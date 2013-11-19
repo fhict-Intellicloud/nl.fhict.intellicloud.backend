@@ -9,7 +9,7 @@ namespace nl.fhict.IntelliCloud.Classes
     {
 
         public int Id = 0;
-        public String Review = string.Empty;
+        public string ReviewText = string.Empty;
         public int AnswerId = 0;
         public int ReviewStateId = 0;
         public int ReviewerId = 0;

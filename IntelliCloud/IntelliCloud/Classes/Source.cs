@@ -9,8 +9,8 @@ namespace nl.fhict.IntelliCloud.Classes
     {
 
         public int Id = 0;
-        public String Name = string.Empty;
-        public String Description = string.Empty;
+        public string Name = string.Empty;
+        public string Description = string.Empty;
 
     }
 }

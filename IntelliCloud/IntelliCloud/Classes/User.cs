@@ -9,12 +9,12 @@ namespace nl.fhict.IntelliCloud.Classes
     {
 
         public int Id = 0;
-        public String UserName = string.Empty;
-        public String FirstName = string.Empty;
-        public String Infix = string.Empty;
-        public String LastName = string.Empty;
+        public string UserName = string.Empty;
+        public string FirstName = string.Empty;
+        public string Infix = string.Empty;
+        public string LastName = string.Empty;
         public int TypeId = 0;
-        public String Password = string.Empty;
+        public string Password = string.Empty;
 
     }
 }
