@@ -49,6 +49,7 @@
   <ItemGroup>
     <Compile Include="Context\IntelliCloudContext.cs" />
     <Compile Include="Context\IntelliCloudContextFactory.cs" />
+    <Compile Include="Migration\Configuration.cs" />
     <Compile Include="Model\AnswerEntity.cs" />
     <Compile Include="Model\AnswerKeyEntity.cs" />
     <Compile Include="Model\FeedbackEntity.cs" />
