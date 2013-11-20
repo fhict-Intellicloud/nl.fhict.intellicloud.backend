@@ -39,11 +39,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Classes\Answer.cs" />
-    <Compile Include="Classes\Question.cs" />
-    <Compile Include="Classes\Review.cs" />
-    <Compile Include="Classes\Source.cs" />
-    <Compile Include="Classes\User.cs" />
+    <Compile Include="DataTransfer\Answer.cs" />
+    <Compile Include="DataTransfer\Question.cs" />
+    <Compile Include="DataTransfer\Review.cs" />
+    <Compile Include="DataTransfer\Source.cs" />
+    <Compile Include="DataTransfer\User.cs" />
+    <Compile Include="Manager\InelliCloudManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
