@@ -4,24 +4,24 @@ using System.Linq;
 using System.Runtime.Serialization;
 using System.Text;
 
-namespace nl.fhict.IntelliCloud.Business.DataTransfer
+namespace nl.fhict.IntelliCloud.Common.DataTransfer
 {
     /// <summary>
-    /// An enumeration indicating the type of <see cref="User"/>.
+    /// An enumeration indicating the states of a <see cref="Review"/>.
     /// </summary>
     [DataContract]
-    public enum UserType
+    public enum ReviewState
     {
         /// <summary>
-        /// Indicates the <see cref="User"/> is an customer.
+        /// Indicates the review is made but not jet implemented in the answer.
         /// </summary>
         [EnumMember]
-        Customer,
-        
+        Open,
+
         /// <summary>
-        /// Indicates the <see cref="User"/> is an employee.
+        /// Indicates the review is implemented in the answer.
         /// </summary>
         [EnumMember]
-        Employee
+        Closed
     }
 }

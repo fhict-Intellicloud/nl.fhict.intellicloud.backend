@@ -4,7 +4,7 @@ using System.Linq;
 using System.Runtime.Serialization;
 using System.Web;
 
-namespace nl.fhict.IntelliCloud.Business.DataTransfer
+namespace nl.fhict.IntelliCloud.Common.DataTransfer
 {
     /// <summary>
     /// A class representing a user.
@@ -58,6 +58,6 @@ namespace nl.fhict.IntelliCloud.Business.DataTransfer
         /// Gets or sets a collection of sources the user supports.
         /// </summary>
         [DataMember]
-        public IList<SourceUser> Sources { get; set; }
+        public IList<Source> Sources { get; set; }
     }
 }

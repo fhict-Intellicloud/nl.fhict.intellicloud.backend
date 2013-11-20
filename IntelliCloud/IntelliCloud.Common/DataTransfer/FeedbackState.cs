@@ -4,7 +4,7 @@ using System.Linq;
 using System.Runtime.Serialization;
 using System.Text;
 
-namespace nl.fhict.IntelliCloud.Business.DataTransfer
+namespace nl.fhict.IntelliCloud.Common.DataTransfer
 {
     /// <summary>
     /// An enumeration indicating the process state of the <see cref="Feedback"/>.

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Runtime.Serialization;
 using System.Web;
 
-namespace nl.fhict.IntelliCloud.Business.DataTransfer
+namespace nl.fhict.IntelliCloud.Common.DataTransfer
 {
     /// <summary>
     /// A class representing the answer to a <see cref="Question"/>.

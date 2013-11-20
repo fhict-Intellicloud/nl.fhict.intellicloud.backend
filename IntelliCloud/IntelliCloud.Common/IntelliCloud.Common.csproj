@@ -4,13 +4,14 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{59A5B95E-1352-4B18-AAA4-71E1F334A2F5}</ProjectGuid>
+    <ProjectGuid>{22A9B283-420A-4325-990A-7C0A14E36590}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>nl.fhict.IntelliCloud.Business</RootNamespace>
-    <AssemblyName>IntelliCloud.Business</AssemblyName>
+    <RootNamespace>nl.fhict.IntelliCloud.Common</RootNamespace>
+    <AssemblyName>IntelliCloud.Common</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -40,18 +41,20 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Manager\InelliCloudManager.cs" />
+    <Compile Include="DataTransfer\Answer.cs" />
+    <Compile Include="DataTransfer\AnswerState.cs" />
+    <Compile Include="DataTransfer\Feedback.cs" />
+    <Compile Include="DataTransfer\FeedbackState.cs" />
+    <Compile Include="DataTransfer\FeedbackType.cs" />
+    <Compile Include="DataTransfer\Question.cs" />
+    <Compile Include="DataTransfer\QuestionState.cs" />
+    <Compile Include="DataTransfer\Review.cs" />
+    <Compile Include="DataTransfer\ReviewState.cs" />
+    <Compile Include="DataTransfer\Source.cs" />
+    <Compile Include="DataTransfer\SourceDefinition.cs" />
+    <Compile Include="DataTransfer\User.cs" />
+    <Compile Include="DataTransfer\UserType.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\IntelliCloud.Common\IntelliCloud.Common.csproj">
-      <Project>{22a9b283-420a-4325-990a-7c0a14e36590}</Project>
-      <Name>IntelliCloud.Common</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\IntelliCloud.Data\IntelliCloud.Data.csproj">
-      <Project>{ff97327b-0419-44f1-b71e-ab2086553ee2}</Project>
-      <Name>IntelliCloud.Data</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

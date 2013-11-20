@@ -5,7 +5,7 @@ using System.Runtime.Serialization;
 using System.ServiceModel;
 using System.ServiceModel.Web;
 using System.Text;
-using nl.fhict.IntelliCloud.Business.DataTransfer;
+using nl.fhict.IntelliCloud.Common.DataTransfer;
 
 namespace IntelliCloud
 {

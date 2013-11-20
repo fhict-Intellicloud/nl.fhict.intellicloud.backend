@@ -89,6 +89,10 @@
       <Project>{59a5b95e-1352-4b18-aaa4-71e1f334a2f5}</Project>
       <Name>IntelliCloud.Business</Name>
     </ProjectReference>
+    <ProjectReference Include="..\IntelliCloud.Common\IntelliCloud.Common.csproj">
+      <Project>{22a9b283-420a-4325-990a-7c0a14e36590}</Project>
+      <Name>IntelliCloud.Common</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

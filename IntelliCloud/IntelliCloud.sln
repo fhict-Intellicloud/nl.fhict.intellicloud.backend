@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IntelliCloud.Business", "In
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IntelliCloud.Data", "IntelliCloud.Data\IntelliCloud.Data.csproj", "{FF97327B-0419-44F1-B71E-AB2086553EE2}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IntelliCloud.Common", "IntelliCloud.Common\IntelliCloud.Common.csproj", "{22A9B283-420A-4325-990A-7C0A14E36590}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -25,6 +27,10 @@ Global
 		{FF97327B-0419-44F1-B71E-AB2086553EE2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FF97327B-0419-44F1-B71E-AB2086553EE2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FF97327B-0419-44F1-B71E-AB2086553EE2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{22A9B283-420A-4325-990A-7C0A14E36590}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{22A9B283-420A-4325-990A-7C0A14E36590}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{22A9B283-420A-4325-990A-7C0A14E36590}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{22A9B283-420A-4325-990A-7C0A14E36590}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

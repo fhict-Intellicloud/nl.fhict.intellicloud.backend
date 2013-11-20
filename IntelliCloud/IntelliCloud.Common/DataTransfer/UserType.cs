@@ -4,24 +4,24 @@ using System.Linq;
 using System.Runtime.Serialization;
 using System.Text;
 
-namespace nl.fhict.IntelliCloud.Business.DataTransfer
+namespace nl.fhict.IntelliCloud.Common.DataTransfer
 {
     /// <summary>
-    /// An enumeration indicating if the answer was declined or accepted.
+    /// An enumeration indicating the type of <see cref="User"/>.
     /// </summary>
     [DataContract]
-    public enum FeedbackType
+    public enum UserType
     {
         /// <summary>
-        /// Indicates that the answer was accepted.
+        /// Indicates the <see cref="User"/> is an customer.
         /// </summary>
         [EnumMember]
-        Accepted,
+        Customer,
         
         /// <summary>
-        /// Indicates that the answer was declined.
+        /// Indicates the <see cref="User"/> is an employee.
         /// </summary>
         [EnumMember]
-        Declined
+        Employee
     }
 }

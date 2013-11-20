@@ -4,24 +4,24 @@ using System.Linq;
 using System.Runtime.Serialization;
 using System.Text;
 
-namespace nl.fhict.IntelliCloud.Business.DataTransfer
+namespace nl.fhict.IntelliCloud.Common.DataTransfer
 {
     /// <summary>
-    /// An enumeration indicating the states of a <see cref="Review"/>.
+    /// An enumeration indicating if the answer was declined or accepted.
     /// </summary>
     [DataContract]
-    public enum ReviewState
+    public enum FeedbackType
     {
         /// <summary>
-        /// Indicates the review is made but not jet implemented in the answer.
+        /// Indicates that the answer was accepted.
         /// </summary>
         [EnumMember]
-        Open,
-
+        Accepted,
+        
         /// <summary>
-        /// Indicates the review is implemented in the answer.
+        /// Indicates that the answer was declined.
         /// </summary>
         [EnumMember]
-        Closed
+        Declined
     }
 }

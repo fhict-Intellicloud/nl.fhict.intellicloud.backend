@@ -49,10 +49,23 @@
   <ItemGroup>
     <Compile Include="Context\IntelliCloudContext.cs" />
     <Compile Include="Context\IntelliCloudContextFactory.cs" />
+    <Compile Include="Model\AnswerEntity.cs" />
+    <Compile Include="Model\AnswerKeyEntity.cs" />
+    <Compile Include="Model\FeedbackEntity.cs" />
+    <Compile Include="Model\KeywordEntity.cs" />
+    <Compile Include="Model\QuestionEntity.cs" />
+    <Compile Include="Model\QuestionKeyEntity.cs" />
+    <Compile Include="Model\ReviewEntity.cs" />
+    <Compile Include="Model\SourceEntity.cs" />
+    <Compile Include="Model\SourceDefinitionEntity.cs" />
+    <Compile Include="Model\UserEntity.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Model\" />
+    <ProjectReference Include="..\IntelliCloud.Common\IntelliCloud.Common.csproj">
+      <Project>{22a9b283-420a-4325-990a-7c0a14e36590}</Project>
+      <Name>IntelliCloud.Common</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
