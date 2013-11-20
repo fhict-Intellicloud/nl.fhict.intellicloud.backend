@@ -20,10 +20,11 @@ namespace IntelliCloud
         /// <param name="question">the question itself</param>
         /// <returns>Returns wether the question upload was succesfull of failed</returns>
         [OperationContract]
-        [WebInvoke(Method = "GET", 
+        [WebInvoke(Method = "POST", 
             UriTemplate = "AskQuestion", 
             RequestFormat = WebMessageFormat.Json, 
-            ResponseFormat = WebMessageFormat.Json)]
+            ResponseFormat = WebMessageFormat.Json,
+            BodyStyle = WebMessageBodyStyle.Wrapped)]
         void AskQuestion(String source, String reference, String question);
 
         /// <summary>
@@ -34,10 +35,11 @@ namespace IntelliCloud
         /// <param name="answererId">The Id of the employee who answerd the question</param>
         /// <returns>Returns wether the send was succesfull of failed</returns>
         [OperationContract]
-        [WebInvoke(Method = "GET", 
+        [WebInvoke(Method = "POST", 
             UriTemplate = "SendAnswer", 
-            RequestFormat = WebMessageFormat.Json, 
-            ResponseFormat = WebMessageFormat.Json)]
+            RequestFormat = WebMessageFormat.Json,
+            ResponseFormat = WebMessageFormat.Json,
+            BodyStyle = WebMessageBodyStyle.Wrapped)]
         void SendAnswer(String questionId, String answer, String answererId);
 
         /// <summary>
@@ -47,8 +49,8 @@ namespace IntelliCloud
         /// <returns>Returns the questions availible to this employee</returns>
         [OperationContract]
         [WebInvoke(Method = "GET", 
-            UriTemplate = "GetQuestions", 
-            RequestFormat = WebMessageFormat.Json, 
+            UriTemplate = "GetQuestions/{employeeId}", 
+            RequestFormat = WebMessageFormat.Json,
             ResponseFormat = WebMessageFormat.Json)]
         List<Question> GetQuestions(String employeeId);
 
@@ -60,10 +62,11 @@ namespace IntelliCloud
         /// <param name="questionId">The Id of the question where this answer is accepted for</param>
         /// <returns>Returns wether the accept succeded of failed</returns>
         [OperationContract]
-        [WebInvoke(Method = "GET", 
+        [WebInvoke(Method = "POST", 
             UriTemplate = "AcceptAnswer", 
-            RequestFormat = WebMessageFormat.Json, 
-            ResponseFormat = WebMessageFormat.Json)]
+            RequestFormat = WebMessageFormat.Json,
+            ResponseFormat = WebMessageFormat.Json,
+            BodyStyle = WebMessageBodyStyle.Wrapped)]
         void AcceptAnswer(String feedback, String answerId, String questionId);
 
         /// <summary>
@@ -74,10 +77,11 @@ namespace IntelliCloud
         /// <param name="questionId">The Id of the question where this answer is declined for</param>
         /// <returns>Returns wether the decline succeded of failed</returns>
         [OperationContract]
-        [WebInvoke(Method = "GET", 
+        [WebInvoke(Method = "POST", 
             UriTemplate = "DeclineAnswer", 
-            RequestFormat = WebMessageFormat.Json, 
-            ResponseFormat = WebMessageFormat.Json)]
+            RequestFormat = WebMessageFormat.Json,
+            ResponseFormat = WebMessageFormat.Json,
+            BodyStyle = WebMessageBodyStyle.Wrapped)]
         void DeclineAnswer(String feedback, String answerId, String questionId);
 
         /// <summary>
@@ -88,10 +92,11 @@ namespace IntelliCloud
         /// <param name="answererId">The id of the employee who answered the question</param>
         /// <returns>returns wether the answer was recieved by the server</returns>
         [OperationContract]
-        [WebInvoke(Method = "GET", 
+        [WebInvoke(Method = "POST", 
             UriTemplate = "SendAnswerForReview", 
-            RequestFormat = WebMessageFormat.Json, 
-            ResponseFormat = WebMessageFormat.Json)]
+            RequestFormat = WebMessageFormat.Json,
+            ResponseFormat = WebMessageFormat.Json,
+            BodyStyle = WebMessageBodyStyle.Wrapped)]
         void SendAnswerForReview(String answer, String questionId, String answererId);
 
         /// <summary>
@@ -102,10 +107,11 @@ namespace IntelliCloud
         /// <param name="review">The review text itself</param>
         /// <returns>Return wether the review was recieved by the server</returns>
         [OperationContract]
-        [WebInvoke(Method = "GET", 
+        [WebInvoke(Method = "POST", 
             UriTemplate = "SendReviewForAnswer", 
-            RequestFormat = WebMessageFormat.Json, 
-            ResponseFormat = WebMessageFormat.Json)]
+            RequestFormat = WebMessageFormat.Json,
+            ResponseFormat = WebMessageFormat.Json,
+            BodyStyle = WebMessageBodyStyle.Wrapped)]
         void SendReviewForAnswer(String reviewerId, String answerId, String review);
 
         /// <summary>
@@ -115,7 +121,7 @@ namespace IntelliCloud
         /// <returns>Return a list containing all the reviews for this specified answer</returns>
         [OperationContract]
         [WebInvoke(Method = "GET", 
-            UriTemplate = "GetReviewsForAnswer", 
+            UriTemplate = "GetReviewsForAnswer/{answerId}", 
             RequestFormat = WebMessageFormat.Json, 
             ResponseFormat = WebMessageFormat.Json)]
         List<Review> GetReviewsForAnswer(String answerId);
@@ -127,10 +133,11 @@ namespace IntelliCloud
         /// <returns>Returns a list of all the answers that are up for review for this employee</returns>
         [OperationContract]
         [WebInvoke(Method = "GET", 
-            UriTemplate = "GetAnswersUpForReview", 
+            UriTemplate = "GetAnswersUpForReview/{employeeId}", 
             RequestFormat = WebMessageFormat.Json, 
             ResponseFormat = WebMessageFormat.Json)]
         List<Answer> GetAnswersUpForReview(String employeeId);
 
     }
+        
 }
