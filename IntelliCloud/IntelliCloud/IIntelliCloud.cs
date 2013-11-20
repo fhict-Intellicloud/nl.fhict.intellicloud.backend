@@ -1,4 +1,4 @@
-﻿using nl.fhict.IntelliCloud.Classes;
+﻿using nl.fhict.IntelliCloud.DataTransfer;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,7 +24,7 @@ namespace IntelliCloud
             UriTemplate = "AskQuestion", 
             RequestFormat = WebMessageFormat.Json, 
             ResponseFormat = WebMessageFormat.Json)]
-        Boolean AskQuestion(String source, String reference, String question);
+        void AskQuestion(String source, String reference, String question);
 
         /// <summary>
         /// This method is used to send a answer directly back to the asker, in this case there won't be any reviewing
@@ -38,7 +38,7 @@ namespace IntelliCloud
             UriTemplate = "SendAnswer", 
             RequestFormat = WebMessageFormat.Json, 
             ResponseFormat = WebMessageFormat.Json)]
-        Boolean SendAnswer(String questionId, String answer, String answererId);
+        void SendAnswer(String questionId, String answer, String answererId);
 
         /// <summary>
         /// This method return the question availible to this employee
@@ -64,7 +64,7 @@ namespace IntelliCloud
             UriTemplate = "AcceptAnswer", 
             RequestFormat = WebMessageFormat.Json, 
             ResponseFormat = WebMessageFormat.Json)]
-        Boolean AcceptAnswer(String feedback, String answerId, String questionId);
+        void AcceptAnswer(String feedback, String answerId, String questionId);
 
         /// <summary>
         /// This method is used to decline answers
@@ -78,7 +78,7 @@ namespace IntelliCloud
             UriTemplate = "DeclineAnswer", 
             RequestFormat = WebMessageFormat.Json, 
             ResponseFormat = WebMessageFormat.Json)]
-        Boolean DeclineAnswer(String feedback, String answerId, String questionId);
+        void DeclineAnswer(String feedback, String answerId, String questionId);
 
         /// <summary>
         /// This method is used to put a answer up for review, this way colleagues can review the answer
@@ -92,7 +92,7 @@ namespace IntelliCloud
             UriTemplate = "SendAnswerForReview", 
             RequestFormat = WebMessageFormat.Json, 
             ResponseFormat = WebMessageFormat.Json)]
-        Boolean SendAnswerForReview(String answer, String questionId, String answererId);
+        void SendAnswerForReview(String answer, String questionId, String answererId);
 
         /// <summary>
         /// This method is used to send a review for a specific answer
@@ -106,7 +106,7 @@ namespace IntelliCloud
             UriTemplate = "SendReviewForAnswer", 
             RequestFormat = WebMessageFormat.Json, 
             ResponseFormat = WebMessageFormat.Json)]
-        Boolean SendReviewForAnswer(String reviewerId, String answerId, String review);
+        void SendReviewForAnswer(String reviewerId, String answerId, String review);
 
         /// <summary>
         /// This method is used to get all the Reviews written for a specific answer

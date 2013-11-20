@@ -63,11 +63,6 @@
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Classes\Answer.cs" />
-    <Compile Include="Classes\Source.cs" />
-    <Compile Include="Classes\Question.cs" />
-    <Compile Include="Classes\Review.cs" />
-    <Compile Include="Classes\User.cs" />
     <Compile Include="IntelliCloud.svc.cs">
       <DependentUpon>IntelliCloud.svc</DependentUpon>
     </Compile>
@@ -85,6 +80,12 @@
       <DependentUpon>Web.config</DependentUpon>
     </None>
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\IntelliCloud.Business\IntelliCloud.Business.csproj">
+      <Project>{59a5b95e-1352-4b18-aaa4-71e1f334a2f5}</Project>
+      <Name>IntelliCloud.Business</Name>
+    </ProjectReference>
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
@@ -98,7 +99,7 @@
         <WebProjectProperties>
           <UseIIS>True</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>0</DevelopmentServerPort>
+          <DevelopmentServerPort>1460</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
           <IISUrl>http://localhost:2020/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>

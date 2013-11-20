@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace nl.fhict.IntelliCloud.Classes
+namespace nl.fhict.IntelliCloud.DataTransfer
 {
     public class Source
     {
