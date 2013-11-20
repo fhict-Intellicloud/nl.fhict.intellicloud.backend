@@ -1,4 +1,4 @@
-﻿using nl.fhict.IntelliCloud.DataTransfer;
+using nl.fhict.IntelliCloud.DataTransfer;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,7 +13,7 @@ namespace IntelliCloud
     public interface IIntelliCloud
     {
         /// <summary>
-        /// This method is used to ask a question to a employee
+        /// This method is used to ask a question to a employee.
         /// </summary>
         /// <param name="source">the name of the source as the source is known in the database</param>
         /// <param name="reference">the reference needed by the plugin to send the answers back</param>
