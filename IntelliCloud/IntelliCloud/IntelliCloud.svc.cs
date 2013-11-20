@@ -1,4 +1,4 @@
-﻿using nl.fhict.IntelliCloud.DataTransfer;
+﻿using nl.fhict.IntelliCloud.Business.DataTransfer;
 using System;
 using System.Collections.Generic;
 using System.Linq;

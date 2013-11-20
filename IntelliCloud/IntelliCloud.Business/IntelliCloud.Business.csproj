@@ -41,10 +41,18 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DataTransfer\Answer.cs" />
+    <Compile Include="DataTransfer\AnswerState.cs" />
+    <Compile Include="DataTransfer\Feedback.cs" />
+    <Compile Include="DataTransfer\FeedbackState.cs" />
+    <Compile Include="DataTransfer\FeedbackType.cs" />
     <Compile Include="DataTransfer\Question.cs" />
+    <Compile Include="DataTransfer\QuestionState.cs" />
     <Compile Include="DataTransfer\Review.cs" />
+    <Compile Include="DataTransfer\ReviewState.cs" />
     <Compile Include="DataTransfer\Source.cs" />
+    <Compile Include="DataTransfer\SourceUser.cs" />
     <Compile Include="DataTransfer\User.cs" />
+    <Compile Include="DataTransfer\UserType.cs" />
     <Compile Include="Manager\InelliCloudManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
