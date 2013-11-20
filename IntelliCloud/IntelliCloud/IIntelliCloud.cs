@@ -22,7 +22,7 @@ namespace IntelliCloud
         [OperationContract]
         [WebInvoke(Method = "POST", 
             UriTemplate = "AskQuestion", 
-            RequestFormat = WebMessageFormat.Json, 
+            RequestFormat = WebMessageFormat.Xml, 
             ResponseFormat = WebMessageFormat.Json,
             BodyStyle = WebMessageBodyStyle.Wrapped)]
         void AskQuestion(String source, String reference, String question);
