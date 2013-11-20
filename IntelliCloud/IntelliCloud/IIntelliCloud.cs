@@ -127,16 +127,28 @@ namespace IntelliCloud
         List<Review> GetReviewsForAnswer(String answerId);
 
         /// <summary>
-        /// This method is used to get all the answer you can review
+        /// This method is used to get the answer by the answerId
         /// </summary>
-        /// <param name="employeeId">The Id of the employee who want to review answers</param>
-        /// <returns>Returns a list of all the answers that are up for review for this employee</returns>
+        /// <param name="answerId">This Id of the answer you want to recieve</param>
+        /// <returns>returns the answer you want to use</returns>
         [OperationContract]
         [WebInvoke(Method = "GET", 
-            UriTemplate = "GetAnswersUpForReview/{employeeId}", 
+            UriTemplate = "GetAnswerById/{answerId}", 
             RequestFormat = WebMessageFormat.Json, 
             ResponseFormat = WebMessageFormat.Json)]
-        List<Answer> GetAnswersUpForReview(String employeeId);
+        Answer GetAnswerById(String answerId);
+
+        /// <summary>
+        /// This method is used to get the question by the questionId
+        /// </summary>
+        /// <param name="questionId">this Id of the quetion you want to recieve</param>
+        /// <returns>returns the question you want to use</returns>
+        [OperationContract]
+        [WebInvoke(Method = "GET",
+            UriTemplate = "GetQuestionById/{questionId}",
+            RequestFormat = WebMessageFormat.Json,
+            ResponseFormat = WebMessageFormat.Json)]
+        Question GetQuestionById(String questionId);
 
     }
         

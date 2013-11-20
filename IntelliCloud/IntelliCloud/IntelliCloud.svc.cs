@@ -62,5 +62,17 @@ namespace IntelliCloud
 
             return answers;
         }
+
+
+        public Answer GetAnswerById(string answerId)
+        {
+            return new Answer();
+
+        }
+
+        public Question GetQuestionById(string questionId)
+        {
+            return new Question();
+        }
     }
 }
