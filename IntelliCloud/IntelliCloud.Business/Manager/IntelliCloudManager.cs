@@ -58,6 +58,7 @@ namespace nl.fhict.IntelliCloud.Business.Manager
                     sourceEntity.Value = reference;
                     sourceEntity.CreationTime = DateTime.Now;
                     sourceEntity.SourceDefinition = questionEntity.SourceType;
+                    sourceEntity.UserId = userEntity.Id;
 
                     ctx.Sources.Add(sourceEntity);
 
