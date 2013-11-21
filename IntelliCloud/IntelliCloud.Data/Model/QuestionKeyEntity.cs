@@ -16,13 +16,13 @@ namespace nl.fhict.IntelliCloud.Data.Model
         /// <summary>
         /// Gets or sets the question the keyword applies to.
         /// </summary>
-        [Required]
+        [Key, Required]
         public QuestionEntity Question { get; set; }
         
         /// <summary>
         /// Gets or sets the keyword that is linked to the question.
         /// </summary>
-        [Required]
+        [Key, Required]
         public KeywordEntity Keyword { get; set; }
 
         /// <summary>

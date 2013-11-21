@@ -16,6 +16,11 @@ namespace nl.fhict.IntelliCloud.Data.Model
     public class FeedbackEntity
     {
         /// <summary>
+        /// Gets or sets the unique identifier of the feedback.
+        /// </summary>
+        public int Id { get; set; }
+
+        /// <summary>
         /// Gets or sets the content of the feedback. The content represents the feedback the customer gave.
         /// </summary>
         [Required]
