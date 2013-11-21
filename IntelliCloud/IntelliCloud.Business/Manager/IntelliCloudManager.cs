@@ -14,7 +14,59 @@ namespace nl.fhict.IntelliCloud.Business.Manager
 
         public void AskQuestion(string source, string reference, string question)
         {
+            Validation.StringCheck(source);
+            Validation.SourceDefinitionExistsCheck(source);
+            Validation.StringCheck(reference);
+            Validation.StringCheck(question);
 
+            // create new context to connect to the database
+            using (IntelliCloudContext ctx = new IntelliCloudContext()) {
+
+                QuestionEntity questionEntity = new QuestionEntity();
+
+                questionEntity.Content = question;
+                questionEntity.CreationTime = DateTime.Now;
+                questionEntity.SourceType = ctx.SourceDefinitions.First(sd => sd.Name.Equals(source));
+                questionEntity.QuestionState = QuestionState.Open;
+               
+                // Check if the user already exists
+                var users = from u in ctx.Users
+                            where u.Id == ctx.Sources.First(s => s.SourceDefinition.Id == questionEntity.SourceType.Id && s.Value == reference).UserId 
+                            select u;
+
+                if (users.Count() > 0)
+                {
+                    // user already has an account, use this
+                    questionEntity.User = users.FirstOrDefault();
+                }
+                else
+                {
+                    // user has no account, create one
+                    UserEntity userEntity = new UserEntity();
+
+                    userEntity.CreationTime = DateTime.Now;
+                    userEntity.Type = UserType.Customer;
+
+                    ctx.Users.Add(userEntity);
+
+                    ctx.SaveChanges();
+
+                    questionEntity.User = userEntity;   
+
+                    // Mount the source to the new user
+                    SourceEntity sourceEntity = new SourceEntity();
+                    sourceEntity.Value = reference;
+                    sourceEntity.CreationTime = DateTime.Now;
+                    sourceEntity.SourceDefinition = questionEntity.SourceType;
+
+                    ctx.Sources.Add(sourceEntity);
+
+                }
+
+                ctx.Questions.Add(questionEntity);
+
+                ctx.SaveChanges();
+            }
         }
 
         public void SendAnswer(string questionId, string answerId)

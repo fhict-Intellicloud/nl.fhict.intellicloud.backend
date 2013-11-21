@@ -20,6 +20,11 @@ namespace nl.fhict.IntelliCloud.Data.Model
         public int Id { get; set; }
 
         /// <summary>
+        /// Gets or sets the reference to the user.
+        /// </summary>
+        public int UserId { get; set; }
+
+        /// <summary>
         /// Gets or sets the definition of the source for which a value is provided, e.g. email, facebook or twitter.
         /// </summary>
         [Required]

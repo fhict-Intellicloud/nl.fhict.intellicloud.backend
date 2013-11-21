@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using nl.fhict.IntelliCloud.Common.DataTransfer;
+using nl.fhict.IntelliCloud.Data.Context;
 
 namespace nl.fhict.IntelliCloud.Business
 {
@@ -71,6 +72,22 @@ namespace nl.fhict.IntelliCloud.Business
             {
                 throw new ArgumentException("Cannot parse string to ReviewState enum.");
             }
+        }
+
+        public static void SourceDefinitionExistsCheck(string SourceDefinitionName)
+        {
+                using (IntelliCloudContext ctx = new IntelliCloudContext())
+                {
+
+                    var sourceDefinitions = from sd in ctx.SourceDefinitions
+                                            where sd.Name == SourceDefinitionName
+                                            select sd;
+
+                    if (!(sourceDefinitions.Count() > 0))
+                    {
+                        throw new ArgumentException("Source definition not found.");
+                    }
+                }
         }
     }
 }
