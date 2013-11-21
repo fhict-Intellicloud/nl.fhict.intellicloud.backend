@@ -18,7 +18,7 @@ namespace IntelliCloud
         /// <param name="source">the name of the source as the source is known in the database</param>
         /// <param name="reference">the reference needed by the plugin to send the answers back</param>
         /// <param name="question">the question itself</param>
-        /// <returns>Returns wether the question upload was succesfull or failed</returns>
+        /// <returns>Returns whether the question upload was succesfull or failed</returns>
         [OperationContract]
         [WebInvoke(Method = "POST", 
             UriTemplate = "AskQuestion", 
@@ -32,7 +32,7 @@ namespace IntelliCloud
         /// </summary>
         /// <param name="questionId">The questionId of the question that this answer answers</param>
         /// <param name="answerId">The Id of the answer</param>
-        /// <returns>Returns wether the send was succesfull or failed</returns>
+        /// <returns>Returns whether the send was succesfull or failed</returns>
         [OperationContract]
         [WebInvoke(Method = "POST", 
             UriTemplate = "SendAnswer", 
@@ -48,7 +48,7 @@ namespace IntelliCloud
         /// <param name="answer">The answer itself</param>
         /// <param name="answererId">The id of the user who answered it</param>
         /// <param name="answerState">The answerstate it should get</param>
-        /// <returns>Returns wether the create was succesfull or failed</returns>
+        /// <returns>Returns whether the create was succesfull or failed</returns>
         [OperationContract]
         [WebInvoke(Method = "POST",
             UriTemplate = "CreateAnswer",
@@ -62,7 +62,7 @@ namespace IntelliCloud
         /// </summary>
         /// <param name="answerId">The answerId of the answer that has to be updated</param>
         /// <param name="answerState">The answerstate it should be updated to</param>
-        /// <returns>Returns wether the update was succesfull or failed</returns>
+        /// <returns>Returns whether the update was succesfull or failed</returns>
         [OperationContract]
         [WebInvoke(Method = "POST",
             UriTemplate = "UpdateAnswer",
@@ -89,7 +89,7 @@ namespace IntelliCloud
         /// <param name="feedback">Use this parameter if the answer is correct but still can use some tweaking</param>
         /// <param name="answerId">The Id of the answer you want to accept</param>
         /// <param name="questionId">The Id of the question where this answer is accepted for</param>
-        /// <returns>Returns wether the accept succeded of failed</returns>
+        /// <returns>Returns whether the accept succedeed of failed</returns>
         [OperationContract]
         [WebInvoke(Method = "POST", 
             UriTemplate = "AcceptAnswer", 
@@ -104,7 +104,7 @@ namespace IntelliCloud
         /// <param name="feedback">Use this parameter to fill in wath is missing for this answer to be correct</param>
         /// <param name="answerId">The Id of the answer you want to decline</param>
         /// <param name="questionId">The Id of the question where this answer is declined for</param>
-        /// <returns>Returns wether the decline succeded or failed</returns>
+        /// <returns>Returns whether the decline succeeded or failed</returns>
         [OperationContract]
         [WebInvoke(Method = "POST", 
             UriTemplate = "DeclineAnswer", 
@@ -119,7 +119,7 @@ namespace IntelliCloud
         /// <param name="reviewerId">The Id of the employee who wrote the review</param>
         /// <param name="answerId">The Id of the answer this review is written for</param>
         /// <param name="review">The review text itself</param>
-        /// <returns>Return wether the review was recieved by the server</returns>
+        /// <returns>Return whether the review was recieved by the server</returns>
         [OperationContract]
         [WebInvoke(Method = "POST", 
             UriTemplate = "SendReviewForAnswer", 
@@ -133,7 +133,7 @@ namespace IntelliCloud
         /// </summary>
         /// <param name="reviewId">The reviewId of the review that has to be updated</param>
         /// <param name="reviewState">The reviewstate it should be updated to</param>
-        /// <returns>Returns wether the update was succesfull or failed</returns>
+        /// <returns>Returns whether the update was succesfull or failed</returns>
         [OperationContract]
         [WebInvoke(Method = "POST",
             UriTemplate = "UpdateReview",
@@ -170,7 +170,7 @@ namespace IntelliCloud
         /// This method is used to get the answer by the answerId
         /// </summary>
         /// <param name="answerId">This Id of the answer you want to recieve</param>
-        /// <returns>returns the answer you want to use</returns>
+        /// <returns>Returns the answer you want to use</returns>
         [OperationContract]
         [WebInvoke(Method = "GET", 
             UriTemplate = "GetAnswerById/{answerId}", 
@@ -182,7 +182,7 @@ namespace IntelliCloud
         /// This method is used to get the question by the questionId
         /// </summary>
         /// <param name="questionId">this Id of the quetion you want to recieve</param>
-        /// <returns>returns the question you want to use</returns>
+        /// <returns>Returns the question you want to use</returns>
         [OperationContract]
         [WebInvoke(Method = "GET",
             UriTemplate = "GetQuestionById/{questionId}",

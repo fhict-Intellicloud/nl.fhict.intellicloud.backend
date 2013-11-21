@@ -104,23 +104,15 @@ namespace nl.fhict.IntelliCloud.Business.Manager
             Validation.IdCheck(answerId);
 
             using (IntelliCloudContext context = new IntelliCloudContext())
-            {               
-                List<ReviewEntity> reviewEntities = context.Reviews.Where(r => r.Answer.Id.Equals(Convert.ToInt32(answerId))).ToList();
-
-                List<Review> reviews = new List<Review>();
-                foreach (ReviewEntity entity in reviewEntities)
+            {
+                return new List<Review>(context.Reviews.Select(x => new Review()
                 {
-                    Review temp = new Review();
-                    temp.AnswerId = entity.Answer.Id;
-                    temp.Content = entity.Content;
-                    temp.Id = entity.Id;
-                    temp.ReviewState = entity.ReviewState;
-                    temp.User = ConvertEntities.UserEntityToUser(entity.User);
-                    
-                    reviews.Add(temp);
-                }
-
-                return reviews;
+                    AnswerId = x.Answer.Id,
+                    Content = x.Content,
+                    Id = x.Id,
+                    ReviewState = x.ReviewState,
+                    User = ConvertEntities.UserEntityToUser(x.User)
+                }));
             }
         }
 
@@ -130,23 +122,14 @@ namespace nl.fhict.IntelliCloud.Business.Manager
 
             using (IntelliCloudContext context = new IntelliCloudContext())
             {
-                List<AnswerEntity> answerEntities =
-                    context.Answers.Where(a => a.AnswerState.Equals(AnswerState.UnderReview)).ToList();
-
-                List<Answer> answers = new List<Answer>();
-                foreach (AnswerEntity entity in answerEntities)
+                return new List<Answer>(context.Answers.Select(x => new Answer()
                 {
-                    Answer temp = new Answer();
-                    temp.Id = entity.Id;
-                    temp.Content = entity.Content;
-                    temp.AnswerState = entity.AnswerState;
-                    temp.Question = ConvertEntities.QuestionEntityToQuestion(entity.Question);
-                    temp.User = ConvertEntities.UserEntityToUser(entity.User);
-
-                    answers.Add(temp);
-                }
-
-                return answers;
+                    Content = x.Content,
+                    Id = x.Id,
+                    AnswerState = x.AnswerState,
+                    Question = ConvertEntities.QuestionEntityToQuestion(x.Question),
+                    User = ConvertEntities.UserEntityToUser(x.User)
+                }));
             }          
         }
 

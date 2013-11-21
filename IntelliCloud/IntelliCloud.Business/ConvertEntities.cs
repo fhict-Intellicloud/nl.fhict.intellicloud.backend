@@ -7,6 +7,10 @@ using nl.fhict.IntelliCloud.Data.Model;
 
 namespace nl.fhict.IntelliCloud.Business
 {
+    /// <summary>
+    /// This class will implement methods for converting Entities to domain objects.
+    /// Only if it is necassary.
+    /// </summary>
     public class ConvertEntities
     {
         /// <summary>
@@ -77,6 +81,7 @@ namespace nl.fhict.IntelliCloud.Business
             question.Content = entity.Content;
             question.QuestionState = entity.QuestionState;
             question.SourceType = SourceDefinitionEntityToSourceDefinition(entity.SourceType);
+            return question;
         }
     }
 }
