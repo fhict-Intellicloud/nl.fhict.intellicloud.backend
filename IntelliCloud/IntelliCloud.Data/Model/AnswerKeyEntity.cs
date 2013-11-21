@@ -10,19 +10,24 @@ namespace nl.fhict.IntelliCloud.Data.Model
     /// <summary>
     /// A class representing the relation between a keyword and answer.
     /// </summary>
-    [Table("QuestionKey")]
+    [Table("AnswerKey")]
     public class AnswerKeyEntity
     {
         /// <summary>
+        /// Gets or sets the unique identifier of the answer keyword.
+        /// </summary>
+        public int Id { get; set; }
+
+        /// <summary>
         /// Gets or sets the answer the keyword applies to.
         /// </summary>
-        [Key, Required]
+        [Required]
         public AnswerEntity Answer { get; set; }
         
         /// <summary>
         /// Gets or sets the keyword that is linked to the answer.
         /// </summary>
-        [Key, Required]
+        [Required]
         public KeywordEntity Keyword { get; set; }
 
         /// <summary>

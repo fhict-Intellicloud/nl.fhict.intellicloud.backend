@@ -14,21 +14,26 @@ namespace nl.fhict.IntelliCloud.Data.Model
     public class QuestionKeyEntity
     {
         /// <summary>
+        /// Gets or sets the unique identifier of the question keyword.
+        /// </summary>
+        public int Id { get; set; }
+
+        /// <summary>
         /// Gets or sets the question the keyword applies to.
         /// </summary>
-        [Key, Required]
+        [Required]
         public QuestionEntity Question { get; set; }
         
         /// <summary>
         /// Gets or sets the keyword that is linked to the question.
         /// </summary>
-        [Key, Required]
+        [Required]
         public KeywordEntity Keyword { get; set; }
 
         /// <summary>
         /// Gets or sets the affinity of the keyword with the question. The affinity is determined by de count of the 
         /// keyword in the question and by the amount of accepts and declines of answers that have this keyword.
         /// </summary>
-        public int Affinity { get; set; }
+        public int Affinity { get; set; }         
     }
 }

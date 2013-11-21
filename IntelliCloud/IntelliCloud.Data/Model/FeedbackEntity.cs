@@ -12,7 +12,7 @@ namespace nl.fhict.IntelliCloud.Data.Model
     /// <summary>
     /// A class representing the feedback that is given on a <see cref="Answer"/>.
     /// </summary>
-    [Table("FeedbackEntity")]
+    [Table("Feedback")]
     public class FeedbackEntity
     {
         /// <summary>

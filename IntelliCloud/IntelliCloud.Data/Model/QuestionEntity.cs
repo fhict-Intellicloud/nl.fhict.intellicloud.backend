@@ -15,6 +15,7 @@ namespace nl.fhict.IntelliCloud.Data.Model
     [Table("Question")]
     public class QuestionEntity
     {
+
         /// <summary>
         /// Gets or sets the unique identifier of the question.
         /// </summary>
@@ -47,6 +48,5 @@ namespace nl.fhict.IntelliCloud.Data.Model
         /// </summary>
         [Required]
         public SourceDefinitionEntity SourceType { get; set; }
-
     }
 }

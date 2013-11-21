@@ -14,6 +14,7 @@ namespace nl.fhict.IntelliCloud.Data.Model
     [Table("Keyword")]
     public class KeywordEntity
     {
+
         /// <summary>
         /// Gets or sets the unique identifier of the keyword.
         /// </summary>
