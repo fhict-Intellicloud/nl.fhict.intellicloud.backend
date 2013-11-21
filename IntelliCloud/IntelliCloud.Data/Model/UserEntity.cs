@@ -67,5 +67,10 @@ namespace nl.fhict.IntelliCloud.Data.Model
         /// Gets or sets a collection of sources the user supports.
         /// </summary>
         public ICollection<SourceEntity> Sources { get; set; }
+
+        /// <summary>
+        /// Gets or sets the creation date and time of the user.
+        /// </summary>
+        public DateTime CreationTime { get; set; }
     }
 }

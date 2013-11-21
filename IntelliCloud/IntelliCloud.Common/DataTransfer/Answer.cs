@@ -41,5 +41,11 @@ namespace nl.fhict.IntelliCloud.Common.DataTransfer
         /// </summary>
         [DataMember]
         public AnswerState AnswerState { get; set; }
+
+        /// <summary>
+        /// Gets or sets the creation date and time of the answer.
+        /// </summary>
+        [DataMember]
+        public DateTime CreationTime { get; set; }
     }
 }

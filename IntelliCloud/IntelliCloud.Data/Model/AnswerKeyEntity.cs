@@ -36,5 +36,10 @@ namespace nl.fhict.IntelliCloud.Data.Model
         /// declined.
         /// </summary>
         public int Affinity { get; set; }
+
+        /// <summary>
+        /// Gets or sets the creation date and time of the answer key.
+        /// </summary>
+        public DateTime CreationTime { get; set; }
     }
 }

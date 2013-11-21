@@ -42,5 +42,10 @@ namespace nl.fhict.IntelliCloud.Data.Model
         /// Gets or sets the state of the answer.
         /// </summary>
         public AnswerState AnswerState { get; set; }
+
+        /// <summary>
+        /// Gets or sets the creation date and time of the answer.
+        /// </summary>
+        public DateTime CreationTime { get; set; }
     }
 }
