@@ -22,7 +22,7 @@ namespace IntelliCloud
 
         public void AskQuestion(string source, string reference, string question)
         {
-
+            manager.AskQuestion(source, reference, question);
         }
 
         public void SendAnswer(string questionId, string answerId)
