@@ -65,5 +65,11 @@ namespace nl.fhict.IntelliCloud.Common.DataTransfer
         /// </summary>
         [DataMember]
         public DateTime CreationTime { get; set; }
+
+        /// <summary>
+        /// Gets or sets the keywords that are linked to the user.
+        /// </summary>
+        [DataMember]
+        public IList<Keyword> Keywords { get; set; }
     }
 }
