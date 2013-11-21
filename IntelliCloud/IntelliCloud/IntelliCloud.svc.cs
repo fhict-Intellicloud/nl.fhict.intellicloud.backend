@@ -1,4 +1,5 @@
-﻿using nl.fhict.IntelliCloud.Common.DataTransfer;
+﻿using nl.fhict.IntelliCloud.Business.Manager;
+using nl.fhict.IntelliCloud.Common.DataTransfer;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,14 +13,31 @@ namespace IntelliCloud
     public class IntelliCloud : IIntelliCloud
     {
 
+        private readonly IntelliCloudManager manager;
+
+        public IntelliCloud()
+        {
+            manager = new IntelliCloudManager();            
+        }
+
         public void AskQuestion(string source, string reference, string question)
         {
 
         }
 
-        public void SendAnswer(string questionId, string answer, string answererId)
+        public void SendAnswer(string questionId, string answerId)
         {
 
+        }
+
+        public void CreateAnswer(string questionId, string answer, string answererId, string answerState)
+        {
+            manager.CreateAnswer(questionId, answer, answererId, answerState);   
+        }
+
+        public void UpdateAnswer(string answerId, string answerState)
+        {
+            
         }
 
         public List<Question> GetQuestions(string employeeId)
@@ -39,29 +57,24 @@ namespace IntelliCloud
 
         }
 
-        public void SendAnswerForReview(string answer, string questionId, string answererId)
-        {
-            
-
-        }
-
         public void SendReviewForAnswer(string reviewerId, string answerId, string review)
         {
+            manager.SendReviewForAnswer(reviewerId, answerId, review);
+        }
 
+        public void UpdateReview(string reviewId, string reviewState)
+        {
+            
         }
 
         public List<Review> GetReviewsForAnswer(string answerId)
         {
-            List<Review> reviews = new List<Review>();
-
-            return reviews;
+            return manager.GetReviewsForAnswer(answerId);
         }
 
         public List<Answer> GetAnswersUpForReview(string employeeId)
         {
-            List<Answer> answers = new List<Answer>();
-
-            return answers;
+            return GetAnswersUpForReview(employeeId);
         }
 
 

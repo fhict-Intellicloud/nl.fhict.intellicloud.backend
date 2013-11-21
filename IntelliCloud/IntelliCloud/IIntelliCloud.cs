@@ -18,7 +18,7 @@ namespace IntelliCloud
         /// <param name="source">the name of the source as the source is known in the database</param>
         /// <param name="reference">the reference needed by the plugin to send the answers back</param>
         /// <param name="question">the question itself</param>
-        /// <returns>Returns wether the question upload was succesfull of failed</returns>
+        /// <returns>Returns wether the question upload was succesfull or failed</returns>
         [OperationContract]
         [WebInvoke(Method = "POST", 
             UriTemplate = "AskQuestion", 
@@ -28,19 +28,48 @@ namespace IntelliCloud
         void AskQuestion(String source, String reference, String question);
 
         /// <summary>
-        /// This method is used to send a answer directly back to the asker, in this case there won't be any reviewing
+        /// This method is used to send an answer directly back to the asker, in this case there won't be any reviewing
         /// </summary>
         /// <param name="questionId">The questionId of the question that this answer answers</param>
-        /// <param name="answer">The answer itself</param>
-        /// <param name="answererId">The Id of the employee who answerd the question</param>
-        /// <returns>Returns wether the send was succesfull of failed</returns>
+        /// <param name="answerId">The Id of the answer</param>
+        /// <returns>Returns wether the send was succesfull or failed</returns>
         [OperationContract]
         [WebInvoke(Method = "POST", 
             UriTemplate = "SendAnswer", 
             RequestFormat = WebMessageFormat.Json,
             ResponseFormat = WebMessageFormat.Json,
             BodyStyle = WebMessageBodyStyle.Wrapped)]
-        void SendAnswer(String questionId, String answer, String answererId);
+        void SendAnswer(String questionId, String answerId);
+
+        /// <summary>
+        /// This method is used to create an answer.
+        /// </summary>
+        /// <param name="questionId">The questionId of the question that this answer answers</param>
+        /// <param name="answer">The answer itself</param>
+        /// <param name="answererId">The id of the user who answered it</param>
+        /// <param name="answerState">The answerstate it should get</param>
+        /// <returns>Returns wether the create was succesfull or failed</returns>
+        [OperationContract]
+        [WebInvoke(Method = "POST",
+            UriTemplate = "CreateAnswer",
+            RequestFormat = WebMessageFormat.Json,
+            ResponseFormat = WebMessageFormat.Json,
+            BodyStyle = WebMessageBodyStyle.Wrapped)]
+        void CreateAnswer(String questionId, String answer, String answererId, string answerState);
+
+        /// <summary>
+        /// This method is used to update the answerstate of an answer.
+        /// </summary>
+        /// <param name="answerId">The answerId of the answer that has to be updated</param>
+        /// <param name="answerState">The answerstate it should be updated to</param>
+        /// <returns>Returns wether the update was succesfull or failed</returns>
+        [OperationContract]
+        [WebInvoke(Method = "POST",
+            UriTemplate = "UpdateAnswer",
+            RequestFormat = WebMessageFormat.Json,
+            ResponseFormat = WebMessageFormat.Json,
+            BodyStyle = WebMessageBodyStyle.Wrapped)]
+        void UpdateAnswer(String answerId, String answerState);
 
         /// <summary>
         /// This method return the question availible to this employee
@@ -75,7 +104,7 @@ namespace IntelliCloud
         /// <param name="feedback">Use this parameter to fill in wath is missing for this answer to be correct</param>
         /// <param name="answerId">The Id of the answer you want to decline</param>
         /// <param name="questionId">The Id of the question where this answer is declined for</param>
-        /// <returns>Returns wether the decline succeded of failed</returns>
+        /// <returns>Returns wether the decline succeded or failed</returns>
         [OperationContract]
         [WebInvoke(Method = "POST", 
             UriTemplate = "DeclineAnswer", 
@@ -83,21 +112,6 @@ namespace IntelliCloud
             ResponseFormat = WebMessageFormat.Json,
             BodyStyle = WebMessageBodyStyle.Wrapped)]
         void DeclineAnswer(String feedback, String answerId, String questionId);
-
-        /// <summary>
-        /// This method is used to put a answer up for review, this way colleagues can review the answer
-        /// </summary>
-        /// <param name="answer">The answer you want to be reviewed</param>
-        /// <param name="questionId">The id of the question this answer is the answer to</param>
-        /// <param name="answererId">The id of the employee who answered the question</param>
-        /// <returns>returns wether the answer was recieved by the server</returns>
-        [OperationContract]
-        [WebInvoke(Method = "POST", 
-            UriTemplate = "SendAnswerForReview", 
-            RequestFormat = WebMessageFormat.Json,
-            ResponseFormat = WebMessageFormat.Json,
-            BodyStyle = WebMessageBodyStyle.Wrapped)]
-        void SendAnswerForReview(String answer, String questionId, String answererId);
 
         /// <summary>
         /// This method is used to send a review for a specific answer
@@ -115,6 +129,20 @@ namespace IntelliCloud
         void SendReviewForAnswer(String reviewerId, String answerId, String review);
 
         /// <summary>
+        /// This method is used to update the reviewstate of an review.
+        /// </summary>
+        /// <param name="reviewId">The reviewId of the review that has to be updated</param>
+        /// <param name="reviewState">The reviewstate it should be updated to</param>
+        /// <returns>Returns wether the update was succesfull or failed</returns>
+        [OperationContract]
+        [WebInvoke(Method = "POST",
+            UriTemplate = "UpdateReview",
+            RequestFormat = WebMessageFormat.Json,
+            ResponseFormat = WebMessageFormat.Json,
+            BodyStyle = WebMessageBodyStyle.Wrapped)]
+        void UpdateReview(String reviewId, String reviewState);
+
+        /// <summary>
         /// This method is used to get all the Reviews written for a specific answer
         /// </summary>
         /// <param name="answerId">The Id of the answer you want to get the reviews for</param>
@@ -127,10 +155,10 @@ namespace IntelliCloud
         List<Review> GetReviewsForAnswer(String answerId);
 
         /// <summary>
-        /// This method is used to get all the Answers that are reviewed by a specific employee
+        /// This method is used to get all the Answers that have to be reviewed by a given employee.
         /// </summary>
         /// <param name="employeeId">The Id of the employee you want to get the answers from</param>
-        /// <returns>Return a list containing all the answers for this specific employee</returns>
+        /// <returns>Return a list containing all the answers that have to be reviewed by the employee</returns>
         [OperationContract]
         [WebInvoke(Method = "GET",
             UriTemplate = "GetAnswersUpForReview/{employeeId}",
