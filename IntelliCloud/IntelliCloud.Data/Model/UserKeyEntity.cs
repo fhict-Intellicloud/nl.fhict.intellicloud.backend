@@ -8,37 +8,36 @@ using System.Text;
 namespace nl.fhict.IntelliCloud.Data.Model
 {
     /// <summary>
-    /// A class representing the relation between a keyword and answer.
+    /// A class representing the relation between a keyword and a user.
     /// </summary>
-    [Table("AnswerKey")]
-    public class AnswerKeyEntity
+    [Table("UserKey")]
+    public class UserKeyEntity
     {
         /// <summary>
-        /// Gets or sets the unique identifier of the answer keyword.
+        /// Gets or sets the unique identifier of the user keyword.
         /// </summary>
         public int Id { get; set; }
 
         /// <summary>
-        /// Gets or sets the answer the keyword applies to.
+        /// Gets or sets the user the keyword applies to.
         /// </summary>
         [Required]
-        public AnswerEntity Answer { get; set; }
-        
+        public UserEntity User { get; set; }
+
         /// <summary>
-        /// Gets or sets the keyword that is linked to the answer.
+        /// Gets or sets the keyword that is linked to the user.
         /// </summary>
         [Required]
         public KeywordEntity Keyword { get; set; }
 
         /// <summary>
-        /// Gets or sets the affinity of the keyword with the answer. The affinity is determined by de count of the 
-        /// keyword in the answer and by the amount of keywords in questions that have marked this answer as accepted or
-        /// declined.
+        /// Gets or sets the affinity of the keyword with the user. The affinity is determined by the keyword amount of
+        /// questions and answers the user processed.
         /// </summary>
         public int Affinity { get; set; }
 
         /// <summary>
-        /// Gets or sets the creation date and time of the answer key.
+        /// Gets or sets the creation date and time of the user keyword.
         /// </summary>
         public DateTime CreationTime { get; set; }
     }

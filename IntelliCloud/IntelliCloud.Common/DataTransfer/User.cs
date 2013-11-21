@@ -59,5 +59,17 @@ namespace nl.fhict.IntelliCloud.Common.DataTransfer
         /// </summary>
         [DataMember]
         public IList<Source> Sources { get; set; }
+
+        /// <summary>
+        /// Gets or sets the creation date and time of the answer.
+        /// </summary>
+        [DataMember]
+        public DateTime CreationTime { get; set; }
+
+        /// <summary>
+        /// Gets or sets the keywords that are linked to the user.
+        /// </summary>
+        [DataMember]
+        public IList<Keyword> Keywords { get; set; }
     }
 }

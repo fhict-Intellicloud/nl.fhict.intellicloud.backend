@@ -48,5 +48,10 @@ namespace nl.fhict.IntelliCloud.Data.Model
         /// </summary>
         [Required]
         public SourceDefinitionEntity SourceType { get; set; }
+
+        /// <summary>
+        /// Gets or sets the creation date and time of the question.
+        /// </summary>
+        public DateTime CreationTime { get; set; }
     }
 }

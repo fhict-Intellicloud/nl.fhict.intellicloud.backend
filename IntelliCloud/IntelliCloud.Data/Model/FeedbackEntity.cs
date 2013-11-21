@@ -46,5 +46,10 @@ namespace nl.fhict.IntelliCloud.Data.Model
         /// Gets or sets the state of the feedback. The state indicates if the feedback is already processed.
         /// </summary>
         public FeedbackState FeedbackState { get; set; }
+
+        /// <summary>
+        /// Gets or sets the creation date and time of the feedback.
+        /// </summary>
+        public DateTime CreationTime { get; set; }
     }
 }

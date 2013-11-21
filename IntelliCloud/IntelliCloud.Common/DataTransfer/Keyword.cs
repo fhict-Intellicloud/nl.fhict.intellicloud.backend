@@ -2,40 +2,38 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
-using System.Web;
+using System.Text;
 
 namespace nl.fhict.IntelliCloud.Common.DataTransfer
 {
     /// <summary>
-    /// A class representing the definition of a source. A source can be a account for some service, like facebook, 
-    /// twitter or email.
+    /// A class representing a keyword that belongs to a user, answer or question.
     /// </summary>
     [DataContract]
-    public class SourceDefinition
+    public class Keyword
     {
         /// <summary>
-        /// Gets or sets the unique identifier of the source definition.
+        /// Gets or sets the unique identifier of the relation between the user, answer or question and the keyword.
         /// </summary>
-        [DataMember]
         public int Id { get; set; }
 
         /// <summary>
-        /// Gets or sets the name of the source definition, e.g. 'Facebook'.
+        /// Gets or sets the name of the keyword. In this case the keyword itself.
         /// </summary>
         [DataMember]
         public string Name { get; set; }
 
         /// <summary>
-        /// Gets or sets a description of the source definition.
+        /// Gets or sets the affinity of the keyword with the user, answer or question.
         /// </summary>
         [DataMember]
-        public string Description { get; set; }
+        public int Affinity { get; set; }
 
         /// <summary>
-        /// Gets or sets the creation date and time of the answer.
+        /// Gets or sets the creation date and time of the releation between the user, answer or question and the 
+        /// keyword.
         /// </summary>
         [DataMember]
         public DateTime CreationTime { get; set; }
-
     }
 }

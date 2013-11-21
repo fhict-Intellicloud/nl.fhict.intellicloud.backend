@@ -42,5 +42,11 @@ namespace nl.fhict.IntelliCloud.Common.DataTransfer
         [DataMember]
         public User User { get; set; }
 
+        /// <summary>
+        /// Gets or sets the creation date and time of the review.
+        /// </summary>
+        [DataMember]
+        public DateTime CreationTime { get; set; }
+
     }
 }

@@ -60,6 +60,7 @@
     <Compile Include="Model\SourceEntity.cs" />
     <Compile Include="Model\SourceDefinitionEntity.cs" />
     <Compile Include="Model\UserEntity.cs" />
+    <Compile Include="Model\UserKeyEntity.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

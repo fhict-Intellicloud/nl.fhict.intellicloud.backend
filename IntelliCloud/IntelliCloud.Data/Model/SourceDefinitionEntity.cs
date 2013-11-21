@@ -32,5 +32,10 @@ namespace nl.fhict.IntelliCloud.Data.Model
         [MaxLength(254)]
         public string Description { get; set; }
 
+        /// <summary>
+        /// Gets or sets the creation date and time of the source definition.
+        /// </summary>
+        public DateTime CreationTime { get; set; }
+
     }
 }

@@ -41,5 +41,11 @@ namespace nl.fhict.IntelliCloud.Common.DataTransfer
         /// </summary>
         [DataMember]
         public FeedbackState FeedbackState { get; set; }
+
+        /// <summary>
+        /// Gets or sets the creation date and time of the feedback.
+        /// </summary>
+        [DataMember]
+        public DateTime CreationTime { get; set; }
     }
 }

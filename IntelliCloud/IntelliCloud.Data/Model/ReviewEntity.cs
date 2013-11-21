@@ -42,5 +42,10 @@ namespace nl.fhict.IntelliCloud.Data.Model
         /// </summary>
         [Required]
         public UserEntity User { get; set; }
+
+        /// <summary>
+        /// Gets or sets the creation date and time of the review.
+        /// </summary>
+        public DateTime CreationTime { get; set; }
     }
 }

@@ -25,5 +25,10 @@ namespace nl.fhict.IntelliCloud.Data.Model
         /// </summary>
         [Required, MaxLength(254)]
         public string Name { get; set; }
+
+        /// <summary>
+        /// Gets or sets the creation date and time of the keyword.
+        /// </summary>
+        public DateTime CreationTime { get; set; }
     }
 }
