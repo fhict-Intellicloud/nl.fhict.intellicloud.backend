@@ -25,7 +25,7 @@ namespace nl.fhict.IntelliCloud.Business.Manager
                 QuestionEntity questionEntity = new QuestionEntity();
 
                 questionEntity.Content = question;
-                questionEntity.CreationTime = DateTime.Now;
+                questionEntity.CreationTime = DateTime.UtcNow;
                 questionEntity.SourceType = ctx.SourceDefinitions.First(sd => sd.Name.Equals(source));
                 questionEntity.QuestionState = QuestionState.Open;
                
@@ -44,7 +44,7 @@ namespace nl.fhict.IntelliCloud.Business.Manager
                     // user has no account, create one
                     UserEntity userEntity = new UserEntity();
 
-                    userEntity.CreationTime = DateTime.Now;
+                    userEntity.CreationTime = DateTime.UtcNow;
                     userEntity.Type = UserType.Customer;
 
                     ctx.Users.Add(userEntity);
@@ -56,7 +56,7 @@ namespace nl.fhict.IntelliCloud.Business.Manager
                     // Mount the source to the new user
                     SourceEntity sourceEntity = new SourceEntity();
                     sourceEntity.Value = reference;
-                    sourceEntity.CreationTime = DateTime.Now;
+                    sourceEntity.CreationTime = DateTime.UtcNow;
                     sourceEntity.SourceDefinition = questionEntity.SourceType;
                     sourceEntity.UserId = userEntity.Id;
 
