@@ -74,7 +74,7 @@ namespace IntelliCloud
 
         public List<Answer> GetAnswersUpForReview(string employeeId)
         {
-            return GetAnswersUpForReview(employeeId);
+            return manager.GetAnswersUpForReview(employeeId);
         }
 
 
