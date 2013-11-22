@@ -31,7 +31,7 @@ namespace nl.fhict.IntelliCloud.Business.Manager
                
                 // Check if the user already exists
                 var users = from u in ctx.Users
-                            where u.Id == ctx.Sources.First(s => s.SourceDefinition.Id == questionEntity.SourceType.Id && s.Value == reference).UserId 
+                            where u.Id == ctx.Sources.FirstOrDefault(s => s.SourceDefinition.Id == questionEntity.SourceType.Id && s.Value == reference).UserId 
                             select u;
 
                 if (users.Count() > 0)
@@ -158,14 +158,14 @@ namespace nl.fhict.IntelliCloud.Business.Manager
 
             using (IntelliCloudContext context = new IntelliCloudContext())
             {
-                return new List<Review>(context.Reviews.Select(x => new Review()
-                {
-                    AnswerId = x.Answer.Id,
-                    Content = x.Content,
-                    Id = x.Id,
-                    ReviewState = x.ReviewState,
-                    User = ConvertEntities.UserEntityToUser(x.User)
-                }));
+
+                int iAnswerId = int.Parse(answerId);
+
+                List<ReviewEntity> reviewEntities = (from r in context.Reviews
+                                                     where r.Answer.Id == iAnswerId
+                                                     select r).ToList();
+
+                return ConvertEntities.ReviewEntityListToReviewList(reviewEntities);
             }
         }
 
@@ -175,14 +175,12 @@ namespace nl.fhict.IntelliCloud.Business.Manager
 
             using (IntelliCloudContext context = new IntelliCloudContext())
             {
-                return new List<Answer>(context.Answers.Select(x => new Answer()
-                {
-                    Content = x.Content,
-                    Id = x.Id,
-                    AnswerState = x.AnswerState,
-                    Question = ConvertEntities.QuestionEntityToQuestion(x.Question),
-                    User = ConvertEntities.UserEntityToUser(x.User)
-                }));
+
+                List<AnswerEntity> answerEntities = (from a in context.Answers
+                                                    where a.AnswerState == (AnswerState.UnderReview)
+                                                    select a).ToList();
+
+                return ConvertEntities.AnswerEntityListToAnswerList(answerEntities);
             }          
         }
 

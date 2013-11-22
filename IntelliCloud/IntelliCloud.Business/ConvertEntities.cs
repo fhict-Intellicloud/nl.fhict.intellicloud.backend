@@ -83,5 +83,39 @@ namespace nl.fhict.IntelliCloud.Business
             question.SourceType = SourceDefinitionEntityToSourceDefinition(entity.SourceType);
             return question;
         }
+
+        public static List<Answer> AnswerEntityListToAnswerList(List<AnswerEntity> entities)
+        {
+            List<Answer> answers = new List<Answer>();
+            foreach (AnswerEntity entity in entities)
+            {
+                Answer temp = new Answer();
+                temp.Id = entity.Id;
+                temp.Content = entity.Content;
+                temp.AnswerState = entity.AnswerState;
+                temp.Question = ConvertEntities.QuestionEntityToQuestion(entity.Question);
+                temp.User = ConvertEntities.UserEntityToUser(entity.User);
+                answers.Add(temp);
+            }
+
+            return answers;
+        }
+
+        internal static List<Review> ReviewEntityListToReviewList(List<ReviewEntity> entities)
+        {
+            List<Review> reviews = new List<Review>();
+            foreach (ReviewEntity entity in entities)
+            {
+                Review temp = new Review();
+                temp.Id = entity.Id;
+                temp.Content = entity.Content;
+                temp.ReviewState = entity.ReviewState;
+                temp.AnswerId = entity.Answer.Id;
+                temp.User = ConvertEntities.UserEntityToUser(entity.User);
+                reviews.Add(temp);
+            }
+
+            return reviews;
+        }
     }
 }
