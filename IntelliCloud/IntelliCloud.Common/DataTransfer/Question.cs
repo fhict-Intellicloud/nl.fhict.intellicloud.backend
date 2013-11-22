@@ -39,7 +39,6 @@ namespace nl.fhict.IntelliCloud.Common.DataTransfer
         /// <summary>
         /// Gets or sets the state of the question.
         /// </summary>
-        [DataMember]
         public QuestionState QuestionState { get; set; }
 
         /// <summary>

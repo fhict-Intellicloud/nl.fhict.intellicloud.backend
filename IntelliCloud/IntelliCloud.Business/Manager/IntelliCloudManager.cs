@@ -161,7 +161,7 @@ namespace nl.fhict.IntelliCloud.Business.Manager
 
                 int iAnswerId = int.Parse(answerId);
 
-                List<ReviewEntity> reviewEntities = (from r in context.Reviews
+                List<ReviewEntity> reviewEntities = (from r in context.Reviews.Include("Answer").Include("User")
                                                      where r.Answer.Id == iAnswerId
                                                      select r).ToList();
 
@@ -176,7 +176,7 @@ namespace nl.fhict.IntelliCloud.Business.Manager
             using (IntelliCloudContext context = new IntelliCloudContext())
             {
 
-                List<AnswerEntity> answerEntities = (from a in context.Answers
+                List<AnswerEntity> answerEntities = (from a in context.Answers.Include("Question").Include("User").Include("Question.User").Include("Question.SourceType").Include("User.Sources")
                                                     where a.AnswerState == (AnswerState.UnderReview)
                                                     select a).ToList();
 

@@ -20,8 +20,8 @@ namespace IntelliCloud
         /// <param name="question">the question itself</param>
         /// <returns>Returns whether the question upload was succesfull or failed</returns>
         [OperationContract]
-        [WebInvoke(Method = "POST", 
-            UriTemplate = "AskQuestion", 
+        [WebInvoke(Method = "GET", 
+            UriTemplate = "AskQuestion/{source}/{reference}/{question}", 
             RequestFormat = WebMessageFormat.Xml, 
             ResponseFormat = WebMessageFormat.Json,
             BodyStyle = WebMessageBodyStyle.Wrapped)]
@@ -160,10 +160,10 @@ namespace IntelliCloud
         /// <param name="employeeId">The Id of the employee you want to get the answers from</param>
         /// <returns>Return a list containing all the answers that have to be reviewed by the employee</returns>
         [OperationContract]
-        [WebInvoke(Method = "GET",
-            UriTemplate = "GetAnswersUpForReview/{employeeId}",
+        [WebGet(UriTemplate = "GetAnswersUpForReview/{employeeId}",
             RequestFormat = WebMessageFormat.Json,
-            ResponseFormat = WebMessageFormat.Json)]
+            ResponseFormat = WebMessageFormat.Json,
+            BodyStyle = WebMessageBodyStyle.Wrapped)]
         List<Answer> GetAnswersUpForReview(String employeeId);
 
         /// <summary>

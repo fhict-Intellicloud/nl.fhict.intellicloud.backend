@@ -28,6 +28,7 @@ namespace nl.fhict.IntelliCloud.Business
             user.Username = entity.Username;
             user.Password = entity.Password;
             user.Type = entity.Type;
+            user.CreationTime = entity.CreationTime;
             user.Sources = SourceEntityListToSources(entity.Sources);
 
             return user;
@@ -47,6 +48,7 @@ namespace nl.fhict.IntelliCloud.Business
                 temp.Id = source.Id;
                 temp.SourceDefinition = SourceDefinitionEntityToSourceDefinition(source.SourceDefinition);
                 temp.Value = source.Value;
+                temp.CreationTime = source.CreationTime;
                 sources.Add(temp);
             }
             return sources;
@@ -64,6 +66,7 @@ namespace nl.fhict.IntelliCloud.Business
             sourceDefinition.Id = sourceDefinitionEntity.Id;
             sourceDefinition.Name = sourceDefinitionEntity.Name;
             sourceDefinition.Description = sourceDefinitionEntity.Description;
+            sourceDefinition.CreationTime = sourceDefinitionEntity.CreationTime;
             return sourceDefinition;
         }
 
@@ -76,9 +79,13 @@ namespace nl.fhict.IntelliCloud.Business
         {
             Question question = new Question();
             question.Id = entity.Id;
-            question.Answerer = UserEntityToUser(entity.Answerer);
+            if (entity.Answerer != null)
+            {
+                question.Answerer = UserEntityToUser(entity.Answerer);
+            }
             question.User = UserEntityToUser(entity.User);
             question.Content = entity.Content;
+            question.CreationTime = entity.CreationTime;
             question.QuestionState = entity.QuestionState;
             question.SourceType = SourceDefinitionEntityToSourceDefinition(entity.SourceType);
             return question;
@@ -91,6 +98,7 @@ namespace nl.fhict.IntelliCloud.Business
             {
                 Answer temp = new Answer();
                 temp.Id = entity.Id;
+                temp.CreationTime = entity.CreationTime;
                 temp.Content = entity.Content;
                 temp.AnswerState = entity.AnswerState;
                 temp.Question = ConvertEntities.QuestionEntityToQuestion(entity.Question);
@@ -111,6 +119,7 @@ namespace nl.fhict.IntelliCloud.Business
                 temp.Content = entity.Content;
                 temp.ReviewState = entity.ReviewState;
                 temp.AnswerId = entity.Answer.Id;
+                temp.CreationTime = entity.CreationTime;
                 temp.User = ConvertEntities.UserEntityToUser(entity.User);
                 reviews.Add(temp);
             }
