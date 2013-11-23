@@ -8,10 +8,10 @@ using System.Text;
 using nl.fhict.IntelliCloud.Common.DataTransfer;
 using System.IO;
 
-namespace IntelliCloud
+namespace nl.fhict.IntelliCloud.Service
 {
     [ServiceContract]
-    public interface IIntelliCloud
+    public interface IIntelliCloudService
     {
         /// <summary>
         /// This method is used to ask a question to a employee.
