@@ -118,7 +118,7 @@ namespace nl.fhict.IntelliCloud.Business.Manager
             using (IntelliCloudContext context = new IntelliCloudContext())
             {
                 // Set the state of the answer to Accepted
-                AnswerEntity answer = context.Answers.First(a => a.Id.Equals(Convert.ToInt32(answerId)));
+                AnswerEntity answer = context.Answers.Single(a => a.Id == Convert.ToInt32(answerId));
                 answer.AnswerState = AnswerState.Accepted;
 
                 // Set the state of the question to Closed - no further action is required
@@ -150,7 +150,7 @@ namespace nl.fhict.IntelliCloud.Business.Manager
             using (IntelliCloudContext context = new IntelliCloudContext())
             {
                 // Set the state of the answer to Declined
-                AnswerEntity answer = context.Answers.First(a => a.Id.Equals(Convert.ToInt32(answerId)));
+                AnswerEntity answer = context.Answers.Single(a => a.Id == Convert.ToInt32(answerId));
                 answer.AnswerState = AnswerState.Declined;
 
                 // Set the state of the question to Open - employee needs to process the feedback given by the user
