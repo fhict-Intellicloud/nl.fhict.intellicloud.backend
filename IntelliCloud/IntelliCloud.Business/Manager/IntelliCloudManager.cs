@@ -26,39 +26,39 @@ namespace nl.fhict.IntelliCloud.Business.Manager
 
                 questionEntity.Content = question;
                 questionEntity.CreationTime = DateTime.UtcNow;
-                questionEntity.SourceType = ctx.SourceDefinitions.First(sd => sd.Name.Equals(source));
+                questionEntity.SourceType = ctx.SourceDefinitions.Single(sd => sd.Name.Equals(source));
                 questionEntity.QuestionState = QuestionState.Open;
                
                 // Check if the user already exists
-                var users = from u in ctx.Users
-                            where u.Id == ctx.Sources.FirstOrDefault(s => s.SourceDefinition.Id == questionEntity.SourceType.Id && s.Value == reference).UserId 
-                            select u;
+                var userEntity = (from u in ctx.Users
+                            where u.Id == ctx.Sources.Single(s => s.SourceDefinition.Id == questionEntity.SourceType.Id && s.Value == reference).UserId 
+                            select u).SingleOrDefault();
 
-                if (users.Count() > 0)
+                if (userEntity != null)
                 {
                     // user already has an account, use this
-                    questionEntity.User = users.FirstOrDefault();
+                    questionEntity.User = userEntity;
                 }
                 else
                 {
                     // user has no account, create one
-                    UserEntity userEntity = new UserEntity();
+                    UserEntity newUserEntity = new UserEntity();
 
-                    userEntity.CreationTime = DateTime.UtcNow;
-                    userEntity.Type = UserType.Customer;
+                    newUserEntity.CreationTime = DateTime.UtcNow;
+                    newUserEntity.Type = UserType.Customer;
 
-                    ctx.Users.Add(userEntity);
+                    ctx.Users.Add(newUserEntity);
 
                     ctx.SaveChanges();
 
-                    questionEntity.User = userEntity;   
+                    questionEntity.User = newUserEntity;   
 
                     // Mount the source to the new user
                     SourceEntity sourceEntity = new SourceEntity();
                     sourceEntity.Value = reference;
                     sourceEntity.CreationTime = DateTime.UtcNow;
                     sourceEntity.SourceDefinition = questionEntity.SourceType;
-                    sourceEntity.UserId = userEntity.Id;
+                    sourceEntity.UserId = newUserEntity.Id;
 
                     ctx.Sources.Add(sourceEntity);
 
