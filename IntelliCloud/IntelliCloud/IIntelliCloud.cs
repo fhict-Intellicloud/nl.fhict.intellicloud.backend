@@ -6,6 +6,7 @@ using System.ServiceModel;
 using System.ServiceModel.Web;
 using System.Text;
 using nl.fhict.IntelliCloud.Common.DataTransfer;
+using System.IO;
 
 namespace IntelliCloud
 {
@@ -20,9 +21,9 @@ namespace IntelliCloud
         /// <param name="question">the question itself</param>
         /// <returns>Returns whether the question upload was succesfull or failed</returns>
         [OperationContract]
-        [WebInvoke(Method = "GET", 
+        [WebInvoke(Method = "POST", 
             UriTemplate = "AskQuestion/{source}/{reference}/{question}", 
-            RequestFormat = WebMessageFormat.Xml, 
+            RequestFormat = WebMessageFormat.Json, 
             ResponseFormat = WebMessageFormat.Json,
             BodyStyle = WebMessageBodyStyle.Wrapped)]
         void AskQuestion(String source, String reference, String question);
@@ -191,5 +192,5 @@ namespace IntelliCloud
         Question GetQuestionById(String questionId);
 
     }
-        
+
 }
