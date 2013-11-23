@@ -30,13 +30,15 @@ namespace nl.fhict.IntelliCloud.Business.Manager
                 questionEntity.QuestionState = QuestionState.Open;
                
                 // Check if the user already exists
-                var userEntity = (from u in ctx.Users
-                            where u.Id == ctx.Sources.Single(s => s.SourceDefinition.Id == questionEntity.SourceType.Id && s.Value == reference).UserId 
-                            select u).SingleOrDefault();
+                var sourceEntity = ctx.Sources.SingleOrDefault(s => s.SourceDefinition.Id == questionEntity.SourceType.Id && s.Value == reference); 
 
-                if (userEntity != null)
+                if (sourceEntity != null)
                 {
                     // user already has an account, use this
+                    var userEntity = (from u in ctx.Users
+                            where u.Id == sourceEntity.UserId
+                            select u).Single();
+
                     questionEntity.User = userEntity;
                 }
                 else
@@ -54,13 +56,13 @@ namespace nl.fhict.IntelliCloud.Business.Manager
                     questionEntity.User = newUserEntity;   
 
                     // Mount the source to the new user
-                    SourceEntity sourceEntity = new SourceEntity();
-                    sourceEntity.Value = reference;
-                    sourceEntity.CreationTime = DateTime.UtcNow;
-                    sourceEntity.SourceDefinition = questionEntity.SourceType;
-                    sourceEntity.UserId = newUserEntity.Id;
+                    SourceEntity newSourceEntity = new SourceEntity();
+                    newSourceEntity.Value = reference;
+                    newSourceEntity.CreationTime = DateTime.UtcNow;
+                    newSourceEntity.SourceDefinition = questionEntity.SourceType;
+                    newSourceEntity.UserId = newUserEntity.Id;
 
-                    ctx.Sources.Add(sourceEntity);
+                    ctx.Sources.Add(newSourceEntity);
 
                 }
 
