@@ -1,23 +1,17 @@
 ﻿using nl.fhict.IntelliCloud.Business.Manager;
 using nl.fhict.IntelliCloud.Common.DataTransfer;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.Serialization;
-using System.ServiceModel;
-using System.ServiceModel.Web;
-using System.Text;
 
-namespace IntelliCloud
+namespace nl.fhict.IntelliCloud.Service
 {
-    public class IntelliCloud : IIntelliCloud
+    public class IntelliCloudService : IIntelliCloudService
     {
 
         private readonly IntelliCloudManager manager;
 
-        public IntelliCloud()
+        public IntelliCloudService()
         {
-            manager = new IntelliCloudManager();            
+            this.manager = new IntelliCloudManager();            
         }
 
         public void AskQuestion(string source, string reference, string question)

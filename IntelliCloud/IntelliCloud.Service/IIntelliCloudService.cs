@@ -7,10 +7,10 @@ using System.ServiceModel.Web;
 using System.Text;
 using nl.fhict.IntelliCloud.Common.DataTransfer;
 
-namespace IntelliCloud
+namespace nl.fhict.IntelliCloud.Service
 {
     [ServiceContract]
-    public interface IIntelliCloud
+    public interface IIntelliCloudService
     {
         /// <summary>
         /// This method is used to ask a question to a employee.
