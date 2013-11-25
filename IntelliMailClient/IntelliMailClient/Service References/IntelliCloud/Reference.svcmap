@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ReferenceGroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="3fe3325b-7730-4de3-8aa7-434ea303cfe4" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
+  <ClientOptions>
+    <GenerateAsynchronousMethods>false</GenerateAsynchronousMethods>
+    <GenerateTaskBasedAsynchronousMethod>true</GenerateTaskBasedAsynchronousMethod>
+    <EnableDataBinding>true</EnableDataBinding>
+    <ExcludedTypes />
+    <ImportXmlTypes>false</ImportXmlTypes>
+    <GenerateInternalTypes>false</GenerateInternalTypes>
+    <GenerateMessageContracts>false</GenerateMessageContracts>
+    <NamespaceMappings />
+    <CollectionMappings />
+    <GenerateSerializableTypes>true</GenerateSerializableTypes>
+    <Serializer>Auto</Serializer>
+    <UseSerializerForFaults>true</UseSerializerForFaults>
+    <ReferenceAllAssemblies>true</ReferenceAllAssemblies>
+    <ReferencedAssemblies />
+    <ReferencedDataContractTypes />
+    <ServiceContractMappings />
+  </ClientOptions>
+  <MetadataSources>
+    <MetadataSource Address="http://81.204.121.229/IntelliCloudService/IntelliCloudService.svc" Protocol="http" SourceId="1" />
+  </MetadataSources>
+  <Metadata>
+    <MetadataFile FileName="IntelliCloudService.wsdl" MetadataType="Wsdl" ID="f259d84a-779d-4946-8fa9-02e5961f3166" SourceId="1" SourceUrl="http://81.204.121.229/IntelliCloudService/IntelliCloudService.svc?wsdl" />
+    <MetadataFile FileName="IntelliCloudService.xsd" MetadataType="Schema" ID="15c6a0f6-8474-42b7-b979-0a8596007888" SourceId="1" SourceUrl="http://81.204.121.229/IntelliCloudService/IntelliCloudService.svc?xsd=xsd0" />
+    <MetadataFile FileName="IntelliCloudService.disco" MetadataType="Disco" ID="763e3e24-4db5-45b4-8eb4-dcbb751784cc" SourceId="1" SourceUrl="http://81.204.121.229/IntelliCloudService/IntelliCloudService.svc?disco" />
+    <MetadataFile FileName="IntelliCloudService1.xsd" MetadataType="Schema" ID="3486c9f8-9528-48e7-937d-a4ddd3691832" SourceId="1" SourceUrl="http://81.204.121.229/IntelliCloudService/IntelliCloudService.svc?xsd=xsd2" />
+    <MetadataFile FileName="IntelliCloudService2.xsd" MetadataType="Schema" ID="6e3527b6-ca70-4430-ab60-059886729441" SourceId="1" SourceUrl="http://81.204.121.229/IntelliCloudService/IntelliCloudService.svc?xsd=xsd1" />
+  </Metadata>
+  <Extensions>
+    <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />
+    <ExtensionFile FileName="configuration.svcinfo" Name="configuration.svcinfo" />
+  </Extensions>
+</ReferenceGroup>
