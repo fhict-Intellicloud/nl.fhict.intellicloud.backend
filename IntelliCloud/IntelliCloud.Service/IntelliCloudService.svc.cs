@@ -39,17 +39,24 @@ namespace nl.fhict.IntelliCloud.Service
         {
             List<Question> questions = new List<Question>();
 
+            questions.Add(new Question() { User = new User() { FirstName = "UserOne", Infix = "of", LastName = "LastName" } });
+            questions.Add(new Question() { User = new User() { FirstName = "UserTwo", Infix = "of", LastName = "LastName" } });
+            questions.Add(new Question() { User = new User() { FirstName = "UserThree", Infix = "of", LastName = "LastName" } });
+            questions.Add(new Question() { User = new User() { FirstName = "UserFour", Infix = "of", LastName = "LastName" } });
+            questions.Add(new Question() { User = new User() { FirstName = "UserFive", Infix = "of", LastName = "LastName" } });
+            questions.Add(new Question() { User = new User() { FirstName = "UserSix", Infix = "of", LastName = "LastName" } });
+
             return questions;
         }
 
         public void AcceptAnswer(string feedback, string answerId, string questionId)
         {
-
+            manager.AcceptAnswer(feedback, answerId, questionId);
         }
 
         public void DeclineAnswer(string feedback, string answerId, string questionId)
         {
-
+            manager.DeclineAnswer(feedback, answerId, questionId);
         }
 
         public void SendReviewForAnswer(string reviewerId, string answerId, string review)

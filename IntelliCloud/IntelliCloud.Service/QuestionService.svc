@@ -1,0 +1,1 @@
+﻿<%@ ServiceHost Language="C#" Debug="true" Service="nl.fhict.IntelliCloud.Service.QuestionService" CodeBehind="QuestionService.svc.cs" %>
