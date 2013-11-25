@@ -1,5 +1,6 @@
 ﻿using nl.fhict.IntelliCloud.Business.Manager;
 using nl.fhict.IntelliCloud.Common.DataTransfer;
+using System;
 using System.Collections.Generic;
 
 namespace nl.fhict.IntelliCloud.Service
@@ -74,8 +75,9 @@ namespace nl.fhict.IntelliCloud.Service
 
         public Answer GetAnswerById(string answerId)
         {
-            return new Answer();
 
+
+            return new Answer();
         }
 
         public Question GetQuestionById(string questionId)
