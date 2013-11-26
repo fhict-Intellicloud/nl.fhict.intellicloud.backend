@@ -49,7 +49,7 @@ namespace nl.fhict.IntelliCloud.Service.IntegrationTest
         {
             try
             {
-                this.service.GetAnswerById("InvalidId");
+                //this.service.GetAnswerById("InvalidId");
                 Assert.Fail();
             }
             catch (Exception e)
