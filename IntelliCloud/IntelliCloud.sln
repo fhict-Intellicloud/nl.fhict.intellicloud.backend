@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IntelliCloud.Common", "Inte
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IntelliCloud.Service.IntegrationTest", "IntelliCloud.Service.IntegrationTest\IntelliCloud.Service.IntegrationTest.csproj", "{63E7EE5D-08B6-4DDC-8904-3939AC8AF758}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IntelliCloud.Business.UnitTest", "IntelliCloud.Business.UnitTest\IntelliCloud.Business.UnitTest.csproj", "{482D3E09-31B9-4642-8C08-01FE70223490}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -37,6 +39,10 @@ Global
 		{63E7EE5D-08B6-4DDC-8904-3939AC8AF758}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{63E7EE5D-08B6-4DDC-8904-3939AC8AF758}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{63E7EE5D-08B6-4DDC-8904-3939AC8AF758}.Release|Any CPU.Build.0 = Release|Any CPU
+		{482D3E09-31B9-4642-8C08-01FE70223490}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{482D3E09-31B9-4642-8C08-01FE70223490}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{482D3E09-31B9-4642-8C08-01FE70223490}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{482D3E09-31B9-4642-8C08-01FE70223490}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

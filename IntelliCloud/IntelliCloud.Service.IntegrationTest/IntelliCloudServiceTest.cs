@@ -1,5 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using nl.fhict.IntelliCloud.Service;
+using nl.fhict.IntelliCloud.Common.DataTransfer;
 using System;
 
 namespace nl.fhict.IntelliCloud.Service.IntegrationTest
@@ -8,7 +9,7 @@ namespace nl.fhict.IntelliCloud.Service.IntegrationTest
     /// This class inhibits integration tests for the service <see cref="IIntelliCloudService"/>.
     /// </summary>
     [TestClass]
-    public class IntelliCloudTest
+    public class IntelliCloudServiceTest
     {
         #region Fields
 
@@ -43,20 +44,7 @@ namespace nl.fhict.IntelliCloud.Service.IntegrationTest
 
         #region Tests
 
-        [TestMethod]
-        [TestCategory("nl.fhict.IntelliCloud.Service.IntegrationTest")]
-        public void GetAnswerById_InvalidAnswerId()
-        {
-            try
-            {
-                this.service.GetAnswerById("InvalidId");
-                Assert.Fail();
-            }
-            catch (Exception e)
-            {
-                Assert.AreEqual(e.Message, "Put the expected exception message here");
-            }
-        }
+        // Tests here
 
         #endregion Tests
 
