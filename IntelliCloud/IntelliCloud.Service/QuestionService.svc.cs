@@ -1,4 +1,5 @@
-﻿using nl.fhict.IntelliCloud.Business.Manager;
+﻿using nl.fhict.IntelliCloud.Business;
+using nl.fhict.IntelliCloud.Business.Manager;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,20 +17,32 @@ namespace nl.fhict.IntelliCloud.Service
         {
             this.manager = new IntelliCloudManager();            
         }
-
-        public void AskQuestion(string source, string reference, string question)
+        
+        public List<Common.DataTransfer.Question> GetQuestions(int questionId, int employeeId)
         {
-            manager.AskQuestion(source, reference, question);
+            // TODO remove TOString()
+            if (questionId > 0){
+                return manager.GetQuestions(questionId);
+            }
+            else if (employeeId > 0)
+            {
+                return manager.GetQuestionsForEmployee(employeeId);
+            }
+            else
+            {
+                return manager.GetQuestions();
+            }
         }
 
-        public List<Common.DataTransfer.Question> GetQuestions(string employeeId)
+        public void AskQuestion(Common.DataTransfer.Question question)
         {
-            return manager.GetQuestions(employeeId);
+            manager.AskQuestion(question);
         }
 
-        public Common.DataTransfer.Question GetQuestionById(string questionId)
+        public void UpdateQuestion(string id, Common.DataTransfer.Question question)
         {
-            return manager.GetQuestionById(questionId);
+            Validation.IdCheck(id);
+            manager.UpdateQuestion(id, question);            
         }
     }
 }

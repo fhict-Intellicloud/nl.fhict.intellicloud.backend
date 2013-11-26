@@ -251,5 +251,61 @@ namespace nl.fhict.IntelliCloud.Business.Manager
         {
             return new Question();
         }
+
+        public List<Question> GetQuestions(int questionId)
+        {
+            using (IntelliCloudContext ctx = new IntelliCloudContext())
+            {
+                List<QuestionEntity> questions = (from q in ctx.Questions
+                                                      .Include("User")
+                                                      .Include("SourceType")
+                                                      .Include("User.Sources")
+                                                      .Include("Answerer")
+                                                      .Include("Answerer.Sources")
+                                                  where q.Id == questionId
+                                                  select q).ToList();
+                return ConvertEntities.QuestionEntityListToQuestion(questions);
+            }
+        }
+
+        public List<Question> GetQuestionsForEmployee(int employeeId)
+        {
+            //TODO implement algorithem to match employee to questions
+            using (IntelliCloudContext ctx = new IntelliCloudContext())
+            {
+                List<QuestionEntity> questions = (from q in ctx.Questions
+                                                      .Include("User")
+                                                      .Include("SourceType")
+                                                      .Include("User.Sources")
+                                                      .Include("Answerer")
+                                                      .Include("Answerer.Sources") 
+                                                  where q.QuestionState == QuestionState.Open
+                                                  select q).ToList();
+                return ConvertEntities.QuestionEntityListToQuestion(questions);
+            }
+        }
+
+        public List<Question> GetQuestions()
+        {
+            using (IntelliCloudContext ctx = new IntelliCloudContext()){
+                List<QuestionEntity> questions = (from q in ctx.Questions
+                                                      .Include("User")
+                                                      .Include("SourceType")
+                                                      .Include("User.Sources")
+                                                      .Include("Answerer")
+                                                      .Include("Answerer.Sources") 
+                                                  select q).ToList();
+                return ConvertEntities.QuestionEntityListToQuestion(questions);
+            }
+        }
+
+        public void AskQuestion(Question question)
+        {
+        }
+
+        public void UpdateQuestion(string id, Question question)
+        {
+            
+        }
     }
 }

@@ -13,43 +13,42 @@ namespace nl.fhict.IntelliCloud.Service
     public interface IQuestionService
     {
         /// <summary>
-        /// This method is used to ask a question to a employee.
+        /// This method is used to get question with multiple possible parameters
         /// </summary>
-        /// <param name="source">the name of the source as the source is known in the database</param>
-        /// <param name="reference">the reference needed by the plugin to send the answers back</param>
-        /// <param name="question">the question itself</param>
-        /// <returns>Returns whether the question upload was succesfull or failed</returns>
+        /// <param name="questionId">Optional parameter to get a question by Id</param>
+        /// <param name="employeeId">Optional parameter to get all the availible question for this employee</param>
+        /// <returns>Returns a list of questions</returns>
         [OperationContract]
-        [WebInvoke(Method = "POST",
-            UriTemplate = "Post/{source}/{reference}/{question}",
+        [WebGet(UriTemplate = "Get?employeeId={employeeId}&questionId={questionId}",
             RequestFormat = WebMessageFormat.Json,
             ResponseFormat = WebMessageFormat.Json,
             BodyStyle = WebMessageBodyStyle.Wrapped)]
-        void AskQuestion(String source, String reference, String question);
+        List<Question> GetQuestions(int questionId, int employeeId);
+                
+        /// <summary>
+        /// This method is used to ask a question
+        /// </summary>
+        /// <param name="question">The question object that will be added to the database</param>
+        [OperationContract]
+        [WebInvoke(Method = "POST",
+            UriTemplate = "Post",
+            RequestFormat = WebMessageFormat.Json,
+            ResponseFormat = WebMessageFormat.Json,
+            BodyStyle = WebMessageBodyStyle.Wrapped)]
+        void AskQuestion(Question question);
 
         /// <summary>
-        /// This method return the question availible to this employee
+        /// This method is used to update a question
         /// </summary>
-        /// <param name="employeeId">The employeeId of the employee who requests the questions</param>
-        /// <returns>Returns the questions availible to this employee</returns>
+        /// <param name="id">The id of the question you want to update</param>
+        /// <param name="question">The question object used to update the question</param>
         [OperationContract]
-        [WebInvoke(Method = "GET",
-            UriTemplate = "GetByEmployeeId/{employeeId}",
+        [WebInvoke(Method = "POST",
+            UriTemplate = "Update/{Id}",
             RequestFormat = WebMessageFormat.Json,
-            ResponseFormat = WebMessageFormat.Json)]
-        List<Question> GetQuestions(String employeeId);
-
-        /// <summary>
-        /// This method is used to get the question by the questionId
-        /// </summary>
-        /// <param name="questionId">this Id of the quetion you want to recieve</param>
-        /// <returns>Returns the question you want to use</returns>
-        [OperationContract]
-        [WebInvoke(Method = "GET",
-            UriTemplate = "GetByQuestionId/{questionId}",
-            RequestFormat = WebMessageFormat.Json,
-            ResponseFormat = WebMessageFormat.Json)]
-        Question GetQuestionById(String questionId);
+            ResponseFormat = WebMessageFormat.Json,
+            BodyStyle = WebMessageBodyStyle.Wrapped)]
+        void UpdateQuestion(String id, Question question);
 
     }
 }
