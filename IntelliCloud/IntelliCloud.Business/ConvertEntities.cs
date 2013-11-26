@@ -109,7 +109,7 @@ namespace nl.fhict.IntelliCloud.Business
             return answers;
         }
 
-        internal static List<Review> ReviewEntityListToReviewList(List<ReviewEntity> entities)
+        public static List<Review> ReviewEntityListToReviewList(List<ReviewEntity> entities)
         {
             List<Review> reviews = new List<Review>();
             foreach (ReviewEntity entity in entities)
@@ -126,5 +126,16 @@ namespace nl.fhict.IntelliCloud.Business
 
             return reviews;
         }
+
+        public static List<Question> QuestionEntityListToQuestion(List<QuestionEntity> entities)
+        {
+            List<Question> questions = new List<Question>();
+            foreach (QuestionEntity entity in entities)
+            {
+                questions.Add(QuestionEntityToQuestion(entity));
+            }
+            return questions;
+        }
+
     }
 }
