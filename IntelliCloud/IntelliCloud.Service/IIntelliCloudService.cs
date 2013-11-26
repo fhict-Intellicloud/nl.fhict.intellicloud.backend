@@ -6,11 +6,12 @@ using System.ServiceModel;
 using System.ServiceModel.Web;
 using System.Text;
 using nl.fhict.IntelliCloud.Common.DataTransfer;
+using System.IO;
 
-namespace IntelliCloud
+namespace nl.fhict.IntelliCloud.Service
 {
     [ServiceContract]
-    public interface IIntelliCloud
+    public interface IIntelliCloudService
     {
         /// <summary>
         /// This method is used to ask a question to a employee.
@@ -21,8 +22,8 @@ namespace IntelliCloud
         /// <returns>Returns whether the question upload was succesfull or failed</returns>
         [OperationContract]
         [WebInvoke(Method = "POST", 
-            UriTemplate = "AskQuestion", 
-            RequestFormat = WebMessageFormat.Xml, 
+            UriTemplate = "AskQuestion/{source}/{reference}/{question}", 
+            RequestFormat = WebMessageFormat.Json, 
             ResponseFormat = WebMessageFormat.Json,
             BodyStyle = WebMessageBodyStyle.Wrapped)]
         void AskQuestion(String source, String reference, String question);
@@ -160,10 +161,10 @@ namespace IntelliCloud
         /// <param name="employeeId">The Id of the employee you want to get the answers from</param>
         /// <returns>Return a list containing all the answers that have to be reviewed by the employee</returns>
         [OperationContract]
-        [WebInvoke(Method = "GET",
-            UriTemplate = "GetAnswersUpForReview/{employeeId}",
+        [WebGet(UriTemplate = "GetAnswersUpForReview/{employeeId}",
             RequestFormat = WebMessageFormat.Json,
-            ResponseFormat = WebMessageFormat.Json)]
+            ResponseFormat = WebMessageFormat.Json,
+            BodyStyle = WebMessageBodyStyle.Wrapped)]
         List<Answer> GetAnswersUpForReview(String employeeId);
 
         /// <summary>
@@ -191,5 +192,5 @@ namespace IntelliCloud
         Question GetQuestionById(String questionId);
 
     }
-        
+
 }

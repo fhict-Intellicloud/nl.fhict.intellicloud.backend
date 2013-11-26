@@ -39,7 +39,6 @@ namespace nl.fhict.IntelliCloud.Common.DataTransfer
         /// <summary>
         /// Gets or sets the state of the question.
         /// </summary>
-        [DataMember]
         public QuestionState QuestionState { get; set; }
 
         /// <summary>
@@ -52,7 +51,7 @@ namespace nl.fhict.IntelliCloud.Common.DataTransfer
         /// Gets or sets the creation date and time of the question.
         /// </summary>
         [DataMember]
-        public DateTime CreationTime { get; set; }
+        public DateTime? CreationTime { get; set; }
 
         /// <summary>
         /// Gets or sets the keywords that are linked to the question.

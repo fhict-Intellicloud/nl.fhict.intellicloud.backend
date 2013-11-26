@@ -26,41 +26,43 @@ namespace nl.fhict.IntelliCloud.Business.Manager
 
                 questionEntity.Content = question;
                 questionEntity.CreationTime = DateTime.UtcNow;
-                questionEntity.SourceType = ctx.SourceDefinitions.First(sd => sd.Name.Equals(source));
+                questionEntity.SourceType = ctx.SourceDefinitions.Single(sd => sd.Name.Equals(source));
                 questionEntity.QuestionState = QuestionState.Open;
                
                 // Check if the user already exists
-                var users = from u in ctx.Users
-                            where u.Id == ctx.Sources.First(s => s.SourceDefinition.Id == questionEntity.SourceType.Id && s.Value == reference).UserId 
-                            select u;
+                var sourceEntity = ctx.Sources.SingleOrDefault(s => s.SourceDefinition.Id == questionEntity.SourceType.Id && s.Value == reference); 
 
-                if (users.Count() > 0)
+                if (sourceEntity != null)
                 {
                     // user already has an account, use this
-                    questionEntity.User = users.FirstOrDefault();
+                    var userEntity = (from u in ctx.Users
+                            where u.Id == sourceEntity.UserId
+                            select u).Single();
+
+                    questionEntity.User = userEntity;
                 }
                 else
                 {
                     // user has no account, create one
-                    UserEntity userEntity = new UserEntity();
+                    UserEntity newUserEntity = new UserEntity();
 
-                    userEntity.CreationTime = DateTime.UtcNow;
-                    userEntity.Type = UserType.Customer;
+                    newUserEntity.CreationTime = DateTime.UtcNow;
+                    newUserEntity.Type = UserType.Customer;
 
-                    ctx.Users.Add(userEntity);
+                    ctx.Users.Add(newUserEntity);
 
                     ctx.SaveChanges();
 
-                    questionEntity.User = userEntity;   
+                    questionEntity.User = newUserEntity;   
 
                     // Mount the source to the new user
-                    SourceEntity sourceEntity = new SourceEntity();
-                    sourceEntity.Value = reference;
-                    sourceEntity.CreationTime = DateTime.UtcNow;
-                    sourceEntity.SourceDefinition = questionEntity.SourceType;
-                    sourceEntity.UserId = userEntity.Id;
+                    SourceEntity newSourceEntity = new SourceEntity();
+                    newSourceEntity.Value = reference;
+                    newSourceEntity.CreationTime = DateTime.UtcNow;
+                    newSourceEntity.SourceDefinition = questionEntity.SourceType;
+                    newSourceEntity.UserId = newUserEntity.Id;
 
-                    ctx.Sources.Add(sourceEntity);
+                    ctx.Sources.Add(newSourceEntity);
 
                 }
 
@@ -110,12 +112,66 @@ namespace nl.fhict.IntelliCloud.Business.Manager
 
         public void AcceptAnswer(string feedback, string answerId, string questionId)
         {
+            // Validate input data
+            Validation.StringCheck(feedback);
+            Validation.IdCheck(answerId);
+            Validation.IdCheck(questionId);
 
+            using (IntelliCloudContext context = new IntelliCloudContext())
+            {
+                // Set the state of the answer to Accepted
+                AnswerEntity answer = context.Answers.Single(a => a.Id == Convert.ToInt32(answerId));
+                answer.AnswerState = AnswerState.Accepted;
+
+                // Set the state of the question to Closed - no further action is required
+                QuestionEntity question = answer.Question;
+                question.QuestionState = QuestionState.Closed;
+
+                // Store the user's feedback for the given answer
+                FeedbackEntity feedbackEntity = new FeedbackEntity();
+                feedbackEntity.Answer = answer;
+                feedbackEntity.Content = feedback;
+                feedbackEntity.CreationTime = DateTime.UtcNow;
+                feedbackEntity.FeedbackState = FeedbackState.Open;
+                feedbackEntity.FeedbackType = FeedbackType.Accepted;
+                feedbackEntity.User = question.User;
+
+                context.Feedbacks.Add(feedbackEntity);
+
+                context.SaveChanges();
+            }
         }
 
         public void DeclineAnswer(string feedback, string answerId, string questionId)
         {
+            // Validate input data
+            Validation.StringCheck(feedback);
+            Validation.IdCheck(answerId);
+            Validation.IdCheck(questionId);
 
+            using (IntelliCloudContext context = new IntelliCloudContext())
+            {
+                // Set the state of the answer to Declined
+                AnswerEntity answer = context.Answers.Single(a => a.Id == Convert.ToInt32(answerId));
+                answer.AnswerState = AnswerState.Declined;
+
+                // Set the state of the question to Open - employee needs to process the feedback given by the user
+                QuestionEntity question = answer.Question;
+                question.QuestionState = QuestionState.Open;
+
+                // Store the user's feedback for the given answer
+                FeedbackEntity feedbackEntity = new FeedbackEntity();
+                feedbackEntity.Answer = answer;
+                feedbackEntity.Content = feedback;
+                feedbackEntity.CreationTime = DateTime.UtcNow;
+                feedbackEntity.FeedbackState = FeedbackState.Open;
+                feedbackEntity.FeedbackType = FeedbackType.Declined;
+                feedbackEntity.User = question.User;
+
+                context.Feedbacks.Add(feedbackEntity);
+
+                context.SaveChanges();
+            }
         }
 
         public void UpdateReview(string reviewId, string reviewState)
@@ -158,14 +214,14 @@ namespace nl.fhict.IntelliCloud.Business.Manager
 
             using (IntelliCloudContext context = new IntelliCloudContext())
             {
-                return new List<Review>(context.Reviews.Select(x => new Review()
-                {
-                    AnswerId = x.Answer.Id,
-                    Content = x.Content,
-                    Id = x.Id,
-                    ReviewState = x.ReviewState,
-                    User = ConvertEntities.UserEntityToUser(x.User)
-                }));
+
+                int iAnswerId = int.Parse(answerId);
+
+                List<ReviewEntity> reviewEntities = (from r in context.Reviews.Include("Answer").Include("User")
+                                                     where r.Answer.Id == iAnswerId
+                                                     select r).ToList();
+
+                return ConvertEntities.ReviewEntityListToReviewList(reviewEntities);
             }
         }
 
@@ -175,14 +231,12 @@ namespace nl.fhict.IntelliCloud.Business.Manager
 
             using (IntelliCloudContext context = new IntelliCloudContext())
             {
-                return new List<Answer>(context.Answers.Select(x => new Answer()
-                {
-                    Content = x.Content,
-                    Id = x.Id,
-                    AnswerState = x.AnswerState,
-                    Question = ConvertEntities.QuestionEntityToQuestion(x.Question),
-                    User = ConvertEntities.UserEntityToUser(x.User)
-                }));
+
+                List<AnswerEntity> answerEntities = (from a in context.Answers.Include("Question").Include("User").Include("Question.User").Include("Question.SourceType").Include("User.Sources")
+                                                    where a.AnswerState == (AnswerState.UnderReview)
+                                                    select a).ToList();
+
+                return ConvertEntities.AnswerEntityListToAnswerList(answerEntities);
             }          
         }
 
@@ -196,6 +250,62 @@ namespace nl.fhict.IntelliCloud.Business.Manager
         public Question GetQuestionById(string questionId)
         {
             return new Question();
+        }
+
+        public List<Question> GetQuestions(int questionId)
+        {
+            using (IntelliCloudContext ctx = new IntelliCloudContext())
+            {
+                List<QuestionEntity> questions = (from q in ctx.Questions
+                                                      .Include("User")
+                                                      .Include("SourceType")
+                                                      .Include("User.Sources")
+                                                      .Include("Answerer")
+                                                      .Include("Answerer.Sources")
+                                                  where q.Id == questionId
+                                                  select q).ToList();
+                return ConvertEntities.QuestionEntityListToQuestion(questions);
+            }
+        }
+
+        public List<Question> GetQuestionsForEmployee(int employeeId)
+        {
+            //TODO implement algorithem to match employee to questions
+            using (IntelliCloudContext ctx = new IntelliCloudContext())
+            {
+                List<QuestionEntity> questions = (from q in ctx.Questions
+                                                      .Include("User")
+                                                      .Include("SourceType")
+                                                      .Include("User.Sources")
+                                                      .Include("Answerer")
+                                                      .Include("Answerer.Sources") 
+                                                  where q.QuestionState == QuestionState.Open
+                                                  select q).ToList();
+                return ConvertEntities.QuestionEntityListToQuestion(questions);
+            }
+        }
+
+        public List<Question> GetQuestions()
+        {
+            using (IntelliCloudContext ctx = new IntelliCloudContext()){
+                List<QuestionEntity> questions = (from q in ctx.Questions
+                                                      .Include("User")
+                                                      .Include("SourceType")
+                                                      .Include("User.Sources")
+                                                      .Include("Answerer")
+                                                      .Include("Answerer.Sources") 
+                                                  select q).ToList();
+                return ConvertEntities.QuestionEntityListToQuestion(questions);
+            }
+        }
+
+        public void AskQuestion(Question question)
+        {
+        }
+
+        public void UpdateQuestion(string id, Question question)
+        {
+            
         }
     }
 }

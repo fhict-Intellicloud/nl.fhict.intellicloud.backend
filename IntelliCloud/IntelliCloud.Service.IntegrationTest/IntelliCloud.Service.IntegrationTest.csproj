@@ -4,12 +4,12 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{59A5B95E-1352-4B18-AAA4-71E1F334A2F5}</ProjectGuid>
+    <ProjectGuid>{63E7EE5D-08B6-4DDC-8904-3939AC8AF758}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>nl.fhict.IntelliCloud.Business</RootNamespace>
-    <AssemblyName>IntelliCloud.Business</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <RootNamespace>nl.fhict.IntelliCloud.Service.IntegrationTest</RootNamespace>
+    <AssemblyName>IntelliCloud.Service.IntegrationTest</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -30,16 +30,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="EntityFramework">
-      <HintPath>..\packages\EntityFramework.6.0.1\lib\net40\EntityFramework.dll</HintPath>
-    </Reference>
-    <Reference Include="EntityFramework.SqlServer">
-      <HintPath>..\packages\EntityFramework.6.0.1\lib\net40\EntityFramework.SqlServer.dll</HintPath>
-    </Reference>
+    <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -47,24 +41,21 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ConvertEntities.cs" />
-    <Compile Include="Manager\IntelliCloudManager.cs" />
+    <Compile Include="IntelliCloudServiceTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Validation.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\IntelliCloud.Common\IntelliCloud.Common.csproj">
       <Project>{22a9b283-420a-4325-990a-7c0a14e36590}</Project>
       <Name>IntelliCloud.Common</Name>
     </ProjectReference>
-    <ProjectReference Include="..\IntelliCloud.Data\IntelliCloud.Data.csproj">
-      <Project>{ff97327b-0419-44f1-b71e-ab2086553ee2}</Project>
-      <Name>IntelliCloud.Data</Name>
+    <ProjectReference Include="..\IntelliCloud.Service\IntelliCloud.Service.csproj">
+      <Project>{2a2ce00d-8bba-445d-84cd-bfe3f2fe03d7}</Project>
+      <Name>IntelliCloud.Service</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

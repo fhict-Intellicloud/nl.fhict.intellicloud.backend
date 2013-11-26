@@ -28,6 +28,7 @@ namespace nl.fhict.IntelliCloud.Business
             user.Username = entity.Username;
             user.Password = entity.Password;
             user.Type = entity.Type;
+            user.CreationTime = entity.CreationTime;
             user.Sources = SourceEntityListToSources(entity.Sources);
 
             return user;
@@ -47,6 +48,7 @@ namespace nl.fhict.IntelliCloud.Business
                 temp.Id = source.Id;
                 temp.SourceDefinition = SourceDefinitionEntityToSourceDefinition(source.SourceDefinition);
                 temp.Value = source.Value;
+                temp.CreationTime = source.CreationTime;
                 sources.Add(temp);
             }
             return sources;
@@ -64,6 +66,7 @@ namespace nl.fhict.IntelliCloud.Business
             sourceDefinition.Id = sourceDefinitionEntity.Id;
             sourceDefinition.Name = sourceDefinitionEntity.Name;
             sourceDefinition.Description = sourceDefinitionEntity.Description;
+            sourceDefinition.CreationTime = sourceDefinitionEntity.CreationTime;
             return sourceDefinition;
         }
 
@@ -76,12 +79,63 @@ namespace nl.fhict.IntelliCloud.Business
         {
             Question question = new Question();
             question.Id = entity.Id;
-            question.Answerer = UserEntityToUser(entity.Answerer);
+            if (entity.Answerer != null)
+            {
+                question.Answerer = UserEntityToUser(entity.Answerer);
+            }
             question.User = UserEntityToUser(entity.User);
             question.Content = entity.Content;
+            question.CreationTime = entity.CreationTime;
             question.QuestionState = entity.QuestionState;
             question.SourceType = SourceDefinitionEntityToSourceDefinition(entity.SourceType);
             return question;
         }
+
+        public static List<Answer> AnswerEntityListToAnswerList(List<AnswerEntity> entities)
+        {
+            List<Answer> answers = new List<Answer>();
+            foreach (AnswerEntity entity in entities)
+            {
+                Answer temp = new Answer();
+                temp.Id = entity.Id;
+                temp.CreationTime = entity.CreationTime;
+                temp.Content = entity.Content;
+                temp.AnswerState = entity.AnswerState;
+                temp.Question = ConvertEntities.QuestionEntityToQuestion(entity.Question);
+                temp.User = ConvertEntities.UserEntityToUser(entity.User);
+                answers.Add(temp);
+            }
+
+            return answers;
+        }
+
+        public static List<Review> ReviewEntityListToReviewList(List<ReviewEntity> entities)
+        {
+            List<Review> reviews = new List<Review>();
+            foreach (ReviewEntity entity in entities)
+            {
+                Review temp = new Review();
+                temp.Id = entity.Id;
+                temp.Content = entity.Content;
+                temp.ReviewState = entity.ReviewState;
+                temp.AnswerId = entity.Answer.Id;
+                temp.CreationTime = entity.CreationTime;
+                temp.User = ConvertEntities.UserEntityToUser(entity.User);
+                reviews.Add(temp);
+            }
+
+            return reviews;
+        }
+
+        public static List<Question> QuestionEntityListToQuestion(List<QuestionEntity> entities)
+        {
+            List<Question> questions = new List<Question>();
+            foreach (QuestionEntity entity in entities)
+            {
+                questions.Add(QuestionEntityToQuestion(entity));
+            }
+            return questions;
+        }
+
     }
 }

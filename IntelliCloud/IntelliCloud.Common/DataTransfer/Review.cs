@@ -33,9 +33,8 @@ namespace nl.fhict.IntelliCloud.Common.DataTransfer
         /// <summary>
         /// Gets or sets the state of the review. This state indicates if the review is processed.
         /// </summary>
-        [DataMember]
         public ReviewState ReviewState { get; set; }
-
+        
         /// <summary>
         /// Gets or sets the user that made the review.
         /// </summary>
