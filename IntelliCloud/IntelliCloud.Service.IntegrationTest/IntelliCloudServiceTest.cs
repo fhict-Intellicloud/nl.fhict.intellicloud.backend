@@ -1,5 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using nl.fhict.IntelliCloud.Service;
+using nl.fhict.IntelliCloud.Common.DataTransfer;
 using System;
 
 namespace nl.fhict.IntelliCloud.Service.IntegrationTest
@@ -8,7 +9,7 @@ namespace nl.fhict.IntelliCloud.Service.IntegrationTest
     /// This class inhibits integration tests for the service <see cref="IIntelliCloudService"/>.
     /// </summary>
     [TestClass]
-    public class IntelliCloudTest
+    public class IntelliCloudServiceTest
     {
         #region Fields
 

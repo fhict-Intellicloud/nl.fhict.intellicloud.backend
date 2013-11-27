@@ -16,10 +16,10 @@ namespace nl.fhict.IntelliCloud.Business
         /// <param name="value">The string that needs to be checked</param>
         public static void StringCheck(string value)
         {
-            if (String.IsNullOrEmpty(value))
-            {
-                throw new ArgumentException("String is null or empty.");
-            } 
+            if (value == null)
+                throw new ArgumentNullException();
+            else if (String.IsNullOrEmpty(value))
+                throw new ArgumentException("String is empty.");
         }
 
         /// <summary>

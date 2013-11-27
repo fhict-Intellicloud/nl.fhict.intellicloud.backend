@@ -53,6 +53,10 @@
     <Compile Include="Validation.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="App.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\IntelliCloud.Common\IntelliCloud.Common.csproj">
       <Project>{22a9b283-420a-4325-990a-7c0a14e36590}</Project>
       <Name>IntelliCloud.Common</Name>
@@ -61,10 +65,6 @@
       <Project>{ff97327b-0419-44f1-b71e-ab2086553ee2}</Project>
       <Name>IntelliCloud.Data</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="App.config" />
-    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
