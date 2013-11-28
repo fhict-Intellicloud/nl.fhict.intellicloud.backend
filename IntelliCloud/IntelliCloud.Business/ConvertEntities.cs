@@ -72,7 +72,7 @@ namespace nl.fhict.IntelliCloud.Business
         /// Converts a QuestionEntity to a Question.
         /// </summary>
         /// <param name="entity">The QuestionEntity that has to be converted.</param>
-        /// <returns>The question onbject.</returns>
+        /// <returns>The question object.</returns>
         public static Question QuestionEntityToQuestion(QuestionEntity entity)
         {
             Question question = new Question();
