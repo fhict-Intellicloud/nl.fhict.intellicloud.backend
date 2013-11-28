@@ -13,7 +13,7 @@ namespace nl.fhict.IntelliCloud.Common.DataTransfer
     public class Source
     {
         /// <summary>
-        /// Gets or sets the unique indentifier of the source.
+        /// Gets or sets the unique identifier of the source.
         /// </summary>
         [DataMember]
         public int Id { get; set; }

@@ -19,7 +19,7 @@ namespace nl.fhict.IntelliCloud.Common.DataTransfer
         Open,
         
         /// <summary>
-        /// Indicates the <see cref="Question"/> is assigned to an employee to be asnwered.
+        /// Indicates the <see cref="Question"/> is assigned to an employee to be answered.
         /// </summary>
         [EnumMember]
         UpForAnswer,

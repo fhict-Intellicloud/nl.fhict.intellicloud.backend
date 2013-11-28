@@ -66,6 +66,7 @@ namespace nl.fhict.IntelliCloud.Data.Model
         /// <summary>
         /// Gets or sets the creation date and time of the user.
         /// </summary>
+        [Required]
         public DateTime CreationTime { get; set; }
 
         /// <summary>
