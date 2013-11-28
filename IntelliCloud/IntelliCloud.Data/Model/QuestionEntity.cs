@@ -29,6 +29,12 @@ namespace nl.fhict.IntelliCloud.Data.Model
         public string Content { get; set; }
 
         /// <summary>
+        /// Gets or sets the language the question is written in.
+        /// </summary>
+        [Required]
+        public LanguageDefinitionEntity LanguageDefinition { get; set; }
+
+        /// <summary>
         /// Gets or sets the answer for the question. This field is empty until the question state is either 
         /// <see cref="QuestionState.UpForFeedback"/> or <see cref="QuestionState.Closed"/>, so it only contains 
         /// accepted or pending answers.

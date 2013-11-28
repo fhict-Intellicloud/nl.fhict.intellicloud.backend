@@ -25,6 +25,12 @@ namespace nl.fhict.IntelliCloud.Data.Model
         /// </summary>
         [Required]
         public string Content { get; set; }
+
+        /// <summary>
+        /// Gets or sets the language the answer is written in.
+        /// </summary>
+        [Required]
+        public LanguageDefinitionEntity LanguageDefinition { get; set; }
         
         /// <summary>
         /// Gets or sets the user that gave the answer.

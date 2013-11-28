@@ -22,7 +22,13 @@ namespace nl.fhict.IntelliCloud.Common.DataTransfer
         /// Gets or sets the content of the answer. The content contains the answer given to the question.
         /// </summary>
         [DataMember]
-        public string Content { get; set; }              
+        public string Content { get; set; }
+
+        /// <summary>
+        /// Gets or sets the language the answer is written in.
+        /// </summary>
+        [DataMember]
+        public LanguageDefinition LanguageDefinition { get; set; }
         
         /// <summary>
         /// Gets or sets the user that gave the answer.
