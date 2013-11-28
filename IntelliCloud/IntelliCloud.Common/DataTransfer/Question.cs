@@ -19,13 +19,33 @@ namespace nl.fhict.IntelliCloud.Common.DataTransfer
         public int Id { get; set; }
 
         /// <summary>
+        /// Gets or sets the tile of the question. The title is a short summary of the question.
+        /// </summary>
+        [DataMember]
+        public string Title { get; set; }
+
+        /// <summary>
         /// Gets or sets the content of the question. The content contains question asked by the <see cref="User"/>.
         /// </summary>
         [DataMember]
         public string Content { get; set; }
 
         /// <summary>
-        /// Gets or sets the user that aksed the question.
+        /// Gets or sets the language the question is written in.
+        /// </summary>
+        [DataMember]
+        public LanguageDefinition LanguageDefinition { get; set; }
+
+        /// <summary>
+        /// Gets or sets the answer for the question. This field is empty until the question state is either 
+        /// <see cref="QuestionState.UpForFeedback"/> or <see cref="QuestionState.Closed"/>, so it only contains 
+        /// accepted or pending answers.
+        /// </summary>
+        [DataMember]
+        public Answer Answer { get; set; }
+
+        /// <summary>
+        /// Gets or sets the user that asked the question.
         /// </summary>
         [DataMember]
         public User User { get; set; }
@@ -42,10 +62,10 @@ namespace nl.fhict.IntelliCloud.Common.DataTransfer
         public QuestionState QuestionState { get; set; }
 
         /// <summary>
-        /// Gets or sets the type of source that is used to return the answer to the question. The actual source can be found using the <see cref="Question.User"/> field.
+        /// Gets or sets the source definition that is used to return the answer to the question. The actual source can be found using the <see cref="Question.User"/> field.
         /// </summary>
         [DataMember]
-        public SourceDefinition SourceType { get; set; }
+        public SourceDefinition SourceDefinition { get; set; }
 
         /// <summary>
         /// Gets or sets the creation date and time of the question.
@@ -59,5 +79,11 @@ namespace nl.fhict.IntelliCloud.Common.DataTransfer
         [DataMember]
         public IList<Keyword> Keywords { get; set; }
 
+        /// <summary>
+        /// Gets or sets a value indicating whether the question is private. When a question is private it can only be 
+        /// viewed by users of type <see cref="UserType.Employee"/>.
+        /// </summary>
+        [DataMember]
+        public bool IsPrivate { get; set; }
     }
 }

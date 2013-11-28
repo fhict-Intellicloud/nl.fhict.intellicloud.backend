@@ -23,12 +23,12 @@ namespace nl.fhict.IntelliCloud.Common.DataTransfer
         /// </summary>
         [DataMember]
         public string Content { get; set; }
-        
+
         /// <summary>
-        /// Gets or sets the question to which the answer applies.
+        /// Gets or sets the language the answer is written in.
         /// </summary>
         [DataMember]
-        public Question Question { get; set; }
+        public LanguageDefinition LanguageDefinition { get; set; }
         
         /// <summary>
         /// Gets or sets the user that gave the answer.
@@ -53,5 +53,12 @@ namespace nl.fhict.IntelliCloud.Common.DataTransfer
         /// </summary>
         [DataMember]
         public IList<Keyword> Keywords { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the answer is private. When a answer is private it can only be 
+        /// viewed by users of type <see cref="UserType.Employee"/>.
+        /// </summary>
+        [DataMember]
+        public bool IsPrivate { get; set; }
     }
 }

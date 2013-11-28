@@ -27,10 +27,19 @@ namespace nl.fhict.IntelliCloud.Data.Model
         public string Content { get; set; }
 
         /// <summary>
-        /// Gets or sets the identifier of the answer the feedback applies to.
+        /// Gets or sets the answer the feedback applies to.
         /// </summary>
         [Required]
         public AnswerEntity Answer { get; set; }
+
+        /// <summary>
+        /// Gets or sets the question which was answered. This field is required because the answer only has a link to
+        /// the question that triggered its creation and the question only has a link to the accepted or pending answer.
+        /// This feedback however can also apply to existing answers (so this question wasn't the question that 
+        /// triggered its creation) that where declined for this question (so the answer isn't linked to this question).
+        /// </summary>
+        [Required]
+        public QuestionEntity Question { get; set; }
 
         /// <summary>
         /// Gets or sets the user that gave the feedback.
@@ -38,7 +47,7 @@ namespace nl.fhict.IntelliCloud.Data.Model
         public UserEntity User { get; set; }
 
         /// <summary>
-        /// Gets or sets the type of feedback. The type indicates if the anser was accepted or declined.
+        /// Gets or sets the type of feedback. The type indicates if the answer was accepted or declined.
         /// </summary>
         public FeedbackType FeedbackType { get; set; }
 
@@ -50,6 +59,7 @@ namespace nl.fhict.IntelliCloud.Data.Model
         /// <summary>
         /// Gets or sets the creation date and time of the feedback.
         /// </summary>
+        [Required]
         public DateTime CreationTime { get; set; }
     }
 }

@@ -9,7 +9,7 @@ namespace nl.fhict.IntelliCloud.Business
 {
     /// <summary>
     /// This class will implement methods for converting Entities to domain objects.
-    /// Only if it is necassary.
+    /// Only if it is necessary.
     /// </summary>
     public class ConvertEntities
     {
@@ -25,8 +25,6 @@ namespace nl.fhict.IntelliCloud.Business
             user.FirstName = entity.FirstName;
             user.Infix = entity.Infix;
             user.LastName = entity.LastName;
-            user.Username = entity.Username;
-            user.Password = entity.Password;
             user.Type = entity.Type;
             user.CreationTime = entity.CreationTime;
             user.Sources = SourceEntityListToSources(entity.Sources);
@@ -87,7 +85,7 @@ namespace nl.fhict.IntelliCloud.Business
             question.Content = entity.Content;
             question.CreationTime = entity.CreationTime;
             question.QuestionState = entity.QuestionState;
-            question.SourceType = SourceDefinitionEntityToSourceDefinition(entity.SourceType);
+            question.SourceDefinition = SourceDefinitionEntityToSourceDefinition(entity.SourceDefinition);
             return question;
         }
 
@@ -101,7 +99,6 @@ namespace nl.fhict.IntelliCloud.Business
                 temp.CreationTime = entity.CreationTime;
                 temp.Content = entity.Content;
                 temp.AnswerState = entity.AnswerState;
-                temp.Question = ConvertEntities.QuestionEntityToQuestion(entity.Question);
                 temp.User = ConvertEntities.UserEntityToUser(entity.User);
                 answers.Add(temp);
             }
