@@ -5,31 +5,28 @@ using System.Linq;
 using System.Runtime.Serialization;
 using System.ServiceModel;
 using System.Text;
+using nl.fhict.IntelliCloud.Common.DataTransfer;
 
 namespace nl.fhict.IntelliCloud.Service
 {
+    /// <summary>
+    /// A service providing functionality related to answer reviewing.
+    /// </summary>
     public class ReviewService : IReviewService
     {
-        private readonly IntelliCloudManager manager;
-
-        public ReviewService()
+        public IList<Review> GetReviews(int answerId)
         {
-            this.manager = new IntelliCloudManager();            
+            throw new NotImplementedException();
         }
 
-        public void SendReviewForAnswer(string reviewerId, string answerId, string review)
+        public void CreateReview(int employeeId, int answerId, string review)
         {
-            manager.SendReviewForAnswer(reviewerId, answerId, review);
+            throw new NotImplementedException();
         }
 
-        public void UpdateReview(string reviewId, string reviewState)
+        public void UpdateReview(string id, ReviewState reviewState)
         {
-            manager.UpdateReview(reviewId, reviewState);
-        }
-
-        public List<Common.DataTransfer.Review> GetReviewsForAnswer(string answerId)
-        {
-            return manager.GetReviewsForAnswer(answerId);
+            throw new NotImplementedException();
         }
     }
 }

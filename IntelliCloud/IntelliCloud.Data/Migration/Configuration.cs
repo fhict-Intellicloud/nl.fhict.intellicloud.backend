@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Data.Entity.Migrations;
+﻿using System.Data.Entity.Migrations;
 using nl.fhict.IntelliCloud.Data.Context;
 
 namespace nl.fhict.IntelliCloud.Data.Migration
@@ -19,5 +15,18 @@ namespace nl.fhict.IntelliCloud.Data.Migration
         {
             this.AutomaticMigrationsEnabled = true;
         }
+
+        /// <summary>
+        /// Seeds the specified context.
+        /// </summary>
+        /// <param name="context">The context that is to be seeded.</param>
+        protected override void Seed(IntelliCloudContext context)
+        {
+            context.CreateIndex(
+                name: "IX_Source_Unique",
+                table: "Source",
+                columns: new[] { "Value", "SourceDefinition_Id" },
+                unique: true);
+        }        
     }
 }

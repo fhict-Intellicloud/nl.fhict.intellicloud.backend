@@ -20,7 +20,7 @@ namespace nl.fhict.IntelliCloud.Common.DataTransfer
         public int Id { get; set; }
 
         /// <summary>
-        /// Gets or sets the name of the source definition, e.g. 'Facebook'.
+        /// Gets or sets the name of the source definition, e.g. 'Facebook', 'Twitter', 'Mail' or a openId issuer.
         /// </summary>
         [DataMember]
         public string Name { get; set; }
@@ -30,6 +30,13 @@ namespace nl.fhict.IntelliCloud.Common.DataTransfer
         /// </summary>
         [DataMember]
         public string Description { get; set; }
+
+        /// <summary>
+        /// Gets or sets the url that can be used to retrieve information about a user. The url is used to send a token
+        /// to an external system to verify its authenticity. It is mainly used by openId providers.
+        /// </summary>
+        [DataMember]
+        public string Url { get; set; }
 
         /// <summary>
         /// Gets or sets the creation date and time of the answer.

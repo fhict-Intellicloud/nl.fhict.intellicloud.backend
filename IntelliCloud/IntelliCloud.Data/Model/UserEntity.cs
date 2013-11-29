@@ -29,18 +29,6 @@ namespace nl.fhict.IntelliCloud.Data.Model
         public int Id { get; set; }
 
         /// <summary>
-        /// Gets or sets the username of the user. The username is used when a user wishes to be authenticated.
-        /// </summary>
-        [MaxLength(254)]
-        public string Username { get; set; }
-
-        /// <summary>
-        /// Gets or sets the password of the user. The password is used when a user wishes to be authenticated.
-        /// </summary>
-        [MaxLength(254)]
-        public string Password { get; set; }
-
-        /// <summary>
         /// Gets or sets the first name of the user.
         /// </summary>
         [MaxLength(254)]
@@ -66,6 +54,7 @@ namespace nl.fhict.IntelliCloud.Data.Model
         /// <summary>
         /// Gets or sets the creation date and time of the user.
         /// </summary>
+        [Required]
         public DateTime CreationTime { get; set; }
 
         /// <summary>

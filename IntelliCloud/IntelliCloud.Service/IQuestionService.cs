@@ -9,46 +9,60 @@ using System.Text;
 
 namespace nl.fhict.IntelliCloud.Service
 {
+    /// <summary>
+    /// An interface for a service providing functionality related to questions.
+    /// </summary>
     [ServiceContract]
     public interface IQuestionService
     {
         /// <summary>
-        /// This method is used to get question with multiple possible parameters
+        /// Retrieves the available questions and optionally filtering them using the employee identifier.
         /// </summary>
-        /// <param name="questionId">Optional parameter to get a question by Id</param>
-        /// <param name="employeeId">Optional parameter to get all the availible question for this employee</param>
-        /// <returns>Returns a list of questions</returns>
+        /// <param name="employeeId">The optional employee identifier, only questions about which the employee has 
+        /// knowledge are returned (keywords between user and question match).</param>
+        /// <returns>Returns the questions that match the filters.</returns>
         [OperationContract]
-        [WebGet(UriTemplate = "Get?employeeId={employeeId}&questionId={questionId}",
+        [WebGet(UriTemplate = "questions?employeeId={employeeId}",
             RequestFormat = WebMessageFormat.Json,
-            ResponseFormat = WebMessageFormat.Json,
-            BodyStyle = WebMessageBodyStyle.Wrapped)]
-        List<Question> GetQuestions(int questionId, int employeeId);
-                
-        /// <summary>
-        /// This method is used to ask a question
-        /// </summary>
-        /// <param name="question">The question object that will be added to the database</param>
-        [OperationContract]
-        [WebInvoke(Method = "POST",
-            UriTemplate = "Post",
-            RequestFormat = WebMessageFormat.Json,
-            ResponseFormat = WebMessageFormat.Json,
-            BodyStyle = WebMessageBodyStyle.Wrapped)]
-        void AskQuestion(Question question);
+            ResponseFormat = WebMessageFormat.Json)]
+        IList<Question> GetQuestions(int employeeId);
 
         /// <summary>
-        /// This method is used to update a question
+        /// Retrieve the question with the given identifier.
         /// </summary>
-        /// <param name="id">The id of the question you want to update</param>
-        /// <param name="question">The question object used to update the question</param>
+        /// <param name="id">The identifier of the question.</param>
+        /// <returns>Returns the question with the given identifier.</returns>
+        [OperationContract]
+        [WebGet(UriTemplate = "questions/{id}",
+            RequestFormat = WebMessageFormat.Json,
+            ResponseFormat = WebMessageFormat.Json)]
+        Question GetQuestion(string id);
+
+        /// <summary>
+        /// Creates a new question.
+        /// </summary>
+        /// <param name="source">The source from which the question was send, e.g. "Mail", "Facebook" or "Twitter".</param>
+        /// <param name="reference">The identifier for the source, e.g. the username or email address.</param>
+        /// <param name="question">The question that was answered.</param>
         [OperationContract]
         [WebInvoke(Method = "POST",
-            UriTemplate = "Update/{Id}",
+            UriTemplate = "questions",
             RequestFormat = WebMessageFormat.Json,
             ResponseFormat = WebMessageFormat.Json,
             BodyStyle = WebMessageBodyStyle.Wrapped)]
-        void UpdateQuestion(String id, Question question);
+        void CreateQuestion(string source, string reference, string question);
 
+        /// <summary>
+        /// Updates the question with the given identifier.
+        /// </summary>
+        /// <param name="id">The identifier of the question that is updated.</param>
+        /// <param name="employeeId">The identifier of the employee that is going to answer the question.</param>
+        [OperationContract]
+        [WebInvoke(Method = "PUT",
+            UriTemplate = "questions/{id}",
+            RequestFormat = WebMessageFormat.Json,
+            ResponseFormat = WebMessageFormat.Json,
+            BodyStyle = WebMessageBodyStyle.Wrapped)]
+        void UpdateAnswer(string id, int employeeId);
     }
 }

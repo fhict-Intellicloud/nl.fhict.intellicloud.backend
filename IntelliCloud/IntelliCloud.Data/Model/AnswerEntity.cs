@@ -25,12 +25,12 @@ namespace nl.fhict.IntelliCloud.Data.Model
         /// </summary>
         [Required]
         public string Content { get; set; }
-        
+
         /// <summary>
-        /// Gets or sets the question to which the answer applies.
+        /// Gets or sets the language the answer is written in.
         /// </summary>
         [Required]
-        public QuestionEntity Question { get; set; }
+        public LanguageDefinitionEntity LanguageDefinition { get; set; }
         
         /// <summary>
         /// Gets or sets the user that gave the answer.
@@ -46,6 +46,13 @@ namespace nl.fhict.IntelliCloud.Data.Model
         /// <summary>
         /// Gets or sets the creation date and time of the answer.
         /// </summary>
+        [Required]
         public DateTime CreationTime { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the answer is private. When a answer is private it can only be 
+        /// viewed by users of type <see cref="UserType.Employee"/>.
+        /// </summary>
+        public bool IsPrivate { get; set; }
     }
 }
