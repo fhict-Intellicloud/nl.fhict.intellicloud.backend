@@ -14,24 +14,32 @@ namespace nl.fhict.IntelliCloud.Service
     /// </summary>
     public class AnswerService : IAnswerService
     {
+
+        private readonly AnswerManager manager;
+
+        public AnswerService()
+        {
+            this.manager = new AnswerManager();
+        }
+
         public IList<Answer> GetAnswers(AnswerState answerState, int employeeId)
         {
-            throw new NotImplementedException();
+            return manager.GetAnswers(answerState, employeeId);
         }
 
         public Answer GetAnswer(string id)
         {
-            throw new NotImplementedException();
+            return manager.GetAnswer(id);
         }
 
         public void CreateAnswer(int questionId, string answer, int answererId, AnswerState answerState)
         {
-            throw new NotImplementedException();
+            manager.CreateAnswer(questionId, answer, answererId, answerState);
         }
 
         public void UpdateAnswer(string id, AnswerState answerState)
         {
-            throw new NotImplementedException();
+            manager.UpdateAnswer(id, answerState);
         }
     }
 }
