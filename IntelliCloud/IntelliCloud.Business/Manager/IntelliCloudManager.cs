@@ -120,7 +120,13 @@ namespace nl.fhict.IntelliCloud.Business.Manager
             using (IntelliCloudContext context = new IntelliCloudContext())
             {
                 // Set the state of the answer to Accepted
-                AnswerEntity answer = context.Answers.Single(a => a.Id == Convert.ToInt32(answerId));
+                int iAnswerId = Convert.ToInt32(answerId);
+                AnswerEntity answer = context.Answers
+                    .Include("Question")
+                    .Include("Question.User")
+                    .Include("Question.User.Sources")
+                    .Single(a => a.Id == iAnswerId);
+
                 answer.AnswerState = AnswerState.Accepted;
 
                 // Set the state of the question to Closed - no further action is required
@@ -135,7 +141,7 @@ namespace nl.fhict.IntelliCloud.Business.Manager
                 feedbackEntity.FeedbackState = FeedbackState.Open;
                 feedbackEntity.FeedbackType = FeedbackType.Accepted;
                 feedbackEntity.User = question.User;
-
+                
                 context.Feedbacks.Add(feedbackEntity);
 
                 context.SaveChanges();
@@ -239,8 +245,7 @@ namespace nl.fhict.IntelliCloud.Business.Manager
                 return ConvertEntities.AnswerEntityListToAnswerList(answerEntities);
             }          
         }
-
-
+        
         public Answer GetAnswerById(string answerId)
         {
             return new Answer();
