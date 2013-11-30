@@ -9,7 +9,7 @@ using nl.fhict.IntelliCloud.Data.Model;
 
 namespace nl.fhict.IntelliCloud.Business.Manager
 {
-    public class IntelliCloudManager
+    public class IntelliCloudManager : BaseManager
     {
 
         public void AskQuestion(string source, string reference, string question)

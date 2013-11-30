@@ -12,10 +12,17 @@ namespace nl.fhict.IntelliCloud.Business.UnitTest
     {
         #region Fields
 
+        private Validation validation;
 
         #endregion Fields
 
         #region Methods
+
+        [TestInitialize]
+        public void Initialize()
+        {
+            validation = new Validation();
+        }
 
         #region Tests
 
@@ -29,7 +36,7 @@ namespace nl.fhict.IntelliCloud.Business.UnitTest
         {
             try
             {
-                Validation.StringCheck(String.Empty);
+                validation.StringCheck(String.Empty);
                 Assert.Fail();
             }
             catch (Exception e)
@@ -47,7 +54,7 @@ namespace nl.fhict.IntelliCloud.Business.UnitTest
         {
             try
             {
-                Validation.StringCheck(null);
+                validation.StringCheck(null);
                 Assert.Fail();
             }
             catch (Exception e)
@@ -68,7 +75,7 @@ namespace nl.fhict.IntelliCloud.Business.UnitTest
         {
             try
             {
-                Validation.IdCheck("UnparseableValue");
+                validation.IdCheck("UnparseableValue");
                 Assert.Fail();
             }
             catch (Exception e)
@@ -85,7 +92,7 @@ namespace nl.fhict.IntelliCloud.Business.UnitTest
         {
             try
             {
-                Validation.IdCheck("-1");
+                validation.IdCheck("-1");
                 Assert.Fail();
             }
             catch (Exception e)

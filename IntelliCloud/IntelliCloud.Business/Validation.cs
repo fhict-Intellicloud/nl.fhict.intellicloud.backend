@@ -14,7 +14,7 @@ namespace nl.fhict.IntelliCloud.Business
         /// Checks if the string is not null or empty.
         /// </summary>
         /// <param name="value">The string that needs to be checked</param>
-        public static void StringCheck(string value)
+        public void StringCheck(string value)
         {
             if (value == null)
                 throw new ArgumentNullException();
@@ -26,7 +26,7 @@ namespace nl.fhict.IntelliCloud.Business
         /// Checks if the id can be converted to an integer, and if it is postiive.
         /// </summary>
         /// <param name="value">The string that needs to be checked as an id.</param>
-        public static void IdCheck(string value)
+        public void IdCheck(string value)
         {
             try
             {
@@ -46,7 +46,7 @@ namespace nl.fhict.IntelliCloud.Business
         /// Checks if the given string can be parsed to an AnswerState enum.
         /// </summary>
         /// <param name="answerState">The string that needs to be checked as an AnswerState</param>
-        public static void AnswerStateCheck(string answerState)
+        public void AnswerStateCheck(string answerState)
         {
             try
             {
@@ -62,7 +62,7 @@ namespace nl.fhict.IntelliCloud.Business
         /// Checks if the given string can be parsed to an ReviewState enum.
         /// </summary>
         /// <param name="reviewState">The string that needs to be checked as an ReviewState</param>
-        public static void ReviewStateCheck(string reviewState)
+        public void ReviewStateCheck(string reviewState)
         {
             try
             {
@@ -74,7 +74,7 @@ namespace nl.fhict.IntelliCloud.Business
             }
         }
 
-        public static void SourceDefinitionExistsCheck(string SourceDefinitionName)
+        public void SourceDefinitionExistsCheck(string SourceDefinitionName)
         {
                 using (IntelliCloudContext ctx = new IntelliCloudContext())
                 {

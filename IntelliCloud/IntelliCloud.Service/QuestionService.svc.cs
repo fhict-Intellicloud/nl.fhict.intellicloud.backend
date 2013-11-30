@@ -40,8 +40,7 @@ namespace nl.fhict.IntelliCloud.Service
         }
 
         public void UpdateQuestion(string id, Common.DataTransfer.Question question)
-        {
-            Validation.IdCheck(id);
+        {            
             manager.UpdateQuestion(id, question);            
         }
     }

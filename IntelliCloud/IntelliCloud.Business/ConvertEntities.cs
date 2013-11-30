@@ -18,7 +18,7 @@ namespace nl.fhict.IntelliCloud.Business
         /// </summary>
         /// <param name="entity">The UserEntity that has to be converted.</param>
         /// <returns>The user object.</returns>
-        public static User UserEntityToUser(UserEntity entity)
+        public User UserEntityToUser(UserEntity entity)
         {
             User user = new User();
             user.Id = entity.Id;
@@ -39,7 +39,7 @@ namespace nl.fhict.IntelliCloud.Business
         /// </summary>
         /// <param name="sourceEntities">The SourceEntities that have to be converted.</param>
         /// <returns>The list of sources.</returns>
-        public static List<Source> SourceEntityListToSources(ICollection<SourceEntity> sourceEntities)
+        public List<Source> SourceEntityListToSources(ICollection<SourceEntity> sourceEntities)
         {
             List<Source> sources = new List<Source>();
             foreach (SourceEntity source in sourceEntities)
@@ -59,7 +59,7 @@ namespace nl.fhict.IntelliCloud.Business
         /// </summary>
         /// <param name="sourceDefinitionEntity">The SourceDefinitionEntity that have to be converted.</param>
         /// <returns>The sourcedefinition object.</returns>
-        public static SourceDefinition SourceDefinitionEntityToSourceDefinition(
+        public SourceDefinition SourceDefinitionEntityToSourceDefinition(
             SourceDefinitionEntity sourceDefinitionEntity)
         {
             SourceDefinition sourceDefinition = new SourceDefinition();
@@ -75,7 +75,7 @@ namespace nl.fhict.IntelliCloud.Business
         /// </summary>
         /// <param name="entity">The QuestionEntity that has to be converted.</param>
         /// <returns>The question onbject.</returns>
-        public static Question QuestionEntityToQuestion(QuestionEntity entity)
+        public Question QuestionEntityToQuestion(QuestionEntity entity)
         {
             Question question = new Question();
             question.Id = entity.Id;
@@ -91,7 +91,7 @@ namespace nl.fhict.IntelliCloud.Business
             return question;
         }
 
-        public static List<Answer> AnswerEntityListToAnswerList(List<AnswerEntity> entities)
+        public List<Answer> AnswerEntityListToAnswerList(List<AnswerEntity> entities)
         {
             List<Answer> answers = new List<Answer>();
             foreach (AnswerEntity entity in entities)
@@ -101,15 +101,15 @@ namespace nl.fhict.IntelliCloud.Business
                 temp.CreationTime = entity.CreationTime;
                 temp.Content = entity.Content;
                 temp.AnswerState = entity.AnswerState;
-                temp.Question = ConvertEntities.QuestionEntityToQuestion(entity.Question);
-                temp.User = ConvertEntities.UserEntityToUser(entity.User);
+                temp.Question = this.QuestionEntityToQuestion(entity.Question);
+                temp.User = this.UserEntityToUser(entity.User);
                 answers.Add(temp);
             }
 
             return answers;
         }
 
-        public static List<Review> ReviewEntityListToReviewList(List<ReviewEntity> entities)
+        public List<Review> ReviewEntityListToReviewList(List<ReviewEntity> entities)
         {
             List<Review> reviews = new List<Review>();
             foreach (ReviewEntity entity in entities)
@@ -120,14 +120,14 @@ namespace nl.fhict.IntelliCloud.Business
                 temp.ReviewState = entity.ReviewState;
                 temp.AnswerId = entity.Answer.Id;
                 temp.CreationTime = entity.CreationTime;
-                temp.User = ConvertEntities.UserEntityToUser(entity.User);
+                temp.User = this.UserEntityToUser(entity.User);
                 reviews.Add(temp);
             }
 
             return reviews;
         }
 
-        public static List<Question> QuestionEntityListToQuestion(List<QuestionEntity> entities)
+        public List<Question> QuestionEntityListToQuestion(List<QuestionEntity> entities)
         {
             List<Question> questions = new List<Question>();
             foreach (QuestionEntity entity in entities)
