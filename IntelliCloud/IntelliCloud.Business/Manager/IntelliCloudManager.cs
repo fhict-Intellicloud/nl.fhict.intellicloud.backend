@@ -26,11 +26,11 @@ namespace nl.fhict.IntelliCloud.Business.Manager
 
                 questionEntity.Content = question;
                 questionEntity.CreationTime = DateTime.UtcNow;
-                questionEntity.SourceType = ctx.SourceDefinitions.Single(sd => sd.Name.Equals(source));
+                questionEntity.SourceDefinition = ctx.SourceDefinitions.Single(sd => sd.Name.Equals(source));
                 questionEntity.QuestionState = QuestionState.Open;
                
                 // Check if the user already exists
-                var sourceEntity = ctx.Sources.SingleOrDefault(s => s.SourceDefinition.Id == questionEntity.SourceType.Id && s.Value == reference); 
+                var sourceEntity = ctx.Sources.SingleOrDefault(s => s.SourceDefinition.Id == questionEntity.SourceDefinition.Id && s.Value == reference); 
 
                 if (sourceEntity != null)
                 {
@@ -59,7 +59,7 @@ namespace nl.fhict.IntelliCloud.Business.Manager
                     SourceEntity newSourceEntity = new SourceEntity();
                     newSourceEntity.Value = reference;
                     newSourceEntity.CreationTime = DateTime.UtcNow;
-                    newSourceEntity.SourceDefinition = questionEntity.SourceType;
+                    newSourceEntity.SourceDefinition = questionEntity.SourceDefinition;
                     newSourceEntity.UserId = newUserEntity.Id;
 
                     ctx.Sources.Add(newSourceEntity);
@@ -89,7 +89,6 @@ namespace nl.fhict.IntelliCloud.Business.Manager
                 AnswerEntity answerEntity = new AnswerEntity();
                 answerEntity.AnswerState = (AnswerState) Enum.Parse(typeof (AnswerState), answerState);
                 answerEntity.Content = answer;
-                answerEntity.Question = context.Questions.First(q => q.Id.Equals(Convert.ToInt32(questionId)));
                 answerEntity.User = context.Users.First(u => u.Id.Equals(Convert.ToInt32(answererId)));
 
                 context.Answers.Add(answerEntity);
@@ -120,11 +119,17 @@ namespace nl.fhict.IntelliCloud.Business.Manager
             using (IntelliCloudContext context = new IntelliCloudContext())
             {
                 // Set the state of the answer to Accepted
-                AnswerEntity answer = context.Answers.Single(a => a.Id == Convert.ToInt32(answerId));
+                int iAnswerId = Convert.ToInt32(answerId);
+                AnswerEntity answer = context.Answers
+                    .Include("Question")
+                    .Include("Question.User")
+                    .Include("Question.User.Sources")
+                    .Single(a => a.Id == iAnswerId);
+
                 answer.AnswerState = AnswerState.Accepted;
 
                 // Set the state of the question to Closed - no further action is required
-                QuestionEntity question = answer.Question;
+                QuestionEntity question = context.Questions.Single(a => a.Id == Convert.ToInt32(questionId));
                 question.QuestionState = QuestionState.Closed;
 
                 // Store the user's feedback for the given answer
@@ -135,7 +140,7 @@ namespace nl.fhict.IntelliCloud.Business.Manager
                 feedbackEntity.FeedbackState = FeedbackState.Open;
                 feedbackEntity.FeedbackType = FeedbackType.Accepted;
                 feedbackEntity.User = question.User;
-
+                
                 context.Feedbacks.Add(feedbackEntity);
 
                 context.SaveChanges();
@@ -156,7 +161,7 @@ namespace nl.fhict.IntelliCloud.Business.Manager
                 answer.AnswerState = AnswerState.Declined;
 
                 // Set the state of the question to Open - employee needs to process the feedback given by the user
-                QuestionEntity question = answer.Question;
+                QuestionEntity question = context.Questions.Single(a => a.Id == Convert.ToInt32(questionId));
                 question.QuestionState = QuestionState.Open;
 
                 // Store the user's feedback for the given answer
@@ -165,7 +170,7 @@ namespace nl.fhict.IntelliCloud.Business.Manager
                 feedbackEntity.Content = feedback;
                 feedbackEntity.CreationTime = DateTime.UtcNow;
                 feedbackEntity.FeedbackState = FeedbackState.Open;
-                feedbackEntity.FeedbackType = FeedbackType.Declined;
+                feedbackEntity.FeedbackType = FeedbackType.Declined;                
                 feedbackEntity.User = question.User;
 
                 context.Feedbacks.Add(feedbackEntity);
@@ -239,8 +244,7 @@ namespace nl.fhict.IntelliCloud.Business.Manager
                 return ConvertEntities.AnswerEntityListToAnswerList(answerEntities);
             }          
         }
-
-
+        
         public Answer GetAnswerById(string answerId)
         {
             return new Answer();

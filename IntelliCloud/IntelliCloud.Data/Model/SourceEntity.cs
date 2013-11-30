@@ -15,7 +15,7 @@ namespace nl.fhict.IntelliCloud.Data.Model
     public class SourceEntity
     {
         /// <summary>
-        /// Gets or sets the unique indentifier of the source.
+        /// Gets or sets the unique identifier of the source.
         /// </summary>
         public int Id { get; set; }
 
@@ -39,6 +39,7 @@ namespace nl.fhict.IntelliCloud.Data.Model
         /// <summary>
         /// Gets or sets the creation date and time of the source.
         /// </summary>
+        [Required]
         public DateTime CreationTime { get; set; }
     }
 }

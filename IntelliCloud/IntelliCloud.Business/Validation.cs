@@ -41,7 +41,19 @@ namespace nl.fhict.IntelliCloud.Business
                 throw new ArgumentException("Id can not be converted to an integer.");
             }
         }
-        
+
+        /// <summary>
+        /// Checks if the id  is postiive.
+        /// </summary>
+        /// <param name="value">The int that needs to be checked as an id.</param>
+        public static void IdCheck(int value)
+        {
+            if (value < 0)
+                {
+                    throw new ArgumentException("Id has to be positive.");
+                }
+        }
+
         /// <summary>
         /// Checks if the given string can be parsed to an AnswerState enum.
         /// </summary>

@@ -9,7 +9,7 @@ namespace nl.fhict.IntelliCloud.Business
 {
     /// <summary>
     /// This class will implement methods for converting Entities to domain objects.
-    /// Only if it is necassary.
+    /// Only if it is necessary.
     /// </summary>
     public class ConvertEntities
     {
@@ -25,8 +25,6 @@ namespace nl.fhict.IntelliCloud.Business
             user.FirstName = entity.FirstName;
             user.Infix = entity.Infix;
             user.LastName = entity.LastName;
-            user.Username = entity.Username;
-            user.Password = entity.Password;
             user.Type = entity.Type;
             user.CreationTime = entity.CreationTime;
             user.Sources = SourceEntityListToSources(entity.Sources);
@@ -74,8 +72,13 @@ namespace nl.fhict.IntelliCloud.Business
         /// Converts a QuestionEntity to a Question.
         /// </summary>
         /// <param name="entity">The QuestionEntity that has to be converted.</param>
+<<<<<<< HEAD
         /// <returns>The question onbject.</returns>
         public Question QuestionEntityToQuestion(QuestionEntity entity)
+=======
+        /// <returns>The question object.</returns>
+        public static Question QuestionEntityToQuestion(QuestionEntity entity)
+>>>>>>> upstream/master
         {
             Question question = new Question();
             question.Id = entity.Id;
@@ -87,10 +90,11 @@ namespace nl.fhict.IntelliCloud.Business
             question.Content = entity.Content;
             question.CreationTime = entity.CreationTime;
             question.QuestionState = entity.QuestionState;
-            question.SourceType = SourceDefinitionEntityToSourceDefinition(entity.SourceType);
+            question.SourceDefinition = SourceDefinitionEntityToSourceDefinition(entity.SourceDefinition);
             return question;
         }
 
+<<<<<<< HEAD
         public List<Answer> AnswerEntityListToAnswerList(List<AnswerEntity> entities)
         {
             List<Answer> answers = new List<Answer>();
@@ -104,6 +108,27 @@ namespace nl.fhict.IntelliCloud.Business
                 temp.Question = this.QuestionEntityToQuestion(entity.Question);
                 temp.User = this.UserEntityToUser(entity.User);
                 answers.Add(temp);
+=======
+        public static Answer AnswerEntityToAnswer(AnswerEntity entity)
+        {
+            Answer answer = new Answer();
+
+            answer.Id = entity.Id;
+            answer.CreationTime = entity.CreationTime;
+            answer.Content = entity.Content;
+            answer.AnswerState = entity.AnswerState;
+            answer.User = ConvertEntities.UserEntityToUser(entity.User);
+
+            return answer;
+        }
+
+        public static List<Answer> AnswerEntityListToAnswerList(List<AnswerEntity> entities)
+        {
+            List<Answer> answers = new List<Answer>();
+            foreach (AnswerEntity entity in entities)
+            {                
+                answers.Add(AnswerEntityToAnswer(entity));
+>>>>>>> upstream/master
             }
 
             return answers;

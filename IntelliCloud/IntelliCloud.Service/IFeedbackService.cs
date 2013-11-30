@@ -5,40 +5,40 @@ using System.Runtime.Serialization;
 using System.ServiceModel;
 using System.ServiceModel.Web;
 using System.Text;
+using nl.fhict.IntelliCloud.Common.DataTransfer;
 
 namespace nl.fhict.IntelliCloud.Service
 {
+    /// <summary>
+    /// An interface for a service providing functionality related to customer feedback.
+    /// </summary>
     [ServiceContract]
     public interface IFeedbackService
     {
         /// <summary>
-        /// This method is used to accept answers
+        /// Retrieves the feedback for the given answer.
         /// </summary>
-        /// <param name="feedback">Use this parameter if the answer is correct but still can use some tweaking</param>
-        /// <param name="answerId">The Id of the answer you want to accept</param>
-        /// <param name="questionId">The Id of the question where this answer is accepted for</param>
-        /// <returns>Returns whether the accept succedeed of failed</returns>
+        /// <param name="answerId">The identifier of the answer, only feedback for this answer is returned.</param>
+        /// <returns>Returns the feedback for the given answer.</returns>
         [OperationContract]
-        [WebInvoke(Method = "POST",
-            UriTemplate = "AcceptAnswer",
+        [WebGet(UriTemplate = "feedbacks?answerId={answerId}",
             RequestFormat = WebMessageFormat.Json,
-            ResponseFormat = WebMessageFormat.Json,
-            BodyStyle = WebMessageBodyStyle.Wrapped)]
-        void AcceptAnswer(String feedback, String answerId, String questionId);
+            ResponseFormat = WebMessageFormat.Json)]
+        IList<Feedback> GetFeedbacks(int answerId);
 
         /// <summary>
-        /// This method is used to decline answers
+        /// Creates feedback for a answer given to a question. The <see cref="FeedbackType"/> indicates if the
+        /// answer was accepted or declined.
         /// </summary>
-        /// <param name="feedback">Use this parameter to fill in wath is missing for this answer to be correct</param>
-        /// <param name="answerId">The Id of the answer you want to decline</param>
-        /// <param name="questionId">The Id of the question where this answer is declined for</param>
-        /// <returns>Returns whether the decline succeeded or failed</returns>
-        [OperationContract]
+        /// <param name="feedback">The feedback that is given.</param>
+        /// <param name="answerId">The identifier of the answer for which the feedback is given.</param>
+        /// <param name="questionId">The identifier of the question for which the feedback is given.</param>
+        /// <param name="feedbackType">The feedback type indicating if the answer was accepted or declined.</param>
         [WebInvoke(Method = "POST",
-            UriTemplate = "DeclineAnswer",
+            UriTemplate = "feedbacks",
             RequestFormat = WebMessageFormat.Json,
             ResponseFormat = WebMessageFormat.Json,
             BodyStyle = WebMessageBodyStyle.Wrapped)]
-        void DeclineAnswer(String feedback, String answerId, String questionId);
+        void CreateFeedback(string feedback, int answerId, int questionId, FeedbackType feedbackType);       
     }
 }

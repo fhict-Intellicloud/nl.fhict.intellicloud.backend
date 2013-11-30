@@ -55,6 +55,7 @@
     <Compile Include="Model\AnswerKeyEntity.cs" />
     <Compile Include="Model\FeedbackEntity.cs" />
     <Compile Include="Model\KeywordEntity.cs" />
+    <Compile Include="Model\LanguageDefinitionEntity.cs" />
     <Compile Include="Model\QuestionEntity.cs" />
     <Compile Include="Model\QuestionKeyEntity.cs" />
     <Compile Include="Model\ReviewEntity.cs" />

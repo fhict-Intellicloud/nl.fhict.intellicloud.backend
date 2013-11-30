@@ -6,42 +6,39 @@ using System.Linq;
 using System.Runtime.Serialization;
 using System.ServiceModel;
 using System.Text;
+using nl.fhict.IntelliCloud.Common.DataTransfer;
 
 namespace nl.fhict.IntelliCloud.Service
 {
+    /// <summary>
+    /// A service providing functionality related to questions.
+    /// </summary>
     public class QuestionService : IQuestionService
     {
-        private readonly IntelliCloudManager manager;
-
-        public QuestionService()
+        public IList<Question> GetQuestions(int employeeId)
         {
-            this.manager = new IntelliCloudManager();            
-        }
-        
-        public List<Common.DataTransfer.Question> GetQuestions(int questionId, int employeeId)
-        {
-            // TODO remove TOString()
-            if (questionId > 0){
-                return manager.GetQuestions(questionId);
-            }
-            else if (employeeId > 0)
-            {
-                return manager.GetQuestionsForEmployee(employeeId);
-            }
-            else
-            {
-                return manager.GetQuestions();
-            }
+            throw new NotImplementedException();
         }
 
-        public void AskQuestion(Common.DataTransfer.Question question)
+        public Question GetQuestion(string id)
         {
-            manager.AskQuestion(question);
+            throw new NotImplementedException();
         }
 
+        public void CreateQuestion(string source, string reference, string question)
+        {
+            throw new NotImplementedException();
+        }
+
+<<<<<<< HEAD
         public void UpdateQuestion(string id, Common.DataTransfer.Question question)
         {            
             manager.UpdateQuestion(id, question);            
+=======
+        public void UpdateAnswer(string id, int employeeId)
+        {
+            throw new NotImplementedException();
+>>>>>>> upstream/master
         }
     }
 }

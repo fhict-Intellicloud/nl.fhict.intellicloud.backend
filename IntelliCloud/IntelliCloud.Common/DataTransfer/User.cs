@@ -19,18 +19,6 @@ namespace nl.fhict.IntelliCloud.Common.DataTransfer
         public int Id { get; set; }
 
         /// <summary>
-        /// Gets or sets the username of the user. The username is used when a user wishes to be authenticated.
-        /// </summary>
-        [DataMember]
-        public string Username { get; set; }
-
-        /// <summary>
-        /// Gets or sets the password of the user. The password is used when a user wishes to be authenticated.
-        /// </summary>
-        [DataMember]
-        public string Password { get; set; }
-
-        /// <summary>
         /// Gets or sets the first name of the user.
         /// </summary>
         [DataMember]

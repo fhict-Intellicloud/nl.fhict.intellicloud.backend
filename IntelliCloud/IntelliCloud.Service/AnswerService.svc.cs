@@ -5,37 +5,41 @@ using System.Linq;
 using System.Runtime.Serialization;
 using System.ServiceModel;
 using System.Text;
+using nl.fhict.IntelliCloud.Common.DataTransfer;
 
 namespace nl.fhict.IntelliCloud.Service
 {
+    /// <summary>
+    /// A service providing functionality related to answers.
+    /// </summary>
     public class AnswerService : IAnswerService
     {
-        private readonly IntelliCloudManager manager;
+
+        private readonly AnswerManager manager;
 
         public AnswerService()
         {
-            this.manager = new IntelliCloudManager();            
+            this.manager = new AnswerManager();
         }
 
-        public void AcceptAnswer(string feedback, string answerId, string questionId)
+        public IList<Answer> GetAnswers(AnswerState answerState, int employeeId)
         {
-            manager.AcceptAnswer(feedback, answerId, questionId);
+            return manager.GetAnswers(answerState, employeeId);
         }
 
-        public void DeclineAnswer(string feedback, string answerId, string questionId)
+        public Answer GetAnswer(string id)
         {
-            manager.DeclineAnswer(feedback, answerId, questionId);
+            return manager.GetAnswer(id);
         }
 
-        public List<Common.DataTransfer.Answer> GetAnswersUpForReview(string employeeId)
+        public void CreateAnswer(int questionId, string answer, int answererId, AnswerState answerState)
         {
-            return manager.GetAnswersUpForReview(employeeId);
+            manager.CreateAnswer(questionId, answer, answererId, answerState);
         }
 
-        public Common.DataTransfer.Answer GetAnswerById(string answerId)
+        public void UpdateAnswer(string id, AnswerState answerState)
         {
-            return manager.GetAnswerById(answerId)
-;
+            manager.UpdateAnswer(id, answerState);
         }
     }
 }
