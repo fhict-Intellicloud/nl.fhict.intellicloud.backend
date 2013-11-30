@@ -72,13 +72,8 @@ namespace nl.fhict.IntelliCloud.Business
         /// Converts a QuestionEntity to a Question.
         /// </summary>
         /// <param name="entity">The QuestionEntity that has to be converted.</param>
-<<<<<<< HEAD
-        /// <returns>The question onbject.</returns>
-        public Question QuestionEntityToQuestion(QuestionEntity entity)
-=======
         /// <returns>The question object.</returns>
-        public static Question QuestionEntityToQuestion(QuestionEntity entity)
->>>>>>> upstream/master
+        public Question QuestionEntityToQuestion(QuestionEntity entity)
         {
             Question question = new Question();
             question.Id = entity.Id;
@@ -94,22 +89,7 @@ namespace nl.fhict.IntelliCloud.Business
             return question;
         }
 
-<<<<<<< HEAD
-        public List<Answer> AnswerEntityListToAnswerList(List<AnswerEntity> entities)
-        {
-            List<Answer> answers = new List<Answer>();
-            foreach (AnswerEntity entity in entities)
-            {
-                Answer temp = new Answer();
-                temp.Id = entity.Id;
-                temp.CreationTime = entity.CreationTime;
-                temp.Content = entity.Content;
-                temp.AnswerState = entity.AnswerState;
-                temp.Question = this.QuestionEntityToQuestion(entity.Question);
-                temp.User = this.UserEntityToUser(entity.User);
-                answers.Add(temp);
-=======
-        public static Answer AnswerEntityToAnswer(AnswerEntity entity)
+        public Answer AnswerEntityToAnswer(AnswerEntity entity)
         {
             Answer answer = new Answer();
 
@@ -117,18 +97,17 @@ namespace nl.fhict.IntelliCloud.Business
             answer.CreationTime = entity.CreationTime;
             answer.Content = entity.Content;
             answer.AnswerState = entity.AnswerState;
-            answer.User = ConvertEntities.UserEntityToUser(entity.User);
+            answer.User = UserEntityToUser(entity.User);
 
             return answer;
         }
 
-        public static List<Answer> AnswerEntityListToAnswerList(List<AnswerEntity> entities)
+        public List<Answer> AnswerEntityListToAnswerList(List<AnswerEntity> entities)
         {
             List<Answer> answers = new List<Answer>();
             foreach (AnswerEntity entity in entities)
             {                
                 answers.Add(AnswerEntityToAnswer(entity));
->>>>>>> upstream/master
             }
 
             return answers;

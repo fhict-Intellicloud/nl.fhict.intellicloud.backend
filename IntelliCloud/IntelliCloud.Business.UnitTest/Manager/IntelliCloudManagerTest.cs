@@ -26,6 +26,7 @@ namespace nl.fhict.IntelliCloud.Business.UnitTest.Manager
         #region Fields
 
         private IntelliCloudManager manager;
+        private Mock<Validation> validation;
         private List<AnswerEntity> answers;
         private List<ReviewEntity> reviews;
         private List<QuestionEntity> questions;
@@ -38,19 +39,20 @@ namespace nl.fhict.IntelliCloud.Business.UnitTest.Manager
         [TestInitialize]
         public void Initialize()
         {
-            this.manager = new IntelliCloudManager();
+            validation = new Mock<Validation>();
+            this.manager = new IntelliCloudManager(null, validation.Object);
 
             //add test data 
             //TODO: if not necassary, delete this
             users = new List<UserEntity>();
-            users.Add(new UserEntity() { CreationTime = DateTime.Now, FirstName = "Geert", Id = 0, Infix = "van", LastName = "Hoesel", Password = "banaan", Username = "bacardi", Type = UserType.Customer});
-            users.Add(new UserEntity() { CreationTime = DateTime.Now, FirstName = "Teun", Id = 1, Infix = "van", LastName = "Gisbergen", Password = "banaan", Username = "teun", Type = UserType.Employee });
-
-            questions = new List<QuestionEntity>();
-            questions.Add(new QuestionEntity() { Content = "This is the question?", CreationTime = DateTime.Now, Id = 0, QuestionState = QuestionState.UpForAnswer, User = users.First()});
+            users.Add(new UserEntity() { CreationTime = DateTime.Now, FirstName = "Geert", Id = 0, Infix = "van", LastName = "Hoesel", Type = UserType.Customer});
+            users.Add(new UserEntity() { CreationTime = DateTime.Now, FirstName = "Teun", Id = 1, Infix = "van", LastName = "Gisbergen", Type = UserType.Employee });
 
             answers = new List<AnswerEntity>();
-            answers.Add(new AnswerEntity() { AnswerState = AnswerState.UnderReview, Content  = "This is the answer", CreationTime = DateTime.Now, Id = 0, Question = questions.First(), User = users.First()});
+            answers.Add(new AnswerEntity() { AnswerState = AnswerState.UnderReview, Content  = "This is the answer", CreationTime = DateTime.Now, Id = 0, User = users.First()});
+            
+            questions = new List<QuestionEntity>();
+            questions.Add(new QuestionEntity() { Content = "This is the question?", CreationTime = DateTime.Now, Id = 0, QuestionState = QuestionState.UpForAnswer, Answer = answers.First(), User = users.First()});
 
             reviews = new List<ReviewEntity>();
             reviews.Add(new ReviewEntity() { Answer = answers.First(), Content = "This is the review", CreationTime = DateTime.Now, Id = 0, ReviewState = ReviewState.Open, User = users.First(u => u.Type.Equals(UserType.Employee))});
@@ -66,17 +68,18 @@ namespace nl.fhict.IntelliCloud.Business.UnitTest.Manager
         [TestMethod]
         public void UpdateReviewTest()
         {
-            Mock<Validation> mock = new Mock<Validation>();
-            var test = new Mock<IntelliCloudContext>();
-            test.            
-
             string reviewerId = "1";
             string reviewState = "Open";
-            
-            manager.UpdateReview(reviewerId, reviewState);
 
-            mock.Verify(v => v.IdCheck(reviewerId), Times.Once());
-            mock.Verify(v => v.ReviewStateCheck(reviewState), Times.Once());
+            try
+            {
+                manager.UpdateReview(reviewerId, reviewState);
+            }
+            catch (Exception)
+            { }
+            
+            validation.Verify(v => v.IdCheck(reviewerId));
+            validation.Verify(v => v.ReviewStateCheck(reviewState), Times.Once());
         }
 
         #endregion Tests

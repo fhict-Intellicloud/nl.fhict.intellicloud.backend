@@ -2,18 +2,28 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using nl.fhict.IntelliCloud.Data.Context;
 
 namespace nl.fhict.IntelliCloud.Business.Manager
 {
     public abstract class BaseManager
     {
-        public static Validation Validation;
-        public static ConvertEntities ConvertEntities;
+        protected Validation Validation;
+        protected ConvertEntities ConvertEntities;
+        protected IntelliCloudContext IntelliCloudContext;
+
+        protected BaseManager(IntelliCloudContext context, Validation validation)
+        {
+            Validation = validation;
+            ConvertEntities = new ConvertEntities();
+            IntelliCloudContext = context;
+        }
 
         protected BaseManager()
         {
             Validation = new Validation();
             ConvertEntities = new ConvertEntities();
+            IntelliCloudContext = new IntelliCloudContext();
         }
     }
 }

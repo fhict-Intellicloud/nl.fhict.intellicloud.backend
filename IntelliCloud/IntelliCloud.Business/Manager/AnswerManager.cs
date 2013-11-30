@@ -8,7 +8,7 @@ using System.Text;
 
 namespace nl.fhict.IntelliCloud.Business.Manager
 {
-    public class AnswerManager
+    public class AnswerManager : BaseManager
     {
         
         public IList<Answer> GetAnswers(AnswerState answerState, int employeeId)
@@ -17,7 +17,7 @@ namespace nl.fhict.IntelliCloud.Business.Manager
 
             List<Answer> answers = new List<Answer>();
 
-            using (IntelliCloudContext ctx = new IntelliCloudContext())
+            using (var ctx = IntelliCloudContext)
             {
 
                 List<AnswerEntity> answerentities = (from a in ctx.Answers
@@ -41,7 +41,7 @@ namespace nl.fhict.IntelliCloud.Business.Manager
 
             Answer answer = new Answer();
 
-            using (IntelliCloudContext ctx = new IntelliCloudContext())
+            using (var ctx = IntelliCloudContext)
             {
                 int iId = Convert.ToInt32(id);
 
@@ -64,9 +64,9 @@ namespace nl.fhict.IntelliCloud.Business.Manager
         {
             Validation.IdCheck(answererId);
             Validation.IdCheck(questionId);
-            Validation.StringCheck(answer);      
+            Validation.StringCheck(answer);
 
-            using (IntelliCloudContext ctx = new IntelliCloudContext())
+            using (var ctx = IntelliCloudContext)
             {
 
                 AnswerEntity answerEntity = new AnswerEntity();
@@ -89,7 +89,7 @@ namespace nl.fhict.IntelliCloud.Business.Manager
         {
             Validation.IdCheck(id);
 
-            using (IntelliCloudContext ctx = new IntelliCloudContext())
+            using (var ctx = IntelliCloudContext)
             {
                 int iId = Convert.ToInt32(id);
 

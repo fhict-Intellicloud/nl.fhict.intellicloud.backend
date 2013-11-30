@@ -30,15 +30,15 @@ namespace nl.fhict.IntelliCloud.Service
             throw new NotImplementedException();
         }
 
-<<<<<<< HEAD
+
         public void UpdateQuestion(string id, Common.DataTransfer.Question question)
-        {            
-            manager.UpdateQuestion(id, question);            
-=======
+        {
+            throw new NotImplementedException();
+        }
+
         public void UpdateAnswer(string id, int employeeId)
         {
             throw new NotImplementedException();
->>>>>>> upstream/master
         }
     }
 }
