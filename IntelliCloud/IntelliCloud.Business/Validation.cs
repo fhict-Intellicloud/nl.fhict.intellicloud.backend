@@ -7,7 +7,7 @@ using nl.fhict.IntelliCloud.Data.Context;
 
 namespace nl.fhict.IntelliCloud.Business
 {
-    public class Validation
+    public class Validation : IValidation
     {
 
         /// <summary>
@@ -46,7 +46,7 @@ namespace nl.fhict.IntelliCloud.Business
         /// Checks if the id  is postiive.
         /// </summary>
         /// <param name="value">The int that needs to be checked as an id.</param>
-        public static void IdCheck(int value)
+        public void IdCheck(int value)
         {
             if (value < 0)
                 {

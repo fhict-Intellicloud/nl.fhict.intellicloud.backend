@@ -11,7 +11,7 @@ namespace nl.fhict.IntelliCloud.Business.Manager
 {
     public class IntelliCloudManager : BaseManager
     {
-        public IntelliCloudManager(IntelliCloudContext context, Validation validation)
+        public IntelliCloudManager(IntelliCloudContext context, IValidation validation)
             : base(context, validation)
         {
             //the intellicloudcontext and validation are given threw here

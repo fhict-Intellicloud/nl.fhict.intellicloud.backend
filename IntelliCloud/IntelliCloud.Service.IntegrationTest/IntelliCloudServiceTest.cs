@@ -59,6 +59,22 @@ namespace nl.fhict.IntelliCloud.Service.IntegrationTest
             }
         }
 
+        [TestMethod]
+        [TestCategory("nl.fhict.IntelliCloud.Service.IntegrationTest")]
+        public void UpdateReview()
+        {
+            try
+            {
+                service.UpdateReview("1", "Open");
+                //this.service.GetAnswerById("InvalidId");
+                //Assert.Fail();
+            }
+            catch (Exception e)
+            {
+                //Assert.AreEqual(e.Message, "Put the expected exception message here");
+            }
+        }
+
         #endregion Tests
 
         #endregion Methods

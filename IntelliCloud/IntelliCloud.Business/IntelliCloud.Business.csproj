@@ -48,6 +48,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ConvertEntities.cs" />
+    <Compile Include="IValidation.cs" />
     <Compile Include="Manager\BaseManager.cs" />
     <Compile Include="Manager\AnswerManager.cs" />
     <Compile Include="Manager\IntelliCloudManager.cs" />

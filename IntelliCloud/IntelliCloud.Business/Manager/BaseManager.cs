@@ -8,11 +8,11 @@ namespace nl.fhict.IntelliCloud.Business.Manager
 {
     public abstract class BaseManager
     {
-        protected Validation Validation;
+        protected IValidation Validation;
         protected ConvertEntities ConvertEntities;
         protected IntelliCloudContext IntelliCloudContext;
 
-        protected BaseManager(IntelliCloudContext context, Validation validation)
+        protected BaseManager(IntelliCloudContext context, IValidation validation)
         {
             Validation = validation;
             ConvertEntities = new ConvertEntities();

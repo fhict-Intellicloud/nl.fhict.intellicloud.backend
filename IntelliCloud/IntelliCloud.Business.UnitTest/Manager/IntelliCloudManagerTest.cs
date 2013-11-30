@@ -26,7 +26,7 @@ namespace nl.fhict.IntelliCloud.Business.UnitTest.Manager
         #region Fields
 
         private IntelliCloudManager manager;
-        private Mock<Validation> validation;
+        private Mock<IValidation> validation;
         private List<AnswerEntity> answers;
         private List<ReviewEntity> reviews;
         private List<QuestionEntity> questions;
@@ -39,7 +39,7 @@ namespace nl.fhict.IntelliCloud.Business.UnitTest.Manager
         [TestInitialize]
         public void Initialize()
         {
-            validation = new Mock<Validation>();
+            validation = new Mock<IValidation>();
             this.manager = new IntelliCloudManager(null, validation.Object);
 
             //add test data 
@@ -78,8 +78,57 @@ namespace nl.fhict.IntelliCloud.Business.UnitTest.Manager
             catch (Exception)
             { }
             
-            validation.Verify(v => v.IdCheck(reviewerId));
+            validation.Verify(v => v.IdCheck(reviewerId), Times.Once());
             validation.Verify(v => v.ReviewStateCheck(reviewState), Times.Once());
+        }
+
+        [TestMethod]
+        public void SendReviewForAnswer()
+        {
+            string reviewerId = "1";
+            string review = "This is my review";
+            string answerId = "2";
+
+            try
+            {
+                manager.SendReviewForAnswer(reviewerId, answerId, review);
+            }
+            catch (Exception)
+            { }
+
+            validation.Verify(v => v.IdCheck(answerId), Times.Once());
+            validation.Verify(v => v.IdCheck(reviewerId), Times.Once());
+            validation.Verify(v => v.StringCheck(review), Times.Once());
+        }
+
+        [TestMethod]
+        public void GetReviewsForAnswer()
+        {
+            string answerId = "2";
+
+            try
+            {
+                manager.GetReviewsForAnswer(answerId);
+            }
+            catch (Exception)
+            { }
+
+            validation.Verify(v => v.IdCheck(answerId), Times.Once());
+        }
+
+        [TestMethod]
+        public void GetAnswersUpForReview()
+        {
+            string employeeId = "1";
+
+            try
+            {
+                manager.GetAnswersUpForReview(employeeId);
+            }
+            catch (Exception)
+            { }
+
+            validation.Verify(v => v.IdCheck(employeeId), Times.Once());
         }
 
         #endregion Tests
