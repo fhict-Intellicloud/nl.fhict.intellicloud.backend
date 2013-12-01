@@ -30,7 +30,7 @@ namespace nl.fhict.IntelliCloud.Service
             throw new NotImplementedException();
         }
 
-        public void UpdateAnswer(string id, int employeeId)
+        public void UpdateQuestion(string id, int employeeId)
         {
             throw new NotImplementedException();
         }
