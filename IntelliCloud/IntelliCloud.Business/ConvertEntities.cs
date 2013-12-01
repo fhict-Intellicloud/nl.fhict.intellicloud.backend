@@ -89,18 +89,25 @@ namespace nl.fhict.IntelliCloud.Business
             return question;
         }
 
+        public static Answer AnswerEntityToAnswer(AnswerEntity entity)
+        {
+            Answer answer = new Answer();
+
+            answer.Id = entity.Id;
+            answer.CreationTime = entity.CreationTime;
+            answer.Content = entity.Content;
+            answer.AnswerState = entity.AnswerState;
+            answer.User = ConvertEntities.UserEntityToUser(entity.User);
+
+            return answer;
+        }
+
         public static List<Answer> AnswerEntityListToAnswerList(List<AnswerEntity> entities)
         {
             List<Answer> answers = new List<Answer>();
             foreach (AnswerEntity entity in entities)
-            {
-                Answer temp = new Answer();
-                temp.Id = entity.Id;
-                temp.CreationTime = entity.CreationTime;
-                temp.Content = entity.Content;
-                temp.AnswerState = entity.AnswerState;
-                temp.User = ConvertEntities.UserEntityToUser(entity.User);
-                answers.Add(temp);
+            {                
+                answers.Add(AnswerEntityToAnswer(entity));
             }
 
             return answers;
