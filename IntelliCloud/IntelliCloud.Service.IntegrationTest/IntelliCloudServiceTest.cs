@@ -1,4 +1,5 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using System.Linq;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using nl.fhict.IntelliCloud.Service;
 using nl.fhict.IntelliCloud.Common.DataTransfer;
 using System;
@@ -65,13 +66,73 @@ namespace nl.fhict.IntelliCloud.Service.IntegrationTest
         {
             try
             {
-                service.UpdateReview("1", "Open");
-                //this.service.GetAnswerById("InvalidId");
-                //Assert.Fail();
+                string reviewId = "1";
+                string reviewState = "Open";
+
+                service.UpdateReview(reviewId, reviewState);
+                
             }
             catch (Exception e)
             {
-                //Assert.AreEqual(e.Message, "Put the expected exception message here");
+                Assert.AreEqual(e.Message, "Sequence contains no elements");
+            }
+        }
+
+        [TestMethod]
+        [TestCategory("nl.fhict.IntelliCloud.Service.IntegrationTest")]
+        public void SendReviewForAnswer()
+        {
+            try
+            {
+                string answerId = "2";
+                string review = "Hallo dit is mijn review";
+                string reviewerId = "2";
+
+                service.SendReviewForAnswer(reviewerId, answerId, review);
+
+            }
+            catch (Exception e)
+            {
+                Assert.AreEqual(e.Message, "Sequence contains no elements");
+            }
+        }
+
+        [TestMethod]
+        [TestCategory("nl.fhict.IntelliCloud.Service.IntegrationTest")]
+        public void GetReviewsForAnswer()
+        {
+            try
+            {
+                string answerId = "2";                
+
+                var reviews = service.GetReviewsForAnswer(answerId);
+                
+                Assert.AreEqual("Hallo dit is mijn review", reviews.First().Content);
+                Assert.AreNotEqual(1, reviews.First().AnswerId);
+                Assert.AreEqual(2, reviews.First().User.Id);
+            }
+            catch (Exception e)
+            {
+                Assert.AreEqual(e.Message, "Sequence contains no elements");
+            }
+        }
+
+        [TestMethod]
+        [TestCategory("nl.fhict.IntelliCloud.Service.IntegrationTest")]
+        public void GetAnswersUpForReview()
+        {
+            try
+            {
+                string employeeId = "3";
+
+                var answers = service.GetAnswersUpForReview(employeeId);
+
+                Assert.AreEqual("Hallo dit is mijn antwoord", answers.First().Content);
+                Assert.AreNotEqual(0, answers.First().AnswerState);
+            }
+            catch (Exception e)
+            {
+                Assert.AreEqual(e.Message, "Sequence contains no elements");
             }
         }
 
