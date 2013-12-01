@@ -120,7 +120,7 @@ namespace nl.fhict.IntelliCloud.Business.Manager
             {
                 // Set the state of the answer to Accepted
                 AnswerEntity answer = context.Answers.Single(a => a.Id == Convert.ToInt32(answerId));
-                answer.AnswerState = AnswerState.Accepted;
+                answer.AnswerState = AnswerState.UnderReview;
 
                 // Set the state of the question to Closed - no further action is required
                 QuestionEntity question = context.Questions.Single(a => a.Id == Convert.ToInt32(questionId));
@@ -152,7 +152,7 @@ namespace nl.fhict.IntelliCloud.Business.Manager
             {
                 // Set the state of the answer to Declined
                 AnswerEntity answer = context.Answers.Single(a => a.Id == Convert.ToInt32(answerId));
-                answer.AnswerState = AnswerState.Declined;
+                answer.AnswerState = AnswerState.UnderReview;
 
                 // Set the state of the question to Open - employee needs to process the feedback given by the user
                 QuestionEntity question = context.Questions.Single(a => a.Id == Convert.ToInt32(questionId));
