@@ -23,5 +23,11 @@ namespace nl.fhict.IntelliCloud.Service
         {
             throw new NotImplementedException();
         }
+
+
+        public void UpdateFeedback(string id, FeedbackState feedbackState)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
