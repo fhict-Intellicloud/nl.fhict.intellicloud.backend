@@ -5,7 +5,7 @@ using System.Linq;
 using System.Runtime.Serialization;
 using System.Text;
 
-namespace nl.fhict.IntelliCloud.Common.DataTransfer
+namespace nl.fhict.IntelliCloud.Data.Model
 {
     /// <summary>
     /// A class representing a language, e.g. 'Dutch' or 'English'.
