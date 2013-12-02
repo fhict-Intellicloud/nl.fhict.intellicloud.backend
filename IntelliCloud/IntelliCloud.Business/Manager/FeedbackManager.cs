@@ -1,4 +1,5 @@
-﻿using nl.fhict.IntelliCloud.Common.DataTransfer;
+﻿using nl.fhict.IntelliCloud.Common.CustomException;
+using nl.fhict.IntelliCloud.Common.DataTransfer;
 using nl.fhict.IntelliCloud.Data.Context;
 using nl.fhict.IntelliCloud.Data.Model;
 using System;
@@ -23,25 +24,17 @@ namespace nl.fhict.IntelliCloud.Business.Manager
             // Validate input data
             Validation.IdCheck(answerId);
 
-            // Create a new list that will hold all instances of class Feedback assigned to the specified answer
-            List<Feedback> feedbacks = new List<Feedback>();
-
+            // Return all feedback entries assigned to the specified answer
             using (IntelliCloudContext context = new IntelliCloudContext())
             {
-                // Get all feedback entities assigned to the specified answer
-                List<FeedbackEntity> feedbackEntities = (from f in context.Feedbacks
-                                                         .Include("Answer")
-                                                         .Include("Question")
-                                                         .Include("User")
-                                                         where f.Answer.Id == answerId
-                                                         select f).ToList();
-
-                // Convert the list of feedback entities to instances of class Feedback
-                feedbacks = ConvertEntities.FeedbackEntityListToFeedbackList(feedbackEntities);
+                return context.Feedbacks
+                       .Include("Answer")
+                       .Include("Question")
+                       .Include("User")
+                       .Where(f => f.Answer.Id == answerId)
+                       .Select(f => ConvertEntities.FeedbackEntityToFeedback(f))
+                       .ToList();
             }
-
-            // Return all feedback entries assigned to the specified answer
-            return feedbacks;
         }
 
         /// <summary>
@@ -60,14 +53,24 @@ namespace nl.fhict.IntelliCloud.Business.Manager
 
             using (IntelliCloudContext context = new IntelliCloudContext())
             {
-                // Set the state of the answer to Declined
-                AnswerEntity answer = context.Answers.Single(a => a.Id == answerId);
+                // Get the answer entity from the context
+                AnswerEntity answer = context.Answers.SingleOrDefault(a => a.Id == answerId);
+
+                if (answer == null)
+                    throw new NotFoundException("No answer entity exists with the specified ID.");
+
+                // Set the state of the answer to UnderReview - employee needs to process the feedback given by the user
                 answer.AnswerState = AnswerState.UnderReview;
 
-                // Set the state of the question to Open - employee needs to process the feedback given by the user
+                // Get the question entity from the context
                 QuestionEntity question = context.Questions
                                           .Include("User")
-                                          .Single(q => q.Id == questionId);
+                                          .SingleOrDefault(q => q.Id == questionId);
+
+                if (question == null)
+                    throw new NotFoundException("No question entity exists with the specified ID.");
+
+                // Set the state of the question to Open - employee needs to process the feedback given by the user
                 question.QuestionState = QuestionState.Open;
 
                 // Store the user's feedback for the given answer
@@ -95,11 +98,16 @@ namespace nl.fhict.IntelliCloud.Business.Manager
             // Validate input data
             Validation.IdCheck(id);
 
+            // Convert the textual representation of the id to an integer
+            int iFeedbackId = Convert.ToInt32(id);
+
             using (IntelliCloudContext context = new IntelliCloudContext())
             {
                 // Get the feedback entity from the context
-                int iFeedbackId = Convert.ToInt32(id);
-                FeedbackEntity feedback = context.Feedbacks.Single(f => f.Id == iFeedbackId);
+                FeedbackEntity feedback = context.Feedbacks.SingleOrDefault(f => f.Id == iFeedbackId);
+
+                if (feedback == null)
+                    throw new NotFoundException("No feedback entity exists with the specified ID.");
 
                 // Update the state of the feedback entry
                 feedback.FeedbackState = feedbackState;
