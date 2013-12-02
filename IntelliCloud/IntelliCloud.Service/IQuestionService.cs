@@ -50,7 +50,7 @@ namespace nl.fhict.IntelliCloud.Service
             RequestFormat = WebMessageFormat.Json,
             ResponseFormat = WebMessageFormat.Json,
             BodyStyle = WebMessageBodyStyle.Wrapped)]
-        void CreateQuestion(string source, string reference, string question);
+        void CreateQuestion(string source, string reference, string question, string title);
 
         /// <summary>
         /// Updates the question with the given identifier.
