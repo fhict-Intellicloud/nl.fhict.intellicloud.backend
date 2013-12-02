@@ -8,7 +8,7 @@ using System.Text;
 
 namespace nl.fhict.IntelliCloud.Business.Manager
 {
-    public class QuestionManager
+    public class QuestionManager : BaseManager
     {
         public IList<Question> GetQuestions(int employeeId)
         {
@@ -25,7 +25,7 @@ namespace nl.fhict.IntelliCloud.Business.Manager
                 List<QuestionEntity> questionEntities = (from q in ctx.Questions
                                                          select q).ToList();
 
-                questions = ConvertEntities.QuestionEntityListToQuestion(questionEntities);
+                questions = ConvertEntities.QuestionEntityListToQuestionList(questionEntities);
             }
 
             return questions;

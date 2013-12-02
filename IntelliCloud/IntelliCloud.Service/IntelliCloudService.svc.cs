@@ -66,7 +66,7 @@ namespace nl.fhict.IntelliCloud.Service
 
         public void UpdateReview(string reviewId, string reviewState)
         {
-            
+            manager.UpdateReview(reviewId, reviewState);
         }
 
         public List<Review> GetReviewsForAnswer(string answerId)
