@@ -1,10 +1,5 @@
 ﻿using nl.fhict.IntelliCloud.Business.Manager;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.Serialization;
-using System.ServiceModel;
-using System.Text;
 using nl.fhict.IntelliCloud.Common.DataTransfer;
 
 namespace nl.fhict.IntelliCloud.Service
@@ -14,20 +9,26 @@ namespace nl.fhict.IntelliCloud.Service
     /// </summary>
     public class FeedbackService : IFeedbackService
     {
+        private readonly FeedbackManager manager;
+
+        public FeedbackService()
+        {
+            this.manager = new FeedbackManager();
+        }
+
         public IList<Feedback> GetFeedbacks(int answerId)
         {
-            throw new NotImplementedException();
+            return this.manager.GetFeedbacks(answerId);
         }
 
         public void CreateFeedback(string feedback, int answerId, int questionId, FeedbackType feedbackType)
         {
-            throw new NotImplementedException();
+            this.manager.CreateFeedback(feedback, answerId, questionId, feedbackType);
         }
-
 
         public void UpdateFeedback(string id, FeedbackState feedbackState)
         {
-            throw new NotImplementedException();
+            this.manager.UpdateFeedback(id, feedbackState);
         }
     }
 }
