@@ -168,34 +168,17 @@ namespace nl.fhict.IntelliCloud.Business
         /// <returns>Instance of class Feedback.</returns>
         public Feedback FeedbackEntityToFeedback(FeedbackEntity entity)
         {
-            Feedback feedback = new Feedback();
-
-            feedback.Content = entity.Content;
-            feedback.AnswerId = entity.Answer.Id;
-            feedback.QuestionId = entity.Question.Id;
-            feedback.User = UserEntityToUser(entity.User);
-            feedback.FeedbackType = entity.FeedbackType;
-            feedback.FeedbackState = entity.FeedbackState;
-            feedback.CreationTime = entity.CreationTime;
-
-            return feedback;
-        }
-
-        /// <summary>
-        /// Method that converts a list of FeedbackEntity instances to a list of Feedback instances.
-        /// </summary>
-        /// <param name="entities">The list of FeedbackEntity instances to convert.</param>
-        /// <returns>List of Feedback instances.</returns>
-        public List<Feedback> FeedbackEntityListToFeedbackList(List<FeedbackEntity> entities)
-        {
-            List<Feedback> feedbacks = new List<Feedback>();
-
-            foreach (FeedbackEntity entity in entities)
+            // Construct and return a new instance of class Feedback, containing the data from the passed entity class
+            return new Feedback()
             {
-                feedbacks.Add(FeedbackEntityToFeedback(entity));
-            }
-
-            return feedbacks;
+                Content = entity.Content,
+                AnswerId = entity.Answer.Id,
+                QuestionId = entity.Question.Id,
+                User = UserEntityToUser(entity.User),
+                FeedbackType = entity.FeedbackType,
+                FeedbackState = entity.FeedbackState,
+                CreationTime = entity.CreationTime
+            };
         }
     }
 }
