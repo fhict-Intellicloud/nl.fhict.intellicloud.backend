@@ -48,7 +48,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Context\IntelliCloudContext.cs" />
-    <Compile Include="Context\IntelliCloudContextFactory.cs" />
     <Compile Include="Migration\Configuration.cs" />
     <Compile Include="Migration\Extension.cs" />
     <Compile Include="Model\AnswerEntity.cs" />
@@ -72,7 +71,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
