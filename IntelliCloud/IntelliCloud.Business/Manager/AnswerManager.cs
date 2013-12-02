@@ -17,7 +17,7 @@ namespace nl.fhict.IntelliCloud.Business.Manager
 
             List<Answer> answers = new List<Answer>();
 
-            using (var ctx = IntelliCloudContext)
+            using (var ctx = new IntelliCloudContext())
             {
 
                 List<AnswerEntity> answerentities = (from a in ctx.Answers
@@ -41,7 +41,7 @@ namespace nl.fhict.IntelliCloud.Business.Manager
 
             Answer answer = new Answer();
 
-            using (var ctx = IntelliCloudContext)
+            using (var ctx = new IntelliCloudContext())
             {
                 int iId = Convert.ToInt32(id);
 
@@ -66,7 +66,7 @@ namespace nl.fhict.IntelliCloud.Business.Manager
             Validation.IdCheck(questionId);
             Validation.StringCheck(answer);
 
-            using (var ctx = IntelliCloudContext)
+            using (var ctx = new IntelliCloudContext())
             {
 
                 AnswerEntity answerEntity = new AnswerEntity();
@@ -89,7 +89,7 @@ namespace nl.fhict.IntelliCloud.Business.Manager
         {
             Validation.IdCheck(id);
 
-            using (var ctx = IntelliCloudContext)
+            using (var ctx = new IntelliCloudContext())
             {
                 int iId = Convert.ToInt32(id);
 

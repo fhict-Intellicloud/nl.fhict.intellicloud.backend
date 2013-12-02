@@ -63,6 +63,6 @@ namespace nl.fhict.IntelliCloud.Service
             RequestFormat = WebMessageFormat.Json,
             ResponseFormat = WebMessageFormat.Json,
             BodyStyle = WebMessageBodyStyle.Wrapped)]
-        void UpdateAnswer(string id, int employeeId);
+        void UpdateQuestion(string id, int employeeId);
     }
 }

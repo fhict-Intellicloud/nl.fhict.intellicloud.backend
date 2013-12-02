@@ -45,21 +45,9 @@ namespace nl.fhict.IntelliCloud.Service.IntegrationTest
 
         #region Tests
 
-        [TestMethod]
-        [TestCategory("nl.fhict.IntelliCloud.Service.IntegrationTest")]
-        public void GetAnswerById_InvalidAnswerId()
-        {
-            try
-            {
-                //this.service.GetAnswerById("InvalidId");
-                Assert.Fail();
-            }
-            catch (Exception e)
-            {
-                Assert.AreEqual(e.Message, "Put the expected exception message here");
-            }
-        }
-
+        /// <summary>
+        /// Tests if the UpdateReview is updating a review, or atleast calls something to the database.
+        /// </summary>
         [TestMethod]
         [TestCategory("nl.fhict.IntelliCloud.Service.IntegrationTest")]
         public void UpdateReview()
@@ -78,6 +66,9 @@ namespace nl.fhict.IntelliCloud.Service.IntegrationTest
             }
         }
 
+        /// <summary>
+        /// Tests if the SendReviewForAnswer is creating a review, or atleast calls something to the database.
+        /// </summary>
         [TestMethod]
         [TestCategory("nl.fhict.IntelliCloud.Service.IntegrationTest")]
         public void SendReviewForAnswer()
@@ -97,6 +88,9 @@ namespace nl.fhict.IntelliCloud.Service.IntegrationTest
             }
         }
 
+        /// <summary>
+        /// Tests if the GetReviewsForAnswer is getting all reviews of an answer, or atleast calls something to the database.
+        /// </summary>
         [TestMethod]
         [TestCategory("nl.fhict.IntelliCloud.Service.IntegrationTest")]
         public void GetReviewsForAnswer()
@@ -117,6 +111,9 @@ namespace nl.fhict.IntelliCloud.Service.IntegrationTest
             }
         }
 
+        /// <summary>
+        /// Tests if the GetAnswersUpForReview is getting all answers that have answerstate UpForReview, or atleast calls something to the database.
+        /// </summary>
         [TestMethod]
         [TestCategory("nl.fhict.IntelliCloud.Service.IntegrationTest")]
         public void GetAnswersUpForReview()

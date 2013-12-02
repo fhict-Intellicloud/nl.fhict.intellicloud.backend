@@ -37,6 +37,10 @@ namespace nl.fhict.IntelliCloud.Business
         /// <param name="reviewState">The string that needs to be checked as an ReviewState</param>
         void ReviewStateCheck(string reviewState);
 
+        /// <summary>
+        /// Checks if the given SourceDefinitionName exists.
+        /// </summary>
+        /// <param name="SourceDefinitionName">SourceDefinitionName that has to be checked.</param>
         void SourceDefinitionExistsCheck(string SourceDefinitionName);
     }
 }

@@ -89,6 +89,11 @@ namespace nl.fhict.IntelliCloud.Business
             return question;
         }
 
+        /// <summary>
+        /// Converts an AnswerEntity to an Answer.
+        /// </summary>
+        /// <param name="entity">The AnswerEntity that has to be converted.</param>
+        /// <returns>The Answer object.</returns>
         public Answer AnswerEntityToAnswer(AnswerEntity entity)
         {
             Answer answer = new Answer();
@@ -102,6 +107,11 @@ namespace nl.fhict.IntelliCloud.Business
             return answer;
         }
 
+        /// <summary>
+        /// Converts a list of AnswerEntities to a list of Answers.
+        /// </summary>
+        /// <param name="entities">The AnswerEntities that have to be converted.</param>
+        /// <returns>The list of answers.</returns>
         public List<Answer> AnswerEntityListToAnswerList(List<AnswerEntity> entities)
         {
             List<Answer> answers = new List<Answer>();
@@ -113,6 +123,11 @@ namespace nl.fhict.IntelliCloud.Business
             return answers;
         }
 
+        /// <summary>
+        /// Converts a list of ReviewEntities to a list of Reviews.
+        /// </summary>
+        /// <param name="entities">The ReviewEntities that have to be converted.</param>
+        /// <returns>The list of reviews.</returns>
         public List<Review> ReviewEntityListToReviewList(List<ReviewEntity> entities)
         {
             List<Review> reviews = new List<Review>();
@@ -131,7 +146,12 @@ namespace nl.fhict.IntelliCloud.Business
             return reviews;
         }
 
-        public List<Question> QuestionEntityListToQuestion(List<QuestionEntity> entities)
+        /// <summary>
+        /// Converts a list of QuestionEntities to a list of Questions.
+        /// </summary>
+        /// <param name="entities">The QuestionEntities that have to be converted.</param>
+        /// <returns>The list of questions.</returns>
+        public List<Question> QuestionEntityListToQuestionList(List<QuestionEntity> entities)
         {
             List<Question> questions = new List<Question>();
             foreach (QuestionEntity entity in entities)

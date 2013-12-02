@@ -28,15 +28,15 @@ namespace nl.fhict.IntelliCloud.Business
         /// <param name="value">The string that needs to be checked as an id.</param>
         public void IdCheck(string value)
         {
-            try
+            int id;
+            if (int.TryParse(value, out id))
             {
-                int id = Convert.ToInt32(value);
                 if (id < 0)
                 {
                     throw new ArgumentException("Id has to be positive.");
                 }
             }
-            catch (Exception ex)
+            else
             {
                 throw new ArgumentException("Id can not be converted to an integer.");
             }
@@ -86,6 +86,10 @@ namespace nl.fhict.IntelliCloud.Business
             }
         }
 
+        /// <summary>
+        /// Checks if the given SourceDefinitionName exists.
+        /// </summary>
+        /// <param name="SourceDefinitionName">SourceDefinitionName that has to be checked.</param>
         public void SourceDefinitionExistsCheck(string SourceDefinitionName)
         {
                 using (IntelliCloudContext ctx = new IntelliCloudContext())

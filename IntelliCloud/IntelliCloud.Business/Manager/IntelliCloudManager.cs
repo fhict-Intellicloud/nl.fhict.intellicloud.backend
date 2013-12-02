@@ -283,7 +283,7 @@ namespace nl.fhict.IntelliCloud.Business.Manager
                                                       .Include("Answerer.Sources")
                                                   where q.Id == questionId
                                                   select q).ToList();
-                return ConvertEntities.QuestionEntityListToQuestion(questions);
+                return ConvertEntities.QuestionEntityListToQuestionList(questions);
             }
         }
 
@@ -300,7 +300,7 @@ namespace nl.fhict.IntelliCloud.Business.Manager
                                                       .Include("Answerer.Sources") 
                                                   where q.QuestionState == QuestionState.Open
                                                   select q).ToList();
-                return ConvertEntities.QuestionEntityListToQuestion(questions);
+                return ConvertEntities.QuestionEntityListToQuestionList(questions);
             }
         }
 
@@ -315,7 +315,7 @@ namespace nl.fhict.IntelliCloud.Business.Manager
                                                       .Include("Answerer")
                                                       .Include("Answerer.Sources") 
                                                   select q).ToList();
-                return ConvertEntities.QuestionEntityListToQuestion(questions);
+                return ConvertEntities.QuestionEntityListToQuestionList(questions);
             }
         }
 

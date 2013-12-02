@@ -18,7 +18,7 @@ namespace nl.fhict.IntelliCloud.Business.UnitTest.Manager
 {
     /// <summary>
     /// In this unit test class all methods of the IntelliCloudManager will be tested.
-    /// All these test will use mock data.
+    /// All these test will use mock classes.
     /// </summary>
     [TestClass]
     public class IntelliCloudManagerTest
@@ -27,10 +27,6 @@ namespace nl.fhict.IntelliCloud.Business.UnitTest.Manager
 
         private IntelliCloudManager manager;
         private Mock<IValidation> validation;
-        private List<AnswerEntity> answers;
-        private List<ReviewEntity> reviews;
-        private List<QuestionEntity> questions;
-        private List<UserEntity> users;
 
         #endregion Fields
 
@@ -40,22 +36,7 @@ namespace nl.fhict.IntelliCloud.Business.UnitTest.Manager
         public void Initialize()
         {
             validation = new Mock<IValidation>();
-            this.manager = new IntelliCloudManager(null, validation.Object);
-
-            //add test data 
-            //TODO: if not necassary, delete this
-            users = new List<UserEntity>();
-            users.Add(new UserEntity() { CreationTime = DateTime.Now, FirstName = "Geert", Id = 0, Infix = "van", LastName = "Hoesel", Type = UserType.Customer});
-            users.Add(new UserEntity() { CreationTime = DateTime.Now, FirstName = "Teun", Id = 1, Infix = "van", LastName = "Gisbergen", Type = UserType.Employee });
-
-            answers = new List<AnswerEntity>();
-            answers.Add(new AnswerEntity() { AnswerState = AnswerState.UnderReview, Content  = "This is the answer", CreationTime = DateTime.Now, Id = 0, User = users.First()});
-            
-            questions = new List<QuestionEntity>();
-            questions.Add(new QuestionEntity() { Content = "This is the question?", CreationTime = DateTime.Now, Id = 0, QuestionState = QuestionState.UpForAnswer, Answer = answers.First(), User = users.First()});
-
-            reviews = new List<ReviewEntity>();
-            reviews.Add(new ReviewEntity() { Answer = answers.First(), Content = "This is the review", CreationTime = DateTime.Now, Id = 0, ReviewState = ReviewState.Open, User = users.First(u => u.Type.Equals(UserType.Employee))});
+            this.manager = new IntelliCloudManager(null, validation.Object);            
         }
 
         [TestCleanup]
@@ -65,6 +46,9 @@ namespace nl.fhict.IntelliCloud.Business.UnitTest.Manager
 
         #region Tests
 
+        /// <summary>
+        /// In this test we check if the reviewerId and reviewState is being validated in the UpdateReview method.
+        /// </summary>
         [TestMethod]
         public void UpdateReviewTest()
         {
@@ -82,6 +66,9 @@ namespace nl.fhict.IntelliCloud.Business.UnitTest.Manager
             validation.Verify(v => v.ReviewStateCheck(reviewState), Times.Once());
         }
 
+        /// <summary>
+        /// In this test we check if the reviewerId, review and answerId is being validated in the SendReviewForAnswer method.
+        /// </summary>
         [TestMethod]
         public void SendReviewForAnswer()
         {
@@ -101,6 +88,9 @@ namespace nl.fhict.IntelliCloud.Business.UnitTest.Manager
             validation.Verify(v => v.StringCheck(review), Times.Once());
         }
 
+        /// <summary>
+        /// In this test we check if the answerId is being validated in the GetReviewsForAnswer method.
+        /// </summary>
         [TestMethod]
         public void GetReviewsForAnswer()
         {
@@ -116,6 +106,9 @@ namespace nl.fhict.IntelliCloud.Business.UnitTest.Manager
             validation.Verify(v => v.IdCheck(answerId), Times.Once());
         }
 
+        /// <summary>
+        /// In this test we check if the employeeId is being validated in the GetAnswersUpForReview method.
+        /// </summary>
         [TestMethod]
         public void GetAnswersUpForReview()
         {

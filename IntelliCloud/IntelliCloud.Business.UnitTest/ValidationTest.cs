@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace nl.fhict.IntelliCloud.Business.UnitTest
 {
+    /// <summary>
+    /// In this unit test class all methods of the Validation class will be tested.
+    /// </summary>
     [TestClass]
     public class ValidationTest
     {
@@ -97,7 +100,7 @@ namespace nl.fhict.IntelliCloud.Business.UnitTest
             }
             catch (Exception e)
             {
-                Assert.AreEqual("Id has to be positive.", e.Message);
+                Assert.AreEqual("Id can not be converted to an integer.", e.Message);
             }
         }
 
