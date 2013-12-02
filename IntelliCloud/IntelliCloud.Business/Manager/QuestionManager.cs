@@ -18,6 +18,10 @@ namespace nl.fhict.IntelliCloud.Business.Manager
 
             using (IntelliCloudContext ctx = new IntelliCloudContext())
             {
+                UserEntity employee = (from u in ctx.Users
+                                       where u.Id == employeeId
+                                       select u).Single();
+
                 List<QuestionEntity> questionEntities = (from q in ctx.Questions
                                                          select q).ToList();
 
@@ -105,9 +109,23 @@ namespace nl.fhict.IntelliCloud.Business.Manager
             }
         }
 
-        public void UpdateQuestion(string id, int employeeId)
+        public void UpdateQuestion(int id, int employeeId)
         {
-            throw new NotImplementedException();
+            Validation.IdCheck(id);
+            Validation.IdCheck(employeeId);
+
+            using (IntelliCloudContext ctx = new IntelliCloudContext())
+            {
+                QuestionEntity questionEntity = (from q in ctx.Questions
+                                                 where q.Id == id
+                                                 select q).Single();
+
+                questionEntity.Answerer = (from u in ctx.Users
+                                           where u.Id == employeeId
+                                           select u).Single();
+                ctx.SaveChanges();
+            }
+
         }
     }
 }

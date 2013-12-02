@@ -22,7 +22,6 @@ namespace nl.fhict.IntelliCloud.Service
             this.manager = new QuestionManager();
         }
 
-
         public IList<Question> GetQuestions(int employeeId)
         {
             return manager.GetQuestions(employeeId);
@@ -40,7 +39,7 @@ namespace nl.fhict.IntelliCloud.Service
 
         public void UpdateQuestion(string id, int employeeId)
         {
-            manager.UpdateQuestion(id, employeeId);
+            manager.UpdateQuestion(Convert.ToInt32(id), employeeId);
         }
     }
 }
