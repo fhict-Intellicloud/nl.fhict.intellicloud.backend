@@ -7,15 +7,25 @@ using System.Threading.Tasks;
 
 namespace nl.fhict.IntelliCloud.Business.UnitTest
 {
+    /// <summary>
+    /// In this unit test class all methods of the Validation class will be tested.
+    /// </summary>
     [TestClass]
     public class ValidationTest
     {
         #region Fields
 
+        private Validation validation;
 
         #endregion Fields
 
         #region Methods
+
+        [TestInitialize]
+        public void Initialize()
+        {
+            validation = new Validation();
+        }
 
         #region Tests
 
@@ -29,7 +39,7 @@ namespace nl.fhict.IntelliCloud.Business.UnitTest
         {
             try
             {
-                Validation.StringCheck(String.Empty);
+                validation.StringCheck(String.Empty);
                 Assert.Fail();
             }
             catch (Exception e)
@@ -47,7 +57,7 @@ namespace nl.fhict.IntelliCloud.Business.UnitTest
         {
             try
             {
-                Validation.StringCheck(null);
+                validation.StringCheck(null);
                 Assert.Fail();
             }
             catch (Exception e)
@@ -68,7 +78,7 @@ namespace nl.fhict.IntelliCloud.Business.UnitTest
         {
             try
             {
-                Validation.IdCheck("UnparseableValue");
+                validation.IdCheck("UnparseableValue");
                 Assert.Fail();
             }
             catch (Exception e)
@@ -85,12 +95,12 @@ namespace nl.fhict.IntelliCloud.Business.UnitTest
         {
             try
             {
-                Validation.IdCheck("-1");
+                validation.IdCheck("-1");
                 Assert.Fail();
             }
             catch (Exception e)
             {
-                Assert.AreEqual("Id has to be positive.", e.Message);
+                Assert.AreEqual("Id can not be converted to an integer.", e.Message);
             }
         }
 

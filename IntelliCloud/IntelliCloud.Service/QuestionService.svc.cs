@@ -1,4 +1,4 @@
-﻿using nl.fhict.IntelliCloud.Business;
+using nl.fhict.IntelliCloud.Business;
 using nl.fhict.IntelliCloud.Business.Manager;
 using System;
 using System.Collections.Generic;

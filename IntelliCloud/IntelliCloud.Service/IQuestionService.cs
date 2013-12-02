@@ -1,4 +1,5 @@
-﻿using nl.fhict.IntelliCloud.Common.DataTransfer;
+
+using nl.fhict.IntelliCloud.Common.DataTransfer;
 using System;
 using System.Collections.Generic;
 using System.Linq;
