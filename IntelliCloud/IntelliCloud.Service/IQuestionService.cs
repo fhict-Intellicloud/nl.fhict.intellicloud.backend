@@ -44,6 +44,7 @@ namespace nl.fhict.IntelliCloud.Service
         /// <param name="source">The source from which the question was send, e.g. "Mail", "Facebook" or "Twitter".</param>
         /// <param name="reference">The identifier for the source, e.g. the username or email address.</param>
         /// <param name="question">The question that was answered.</param>
+        /// <param name="title">The title of the question. The title contains a short summary of the question.</param>
         [OperationContract]
         [WebInvoke(Method = "POST",
             UriTemplate = "questions",
