@@ -1,4 +1,4 @@
-﻿using nl.fhict.IntelliCloud.Business;
+using nl.fhict.IntelliCloud.Business;
 using nl.fhict.IntelliCloud.Business.Manager;
 using System;
 using System.Collections.Generic;
@@ -15,24 +15,31 @@ namespace nl.fhict.IntelliCloud.Service
     /// </summary>
     public class QuestionService : IQuestionService
     {
+        private readonly QuestionManager manager;
+
+        public QuestionService()
+        {
+            this.manager = new QuestionManager();
+        }
+
         public IList<Question> GetQuestions(int employeeId)
         {
-            throw new NotImplementedException();
+            return manager.GetQuestions(employeeId);
         }
 
         public Question GetQuestion(string id)
         {
-            throw new NotImplementedException();
+            return manager.GetQuestion(Convert.ToInt32(id));
         }
 
-        public void CreateQuestion(string source, string reference, string question)
+        public void CreateQuestion(string source, string reference, string question, string title)
         {
-            throw new NotImplementedException();
+            manager.CreateQuestion(source, reference, question, title);
         }
 
         public void UpdateQuestion(string id, int employeeId)
         {
-            throw new NotImplementedException();
+            manager.UpdateQuestion(Convert.ToInt32(id), employeeId);
         }
     }
 }

@@ -43,7 +43,7 @@ namespace nl.fhict.IntelliCloud.Service
         /// <summary>
         /// Updates the review with the given identifier.
         /// </summary>
-        /// <param name="reviewId">The identifier of the review that is updated.</param>
+        /// <param name="id">The identifier of the review that is updated.</param>
         /// <param name="reviewState">The new state of the review.</param>
         [OperationContract]
         [WebInvoke(Method = "PUT",

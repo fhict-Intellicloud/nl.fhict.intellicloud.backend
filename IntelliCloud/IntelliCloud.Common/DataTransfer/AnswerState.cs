@@ -13,27 +13,17 @@ namespace nl.fhict.IntelliCloud.Common.DataTransfer
     public enum AnswerState
     {
         /// <summary>
-        /// A state indicating that the <see cref="Answer"/> is send to the <see cref="User"/> that aksed the <see cref="Question"/> that is answered.
+        /// A state indicating that the <see cref="Answer"/> is ready to be used by the system. This means the system
+        /// can used it to automatically answer questions and employees can use it to manually send it.
         /// </summary>
         [EnumMember]
-        Send,
+        Ready,
 
         /// <summary>
-        /// A state indicating that the <see cref="Answer"/> is under review.
+        /// A state indicating that the <see cref="Answer"/> is under review. This means the answer cannot be send to
+        /// customers.
         /// </summary>
         [EnumMember]
-        UnderReview,
-
-        /// <summary>
-        /// A state indicating that the <see cref="Answer"/> is accepted by the <see cref="User"/> that received the answer. This state can only be applied after the answer is send.
-        /// </summary>
-        [EnumMember]
-        Accepted,
-
-        /// <summary>
-        /// A state indicating that the <see cref="Answer"/> is declined by the <see cref="User"/> that received the answer. This state can only be applied after the answer is send.
-        /// </summary>
-        [EnumMember]
-        Declined
+        UnderReview
     }
 }

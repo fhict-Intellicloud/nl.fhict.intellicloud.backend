@@ -39,6 +39,20 @@ namespace nl.fhict.IntelliCloud.Service
             RequestFormat = WebMessageFormat.Json,
             ResponseFormat = WebMessageFormat.Json,
             BodyStyle = WebMessageBodyStyle.Wrapped)]
-        void CreateFeedback(string feedback, int answerId, int questionId, FeedbackType feedbackType);       
+        void CreateFeedback(string feedback, int answerId, int questionId, FeedbackType feedbackType);
+
+
+        /// <summary>
+        /// Updates the feedback with the given identifier.
+        /// </summary>
+        /// <param name="id">The identifier of the feedback that is updated.</param>
+        /// <param name="feedbackState">The new state of the feedback.</param>
+        [OperationContract]
+        [WebInvoke(Method = "PUT",
+            UriTemplate = "feedbacks/{id}",
+            RequestFormat = WebMessageFormat.Json,
+            ResponseFormat = WebMessageFormat.Json,
+            BodyStyle = WebMessageBodyStyle.Wrapped)]
+        void UpdateFeedback(string id, FeedbackState feedbackState);        
     }
 }
