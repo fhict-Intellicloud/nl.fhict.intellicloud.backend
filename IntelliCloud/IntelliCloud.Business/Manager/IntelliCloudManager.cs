@@ -9,8 +9,18 @@ using nl.fhict.IntelliCloud.Data.Model;
 
 namespace nl.fhict.IntelliCloud.Business.Manager
 {
-    public class IntelliCloudManager
+    public class IntelliCloudManager : BaseManager
     {
+        public IntelliCloudManager(IntelliCloudContext context, IValidation validation)
+            : base(context, validation)
+        {
+            //the intellicloudcontext and validation are given threw here
+        }
+
+        public IntelliCloudManager()
+        {
+            //new static objects are being made in the basemanager
+        }
 
         public void AskQuestion(string source, string reference, string question)
         {
@@ -20,7 +30,8 @@ namespace nl.fhict.IntelliCloud.Business.Manager
             Validation.StringCheck(question);
 
             // create new context to connect to the database
-            using (IntelliCloudContext ctx = new IntelliCloudContext()) {
+            using (var ctx = new IntelliCloudContext())
+            {
 
                 QuestionEntity questionEntity = new QuestionEntity();
 
@@ -84,7 +95,7 @@ namespace nl.fhict.IntelliCloud.Business.Manager
             Validation.IdCheck(answererId);
             Validation.AnswerStateCheck(answerState);
 
-            using (IntelliCloudContext context = new IntelliCloudContext())
+            using (var context = new IntelliCloudContext())
             {
                 AnswerEntity answerEntity = new AnswerEntity();
                 answerEntity.AnswerState = (AnswerState) Enum.Parse(typeof (AnswerState), answerState);
@@ -116,7 +127,7 @@ namespace nl.fhict.IntelliCloud.Business.Manager
             Validation.IdCheck(answerId);
             Validation.IdCheck(questionId);
 
-            using (IntelliCloudContext context = new IntelliCloudContext())
+            using (var context = new IntelliCloudContext())
             {
                 // Set the state of the answer to Accepted
                 int iAnswerId = Convert.ToInt32(answerId);
@@ -154,7 +165,7 @@ namespace nl.fhict.IntelliCloud.Business.Manager
             Validation.IdCheck(answerId);
             Validation.IdCheck(questionId);
 
-            using (IntelliCloudContext context = new IntelliCloudContext())
+            using (var context = new IntelliCloudContext())
             {
                 // Set the state of the answer to Declined
                 AnswerEntity answer = context.Answers.Single(a => a.Id == Convert.ToInt32(answerId));
@@ -184,9 +195,10 @@ namespace nl.fhict.IntelliCloud.Business.Manager
             Validation.IdCheck(reviewId);
             Validation.ReviewStateCheck(reviewState);
 
-            using (IntelliCloudContext context = new IntelliCloudContext())
+            using (var context = new IntelliCloudContext())
             {
-                ReviewEntity review = context.Reviews.First(r => r.Id.Equals(Convert.ToInt32(reviewId)));
+                var id = Convert.ToInt32(reviewId);
+                ReviewEntity review = context.Reviews.First(r => r.Id.Equals(id));
                 review.ReviewState = (ReviewState)Enum.Parse(typeof(ReviewState), reviewState);
 
                 context.SaveChanges();
@@ -199,13 +211,16 @@ namespace nl.fhict.IntelliCloud.Business.Manager
             Validation.IdCheck(reviewerId);
             Validation.StringCheck(review);
 
-            using (IntelliCloudContext context = new IntelliCloudContext())
+            using (var context = new IntelliCloudContext())
             {
+                var aId = Convert.ToInt32(answerId);
+                var rId = Convert.ToInt32(reviewerId);
+
                 ReviewEntity reviewEntity = new ReviewEntity();
-                reviewEntity.Answer = context.Answers.First(q => q.Id.Equals(Convert.ToInt32(answerId)));
+                reviewEntity.Answer = context.Answers.First(q => q.Id.Equals(aId));
                 reviewEntity.Content = review;
                 reviewEntity.ReviewState = ReviewState.Open;
-                reviewEntity.User = context.Users.First(u => u.Id.Equals(Convert.ToInt32(reviewerId)));
+                reviewEntity.User = context.Users.First(u => u.Id.Equals(rId));
 
                 context.Reviews.Add(reviewEntity);
 
@@ -217,7 +232,7 @@ namespace nl.fhict.IntelliCloud.Business.Manager
         {
             Validation.IdCheck(answerId);
 
-            using (IntelliCloudContext context = new IntelliCloudContext())
+            using (var context = new IntelliCloudContext())
             {
 
                 int iAnswerId = int.Parse(answerId);
@@ -234,10 +249,10 @@ namespace nl.fhict.IntelliCloud.Business.Manager
         {
             Validation.IdCheck(employeeId);
 
-            using (IntelliCloudContext context = new IntelliCloudContext())
+            using (var context = new IntelliCloudContext())
             {
 
-                List<AnswerEntity> answerEntities = (from a in context.Answers.Include("Question").Include("User").Include("Question.User").Include("Question.SourceType").Include("User.Sources")
+                List<AnswerEntity> answerEntities = (from a in context.Answers.Include("User")
                                                     where a.AnswerState == (AnswerState.UnderReview)
                                                     select a).ToList();
 
@@ -258,7 +273,7 @@ namespace nl.fhict.IntelliCloud.Business.Manager
 
         public List<Question> GetQuestions(int questionId)
         {
-            using (IntelliCloudContext ctx = new IntelliCloudContext())
+            using (var ctx = new IntelliCloudContext())
             {
                 List<QuestionEntity> questions = (from q in ctx.Questions
                                                       .Include("User")
@@ -268,14 +283,14 @@ namespace nl.fhict.IntelliCloud.Business.Manager
                                                       .Include("Answerer.Sources")
                                                   where q.Id == questionId
                                                   select q).ToList();
-                return ConvertEntities.QuestionEntityListToQuestion(questions);
+                return ConvertEntities.QuestionEntityListToQuestionList(questions);
             }
         }
 
         public List<Question> GetQuestionsForEmployee(int employeeId)
         {
             //TODO implement algorithem to match employee to questions
-            using (IntelliCloudContext ctx = new IntelliCloudContext())
+            using (var ctx = new IntelliCloudContext())
             {
                 List<QuestionEntity> questions = (from q in ctx.Questions
                                                       .Include("User")
@@ -285,13 +300,14 @@ namespace nl.fhict.IntelliCloud.Business.Manager
                                                       .Include("Answerer.Sources") 
                                                   where q.QuestionState == QuestionState.Open
                                                   select q).ToList();
-                return ConvertEntities.QuestionEntityListToQuestion(questions);
+                return ConvertEntities.QuestionEntityListToQuestionList(questions);
             }
         }
 
         public List<Question> GetQuestions()
         {
-            using (IntelliCloudContext ctx = new IntelliCloudContext()){
+            using (var ctx = new IntelliCloudContext())
+            {
                 List<QuestionEntity> questions = (from q in ctx.Questions
                                                       .Include("User")
                                                       .Include("SourceType")
@@ -299,7 +315,7 @@ namespace nl.fhict.IntelliCloud.Business.Manager
                                                       .Include("Answerer")
                                                       .Include("Answerer.Sources") 
                                                   select q).ToList();
-                return ConvertEntities.QuestionEntityListToQuestion(questions);
+                return ConvertEntities.QuestionEntityListToQuestionList(questions);
             }
         }
 

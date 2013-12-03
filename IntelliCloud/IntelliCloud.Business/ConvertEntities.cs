@@ -18,7 +18,7 @@ namespace nl.fhict.IntelliCloud.Business
         /// </summary>
         /// <param name="entity">The UserEntity that has to be converted.</param>
         /// <returns>The user object.</returns>
-        public static User UserEntityToUser(UserEntity entity)
+        public User UserEntityToUser(UserEntity entity)
         {
             User user = new User();
             user.Id = entity.Id;
@@ -37,7 +37,7 @@ namespace nl.fhict.IntelliCloud.Business
         /// </summary>
         /// <param name="sourceEntities">The SourceEntities that have to be converted.</param>
         /// <returns>The list of sources.</returns>
-        public static List<Source> SourceEntityListToSources(ICollection<SourceEntity> sourceEntities)
+        public List<Source> SourceEntityListToSources(ICollection<SourceEntity> sourceEntities)
         {
             List<Source> sources = new List<Source>();
             foreach (SourceEntity source in sourceEntities)
@@ -57,7 +57,7 @@ namespace nl.fhict.IntelliCloud.Business
         /// </summary>
         /// <param name="sourceDefinitionEntity">The SourceDefinitionEntity that have to be converted.</param>
         /// <returns>The sourcedefinition object.</returns>
-        public static SourceDefinition SourceDefinitionEntityToSourceDefinition(
+        public SourceDefinition SourceDefinitionEntityToSourceDefinition(
             SourceDefinitionEntity sourceDefinitionEntity)
         {
             SourceDefinition sourceDefinition = new SourceDefinition();
@@ -73,7 +73,7 @@ namespace nl.fhict.IntelliCloud.Business
         /// </summary>
         /// <param name="entity">The QuestionEntity that has to be converted.</param>
         /// <returns>The question object.</returns>
-        public static Question QuestionEntityToQuestion(QuestionEntity entity)
+        public Question QuestionEntityToQuestion(QuestionEntity entity)
         {
             Question question = new Question();
             question.Id = entity.Id;
@@ -89,7 +89,12 @@ namespace nl.fhict.IntelliCloud.Business
             return question;
         }
 
-        public static Answer AnswerEntityToAnswer(AnswerEntity entity)
+        /// <summary>
+        /// Converts an AnswerEntity to an Answer.
+        /// </summary>
+        /// <param name="entity">The AnswerEntity that has to be converted.</param>
+        /// <returns>The Answer object.</returns>
+        public Answer AnswerEntityToAnswer(AnswerEntity entity)
         {
             Answer answer = new Answer();
 
@@ -97,12 +102,17 @@ namespace nl.fhict.IntelliCloud.Business
             answer.CreationTime = entity.CreationTime;
             answer.Content = entity.Content;
             answer.AnswerState = entity.AnswerState;
-            answer.User = ConvertEntities.UserEntityToUser(entity.User);
+            answer.User = UserEntityToUser(entity.User);
 
             return answer;
         }
 
-        public static List<Answer> AnswerEntityListToAnswerList(List<AnswerEntity> entities)
+        /// <summary>
+        /// Converts a list of AnswerEntities to a list of Answers.
+        /// </summary>
+        /// <param name="entities">The AnswerEntities that have to be converted.</param>
+        /// <returns>The list of answers.</returns>
+        public List<Answer> AnswerEntityListToAnswerList(List<AnswerEntity> entities)
         {
             List<Answer> answers = new List<Answer>();
             foreach (AnswerEntity entity in entities)
@@ -113,7 +123,12 @@ namespace nl.fhict.IntelliCloud.Business
             return answers;
         }
 
-        public static List<Review> ReviewEntityListToReviewList(List<ReviewEntity> entities)
+        /// <summary>
+        /// Converts a list of ReviewEntities to a list of Reviews.
+        /// </summary>
+        /// <param name="entities">The ReviewEntities that have to be converted.</param>
+        /// <returns>The list of reviews.</returns>
+        public List<Review> ReviewEntityListToReviewList(List<ReviewEntity> entities)
         {
             List<Review> reviews = new List<Review>();
             foreach (ReviewEntity entity in entities)
@@ -124,14 +139,19 @@ namespace nl.fhict.IntelliCloud.Business
                 temp.ReviewState = entity.ReviewState;
                 temp.AnswerId = entity.Answer.Id;
                 temp.CreationTime = entity.CreationTime;
-                temp.User = ConvertEntities.UserEntityToUser(entity.User);
+                temp.User = this.UserEntityToUser(entity.User);
                 reviews.Add(temp);
             }
 
             return reviews;
         }
 
-        public static List<Question> QuestionEntityListToQuestion(List<QuestionEntity> entities)
+        /// <summary>
+        /// Converts a list of QuestionEntities to a list of Questions.
+        /// </summary>
+        /// <param name="entities">The QuestionEntities that have to be converted.</param>
+        /// <returns>The list of questions.</returns>
+        public List<Question> QuestionEntityListToQuestionList(List<QuestionEntity> entities)
         {
             List<Question> questions = new List<Question>();
             foreach (QuestionEntity entity in entities)
@@ -141,5 +161,24 @@ namespace nl.fhict.IntelliCloud.Business
             return questions;
         }
 
+        /// <summary>
+        /// Method for converting a FeedbackEntity instance to a Feedback instance.
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <returns>Instance of class Feedback.</returns>
+        public Feedback FeedbackEntityToFeedback(FeedbackEntity entity)
+        {
+            // Construct and return a new instance of class Feedback, containing the data from the passed entity class
+            return new Feedback()
+            {
+                Content = entity.Content,
+                AnswerId = entity.Answer.Id,
+                QuestionId = entity.Question.Id,
+                User = UserEntityToUser(entity.User),
+                FeedbackType = entity.FeedbackType,
+                FeedbackState = entity.FeedbackState,
+                CreationTime = entity.CreationTime
+            };
+        }
     }
 }
