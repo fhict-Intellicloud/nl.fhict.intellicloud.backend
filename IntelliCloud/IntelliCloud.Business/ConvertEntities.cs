@@ -161,5 +161,24 @@ namespace nl.fhict.IntelliCloud.Business
             return questions;
         }
 
+        /// <summary>
+        /// Method for converting a FeedbackEntity instance to a Feedback instance.
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <returns>Instance of class Feedback.</returns>
+        public Feedback FeedbackEntityToFeedback(FeedbackEntity entity)
+        {
+            // Construct and return a new instance of class Feedback, containing the data from the passed entity class
+            return new Feedback()
+            {
+                Content = entity.Content,
+                AnswerId = entity.Answer.Id,
+                QuestionId = entity.Question.Id,
+                User = UserEntityToUser(entity.User),
+                FeedbackType = entity.FeedbackType,
+                FeedbackState = entity.FeedbackState,
+                CreationTime = entity.CreationTime
+            };
+        }
     }
 }
