@@ -5,7 +5,6 @@ using nl.fhict.IntelliCloud.Data.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace nl.fhict.IntelliCloud.Business.Manager
 {
@@ -30,8 +29,11 @@ namespace nl.fhict.IntelliCloud.Business.Manager
                 return context.Feedbacks
                        .Include("Answer")
                        .Include("Question")
+                       .Include("Question.SourceDefinition")
                        .Include("User")
+                       .Include("User.Sources")
                        .Where(f => f.Answer.Id == answerId)
+                       .ToList()
                        .Select(f => ConvertEntities.FeedbackEntityToFeedback(f))
                        .ToList();
             }
