@@ -18,12 +18,25 @@ namespace nl.fhict.IntelliCloud.Business.Manager
 
             using (IntelliCloudContext ctx = new IntelliCloudContext())
             {
-                UserEntity employee = (from u in ctx.Users
-                                       where u.Id == employeeId
-                                       select u).Single();
+                UserEntity employee = null;
+                try
+                {
+                    employee = (from u in ctx.Users
+                                where u.Id == employeeId
+                                select u).Single();
+                }
+                catch (Exception ex)
+                {
+
+                }
 
                 List<QuestionEntity> questionEntities = (from q in ctx.Questions
-                                                         select q).ToList();
+                                                                 .Include("SourceDefinition")
+                                                                 .Include("User")
+                                                                 .Include("User.Sources")
+                                                                 .Include("Answerer")
+                                                                 .Include("Answerer.Sources")
+                                                             select q).ToList();
 
                 questions = ConvertEntities.QuestionEntityListToQuestionList(questionEntities);
             }
@@ -64,6 +77,7 @@ namespace nl.fhict.IntelliCloud.Business.Manager
                 questionEntity.IsPrivate = false;
                 questionEntity.QuestionState = QuestionState.Open;
                 questionEntity.Title = title;
+                questionEntity.LanguageDefinition = ctx.LanguageDefinitions.Single(ld => ld.Name.Equals("English"));
                 questionEntity.SourceDefinition = ctx.SourceDefinitions.Single(sd => sd.Name.Equals(source));
                 
                 // Check if the user already exists

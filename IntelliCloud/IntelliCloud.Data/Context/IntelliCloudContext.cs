@@ -28,6 +28,7 @@ namespace nl.fhict.IntelliCloud.Data.Context
             this.SourceDefinitions = this.Set<SourceDefinitionEntity>();
             this.Sources = this.Set<SourceEntity>();
             this.Users = this.Set<UserEntity>();
+            this.LanguageDefinitions = this.Set<LanguageDefinitionEntity>();
         }
 
         /// <summary>
