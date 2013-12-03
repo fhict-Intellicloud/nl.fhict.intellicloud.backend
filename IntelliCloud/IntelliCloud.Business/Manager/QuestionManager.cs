@@ -1,4 +1,5 @@
-﻿using nl.fhict.IntelliCloud.Common.DataTransfer;
+﻿using nl.fhict.IntelliCloud.Common.CustomException;
+using nl.fhict.IntelliCloud.Common.DataTransfer;
 using nl.fhict.IntelliCloud.Data.Context;
 using nl.fhict.IntelliCloud.Data.Model;
 using System;
@@ -19,11 +20,17 @@ namespace nl.fhict.IntelliCloud.Business.Manager
             using (IntelliCloudContext ctx = new IntelliCloudContext())
             {
                 UserEntity employee = (from u in ctx.Users
-                                       where u.Id == employeeId
-                                       select u).Single();
+                                where u.Id == employeeId
+                                select u).SingleOrDefault();
 
+                //TODO: Only retrieve questions for retrieved employee.
                 List<QuestionEntity> questionEntities = (from q in ctx.Questions
-                                                         select q).ToList();
+                                                                 .Include("SourceDefinition")
+                                                                 .Include("User")
+                                                                 .Include("User.Sources")
+                                                                 .Include("Answerer")
+                                                                 .Include("Answerer.Sources")
+                                                             select q).ToList();
 
                 questions = ConvertEntities.QuestionEntityListToQuestionList(questionEntities);
             }
@@ -41,7 +48,10 @@ namespace nl.fhict.IntelliCloud.Business.Manager
             {
                 QuestionEntity entity = (from q in ctx.Questions
                                          where q.Id == id
-                                         select q).Single();
+                                         select q).SingleOrDefault();
+
+                if (entity == null)
+                    throw new NotFoundException("No Question entity exists with the specified ID.");
 
                 question = ConvertEntities.QuestionEntityToQuestion(entity);
             }
@@ -61,10 +71,25 @@ namespace nl.fhict.IntelliCloud.Business.Manager
 
                 questionEntity.Content = question;
                 questionEntity.CreationTime = DateTime.UtcNow;
+                //TODO: Determine if question is private and add a parameter to CreateQuestion in the service to make this possible.
                 questionEntity.IsPrivate = false;
                 questionEntity.QuestionState = QuestionState.Open;
                 questionEntity.Title = title;
-                questionEntity.SourceDefinition = ctx.SourceDefinitions.Single(sd => sd.Name.Equals(source));
+
+                //TODO determine real language 
+                LanguageDefinitionEntity languageDefinition = ctx.LanguageDefinitions.SingleOrDefault(ld => ld.Name.Equals("English"));
+
+                if (languageDefinition == null)
+                    throw new NotFoundException("No languageDefinition entity exists with the specified ID.");
+
+                questionEntity.LanguageDefinition = languageDefinition;
+
+                SourceDefinitionEntity sourceDefinition = ctx.SourceDefinitions.SingleOrDefault(sd => sd.Name.Equals(source));
+
+                if (sourceDefinition == null)
+                    throw new NotFoundException("No languageDefinition entity exists with the specified ID.");
+
+                questionEntity.SourceDefinition = sourceDefinition;
                 
                 // Check if the user already exists
                 var sourceEntity = ctx.Sources.SingleOrDefault(s => s.SourceDefinition.Id == questionEntity.SourceDefinition.Id && s.Value == reference); 
