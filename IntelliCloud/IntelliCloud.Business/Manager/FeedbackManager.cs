@@ -30,7 +30,7 @@ namespace nl.fhict.IntelliCloud.Business.Manager
                 return context.Feedbacks
                        .Include(f => f.Answer)
                        .Include(f => f.Question)
-                       .Include(f => f.Question.SourceDefinition)
+                       .Include(f => f.Question.Source)
                        .Include(f => f.User)
                        .Include(f => f.User.Sources)
                        .Where(f => f.Answer.Id == answerId)
@@ -73,7 +73,7 @@ namespace nl.fhict.IntelliCloud.Business.Manager
                 QuestionEntity question = context.Questions
                                           .Include(q => q.User)
                                           .Include(q => q.User.Sources)
-                                          .Include(q => q.SourceDefinition)
+                                          .Include(q => q.Source)
                                           .Include(q => q.LanguageDefinition)
                                           .Include(q => q.Answer)
                                           .Include(q => q.Answer.LanguageDefinition)
