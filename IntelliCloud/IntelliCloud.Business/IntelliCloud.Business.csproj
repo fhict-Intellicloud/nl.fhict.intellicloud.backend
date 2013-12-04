@@ -47,6 +47,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Authorization\AuthorizationHandler.cs" />
     <Compile Include="Authorization\AuthorizationToken.cs" />
     <Compile Include="Authorization\OpenIDUserInfo.cs" />
     <Compile Include="ConvertEntities.cs" />
