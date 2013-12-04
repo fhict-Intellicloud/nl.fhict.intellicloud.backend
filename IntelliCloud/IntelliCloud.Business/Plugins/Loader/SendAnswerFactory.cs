@@ -29,7 +29,7 @@ namespace nl.fhict.IntelliCloud.Business.Plugins.Loader
                     // return new FacebookSendAnswerPlugin();
                 case "Twitter":
                     // TODO uncomment
-                    // return new FacebookSendAnswerPlugin();
+                    // return new TwitterSendAnswerPlugin();
                 default:
                     throw new NotImplementedException("The provided source is not supported, so the answer couldn't be send.");
             }
