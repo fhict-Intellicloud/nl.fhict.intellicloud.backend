@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Data.Entity;
 
 namespace nl.fhict.IntelliCloud.Business.Manager
 {
@@ -23,13 +24,15 @@ namespace nl.fhict.IntelliCloud.Business.Manager
                                 where u.Id == employeeId
                                 select u).SingleOrDefault();
 
-                //TODO: Only retrieve questions for retrieved employee.
+                // TODO: Only retrieve questions for retrieved employee.
+                // TODO: Make sure only users of type employee can retrieve private questions.
+                // TODO fix includes
                 List<QuestionEntity> questionEntities = (from q in ctx.Questions
-                                                                 .Include("SourceDefinition")
-                                                                 .Include("User")
-                                                                 .Include("User.Sources")
-                                                                 .Include("Answerer")
-                                                                 .Include("Answerer.Sources")
+                                                                 .Include(d => d.Source)
+                                                                 .Include(d => d.User)
+                                                                 .Include(d => d.User.Sources)
+                                                                 .Include(d => d.Answerer)
+                                                                 .Include(d => d.Answerer.Sources)
                                                              select q).ToList();
 
                 questions = ConvertEntities.QuestionEntityListToQuestionList(questionEntities);
@@ -46,6 +49,7 @@ namespace nl.fhict.IntelliCloud.Business.Manager
 
             using (IntelliCloudContext ctx = new IntelliCloudContext())
             {
+                // TODO: make sure only users of type employee can retrieve private questions.
                 QuestionEntity entity = (from q in ctx.Questions
                                          where q.Id == id
                                          select q).SingleOrDefault();
@@ -58,7 +62,8 @@ namespace nl.fhict.IntelliCloud.Business.Manager
             return question;
         }
 
-        public void CreateQuestion(string source, string reference, string question, string title)
+        public void CreateQuestion(
+            string source, string reference, string question, string title, string postId = null, bool isPrivate = false)
         {
             Validation.StringCheck(source);
             Validation.StringCheck(reference);
@@ -66,67 +71,67 @@ namespace nl.fhict.IntelliCloud.Business.Manager
             Validation.StringCheck(title);
 
             using (IntelliCloudContext ctx = new IntelliCloudContext())
-            {
-                QuestionEntity questionEntity = new QuestionEntity();
-
-                questionEntity.Content = question;
-                questionEntity.CreationTime = DateTime.UtcNow;
-                //TODO: Determine if question is private and add a parameter to CreateQuestion in the service to make this possible.
-                questionEntity.IsPrivate = false;
-                questionEntity.QuestionState = QuestionState.Open;
-                questionEntity.Title = title;
-
-                //TODO determine real language 
+            {                
+                // TODO determine real language 
                 LanguageDefinitionEntity languageDefinition = ctx.LanguageDefinitions.SingleOrDefault(ld => ld.Name.Equals("English"));
 
+                // TODO remove exception as you probably want to create the language if it doesn't exist.
                 if (languageDefinition == null)
-                    throw new NotFoundException("No languageDefinition entity exists with the specified ID.");
-
-                questionEntity.LanguageDefinition = languageDefinition;
+                    throw new NotFoundException("No languageDefinition entity exists with the specified ID.");                
 
                 SourceDefinitionEntity sourceDefinition = ctx.SourceDefinitions.SingleOrDefault(sd => sd.Name.Equals(source));
 
                 if (sourceDefinition == null)
-                    throw new NotFoundException("No languageDefinition entity exists with the specified ID.");
-
-                questionEntity.SourceDefinition = sourceDefinition;
+                    throw new NotFoundException("The provided source doesn't exists.");
                 
                 // Check if the user already exists
-                var sourceEntity = ctx.Sources.SingleOrDefault(s => s.SourceDefinition.Id == questionEntity.SourceDefinition.Id && s.Value == reference); 
+                SourceEntity sourceEntity = ctx.Sources.SingleOrDefault(s => s.SourceDefinition.Id == sourceDefinition.Id && s.Value == reference);
+
+                UserEntity userEntity;
 
                 if (sourceEntity != null)
                 {
                     // user already has an account, use this
-                    var userEntity = (from u in ctx.Users
-                            where u.Id == sourceEntity.UserId
-                            select u).Single();
-
-                    questionEntity.User = userEntity;
+                    userEntity = ctx.Users.Single(u => u.Id == sourceEntity.UserId);                    
                 }
                 else
                 {
                     // user has no account, create one
-                    UserEntity newUserEntity = new UserEntity();
+                    userEntity = new UserEntity()
+                    {
+                        CreationTime = DateTime.UtcNow,
+                        Type = UserType.Customer
+                    };
 
-                    newUserEntity.CreationTime = DateTime.UtcNow;
-                    newUserEntity.Type = UserType.Customer;
-
-                    ctx.Users.Add(newUserEntity);
-
-                    ctx.SaveChanges();
-
-                    questionEntity.User = newUserEntity;   
+                    ctx.Users.Add(userEntity);  
 
                     // Mount the source to the new user
-                    SourceEntity newSourceEntity = new SourceEntity();
-                    newSourceEntity.Value = reference;
-                    newSourceEntity.CreationTime = DateTime.UtcNow;
-                    newSourceEntity.SourceDefinition = questionEntity.SourceDefinition;
-                    newSourceEntity.UserId = newUserEntity.Id;
+                    sourceEntity = new SourceEntity()
+                    {
+                        Value = reference,
+                        CreationTime = DateTime.UtcNow,
+                        SourceDefinition = sourceDefinition,
+                        User = userEntity,
+                    };
 
-                    ctx.Sources.Add(newSourceEntity);
+                    ctx.Sources.Add(sourceEntity);
+                }                
 
-                }
+                QuestionEntity questionEntity = new QuestionEntity()
+                {
+                    Content = question,
+                    CreationTime = DateTime.UtcNow,
+                    IsPrivate = isPrivate,
+                    QuestionState = QuestionState.Open,
+                    Title = title,
+                    Source = new QuestionSourceEntity()
+                    {
+                        Source = sourceEntity,
+                        PostId = postId
+                    },
+                    LanguageDefinition = languageDefinition,
+                    User = userEntity
+                };
 
                 ctx.Questions.Add(questionEntity);
 
