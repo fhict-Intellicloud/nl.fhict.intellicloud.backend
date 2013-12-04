@@ -57,13 +57,12 @@
     <Compile Include="Manager\BaseManager.cs" />
     <Compile Include="Manager\AnswerManager.cs" />
     <Compile Include="Manager\FeedbackManager.cs" />
-    <Compile Include="Manager\IntelliCloudManager.cs" />
     <Compile Include="Manager\QuestionManager.cs" />
+    <Compile Include="Plugins\Loader\SendAnswerFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Validation.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

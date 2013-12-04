@@ -32,9 +32,10 @@ namespace nl.fhict.IntelliCloud.Service
             return manager.GetQuestion(Convert.ToInt32(id));
         }
 
-        public void CreateQuestion(string source, string reference, string question, string title)
+        public void CreateQuestion(
+            string source, string reference, string question, string title, string postId = null, bool isPrivate = false)
         {
-            manager.CreateQuestion(source, reference, question, title);
+            manager.CreateQuestion(source, reference, question, title, postId, isPrivate);
         }
 
         public void UpdateQuestion(string id, int employeeId)
