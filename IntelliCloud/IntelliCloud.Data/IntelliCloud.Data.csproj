@@ -57,6 +57,7 @@
     <Compile Include="Model\LanguageDefinitionEntity.cs" />
     <Compile Include="Model\QuestionEntity.cs" />
     <Compile Include="Model\QuestionKeyEntity.cs" />
+    <Compile Include="Model\QuestionSourceEntity.cs" />
     <Compile Include="Model\ReviewEntity.cs" />
     <Compile Include="Model\SourceEntity.cs" />
     <Compile Include="Model\SourceDefinitionEntity.cs" />

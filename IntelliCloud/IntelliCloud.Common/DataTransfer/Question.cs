@@ -59,13 +59,7 @@ namespace nl.fhict.IntelliCloud.Common.DataTransfer
         /// <summary>
         /// Gets or sets the state of the question.
         /// </summary>
-        public QuestionState QuestionState { get; set; }
-
-        /// <summary>
-        /// Gets or sets the source definition that is used to return the answer to the question. The actual source can be found using the <see cref="Question.User"/> field.
-        /// </summary>
-        [DataMember]
-        public SourceDefinition SourceDefinition { get; set; }
+        public QuestionState QuestionState { get; set; }        
 
         /// <summary>
         /// Gets or sets the creation date and time of the question.
@@ -85,5 +79,13 @@ namespace nl.fhict.IntelliCloud.Common.DataTransfer
         /// </summary>
         [DataMember]
         public bool IsPrivate { get; set; }
+
+        /// <summary>
+        /// Gets or sets the question source that is used to return the answer of the question. The question source 
+        /// represents the <see cref="Source"/> the question originated from and extra information about where exactly 
+        /// the answer needs to be send.
+        /// </summary>
+        [DataMember]
+        public QuestionSource Source { get; set; }
     }
 }

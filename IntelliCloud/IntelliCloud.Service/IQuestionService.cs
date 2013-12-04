@@ -41,17 +41,23 @@ namespace nl.fhict.IntelliCloud.Service
         /// <summary>
         /// Creates a new question.
         /// </summary>
-        /// <param name="source">The source from which the question was send, e.g. "Mail", "Facebook" or "Twitter".</param>
+        /// <param name="source">The source from which the question was send, e.g. "Mail", "Facebook" or "Twitter".
+        /// </param>
         /// <param name="reference">The identifier for the source, e.g. the username or email address.</param>
         /// <param name="question">The question that was answered.</param>
         /// <param name="title">The title of the question. The title contains a short summary of the question.</param>
+        /// <param name="postId">The identifier of the post this question originates from, for example the Facebook post
+        /// identifier.</param>
+        /// <param name="isPrivate">When <c>true</c> the question is private, otherwise the question is public. Private 
+        /// questions are only available to employees and will never be exposed to customers.</param>
         [OperationContract]
         [WebInvoke(Method = "POST",
             UriTemplate = "questions",
             RequestFormat = WebMessageFormat.Json,
             ResponseFormat = WebMessageFormat.Json,
             BodyStyle = WebMessageBodyStyle.Wrapped)]
-        void CreateQuestion(string source, string reference, string question, string title);
+        void CreateQuestion(
+            string source, string reference, string question, string title, string postId = null, bool isPrivate = false);
 
         /// <summary>
         /// Updates the question with the given identifier.
