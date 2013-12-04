@@ -17,7 +17,8 @@ namespace nl.fhict.IntelliCloud.Business.Manager
         protected AuthorizationHandler AuthorizationHandler { get; set; }
 
         /// <summary>
-        /// This constructor will make the BaseManager and set the given IntelliCloudContext and IValidation.
+        /// This constructor will construct the BaseManager and instantiate it's properties.
+        /// The IntelliCloudContext and IValidation properties are set to the given values.
         /// </summary>
         /// <param name="context">IntelliCloudContext to be set.</param>
         /// <param name="validation">IValidation to be set.</param>
@@ -30,7 +31,7 @@ namespace nl.fhict.IntelliCloud.Business.Manager
         }
 
         /// <summary>
-        /// Totally useless summary here, especially made for Teun and Simon.
+        /// This constructor will construct the BaseManager and instantiate it's properties.
         /// </summary>
         protected BaseManager()
         {
