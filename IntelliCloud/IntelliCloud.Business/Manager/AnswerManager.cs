@@ -5,6 +5,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Data.Entity;
+using nl.fhict.IntelliCloud.Common.CustomException; 
 
 namespace nl.fhict.IntelliCloud.Business.Manager
 {
@@ -21,8 +23,8 @@ namespace nl.fhict.IntelliCloud.Business.Manager
             {
 
                 List<AnswerEntity> answerentities = (from a in ctx.Answers
-                                                         .Include("User")
-                                                         .Include("User.Sources")
+                                                         .Include(a => a.User)
+                                                         .Include(a => a.User.Sources)
                                                          .Include("User.Sources.SourceDefinition")
                                                      where a.AnswerState == answerState
                                                      select a).ToList();
@@ -46,8 +48,8 @@ namespace nl.fhict.IntelliCloud.Business.Manager
                 int iId = Convert.ToInt32(id);
 
                 AnswerEntity answerentity = (from a in ctx.Answers
-                                                         .Include("User")
-                                                         .Include("User.Sources")
+                                                         .Include(a => a.User)
+                                                         .Include(a => a.User.Sources)
                                                          .Include("User.Sources.SourceDefinition")
                                                      where a.Id == iId
                                                      select a).Single();
@@ -74,9 +76,23 @@ namespace nl.fhict.IntelliCloud.Business.Manager
                 answerEntity.AnswerState = answerState;
                 answerEntity.Content = answer;
                 answerEntity.CreationTime = DateTime.UtcNow;
-                answerEntity.User = (ctx.Users.Single(u => u.Id == answererId));
+
+                UserEntity user = ctx.Users.SingleOrDefault(ld => ld.Id == answererId);
+
+                if (user == null)
+                    throw new NotFoundException("No user entity exists with the specified ID.");
+
+                answerEntity.User = user;
+
                 answerEntity.IsPrivate = false;
-                answerEntity.LanguageDefinition = null;
+
+                //TODO determine real language 
+                LanguageDefinitionEntity languageDefinition = ctx.LanguageDefinitions.SingleOrDefault(ld => ld.Name.Equals("English"));
+
+                if (languageDefinition == null)
+                    throw new NotFoundException("No languageDefinition entity exists with the specified ID.");
+
+                answerEntity.LanguageDefinition = languageDefinition;
 
                 ctx.Answers.Add(answerEntity);
 
@@ -94,8 +110,13 @@ namespace nl.fhict.IntelliCloud.Business.Manager
                 int iId = Convert.ToInt32(id);
 
                 AnswerEntity answerEntity = (from a in ctx.Answers
+                                                 .Include(a => a.User)
+                                                 .Include(a => a.LanguageDefinition)
                                              where a.Id == iId
-                                             select a).Single();
+                                             select a).SingleOrDefault();
+
+                if (answerEntity == null)
+                    throw new NotFoundException("No answer entity exists with the specified ID.");
 
                 answerEntity.AnswerState = answerState;
 
