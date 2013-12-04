@@ -24,8 +24,8 @@ namespace nl.fhict.IntelliCloud.Business.Manager
 
                 List<AnswerEntity> answerentities = (from a in ctx.Answers
                                                          .Include(a => a.User)
-                                                         .Include(a => a.User.Sources)
-                                                         .Include("User.Sources.SourceDefinition")
+                                                         .Include(a => a.User.Sources)        
+                                                         .Include(a => a.User.Sources.Select(s => s.SourceDefinition))
                                                      where a.AnswerState == answerState
                                                      select a).ToList();
 
@@ -50,7 +50,7 @@ namespace nl.fhict.IntelliCloud.Business.Manager
                 AnswerEntity answerentity = (from a in ctx.Answers
                                                          .Include(a => a.User)
                                                          .Include(a => a.User.Sources)
-                                                         .Include("User.Sources.SourceDefinition")
+                                                         .Include(a => a.User.Sources.Select(s => s.SourceDefinition))
                                                      where a.Id == iId
                                                      select a).Single();
 
