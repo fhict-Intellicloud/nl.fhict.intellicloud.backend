@@ -9,9 +9,11 @@ using System.Text;
 using System.Threading.Tasks;
 using ActiveUp.Net.Mail;
 using System.Configuration;
-using IntelliMailClient.IntelliCloud;
+using IntelliMailClient.QuestionService;
 using System.Net.Mail;
 using System.Net;
+using System.IO;
+using Newtonsoft.Json;
 
 namespace IntelliMailClient
 {
@@ -105,12 +107,10 @@ namespace IntelliMailClient
         /// </summary>
         /// <param name="source"></param>
         /// <param name="e"></param>
-        public void NewMessageReceived(object source, NewMessageReceivedEventArgs e)
+        private void NewMessageReceived(object source, NewMessageReceivedEventArgs e)
         {
             //Write a new entry to the log file.
             serviceLog.WriteEntry("E-mail received!");
-
-            IntelliCloudServiceClient intelliCloudClient = new IntelliCloudServiceClient();
 
             //Stop idling and create a new connection with the server
             client.StopIdle();
@@ -120,13 +120,13 @@ namespace IntelliMailClient
             List<Message> receivedEmails = GetUnreadMails("INBOX").ToList();
 
             //Send each mail to the IntelliCloud webservice
-            foreach (Message m in receivedEmails) 
+            foreach (Message mail in receivedEmails) 
             {
-                serviceLog.WriteEntry("E-mail received from " + m.From.Email);
+                serviceLog.WriteEntry("E-mail received from " + mail.From.Email);
                 try
                 {
-                    intelliCloudClient.AskQuestion("Mail", m.From.Email, m.BodyText.Text);                    
-                    SendConfirmationMail(m.From);
+                    CreateQuestion(mail);                    
+                    SendConfirmationMail(mail.From);
                 }
                 catch (Exception ex)
                 {
@@ -144,6 +144,38 @@ namespace IntelliMailClient
         }
 
         /// <summary>
+        /// Creates a question from an e-mail and sends it to backend
+        /// </summary>
+        /// <param name="mail">The e-mail that contains the question</param>
+        private void CreateQuestion(Message mail)
+        {
+            //Create a new POST request with the correct webmethod
+            var httpWebRequest = (HttpWebRequest)WebRequest.Create("http://81.204.121.229/IntelliCloudService/QuestionService.svc/questions");
+            httpWebRequest.ContentType = "application/json; charset=UTF-8";
+            httpWebRequest.Method = "POST";
+
+            //Create streamwriter to write data to the webmethod
+            using (var streamWriter = new StreamWriter(httpWebRequest.GetRequestStream()))
+            {
+                //Serialize the data to json
+                QuestionMailObject jsonObject = new QuestionMailObject("Mail", mail.From.Email, mail.BodyText.Text, mail.Subject);
+                String json = JsonConvert.SerializeObject(jsonObject);
+
+                streamWriter.Write(json);
+                streamWriter.Flush();
+                streamWriter.Close();
+
+                //Get the result back and write it into the log file
+                var httpResponse = (HttpWebResponse)httpWebRequest.GetResponse();
+                using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
+                {
+                    var result = streamReader.ReadToEnd();
+                    serviceLog.WriteEntry(result);
+                }
+            }
+        }
+
+        /// <summary>
         /// Subscribe the client to the inbox
         /// </summary>
         private void SubscribeToInbox()
@@ -157,7 +189,7 @@ namespace IntelliMailClient
         /// </summary>
         /// <param name="mailBox">Name of the mailbox</param>
         /// <returns></returns>
-        public IEnumerable<Message> GetUnreadMails(string mailBox)
+        private IEnumerable<Message> GetUnreadMails(string mailBox)
         {
             return GetMails(mailBox, "UNSEEN").Cast<Message>();
         }
@@ -179,7 +211,7 @@ namespace IntelliMailClient
         /// Send a confirmation mail to the address that send in a question
         /// </summary>
         /// <param name="from">Address that send in a question</param>
-        public void SendConfirmationMail(Address from)
+        private void SendConfirmationMail(Address from)
         {
             //Create the from and to addresses that are needed to send the e-mail
             MailAddress fromAddress = new MailAddress(username, "IntelliCloud Team");
@@ -187,7 +219,10 @@ namespace IntelliMailClient
             
             //Set the e-mail content
             string subject = "Thank you for your question!";
-            string body = "You will receive an answer in a few days.";
+            string body = "Hello " + from.Name + ",\n\n" + 
+                "We received your question. You will soon receive an answer.\n\n" +
+                "Kind regards,\n" +
+                "IntelliCloud Team";
 
             //Create a new smtp client with credentials
             SmtpClient smtp = new SmtpClient

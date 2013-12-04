@@ -59,6 +59,9 @@
     <Reference Include="ActiveUp.Net.Mail">
       <HintPath>..\..\..\..\..\..\Downloads\ActiveUp.MailSystem_May2013_Binaries\Release\ActiveUp.Net.Mail.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\packages\Newtonsoft.Json.5.0.8\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Configuration.Install" />
@@ -90,7 +93,8 @@
       <DependentUpon>ProjectInstaller.cs</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Service References\IntelliCloud\Reference.cs">
+    <Compile Include="QuestionMailObject.cs" />
+    <Compile Include="Service References\QuestionService\Reference.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.svcmap</DependentUpon>
@@ -100,24 +104,19 @@
     <None Include="App.config">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Service References\IntelliCloud\IntelliCloudService.wsdl" />
-    <None Include="Service References\IntelliCloud\IntelliCloudService.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\IntelliCloud\IntelliCloudService1.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\IntelliCloud\IntelliCloudService2.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\IntelliCloud\IntelliMailClient.IntelliCloud.Answer.datasource">
+    <None Include="packages.config" />
+    <None Include="Service References\QuestionService\IntelliMailClient.QuestionService.Question.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
-    <None Include="Service References\IntelliCloud\IntelliMailClient.IntelliCloud.Question.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
+    <None Include="Service References\QuestionService\QuestionService.wsdl" />
+    <None Include="Service References\QuestionService\QuestionService.xsd">
+      <SubType>Designer</SubType>
     </None>
-    <None Include="Service References\IntelliCloud\IntelliMailClient.IntelliCloud.Review.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
+    <None Include="Service References\QuestionService\QuestionService1.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\QuestionService\QuestionService2.xsd">
+      <SubType>Designer</SubType>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -149,19 +148,19 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <WCFMetadataStorage Include="Service References\IntelliCloud\" />
+    <WCFMetadataStorage Include="Service References\QuestionService\" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Service References\IntelliCloud\IntelliCloudService.disco" />
+    <None Include="Service References\QuestionService\QuestionService.disco" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Service References\IntelliCloud\configuration91.svcinfo" />
+    <None Include="Service References\QuestionService\configuration91.svcinfo" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Service References\IntelliCloud\configuration.svcinfo" />
+    <None Include="Service References\QuestionService\configuration.svcinfo" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Service References\IntelliCloud\Reference.svcmap">
+    <None Include="Service References\QuestionService\Reference.svcmap">
       <Generator>WCF Proxy Generator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>
