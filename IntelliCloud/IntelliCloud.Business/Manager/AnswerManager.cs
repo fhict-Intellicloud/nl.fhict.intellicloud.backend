@@ -105,10 +105,10 @@ namespace nl.fhict.IntelliCloud.Business.Manager
             // TODO send the answer using the this.SendAnswerFactory.LoadPlugin(question.Source.Source.SourDefinition).SendAnswer(question, answer) method.
         }
 
-        public void UpdateAnswer(string id, AnswerState answerState)
+        public void UpdateAnswer(string id, AnswerState answerState, string answer)
         {
             Validation.IdCheck(id);
-            // TODO how to process feedback on a question? Add Content as parameter?
+            Validation.StringCheck(answer);
 
             using (var ctx = new IntelliCloudContext())
             {
@@ -124,6 +124,7 @@ namespace nl.fhict.IntelliCloud.Business.Manager
                     throw new NotFoundException("No answer entity exists with the specified ID.");
 
                 answerEntity.AnswerState = answerState;
+                answerEntity.Content = answer;
 
                 ctx.SaveChanges();
 

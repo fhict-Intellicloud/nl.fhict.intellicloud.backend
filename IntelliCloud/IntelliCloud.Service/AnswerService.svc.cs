@@ -37,9 +37,9 @@ namespace nl.fhict.IntelliCloud.Service
             manager.CreateAnswer(questionId, answer, answererId, answerState);
         }
 
-        public void UpdateAnswer(string id, AnswerState answerState)
+        public void UpdateAnswer(string id, AnswerState answerState, string answer)
         {
-            manager.UpdateAnswer(id, answerState);
+            manager.UpdateAnswer(id, answerState, answer);
         }
     }
 }
