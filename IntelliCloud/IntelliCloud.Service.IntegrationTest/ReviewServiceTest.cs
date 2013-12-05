@@ -32,6 +32,7 @@ namespace nl.fhict.IntelliCloud.Service.IntegrationTest
         public void Initialize()
         {
             this.service = new ReviewService();
+			//TODO: add review, answer and employee in database for methods being tested here
         }
 
         /// <summary>
