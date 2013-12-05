@@ -1,4 +1,5 @@
 ﻿using nl.fhict.IntelliCloud.Common.CustomException;
+using nl.fhict.IntelliCloud.Common.DataTransfer;
 using nl.fhict.IntelliCloud.Data.Context;
 using nl.fhict.IntelliCloud.Data.Model;
 using System;
@@ -16,11 +17,16 @@ namespace nl.fhict.IntelliCloud.Business.Authorization
     public class AuthorizationHandler
     {
         /// <summary>
+        /// Property that contains a User object representing the authorized user.
+        /// </summary>
+        public static User AuthorizedUser { get; set; }
+
+        /// <summary>
         /// Method for parsing the Base64 representation of the JSON object to an instance of AuthorizationToken
         /// </summary>
         /// <param name="authenticationToken">Base64 encoded string of the JSON object (value of the AuthorizationToken HTTP header).<param>
         /// <returns>Instance of class AuthorizationToken.</returns>
-        public AuthorizationToken ParseToken(string authorizationToken)
+        private AuthorizationToken ParseToken(string authorizationToken)
         {
             // Decode the Base64 representation of the JSON object
             byte[] tokenBytes = Convert.FromBase64String(authorizationToken);
@@ -40,7 +46,7 @@ namespace nl.fhict.IntelliCloud.Business.Authorization
         /// </summary>
         /// <param name="token">Instance of class AuthorizationToken.<param>
         /// <returns>Instance of class OpenIDUserInfo.</returns>
-        public OpenIDUserInfo RetrieveUserInfo(AuthorizationToken token)
+        private OpenIDUserInfo RetrieveUserInfo(AuthorizationToken token)
         {
             // String that will contain the endpoint URL of the issuer specified in the token
             string userInfoEndpointUrl = "";
@@ -76,6 +82,42 @@ namespace nl.fhict.IntelliCloud.Business.Authorization
 
                 return parsedUserInfo;
             }
+        }
+
+        /// <summary>
+        /// Method for matching users based on the authorization token in the AuthorizationToken HTTP header.
+        /// </summary>
+        /// <param name="authorizationToken">The authorization token that will be used to match users.</param>
+        /// <returns>Instance of class User on success - null if no users could be matched.</returns>
+        public User MatchUser(string authorizationToken)
+        {
+            // User object that will contain the matched User object on success
+            User matchedUser = null;
+
+            // Only attempt to match users when an authorization token has been supplied
+            if ((authorizationToken != null) && (authorizationToken.Length > 0))
+            {
+                try
+                {
+                    // Parse the authorization token and retrieve user info from the Access Token issuer.
+                    AuthorizationToken parsedToken = this.ParseToken(authorizationToken);
+                    OpenIDUserInfo userInfo = this.RetrieveUserInfo(parsedToken);
+
+                    // Only attempt to match users if the Access Token issuer returned user info
+                    if (userInfo != null)
+                    {
+                        // TODO: add matching logic
+                    }
+                }
+                catch
+                {
+                    // Ignore all exceptions - the value of the authorizationToken parameter is invalid
+                    // Return null since no users could be matched
+                }
+            }
+
+            // Return the matched User object - null if matching failed
+            return matchedUser;
         }
     }
 }
