@@ -3,6 +3,7 @@ using nl.fhict.IntelliCloud.Common.DataTransfer;
 using nl.fhict.IntelliCloud.Data.Context;
 using nl.fhict.IntelliCloud.Data.Model;
 using System;
+using System.Data.Entity;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -140,12 +141,28 @@ namespace nl.fhict.IntelliCloud.Business.Authorization
             {
                 using (IntelliCloudContext context = new IntelliCloudContext())
                 {
-                    UserEntity userEntity = null;
+                    // Get the user entity from the context
+                    UserEntity userEntity = context.Users
+                                            .Include(u => u.Sources.Select(s => s.SourceDefinition))
+                                            .SingleOrDefault(s => s.Sources.Any(a => (a.SourceDefinition.Name == "Mail" && a.Value == userInfo.Email) || (a.SourceDefinition.Name == userInfo.Issuer && a.Value == userInfo.Sub)));
 
-                    // TODO: retrieve user entity and update user data using retrieved user info
-
+                    // Only continue if the user entity was found
                     if (userEntity != null)
+                    {
+                        // Update the user's first name and last name
+                        userEntity.FirstName = userInfo.GivenName;
+                        userEntity.LastName = userInfo.FamilyName;
+
+                        // Update the user's id from the issuer
+                        userEntity.Sources.Where(s => s.SourceDefinition.Name == userInfo.Issuer)
+                                          .Select(s => { s.Value = userInfo.Sub; return s; });
+
+                        // Save the changes to the context
+                        context.SaveChanges();
+
+                        // Convert the UserEntity to an instance of class User and set in the reference
                         matchedUser = this.convertEntities.UserEntityToUser(userEntity);
+                    }
                 }
             }
 
