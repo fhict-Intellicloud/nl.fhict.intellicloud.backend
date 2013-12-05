@@ -48,13 +48,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Context\IntelliCloudContext.cs" />
-    <Compile Include="Context\IntelliCloudContextFactory.cs" />
     <Compile Include="Migration\Configuration.cs" />
     <Compile Include="Migration\Extension.cs" />
     <Compile Include="Model\AnswerEntity.cs" />
     <Compile Include="Model\AnswerKeyEntity.cs" />
     <Compile Include="Model\FeedbackEntity.cs" />
     <Compile Include="Model\KeywordEntity.cs" />
+    <Compile Include="Model\LanguageDefinitionEntity.cs" />
     <Compile Include="Model\QuestionEntity.cs" />
     <Compile Include="Model\QuestionKeyEntity.cs" />
     <Compile Include="Model\ReviewEntity.cs" />
@@ -71,7 +71,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

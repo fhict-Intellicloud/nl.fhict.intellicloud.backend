@@ -48,12 +48,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CustomException\NotFoundException.cs" />
     <Compile Include="DataTransfer\Answer.cs" />
     <Compile Include="DataTransfer\AnswerState.cs" />
     <Compile Include="DataTransfer\Feedback.cs" />
     <Compile Include="DataTransfer\FeedbackState.cs" />
     <Compile Include="DataTransfer\FeedbackType.cs" />
     <Compile Include="DataTransfer\Keyword.cs" />
+    <Compile Include="DataTransfer\LanguageDefinition.cs" />
     <Compile Include="DataTransfer\Question.cs" />
     <Compile Include="DataTransfer\QuestionState.cs" />
     <Compile Include="DataTransfer\Review.cs" />

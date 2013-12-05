@@ -51,6 +51,11 @@ namespace nl.fhict.IntelliCloud.Data.Context
         public DbSet<KeywordEntity> Keywords { get; private set; }
 
         /// <summary>
+        /// Gets a database set for the <see cref="LanguageDefinitionEntity"/> entities.
+        /// </summary>
+        public DbSet<LanguageDefinitionEntity> LanguageDefinitions { get; private set; }
+
+        /// <summary>
         /// Gets a database set for the <see cref="QuestionEntity"/> entities.
         /// </summary>
         public DbSet<QuestionEntity> Questions { get; private set; }
@@ -79,6 +84,11 @@ namespace nl.fhict.IntelliCloud.Data.Context
         /// Gets a database set for the <see cref="UserEntity"/> entities.
         /// </summary>
         public DbSet<UserEntity> Users { get; private set; }
+
+        /// <summary>
+        /// Gets a database set for the <see cref="UserKeyEntity"/> entities.
+        /// </summary>
+        public DbSet<UserKeyEntity> UserKeys { get; private set; }        
 
         /// <summary>
         /// This method is called when the model for a derived context has been initialized, but before the model has been locked down and used to initialize the context. 

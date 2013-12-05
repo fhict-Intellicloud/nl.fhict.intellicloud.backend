@@ -40,13 +40,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\EntityFramework.6.0.1\lib\net40\EntityFramework.dll</HintPath>
-    </Reference>
-    <Reference Include="EntityFramework.SqlServer">
-      <HintPath>..\packages\EntityFramework.6.0.1\lib\net40\EntityFramework.SqlServer.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Web.DynamicData" />
@@ -73,7 +66,6 @@
     <Content Include="IntelliCloudService.svc" />
     <Content Include="QuestionService.svc" />
     <Content Include="ReviewService.svc" />
-    <Content Include="UserService.svc" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -93,7 +85,6 @@
     <Compile Include="IIntelliCloudService.cs" />
     <Compile Include="IQuestionService.cs" />
     <Compile Include="IReviewService.cs" />
-    <Compile Include="IUserService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QuestionService.svc.cs">
       <DependentUpon>QuestionService.svc</DependentUpon>
@@ -101,15 +92,11 @@
     <Compile Include="ReviewService.svc.cs">
       <DependentUpon>ReviewService.svc</DependentUpon>
     </Compile>
-    <Compile Include="UserService.svc.cs">
-      <DependentUpon>UserService.svc</DependentUpon>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="packages.config" />
     <None Include="Properties\PublishProfiles\IntelliCloud-Debug.pubxml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>

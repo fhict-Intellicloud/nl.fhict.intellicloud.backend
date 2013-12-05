@@ -33,9 +33,16 @@ namespace nl.fhict.IntelliCloud.Data.Model
         public string Description { get; set; }
 
         /// <summary>
+        /// Gets or sets the url that can be used to retrieve information about a user. The url is used to send a token
+        /// to an external system to verify its authenticity. It is mainly used by openId providers.
+        /// </summary>
+        [MaxLength(254)]
+        public string Url { get; set; }
+
+        /// <summary>
         /// Gets or sets the creation date and time of the source definition.
         /// </summary>
+        [Required]
         public DateTime CreationTime { get; set; }
-
     }
 }

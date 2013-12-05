@@ -131,7 +131,7 @@ namespace nl.fhict.IntelliCloud.Business.UnitTest
         public void ResolveWordTest_Invalid()
         {
             string word = "formaturen";
-           IList<Word> resolved = WordStoreHelper.ResolveWords(word);
+            IList<Word> resolved = WordStoreHelper.ResolveWords(word);
             Assert.IsTrue(resolved[0].Language.Equals(Language.Unknown) && resolved[0].Type.Equals(WordType.Unknown));
         }
 
@@ -148,7 +148,7 @@ namespace nl.fhict.IntelliCloud.Business.UnitTest
         {
             string question = "hoe formatteer ik mijn computer als ik een virus heb";
 
-            IList<Word> keywords = WordStoreHelper.FindMostLikelyKeywords(question, Language.Dutch);
+           var keywords =  WordStoreHelper.FindMostLikelyKeywords(question, Language.Dutch);
 
             try
             {
@@ -171,7 +171,9 @@ namespace nl.fhict.IntelliCloud.Business.UnitTest
         {
             string question = "How do I format my computer when i have a virus";
 
-            IList<Word> keywords = WordStoreHelper.FindMostLikelyKeywords(question, Language.English);
+            IList<Word> keywords = WordStoreHelper.FindMostLikelyKeywords(
+                WordStoreHelper.ResolveWords(question), 
+                Language.English);
 
             try
             {
