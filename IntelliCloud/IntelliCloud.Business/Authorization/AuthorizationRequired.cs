@@ -12,7 +12,7 @@ namespace nl.fhict.IntelliCloud.Business.Authorization
     /// <summary>
     /// Attribute used to check if a method can be executed.
     /// </summary>
-    public class RequireAuthorization : Attribute, IOperationBehavior, IParameterInspector
+    public class AuthorizationRequired : Attribute, IOperationBehavior, IParameterInspector
     {
         /// <summary>
         /// The UserType required to allow execution of the method.
@@ -28,7 +28,7 @@ namespace nl.fhict.IntelliCloud.Business.Authorization
         /// Constructor that sets the allowed UserTypes for execution of the method.
         /// </summary>
         /// <param name="allowedUserTypes">The allowed UserTypes for execution of the method.</param>
-        public RequireAuthorization(params UserType[] allowedUserTypes)
+        public AuthorizationRequired(params UserType[] allowedUserTypes)
         {
             this.allowedUserTypes = allowedUserTypes;
             this.authorizationHandler = new AuthorizationHandler();
@@ -56,11 +56,15 @@ namespace nl.fhict.IntelliCloud.Business.Authorization
             IncomingWebRequestContext requestContext = WebOperationContext.Current.IncomingRequest;
             string authorizationToken = requestContext.Headers["AuthorizationToken"];
 
-            // Match the user based on the authorization token
+            // Attempt to retrieve user info from the Accept Token issuer
+            OpenIDUserInfo userInfo;
+            this.authorizationHandler.TryRetrieveUserInfo(authorizationToken, out userInfo);
+
+            // Object of class User that will contain an instance of class User on success or null if no user could be matched
             User matchedUser;
 
             // Check if a user has been matched - throw a 401 Unauthorized error if no user could be matched
-            if (!this.authorizationHandler.TryMatchUser(authorizationToken, out matchedUser))
+            if (!this.authorizationHandler.TryMatchUser(userInfo, out matchedUser))
             {
                 throw new WebFaultException(HttpStatusCode.Unauthorized);
             }
