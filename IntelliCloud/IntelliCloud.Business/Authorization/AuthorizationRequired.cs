@@ -57,11 +57,11 @@ namespace nl.fhict.IntelliCloud.Business.Authorization
             string authorizationToken = requestContext.Headers["AuthorizationToken"];
 
             // Attempt to retrieve user info from the Accept Token issuer
-            OpenIDUserInfo userInfo;
+            OpenIDUserInfo userInfo = null;
             this.authorizationHandler.TryRetrieveUserInfo(authorizationToken, out userInfo);
 
             // Object of class User that will contain an instance of class User on success or null if no user could be matched
-            User matchedUser;
+            User matchedUser = null;
 
             // Check if a user has been matched - throw a 401 Unauthorized error if no user could be matched
             if (!this.authorizationHandler.TryMatchUser(userInfo, out matchedUser))

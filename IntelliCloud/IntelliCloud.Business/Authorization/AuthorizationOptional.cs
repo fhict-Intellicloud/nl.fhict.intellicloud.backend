@@ -50,24 +50,29 @@ namespace nl.fhict.IntelliCloud.Business.Authorization
             string authorizationToken = requestContext.Headers["AuthorizationToken"];
 
             // Object of class OpenIDUserInfo that will contain an instance of class OpenIDUserInfo on success or null if no user info could be retrieved
-            OpenIDUserInfo userInfo;
+            OpenIDUserInfo userInfo = null;
+
+            // Object of class User that will contain an instance of class User on success or null if no user could be matched
+            User matchedUser = null;
 
             // Check if user info could be retrieved
             if (this.authorizationHandler.TryRetrieveUserInfo(authorizationToken, out userInfo))
             {
-                // Object of class User that will contain an instance of class User on success or null if no user could be matched
-                User matchedUser;
-
                 // Check if a user has been matched
                 if (!this.authorizationHandler.TryMatchUser(userInfo, out matchedUser))
                 {
                     // TODO: create a new user based on the retrieved user info
                     // TODO: set matchedUser value to newly created User object
                 }
-
-                // Store the matched User object (which may also be a newly created User object if no existing user could be matched)
-                AuthorizationHandler.AuthorizedUser = matchedUser;
             }
+            else
+            {
+                // No user info has been retrieved, create a new user with only basic data
+                // TODO: create a new user with basic data
+            }
+
+            // Store the matched User object (which may also be a newly created User object if no existing user could be matched)
+            AuthorizationHandler.AuthorizedUser = matchedUser;
 
             // We do not intend to use a correlation state, so we just return null
             return null;
