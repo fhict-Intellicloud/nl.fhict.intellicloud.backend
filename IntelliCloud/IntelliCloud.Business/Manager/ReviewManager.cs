@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Data.Entity;
+using nl.fhict.IntelliCloud.Common.CustomException;
 using nl.fhict.IntelliCloud.Common.DataTransfer;
 using nl.fhict.IntelliCloud.Data.Context;
 using nl.fhict.IntelliCloud.Data.Model;
@@ -17,9 +19,7 @@ namespace nl.fhict.IntelliCloud.Business.Manager
         }
 
         public ReviewManager()
-        {
-            //new static objects are being made in the basemanager
-        }
+            : base() {}
 
         public void UpdateReview(string reviewId, ReviewState reviewState)
         {
@@ -28,10 +28,17 @@ namespace nl.fhict.IntelliCloud.Business.Manager
             using (var context = new IntelliCloudContext())
             {
                 var id = Convert.ToInt32(reviewId);
-                ReviewEntity review = context.Reviews.First(r => r.Id.Equals(id));
-                review.ReviewState = reviewState;
+                ReviewEntity review = context.Reviews.SingleOrDefault(r => r.Id.Equals(id));
+                if (review != null)
+                {
+                    review.ReviewState = reviewState;
 
-                context.SaveChanges();
+                    context.SaveChanges();
+                }
+                else
+                {
+                    throw new NotFoundException("Sequence contains no elements");
+                }
             }
         }
 
@@ -44,10 +51,28 @@ namespace nl.fhict.IntelliCloud.Business.Manager
             using (var context = new IntelliCloudContext())
             {
                 ReviewEntity reviewEntity = new ReviewEntity();
-                reviewEntity.Answer = context.Answers.First(q => q.Id.Equals(answerId));
+                var answer = context.Answers.SingleOrDefault(q => q.Id.Equals(answerId));
+                if (review != null)
+                {
+                    reviewEntity.Answer = answer;
+                }
+                else
+                {
+                    throw new NotFoundException("Sequence contains no elements");
+                }
+
+                var user = context.Users.SingleOrDefault(u => u.Id.Equals(employeeId));
+                if (user != null)
+                {
+                    reviewEntity.User = user;
+                }
+                else
+                {
+                    throw new NotFoundException("Sequence contains no elements");
+                }
+
                 reviewEntity.Content = review;
                 reviewEntity.ReviewState = ReviewState.Open;
-                reviewEntity.User = context.Users.First(u => u.Id.Equals(employeeId));
 
                 context.Reviews.Add(reviewEntity);
 
@@ -62,7 +87,7 @@ namespace nl.fhict.IntelliCloud.Business.Manager
             using (var context = new IntelliCloudContext())
             {
 
-                List<ReviewEntity> reviewEntities = (from r in context.Reviews.Include("Answer").Include("User")
+                List<ReviewEntity> reviewEntities = (from r in context.Reviews.Include(r => r.Answer).Include(r => r.User)
                                                      where r.Answer.Id == answerId
                                                      select r).ToList();
 

@@ -5,6 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using nl.fhict.IntelliCloud.Common.DataTransfer;
+using nl.fhict.IntelliCloud.Data.Context;
+using nl.fhict.IntelliCloud.Data.Model;
 
 namespace nl.fhict.IntelliCloud.Service.IntegrationTest
 {
@@ -61,6 +63,14 @@ namespace nl.fhict.IntelliCloud.Service.IntegrationTest
 
                 service.UpdateReview(reviewId, reviewState);
 
+                using (var context = new IntelliCloudContext())
+                {
+                    ReviewEntity review = context.Reviews.FirstOrDefault(r => r.Id.Equals(Convert.ToInt32(reviewId)));
+                    if (review != null)
+                    {
+                        Assert.AreEqual(ReviewState.Open, review.ReviewState);
+                    }
+                }
             }
             catch (Exception e)
             {
@@ -83,6 +93,9 @@ namespace nl.fhict.IntelliCloud.Service.IntegrationTest
 
                 service.CreateReview(employeeId, answerId, review);
 
+                var reviews = service.GetReviews(answerId);
+                Assert.AreEqual("Hallo dit is mijn review", reviews.First().Content);
+                Assert.AreEqual(2, reviews.First().User.Id);
             }
             catch (Exception e)
             {
@@ -103,9 +116,7 @@ namespace nl.fhict.IntelliCloud.Service.IntegrationTest
 
                 var reviews = service.GetReviews(answerId);
 
-                Assert.AreEqual("Hallo dit is mijn review", reviews.First().Content);
-                Assert.AreNotEqual(1, reviews.First().AnswerId);
-                Assert.AreEqual(2, reviews.First().User.Id);
+                Assert.AreEqual(2, reviews.First().AnswerId);
             }
             catch (Exception e)
             {
