@@ -5,7 +5,6 @@ using System.ServiceModel.Channels;
 using System.ServiceModel.Description;
 using System.ServiceModel.Dispatcher;
 using System.ServiceModel.Web;
-using System.Linq;
 
 namespace nl.fhict.IntelliCloud.Business.Authorization
 {
@@ -61,11 +60,15 @@ namespace nl.fhict.IntelliCloud.Business.Authorization
                 // Check if user info could be retrieved
                 if (this.authorizationHandler.TryRetrieveUserInfo(authorizationToken, out userInfo))
                 {
-                    // Try to match a user and set it in the matchedUser reference or create a new user if no user could be matched
+                    // Try to match a user and set it in the matchedUser reference
                     if (!this.authorizationHandler.TryMatchUser(userInfo, out matchedUser))
                     {
-                        // TODO: create a new user based on the retrieved user info
-                        // TODO: set matchedUser value to newly created User object
+                        // Try to create a new user based on the retrieved user info
+                        if (!this.authorizationHandler.TryCreateNewUser(userInfo, out matchedUser))
+                        {
+                            // Failed to create a new user - throw a 500 Internal Server Error error
+                            throw new WebFaultException(HttpStatusCode.InternalServerError);
+                        }
                     }
                 }
                 else
@@ -73,12 +76,6 @@ namespace nl.fhict.IntelliCloud.Business.Authorization
                     // An invalid authorization token has been supplied - throw a 401 Unauthorized error
                     throw new WebFaultException(HttpStatusCode.Unauthorized);
                 }
-            }
-            else
-            {
-                // No authorization token has been supplied, create a new user with only basic data
-                // TODO: create a new user with basic data
-                // TODO: set matchedUser value to newly created User object
             }
 
             // Store the matched User object (which may also be a newly created User object if no existing user could be matched)
