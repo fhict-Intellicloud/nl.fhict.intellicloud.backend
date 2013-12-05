@@ -47,12 +47,16 @@ namespace nl.fhict.IntelliCloud.Business.Manager
         /// <param name="answerId">The id of the answer for which the feedback has been given.</param>
         /// <param name="questionId">The id of the question to which the answer is assigned.</param>
         /// <param name="feedbackType">The type of feedback which indicates if the user accepted or declined the answer.</param>
-        public void CreateFeedback(string feedback, int answerId, int questionId, FeedbackType feedbackType)
+        /// <param name="feedbackToken">The feedback token is required to provide feedback to answers on a question. It
+        /// is used to make sure the user that asked the question is also the user giving the feedback and that feedback
+        /// can only be given once.</param>
+        public void CreateFeedback(string feedback, int answerId, int questionId, FeedbackType feedbackType, string feedbackToken)
         {
             // Validate input data
             Validation.StringCheck(feedback);
             Validation.IdCheck(answerId);
             Validation.IdCheck(questionId);
+            Validation.StringCheck(feedbackToken);
 
             using (IntelliCloudContext context = new IntelliCloudContext())
             {
@@ -85,9 +89,17 @@ namespace nl.fhict.IntelliCloud.Business.Manager
 
                 if (question == null)
                     throw new NotFoundException("No question entity exists with the specified ID.");
+
+                // Check if the user who asked the question is the one to posted the feedback and make sure feedback is
+                // only given once.
+                if (question.FeedbackToken != feedbackToken)
+                    throw new InvalidOperationException(
+                        "Feedback can only be given once by the user who asked the question.");
                 
                 // Set the state of the question to Open - employee needs to process the feedback given by the user
                 question.QuestionState = QuestionState.Open;
+                // Reset token so feedback can only be given once.
+                question.FeedbackToken = null;
 
                 // Store the user's feedback for the given answer
                 FeedbackEntity feedbackEntity = new FeedbackEntity();
