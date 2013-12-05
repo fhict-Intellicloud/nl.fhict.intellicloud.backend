@@ -14,19 +14,26 @@ namespace nl.fhict.IntelliCloud.Service
     /// </summary>
     public class ReviewService : IReviewService
     {
+        private readonly ReviewManager manager;
+
+        public ReviewService()
+        {
+            this.manager = new ReviewManager();
+        }
+
         public IList<Review> GetReviews(int answerId)
         {
-            throw new NotImplementedException();
+            return manager.GetReviews(answerId);
         }
 
         public void CreateReview(int employeeId, int answerId, string review)
         {
-            throw new NotImplementedException();
+            manager.CreateReview(employeeId, answerId, review);
         }
 
         public void UpdateReview(string id, ReviewState reviewState)
         {
-            throw new NotImplementedException();
+            manager.UpdateReview(id, reviewState);
         }
     }
 }
