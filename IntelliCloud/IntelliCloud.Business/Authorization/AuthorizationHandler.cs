@@ -90,10 +90,10 @@ namespace nl.fhict.IntelliCloud.Business.Authorization
         /// <param name="authorizationToken">The authorization token that will be used to match users.</param>
         /// <param name="outMatchedUser">Reference to an object of class User - will be set to an instance of class User on success or null if no user could be matched.</param>
         /// <returns>Boolean value indicating if a user could be matched.</returns>
-        public bool TryMatchUser(string authorizationToken, out User outMatchedUser)
+        public bool TryMatchUser(string authorizationToken, out User matchedUser)
         {
             // User object that will contain the matched User object on success
-            User matchedUser = null;
+            matchedUser = null;
 
             // Only attempt to match a user when an authorization token has been supplied
             if ((authorizationToken != null) && (authorizationToken.Length > 0))
@@ -118,8 +118,7 @@ namespace nl.fhict.IntelliCloud.Business.Authorization
                 }
             }
 
-            // Set the value of the provided User object reference and return true or false indicating if a user could be matched
-            outMatchedUser = matchedUser;
+            // Return true or false indicating if a user could be matched
             return (matchedUser != null) ? true : false;
         }
     }
