@@ -56,10 +56,10 @@ namespace nl.fhict.IntelliCloud.Business.Authorization
             string authorizationToken = requestContext.Headers["AuthorizationToken"];
 
             // Match the user based on the authorization token
-            User matchedUser = this.authorizationHandler.MatchUser(authorizationToken);
+            User matchedUser;
 
             // Check if a user has been matched - throw a 401 Unauthorized error if no user could be matched
-            if (matchedUser == null)
+            if (!this.authorizationHandler.TryMatchUser(authorizationToken, out matchedUser))
             {
                 throw new WebFaultException(HttpStatusCode.Unauthorized);
             }

@@ -88,8 +88,9 @@ namespace nl.fhict.IntelliCloud.Business.Authorization
         /// Method for matching users based on the authorization token in the AuthorizationToken HTTP header.
         /// </summary>
         /// <param name="authorizationToken">The authorization token that will be used to match users.</param>
-        /// <returns>Instance of class User on success - null if no users could be matched.</returns>
-        public User MatchUser(string authorizationToken)
+        /// <param name="outMatchedUser">Reference to an object of class User - will be set to an instance of class User on success or null if no user could be matched.</param>
+        /// <returns>Boolean value indicating if a user could be matched.</returns>
+        public bool TryMatchUser(string authorizationToken, out User outMatchedUser)
         {
             // User object that will contain the matched User object on success
             User matchedUser = null;
@@ -103,10 +104,11 @@ namespace nl.fhict.IntelliCloud.Business.Authorization
                     AuthorizationToken parsedToken = this.ParseToken(authorizationToken);
                     OpenIDUserInfo userInfo = this.RetrieveUserInfo(parsedToken);
 
-                    // Only attempt to match users if the Access Token issuer returned user info
+                    // Only attempt to a match user if the Access Token issuer returned user info
                     if (userInfo != null)
                     {
                         // TODO: add matching logic
+                        // TODO: set matchedUser value to matched user on success
                     }
                 }
                 catch
@@ -116,8 +118,9 @@ namespace nl.fhict.IntelliCloud.Business.Authorization
                 }
             }
 
-            // Return the matched User object - null if matching failed
-            return matchedUser;
+            // Set the value of the provided User object reference and return true or false indicating if a user could be matched
+            outMatchedUser = matchedUser;
+            return (matchedUser != null) ? true : false;
         }
     }
 }
