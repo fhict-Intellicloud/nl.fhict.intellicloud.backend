@@ -95,7 +95,7 @@ namespace nl.fhict.IntelliCloud.Business.Authorization
             // User object that will contain the matched User object on success
             User matchedUser = null;
 
-            // Only attempt to match users when an authorization token has been supplied
+            // Only attempt to match a user when an authorization token has been supplied
             if ((authorizationToken != null) && (authorizationToken.Length > 0))
             {
                 try
@@ -104,7 +104,7 @@ namespace nl.fhict.IntelliCloud.Business.Authorization
                     AuthorizationToken parsedToken = this.ParseToken(authorizationToken);
                     OpenIDUserInfo userInfo = this.RetrieveUserInfo(parsedToken);
 
-                    // Only attempt to a match user if the Access Token issuer returned user info
+                    // Only attempt to match a user if the Access Token issuer returned user info
                     if (userInfo != null)
                     {
                         // TODO: add matching logic
