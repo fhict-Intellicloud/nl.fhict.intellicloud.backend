@@ -14,7 +14,6 @@ namespace nl.fhict.IntelliCloud.Business.Manager
         protected IValidation Validation {get; set;}
         protected ConvertEntities ConvertEntities {get; set;}
         protected IntelliCloudContext IntelliCloudContext { get; set; }
-        protected AuthorizationHandler AuthorizationHandler { get; set; }
 
         /// <summary>
         /// This constructor will construct the BaseManager and instantiate it's properties.
@@ -27,7 +26,6 @@ namespace nl.fhict.IntelliCloud.Business.Manager
             Validation = validation;
             ConvertEntities = new ConvertEntities();
             IntelliCloudContext = context;
-            AuthorizationHandler = new AuthorizationHandler();
         }
 
         /// <summary>
@@ -38,29 +36,6 @@ namespace nl.fhict.IntelliCloud.Business.Manager
             Validation = new Validation();
             ConvertEntities = new ConvertEntities();
             IntelliCloudContext = new IntelliCloudContext();
-            AuthorizationHandler = new AuthorizationHandler();
-        }
-
-        /// <summary>
-        /// Method used to get the authorized user (determined using the AuthorizationToken HTTP header).
-        /// </summary>
-        /// <returns>Instance of class User or null if no user could be matched.</returns>
-        protected User GetAuthorizedUser()
-        {
-            // User object that will contain the matched user
-            User user = null;
-
-            // Get the value of the AuthorizationToken HTTP header
-            IncomingWebRequestContext requestContext = WebOperationContext.Current.IncomingRequest;
-            string authorizationToken = requestContext.Headers["AuthorizationToken"];
-
-            if (authorizationToken != null)
-            {
-                // TODO: process authorization token
-            }
-
-            // Return the matched user - null if no user could be matched
-            return user;
         }
     }
 }
