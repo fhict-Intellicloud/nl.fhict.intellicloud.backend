@@ -5,6 +5,7 @@ using System.ServiceModel.Channels;
 using System.ServiceModel.Description;
 using System.ServiceModel.Dispatcher;
 using System.ServiceModel.Web;
+using System.Linq;
 
 namespace nl.fhict.IntelliCloud.Business.Authorization
 {
@@ -16,7 +17,7 @@ namespace nl.fhict.IntelliCloud.Business.Authorization
         /// <summary>
         /// The UserType required to allow execution of the method.
         /// </summary>
-        private UserType requiredUserType;
+        private UserType[] allowedUserTypes;
 
         /// <summary>
         /// The AuthorizationHandler used to parse the AuthorizationToken HTTP header value and retrieve user info from the Access Token issuer.
@@ -24,12 +25,12 @@ namespace nl.fhict.IntelliCloud.Business.Authorization
         private AuthorizationHandler authorizationHandler;
 
         /// <summary>
-        /// Constructor that sets the required UserType to allow execution of the method.
+        /// Constructor that sets the allowed UserTypes for execution of the method.
         /// </summary>
-        /// <param name="requiredUserType">The required UserType to allow execution of the method.</param>
-        public RequireAuthorization(UserType requiredUserType)
+        /// <param name="allowedUserTypes">The allowed UserTypes for execution of the method.</param>
+        public RequireAuthorization(params UserType[] allowedUserTypes)
         {
-            this.requiredUserType = requiredUserType;
+            this.allowedUserTypes = allowedUserTypes;
             this.authorizationHandler = new AuthorizationHandler();
         }
 
@@ -66,7 +67,7 @@ namespace nl.fhict.IntelliCloud.Business.Authorization
             else
             {
                 // Check if the matched user has the correct privileges - throw a 403 Forbidden error if the user has insufficient privileges
-                if (matchedUser.Type.Equals(this.requiredUserType))
+                if (this.allowedUserTypes.Contains(matchedUser.Type))
                 {
                     // Store the matched User object
                     AuthorizationHandler.AuthorizedUser = matchedUser;
