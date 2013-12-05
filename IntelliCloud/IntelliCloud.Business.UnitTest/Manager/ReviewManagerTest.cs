@@ -60,10 +60,10 @@ namespace nl.fhict.IntelliCloud.Business.UnitTest.Manager
         }
 
         /// <summary>
-        /// In this test we check if the reviewerId, review and answerId is being validated in the SendReviewForAnswer method.
+        /// In this test we check if the reviewerId, review and answerId is being validated in the CreateReview method.
         /// </summary>
         [TestMethod]
-        public void SendReviewForAnswer()
+        public void CreateReviewTest()
         {
             int employeeId = 1;
             string review = "This is my review";
@@ -82,10 +82,10 @@ namespace nl.fhict.IntelliCloud.Business.UnitTest.Manager
         }
 
         /// <summary>
-        /// In this test we check if the answerId is being validated in the GetReviewsForAnswer method.
+        /// In this test we check if the answerId is being validated in the GetReviews method.
         /// </summary>
         [TestMethod]
-        public void GetReviewsForAnswer()
+        public void GetReviewsTest()
         {
             int answerId = 2;
 
