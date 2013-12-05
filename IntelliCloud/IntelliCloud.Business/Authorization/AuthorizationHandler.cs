@@ -94,20 +94,16 @@ namespace nl.fhict.IntelliCloud.Business.Authorization
         {
             // OpenIDUserInfo object that will contain an instance containing all data received from the Access Token issuer.
             userInfo = null;
-
-            // Only attempt to retrieve user info when an authorization token has been supplied
-            if ((authorizationToken != null) && (authorizationToken.Length > 0))
+            
+            try
             {
-                try
-                {
-                    // Parse the authorization token and retrieve user info from the Access Token issuer.
-                    AuthorizationToken parsedToken = this.ParseToken(authorizationToken);
-                    userInfo = this.RetrieveUserInfo(parsedToken);
-                }
-                catch
-                {
-                    // Ignore all exceptions, return null since no user info could be retrieved
-                }
+                // Parse the authorization token and retrieve user info from the Access Token issuer.
+                AuthorizationToken parsedToken = this.ParseToken(authorizationToken);
+                userInfo = this.RetrieveUserInfo(parsedToken);
+            }
+            catch
+            {
+                // Ignore all exceptions, return null since no user info could be retrieved
             }
 
             // Return true or false indicating if a user could be matched

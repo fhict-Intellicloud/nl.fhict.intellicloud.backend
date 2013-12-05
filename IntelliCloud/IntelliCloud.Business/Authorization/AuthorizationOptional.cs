@@ -55,20 +55,30 @@ namespace nl.fhict.IntelliCloud.Business.Authorization
             // Object of class User that will contain an instance of class User on success or null if no user could be matched
             User matchedUser = null;
 
-            // Check if user info could be retrieved
-            if (this.authorizationHandler.TryRetrieveUserInfo(authorizationToken, out userInfo))
+            // Check if an authorization token has been supplied
+            if (!String.IsNullOrWhiteSpace(authorizationToken))
             {
-                // Check if a user has been matched
-                if (!this.authorizationHandler.TryMatchUser(userInfo, out matchedUser))
+                // Check if user info could be retrieved
+                if (this.authorizationHandler.TryRetrieveUserInfo(authorizationToken, out userInfo))
                 {
-                    // TODO: create a new user based on the retrieved user info
-                    // TODO: set matchedUser value to newly created User object
+                    // Try to match a user and set it in the matchedUser reference or create a new user if no user could be matched
+                    if (!this.authorizationHandler.TryMatchUser(userInfo, out matchedUser))
+                    {
+                        // TODO: create a new user based on the retrieved user info
+                        // TODO: set matchedUser value to newly created User object
+                    }
+                }
+                else
+                {
+                    // An invalid authorization token has been supplied - throw a 401 Unauthorized error
+                    throw new WebFaultException(HttpStatusCode.Unauthorized);
                 }
             }
             else
             {
-                // No user info has been retrieved, create a new user with only basic data
+                // No authorization token has been supplied, create a new user with only basic data
                 // TODO: create a new user with basic data
+                // TODO: set matchedUser value to newly created User object
             }
 
             // Store the matched User object (which may also be a newly created User object if no existing user could be matched)
