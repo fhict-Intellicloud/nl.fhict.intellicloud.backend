@@ -85,36 +85,57 @@ namespace nl.fhict.IntelliCloud.Business.Authorization
         }
 
         /// <summary>
-        /// Method for matching users based on the authorization token in the AuthorizationToken HTTP header.
+        /// Method for retrieving user info based on the authorization token in the AuthorizationToken HTTP header.
         /// </summary>
-        /// <param name="authorizationToken">The authorization token that will be used to match users.</param>
-        /// <param name="outMatchedUser">Reference to an object of class User - will be set to an instance of class User on success or null if no user could be matched.</param>
-        /// <returns>Boolean value indicating if a user could be matched.</returns>
-        public bool TryMatchUser(string authorizationToken, out User matchedUser)
+        /// <param name="authorizationToken">The authorization token that will be used to retrieve user info.</param>
+        /// <param name="userInfo">Reference to an object of class OpenIDUserInfo - will be set to an instance of class OpenIDUserInfo on success or null if no user info could be retrieved.</param>
+        /// <returns>Boolean value indicating if user info could be retrieved.</returns>
+        public bool TryRetrieveUserInfo(string authorizationToken, out OpenIDUserInfo userInfo)
         {
-            // User object that will contain the matched User object on success
-            matchedUser = null;
+            // OpenIDUserInfo object that will contain an instance containing all data received from the Access Token issuer.
+            userInfo = null;
 
-            // Only attempt to match a user when an authorization token has been supplied
+            // Only attempt to retrieve user info when an authorization token has been supplied
             if ((authorizationToken != null) && (authorizationToken.Length > 0))
             {
                 try
                 {
                     // Parse the authorization token and retrieve user info from the Access Token issuer.
                     AuthorizationToken parsedToken = this.ParseToken(authorizationToken);
-                    OpenIDUserInfo userInfo = this.RetrieveUserInfo(parsedToken);
-
-                    // Only attempt to match a user if the Access Token issuer returned user info
-                    if (userInfo != null)
-                    {
-                        // TODO: add matching logic
-                        // TODO: set matchedUser value to matched user on success
-                    }
+                    userInfo = this.RetrieveUserInfo(parsedToken);
                 }
                 catch
                 {
-                    // Ignore all exceptions - the value of the authorizationToken parameter is invalid
-                    // Return null since no users could be matched
+                    // Ignore all exceptions, return null since no user info could be retrieved
+                }
+            }
+
+            // Return true or false indicating if a user could be matched
+            return (userInfo != null) ? true : false;
+        }
+
+        /// <summary>
+        /// Method for matching a user based on an instance of class OpenIDUserInfo.
+        /// </summary>
+        /// <param name="userInfo">The instance of class OpenIDUserInfo that will be used to match a user.</param>
+        /// <param name="outMatchedUser">Reference to an object of class User - will be set to an instance of class User on success or null if no user could be matched.</param>
+        /// <returns>Boolean value indicating if a user could be matched.</returns>
+        public bool TryMatchUser(OpenIDUserInfo userInfo, out User matchedUser)
+        {
+            // User object that will contain the matched User object on success
+            matchedUser = null;
+
+            // Only attempt to match a user when an instance of class OpenIDUserInfo has been supplied
+            if (userInfo != null)
+            {
+                try
+                {
+                    // TODO: add matching logic
+                    // TODO: set matchedUser value to matched user on success
+                }
+                catch
+                {
+                    // Ignore all exceptions, return null since no user could be matched
                 }
             }
 
