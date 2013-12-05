@@ -1,11 +1,11 @@
 ﻿using nl.fhict.IntelliCloud.Common.DataTransfer;
 using System;
+using System.Linq;
 using System.Net;
 using System.ServiceModel.Channels;
 using System.ServiceModel.Description;
 using System.ServiceModel.Dispatcher;
 using System.ServiceModel.Web;
-using System.Linq;
 
 namespace nl.fhict.IntelliCloud.Business.Authorization
 {
