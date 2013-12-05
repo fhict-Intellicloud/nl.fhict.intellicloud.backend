@@ -78,9 +78,9 @@ namespace nl.fhict.IntelliCloud.Data.Model
         public QuestionSourceEntity Source { get; set; }
 
         /// <summary>
-        /// Gets or sets the feedback token required to provide feedback to answers on this question. This token is only
-        /// required when the user giving the feedback is not authenticated. It is used to make sure the user that asked
-        /// the question is also the user giving the feedback.
+        /// Gets or sets the feedback token required to provide feedback to answers on this question. It is used to make
+        /// sure the user that asked the question is also the user giving the feedback and that feedback can only be 
+        /// given once.
         /// </summary>
         public string FeedbackToken { get; set; }
     }

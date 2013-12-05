@@ -83,10 +83,11 @@ namespace nl.fhict.IntelliCloud.Business.Manager
                     throw new NotFoundException("No user entity exists with the specified ID.");
 
                 answerEntity.User = user;
-
+                // TODO link answer to question and generate a feedbackToken using GUID (can both be set in the question).
+                // TODO set IsPrivate based on private settings in question.
                 answerEntity.IsPrivate = false;
 
-                //TODO determine real language 
+                // TODO determine real language 
                 LanguageDefinitionEntity languageDefinition = ctx.LanguageDefinitions.SingleOrDefault(ld => ld.Name.Equals("English"));
 
                 if (languageDefinition == null)
@@ -99,11 +100,15 @@ namespace nl.fhict.IntelliCloud.Business.Manager
                 ctx.SaveChanges();
 
             }
+
+            // TODO put the SendAnswerFactory in the BaseManager.
+            // TODO send the answer using the this.SendAnswerFactory.LoadPlugin(question.Source.Source.SourDefinition).SendAnswer(question, answer) method.
         }
 
         public void UpdateAnswer(string id, AnswerState answerState)
         {
             Validation.IdCheck(id);
+            // TODO how to process feedback on a question? Add Content as parameter?
 
             using (var ctx = new IntelliCloudContext())
             {

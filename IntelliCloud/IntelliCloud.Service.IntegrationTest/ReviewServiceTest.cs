@@ -48,7 +48,7 @@ namespace nl.fhict.IntelliCloud.Service.IntegrationTest
         #region Tests
 
         /// <summary>
-        /// Tests if the UpdateReview is updating a review, or atleast calls something to the database.
+        /// Tests if the UpdateReview is updating a review, or at least calls something to the database.
         /// </summary>
         [TestMethod]
         [TestCategory("nl.fhict.IntelliCloud.Service.IntegrationTest")]
@@ -71,14 +71,14 @@ namespace nl.fhict.IntelliCloud.Service.IntegrationTest
                     }
                 }
             }
-            catch (Exception e)
+            catch (Exception e) // TODO move exception test to different method, since this allows for skipping a part of the test...
             {
                 Assert.AreEqual(e.Message, "Sequence contains no elements");
             }
         }
 
         /// <summary>
-        /// Tests if the CreateReview is creating a review, or atleast calls something to the database.
+        /// Tests if the CreateReview is creating a review, or at least calls something to the database.
         /// </summary>
         [TestMethod]
         [TestCategory("nl.fhict.IntelliCloud.Service.IntegrationTest")]
@@ -86,9 +86,9 @@ namespace nl.fhict.IntelliCloud.Service.IntegrationTest
         {
             try
             {
-                int answerId = 2;
+                int answerId = 2; // TODO use the created answer in InitializeTest
                 string review = "Hallo dit is mijn review";
-                int employeeId = 2;
+                int employeeId = 2; // TODO use the created employee in InitializeTest
 
                 service.CreateReview(employeeId, answerId, review);
 
@@ -96,7 +96,7 @@ namespace nl.fhict.IntelliCloud.Service.IntegrationTest
                 Assert.AreEqual("Hallo dit is mijn review", reviews.First().Content);
                 Assert.AreEqual(2, reviews.First().User.Id);
             }
-            catch (Exception e)
+            catch (Exception e) // TODO move exception test to different method, since this allows for skipping a part of the test...
             {
                 Assert.AreEqual(e.Message, "Sequence contains no elements");
             }
@@ -111,13 +111,13 @@ namespace nl.fhict.IntelliCloud.Service.IntegrationTest
         {
             try
             {
-                int answerId = 2;
+                int answerId = 2; // TODO use the created answer in InitializeTest
 
                 var reviews = service.GetReviews(answerId);
 
                 Assert.AreEqual(2, reviews.First().AnswerId);
             }
-            catch (Exception e)
+            catch (Exception e) // TODO move exception test to different method, since this allows for skipping a part of the test...
             {
                 Assert.AreEqual(e.Message, "Sequence contains no elements");
             }
