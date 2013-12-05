@@ -128,15 +128,8 @@ namespace nl.fhict.IntelliCloud.Business.Authorization
             // Only attempt to match a user when an instance of class OpenIDUserInfo has been supplied
             if (userInfo != null)
             {
-                try
-                {
-                    // TODO: add matching logic
-                    // TODO: set matchedUser value to matched user on success
-                }
-                catch
-                {
-                    // Ignore all exceptions, return null since no user could be matched
-                }
+                // TODO: add matching logic
+                // TODO: set matchedUser value to matched user on success
             }
 
             // Return true or false indicating if a user could be matched
