@@ -18,7 +18,7 @@ namespace nl.fhict.IntelliCloud.Business
         {
             if (value == null)
                 throw new ArgumentNullException();
-            else if (String.IsNullOrEmpty(value))
+            else if (String.IsNullOrWhiteSpace(value))
                 throw new ArgumentException("String is empty.");
         }
 

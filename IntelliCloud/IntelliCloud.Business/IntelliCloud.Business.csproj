@@ -51,7 +51,9 @@
   <ItemGroup>
     <Compile Include="Authorization\AuthorizationHandler.cs" />
     <Compile Include="Authorization\AuthorizationToken.cs" />
+    <Compile Include="Authorization\AuthorizationOptional.cs" />
     <Compile Include="Authorization\OpenIDUserInfo.cs" />
+    <Compile Include="Authorization\AuthorizationRequired.cs" />
     <Compile Include="ConvertEntities.cs" />
     <Compile Include="IValidation.cs" />
     <Compile Include="Manager\BaseManager.cs" />
@@ -65,6 +67,7 @@
     <Compile Include="Validation.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
