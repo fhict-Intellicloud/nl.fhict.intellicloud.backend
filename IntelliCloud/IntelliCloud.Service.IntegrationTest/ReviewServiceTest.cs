@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using nl.fhict.IntelliCloud.Common.DataTransfer;
 using nl.fhict.IntelliCloud.Data.Context;
@@ -65,7 +62,8 @@ namespace nl.fhict.IntelliCloud.Service.IntegrationTest
 
                 using (var context = new IntelliCloudContext())
                 {
-                    ReviewEntity review = context.Reviews.FirstOrDefault(r => r.Id.Equals(Convert.ToInt32(reviewId)));
+                    int id = Convert.ToInt32(reviewId);
+                    ReviewEntity review = context.Reviews.FirstOrDefault(r => r.Id.Equals(id));
                     if (review != null)
                     {
                         Assert.AreEqual(ReviewState.Open, review.ReviewState);
