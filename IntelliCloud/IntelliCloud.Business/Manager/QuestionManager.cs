@@ -26,13 +26,13 @@ namespace nl.fhict.IntelliCloud.Business.Manager
 
                 // TODO: Only retrieve questions for retrieved employee.
                 // TODO: Make sure only users of type employee can retrieve private questions.
-                // TODO fix includes
                 List<QuestionEntity> questionEntities = (from q in ctx.Questions
-                                                                 .Include(d => d.Source)
-                                                                 .Include(d => d.User)
-                                                                 .Include(d => d.User.Sources)
-                                                                 .Include(d => d.Answerer)
-                                                                 .Include(d => d.Answerer.Sources)
+                                                                 .Include(q => q.Source)
+                                                                 .Include(q => q.User)
+                                                                 .Include(q => q.User.Sources)
+                                                                 .Include(q => q.Answerer)
+                                                                 .Include(q => q.Answerer.Sources)
+                                                                 .Include(q => q.User.Sources.Select(s => s.SourceDefinition))
                                                              select q).ToList();
 
                 questions = ConvertEntities.QuestionEntityListToQuestionList(questionEntities);
@@ -51,6 +51,12 @@ namespace nl.fhict.IntelliCloud.Business.Manager
             {
                 // TODO: make sure only users of type employee can retrieve private questions.
                 QuestionEntity entity = (from q in ctx.Questions
+                                                                 .Include(q => q.Source)
+                                                                 .Include(q => q.User)
+                                                                 .Include(q => q.User.Sources)
+                                                                 .Include(q => q.Answerer)
+                                                                 .Include(q => q.Answerer.Sources)
+                                                                 .Include(q => q.User.Sources.Select(s => s.SourceDefinition))
                                          where q.Id == id
                                          select q).SingleOrDefault();
 
