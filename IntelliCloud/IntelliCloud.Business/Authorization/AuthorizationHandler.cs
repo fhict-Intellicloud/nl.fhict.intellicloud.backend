@@ -40,7 +40,7 @@ namespace nl.fhict.IntelliCloud.Business.Authorization
         /// </summary>
         /// <param name="authenticationToken">Base64 encoded string of the JSON object (value of the AuthorizationToken HTTP header).<param>
         /// <returns>Instance of class AuthorizationToken.</returns>
-        private AuthorizationToken ParseToken(string authorizationToken)
+        public AuthorizationToken ParseToken(string authorizationToken)
         {
             // Decode the Base64 representation of the JSON object
             byte[] tokenBytes = Convert.FromBase64String(authorizationToken);
@@ -60,7 +60,7 @@ namespace nl.fhict.IntelliCloud.Business.Authorization
         /// </summary>
         /// <param name="token">Instance of class AuthorizationToken.<param>
         /// <returns>Instance of class OpenIDUserInfo.</returns>
-        private OpenIDUserInfo RetrieveUserInfo(AuthorizationToken token)
+        public OpenIDUserInfo RetrieveUserInfo(AuthorizationToken token)
         {
             // String that will contain the endpoint URL of the issuer specified in the token
             string userInfoEndpointUrl = "";
@@ -100,6 +100,97 @@ namespace nl.fhict.IntelliCloud.Business.Authorization
         }
 
         /// <summary>
+        /// Method for matching a user based on an instance of class OpenIDUserInfo.
+        /// </summary>
+        /// <param name="userInfo">The instance of class OpenIDUserInfo that will be used to match a user.</param>
+        /// <returns>Instance of class User on success.</returns>
+        public User MatchUser(OpenIDUserInfo userInfo)
+        {
+            // User object that will contain the matched User object on success
+            User matchedUser = null;
+
+            using (IntelliCloudContext context = new IntelliCloudContext())
+            {
+                // Get the user entity from the context
+                UserEntity userEntity = context.Users
+                                        .Include(u => u.Sources.Select(s => s.SourceDefinition))
+                                        .SingleOrDefault(s => s.Sources.Any(a => (a.SourceDefinition.Name == "Mail" && a.Value == userInfo.Email) || (a.SourceDefinition.Name == userInfo.Issuer && a.Value == userInfo.Sub)));
+
+                // Only continue if the user entity was found
+                if (userEntity != null)
+                {
+                    // Update the user's first name and last name
+                    userEntity.FirstName = userInfo.GivenName;
+                    userEntity.LastName = userInfo.FamilyName;
+
+                    // Update the user's id from the issuer
+                    userEntity.Sources.Where(s => s.SourceDefinition.Name == userInfo.Issuer)
+                                      .Select(s => { s.Value = userInfo.Sub; return s; });
+
+                    // Save the changes to the context
+                    context.SaveChanges();
+
+                    // Convert the UserEntity to an instance of class User and set in the reference
+                    matchedUser = this.convertEntities.UserEntityToUser(userEntity);
+                }
+            }
+
+            // Return the matched User object
+            return matchedUser;
+        }
+
+        /// <summary>
+        /// Method for creating a new user based on an instance of class OpenIDUserInfo.
+        /// </summary>
+        /// <param name="userInfo">The instance of class OpenIDUserInfo that will be used to create the new user.</param>
+        /// <returns>Instance of class User on success.</returns>
+        public User CreateUser(OpenIDUserInfo userInfo)
+        {
+            // Create a new user based on the retrieved user info
+            UserEntity userEntity = null;
+            using (IntelliCloudContext context = new IntelliCloudContext())
+            {
+                // Create a new user based on the retrieved user info
+                userEntity = new UserEntity()
+                {
+                    FirstName = userInfo.GivenName,
+                    LastName = userInfo.FamilyName,
+                    Type = UserType.Customer,
+                    CreationTime = DateTime.UtcNow
+                };
+                context.Users.Add(userEntity);
+
+                // Create a new source for the user's email address
+                SourceDefinitionEntity mailSourceDefinition = context.SourceDefinitions.SingleOrDefault(sd => sd.Name.Equals("Mail"));
+                SourceEntity mailSourceEntity = new SourceEntity()
+                {
+                    Value = userInfo.Email,
+                    CreationTime = DateTime.UtcNow,
+                    SourceDefinition = mailSourceDefinition,
+                    User = userEntity,
+                };
+                context.Sources.Add(mailSourceEntity);
+
+                // Create a new source for the user's id from the issuer
+                SourceDefinitionEntity issuerSourceDefinition = context.SourceDefinitions.SingleOrDefault(sd => sd.Name.Equals(userInfo.Issuer));
+                SourceEntity issuerSourceEntity = new SourceEntity()
+                {
+                    Value = userInfo.Sub,
+                    CreationTime = DateTime.UtcNow,
+                    SourceDefinition = issuerSourceDefinition,
+                    User = userEntity,
+                };
+                context.Sources.Add(issuerSourceEntity);
+
+                // Save the changes to the context
+                context.SaveChanges();
+            }
+
+            // Convert the UserEntity instance to an instance of class User and return it
+            return this.convertEntities.UserEntityToUser(userEntity);
+        }
+
+        /// <summary>
         /// Method for retrieving user info based on the authorization token in the AuthorizationToken HTTP header.
         /// </summary>
         /// <param name="authorizationToken">The authorization token that will be used to retrieve user info.</param>
@@ -136,34 +227,13 @@ namespace nl.fhict.IntelliCloud.Business.Authorization
             // User object that will contain the matched User object on success
             matchedUser = null;
 
-            // Only attempt to match a user when an instance of class OpenIDUserInfo has been supplied
-            if (userInfo != null)
+            try
             {
-                using (IntelliCloudContext context = new IntelliCloudContext())
-                {
-                    // Get the user entity from the context
-                    UserEntity userEntity = context.Users
-                                            .Include(u => u.Sources.Select(s => s.SourceDefinition))
-                                            .SingleOrDefault(s => s.Sources.Any(a => (a.SourceDefinition.Name == "Mail" && a.Value == userInfo.Email) || (a.SourceDefinition.Name == userInfo.Issuer && a.Value == userInfo.Sub)));
-
-                    // Only continue if the user entity was found
-                    if (userEntity != null)
-                    {
-                        // Update the user's first name and last name
-                        userEntity.FirstName = userInfo.GivenName;
-                        userEntity.LastName = userInfo.FamilyName;
-
-                        // Update the user's id from the issuer
-                        userEntity.Sources.Where(s => s.SourceDefinition.Name == userInfo.Issuer)
-                                          .Select(s => { s.Value = userInfo.Sub; return s; });
-
-                        // Save the changes to the context
-                        context.SaveChanges();
-
-                        // Convert the UserEntity to an instance of class User and set in the reference
-                        matchedUser = this.convertEntities.UserEntityToUser(userEntity);
-                    }
-                }
+                matchedUser = this.MatchUser(userInfo);
+            }
+            catch
+            {
+                // Ignore all exceptions, return null since no user info could be retrieved
             }
 
             // Return true or false indicating if a user could be matched
@@ -176,56 +246,18 @@ namespace nl.fhict.IntelliCloud.Business.Authorization
         /// <param name="userInfo">The instance of class OpenIDUserInfo that will be used to create the new user.</param>
         /// <param name="createdUser">Reference to an object of class User - will be set to an instance of class User on success or null if the user could not be created.</param>
         /// <returns>Boolean value indicating if the user could be created.</returns>
-        public bool TryCreateNewUser(OpenIDUserInfo userInfo, out User createdUser)
+        public bool TryCreateUser(OpenIDUserInfo userInfo, out User createdUser)
         {
             // User object that will contain the newly created User object on success
             createdUser = null;
 
-            // Only attempt to create a new user when an instance of class OpenIDUserInfo has been supplied
-            if (userInfo != null)
+            try
             {
-                // No user could be matched; create a new user based on the retrieved user info
-                UserEntity userEntity = null;
-                using (IntelliCloudContext context = new IntelliCloudContext())
-                {
-                    // Create a new user based on the retrieved user info
-                    userEntity = new UserEntity()
-                    {
-                        FirstName = userInfo.GivenName,
-                        LastName = userInfo.FamilyName,
-                        Type = UserType.Customer,
-                        CreationTime = DateTime.UtcNow
-                    };
-                    context.Users.Add(userEntity);
-
-                    // Create a new source for the user's email address
-                    SourceDefinitionEntity mailSourceDefinition = context.SourceDefinitions.SingleOrDefault(sd => sd.Name.Equals("Mail"));
-                    SourceEntity mailSourceEntity = new SourceEntity()
-                    {
-                        Value = userInfo.Email,
-                        CreationTime = DateTime.UtcNow,
-                        SourceDefinition = mailSourceDefinition,
-                        User = userEntity,
-                    };
-                    context.Sources.Add(mailSourceEntity);
-
-                    // Create a new source for the user's id from the issuer
-                    SourceDefinitionEntity issuerSourceDefinition = context.SourceDefinitions.SingleOrDefault(sd => sd.Name.Equals(userInfo.Issuer));
-                    SourceEntity issuerSourceEntity = new SourceEntity()
-                    {
-                        Value = userInfo.Sub,
-                        CreationTime = DateTime.UtcNow,
-                        SourceDefinition = issuerSourceDefinition,
-                        User = userEntity,
-                    };
-                    context.Sources.Add(issuerSourceEntity);
-
-                    // Save the changes to the context
-                    context.SaveChanges();
-                }
-
-                // Convert the UserEntity instance to an instance of class User and set it in the matchedUser variable
-                createdUser = this.convertEntities.UserEntityToUser(userEntity);
+                createdUser = this.CreateUser(userInfo);
+            }
+            catch
+            {
+                // Ignore all exceptions, return null since no user info could be retrieved
             }
 
             // Return true or false indicating if the user has been created

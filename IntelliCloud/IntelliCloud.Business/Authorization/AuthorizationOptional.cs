@@ -64,7 +64,7 @@ namespace nl.fhict.IntelliCloud.Business.Authorization
                     if (!this.authorizationHandler.TryMatchUser(userInfo, out matchedUser))
                     {
                         // Try to create a new user based on the retrieved user info
-                        if (!this.authorizationHandler.TryCreateNewUser(userInfo, out matchedUser))
+                        if (!this.authorizationHandler.TryCreateUser(userInfo, out matchedUser))
                         {
                             // Failed to create a new user - throw a 500 Internal Server Error error
                             throw new WebFaultException(HttpStatusCode.InternalServerError);
