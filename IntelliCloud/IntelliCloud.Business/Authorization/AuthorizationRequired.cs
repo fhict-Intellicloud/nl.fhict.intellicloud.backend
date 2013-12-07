@@ -1,7 +1,5 @@
 ﻿using nl.fhict.IntelliCloud.Common.DataTransfer;
-using nl.fhict.IntelliCloud.Data.OpenID.Model;
 using System;
-using System.Linq;
 using System.Net;
 using System.ServiceModel.Channels;
 using System.ServiceModel.Description;

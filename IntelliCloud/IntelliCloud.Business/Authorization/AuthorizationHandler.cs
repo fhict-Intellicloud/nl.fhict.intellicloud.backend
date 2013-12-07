@@ -5,8 +5,6 @@ using nl.fhict.IntelliCloud.Data.Model;
 using nl.fhict.IntelliCloud.Data.OpenID.Context;
 using nl.fhict.IntelliCloud.Data.OpenID.Model;
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Data.Entity;
 using System.IO;
 using System.Linq;
