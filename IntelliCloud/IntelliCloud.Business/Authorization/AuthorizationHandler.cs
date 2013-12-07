@@ -5,6 +5,8 @@ using nl.fhict.IntelliCloud.Data.Model;
 using nl.fhict.IntelliCloud.Data.OpenID.Context;
 using nl.fhict.IntelliCloud.Data.OpenID.Model;
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Data.Entity;
 using System.IO;
 using System.Linq;
@@ -18,9 +20,14 @@ namespace nl.fhict.IntelliCloud.Business.Authorization
     public class AuthorizationHandler
     {
         /// <summary>
-        /// Property that contains a User object representing the authorized user.
+        /// Property that indicates if the user is authenticated.
         /// </summary>
-        public static User AuthorizedUser { get; set; }
+        public bool IsAuthenticated { get; set; }
+
+        /// <summary>
+        /// Property that indicates if the authenticated user has sufficient privileges.
+        /// </summary>
+        public bool IsAuthorized { get; set; }
 
         /// <summary>
         /// Field that contains an instance of class ConvertEntities, used for converting entities.
@@ -34,20 +41,32 @@ namespace nl.fhict.IntelliCloud.Business.Authorization
 
         /// <summary>
         /// Default constructor.
+        /// Immediately starts the authorization process.
         /// </summary>
-        public AuthorizationHandler()
+        /// <param name="authorizationToken">The token that should be used in the authorization process.</param>
+        /// <param name="allowedUserTypes">Array of authorized UserTypes.</param>
+        public AuthorizationHandler(string authorizationToken, UserType[] allowedUserTypes)
         {
             this.convertEntities = new ConvertEntities();
             this.openIDContext = new OpenIDContext();
+
+            // Start the authorization process
+            this.Authorize(authorizationToken, allowedUserTypes);
         }
 
         /// <summary>
-        /// Constructor that sets the instances of ConvertEntities and IOpenIDContext.
+        /// Constructor that sets the instance IOpenIDContext.
+        /// Immediately starts the authorization process.
         /// </summary>
-        public AuthorizationHandler(ConvertEntities convertEntities, IOpenIDContext openIDContext)
+        /// <param name="authorizationToken">The token that should be used in the authorization process.</param>
+        /// <param name="allowedUserTypes">Array of authorized UserTypes.</param>
+        public AuthorizationHandler(string authorizationToken, UserType[] allowedUserTypes, IOpenIDContext openIDContext)
         {
-            this.convertEntities = convertEntities;
+            this.convertEntities = new ConvertEntities();
             this.openIDContext = openIDContext;
+
+            // Start the authorization process
+            this.Authorize(authorizationToken, allowedUserTypes);
         }
 
         /// <summary>
@@ -187,77 +206,46 @@ namespace nl.fhict.IntelliCloud.Business.Authorization
         }
 
         /// <summary>
-        /// Method for retrieving user info based on the authorization token in the AuthorizationToken HTTP header.
+        /// Method that checks if the user is authenticated and authorized to execute the method based on the authorization token.
+        /// If authorization is optional and the user is not yet authenticated, a new account is created for the user.
         /// </summary>
-        /// <param name="authorizationToken">The authorization token that will be used to retrieve user info.</param>
-        /// <param name="userInfo">Reference to an object of class OpenIDUserInfo - will be set to an instance of class OpenIDUserInfo on success or null if no user info could be retrieved.</param>
-        /// <returns>Boolean value indicating if user info could be retrieved.</returns>
-        public bool TryRetrieveUserInfo(string authorizationToken, out OpenIDUserInfo userInfo)
+        /// <param name="authorizationToken">The token that should be used in the authorization process.</param>
+        /// <param name="allowedUserTypes">Array of authorized UserTypes.</param>
+        public void Authorize(string authorizationToken, UserType[] allowedUserTypes)
         {
-            // OpenIDUserInfo object that will contain an instance containing all data received from the Access Token issuer.
-            userInfo = null;
-            
             try
             {
                 // Parse the authorization token and retrieve user info from the Access Token issuer.
                 AuthorizationToken parsedToken = this.ParseToken(authorizationToken);
-                userInfo = this.RetrieveUserInfo(parsedToken);
+                OpenIDUserInfo userInfo = this.RetrieveUserInfo(parsedToken);
+                User matchedUser = this.MatchUser(userInfo);
+
+                // Set the property that indicates if the user is authenticated
+                this.IsAuthenticated = (matchedUser != null);
+
+                // Check if the user is authenticated
+                if (this.IsAuthenticated)
+                {
+                    // The user is authenticated, set the property that indicates if the user is authorized to execute the method
+                    this.IsAuthorized = (allowedUserTypes.Count() == 0 || allowedUserTypes.Contains(matchedUser.Type));
+                }
+                else
+                {
+                    // The user is not authenticated - check if authorization is optional or if a customer is authorized to execute the method
+                    if (allowedUserTypes.Count() == 0 || allowedUserTypes.Contains(UserType.Customer))
+                    {
+                        // Authorization is optional or a customer is authorized to execute the method, create a new user using the user info retrieved from the Access Token issuer
+                        this.CreateUser(userInfo);
+
+                        this.IsAuthenticated = true;
+                        this.IsAuthorized = true;
+                    }
+                }
             }
             catch
             {
-                // Ignore all exceptions, return null since no user info could be retrieved
+                // Ignore all exceptions, failed to verify if the user is authorized to execute the method
             }
-
-            // Return true or false indicating if a user could be matched
-            return (userInfo != null) ? true : false;
-        }
-
-        /// <summary>
-        /// Method for matching a user based on an instance of class OpenIDUserInfo.
-        /// </summary>
-        /// <param name="userInfo">The instance of class OpenIDUserInfo that will be used to match a user.</param>
-        /// <param name="matchedUser">Reference to an object of class User - will be set to an instance of class User on success or null if no user could be matched.</param>
-        /// <returns>Boolean value indicating if a user could be matched.</returns>
-        public bool TryMatchUser(OpenIDUserInfo userInfo, out User matchedUser)
-        {
-            // User object that will contain the matched User object on success
-            matchedUser = null;
-
-            try
-            {
-                matchedUser = this.MatchUser(userInfo);
-            }
-            catch
-            {
-                // Ignore all exceptions, return null since no user info could be retrieved
-            }
-
-            // Return true or false indicating if a user could be matched
-            return (matchedUser != null) ? true : false;
-        }
-
-        /// <summary>
-        /// Method for creating a new user based on an instance of class OpenIDUserInfo.
-        /// </summary>
-        /// <param name="userInfo">The instance of class OpenIDUserInfo that will be used to create the new user.</param>
-        /// <param name="createdUser">Reference to an object of class User - will be set to an instance of class User on success or null if the user could not be created.</param>
-        /// <returns>Boolean value indicating if the user could be created.</returns>
-        public bool TryCreateUser(OpenIDUserInfo userInfo, out User createdUser)
-        {
-            // User object that will contain the newly created User object on success
-            createdUser = null;
-
-            try
-            {
-                createdUser = this.CreateUser(userInfo);
-            }
-            catch
-            {
-                // Ignore all exceptions, return null since no user info could be retrieved
-            }
-
-            // Return true or false indicating if the user has been created
-            return (createdUser != null) ? true : false;
         }
     }
 }

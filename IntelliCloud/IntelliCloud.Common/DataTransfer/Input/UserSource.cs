@@ -3,7 +3,7 @@
     /// <summary>
     /// Class used when creating or updating a user and it's sources.
     /// </summary>
-    class UserSource
+    public class UserSource
     {
         /// <summary>
         /// Gets or sets the name of the SourceDefinition that is used for this source.

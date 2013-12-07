@@ -21,18 +21,12 @@ namespace nl.fhict.IntelliCloud.Business.Authorization
         private UserType[] allowedUserTypes;
 
         /// <summary>
-        /// The AuthorizationHandler used to parse the AuthorizationToken HTTP header value and retrieve user info from the Access Token issuer.
-        /// </summary>
-        private AuthorizationHandler authorizationHandler;
-
-        /// <summary>
         /// Constructor that sets the allowed UserTypes for execution of the method.
         /// </summary>
         /// <param name="allowedUserTypes">The allowed UserTypes for execution of the method.</param>
         public AuthorizationRequired(params UserType[] allowedUserTypes)
         {
             this.allowedUserTypes = allowedUserTypes;
-            this.authorizationHandler = new AuthorizationHandler();
         }
 
         /// <summary>
@@ -57,43 +51,22 @@ namespace nl.fhict.IntelliCloud.Business.Authorization
             IncomingWebRequestContext requestContext = WebOperationContext.Current.IncomingRequest;
             string authorizationToken = requestContext.Headers["AuthorizationToken"];
 
-            // Attempt to retrieve user info from the Accept Token issuer
-            OpenIDUserInfo userInfo = null;
-
-            // Object of class User that will contain an instance of class User on success or null if no user could be matched
-            User matchedUser = null;
-
-            // Boolean value that indicates if the user is authorized to execute the method
-            bool isAuthorized = false;
-
             // Check if an authorization token has been supplied
             if (!String.IsNullOrWhiteSpace(authorizationToken))
             {
-                // Check if user info could be retrieved
-                if (this.authorizationHandler.TryRetrieveUserInfo(authorizationToken, out userInfo))
-                {
-                    // Check if a user could be matched
-                    if (this.authorizationHandler.TryMatchUser(userInfo, out matchedUser))
-                    {
-                        // Check if the matched user has the correct privileges
-                        if (this.allowedUserTypes.Contains(matchedUser.Type))
-                        {
-                            // The matched user is authorized to execute the method - store the matched User object
-                            isAuthorized = true;
-                            AuthorizationHandler.AuthorizedUser = matchedUser;
-                        }
-                        else
-                        {
-                            // The matched user has insufficient privileges - throw a 403 Forbidden error
-                            throw new WebFaultException(HttpStatusCode.Forbidden);
-                        }
-                    }
-                }
-            }
+                // Start the authorization process
+                AuthorizationHandler authorizationHandler = new AuthorizationHandler(authorizationToken, this.allowedUserTypes);
 
-            // Check if the user is authorized to execute the method - otherwise throw a 401 Unauthorized error
-            if (!isAuthorized)
+                // Check if the user is authenticated and authorized to execute the method
+                if (!authorizationHandler.IsAuthenticated)
+                    throw new WebFaultException(HttpStatusCode.Unauthorized);
+                else if (!authorizationHandler.IsAuthorized)
+                    throw new WebFaultException(HttpStatusCode.Forbidden);
+            }
+            else
+            {
                 throw new WebFaultException(HttpStatusCode.Unauthorized);
+            }
 
             // We do not intend to use a correlation state, so we just return null
             return null;

@@ -23,6 +23,7 @@ namespace nl.fhict.IntelliCloud.Data.OpenID.Context
             // Get available user information from the Access Token issuer.
             string requestUrl = String.Format(endpointUrl, token.AccessToken);
             WebRequest request = WebRequest.Create(requestUrl);
+            request.Timeout = 30000;
             WebResponse response = request.GetResponse();
             StreamReader reader = new StreamReader(response.GetResponseStream());
             string userInfo = reader.ReadToEnd();
