@@ -211,11 +211,13 @@ namespace nl.fhict.IntelliCloud.Business.Authorization
         /// <param name="allowedUserTypes">Array of authorized UserTypes.</param>
         public void Authorize(string authorizationToken, UserType[] allowedUserTypes)
         {
-            try
+            // Parse the authorization token and retrieve user info from the Access Token issuer
+            AuthorizationToken parsedToken = this.ParseToken(authorizationToken);
+            OpenIDUserInfo userInfo = this.RetrieveUserInfo(parsedToken);
+
+            // Only continue if user info was successfully retrieved from the Access token issuer
+            if (userInfo != null)
             {
-                // Parse the authorization token and retrieve user info from the Access Token issuer.
-                AuthorizationToken parsedToken = this.ParseToken(authorizationToken);
-                OpenIDUserInfo userInfo = this.RetrieveUserInfo(parsedToken);
                 User matchedUser = this.MatchUser(userInfo);
 
                 // Set the property that indicates if the user is authenticated
@@ -239,10 +241,6 @@ namespace nl.fhict.IntelliCloud.Business.Authorization
                         this.IsAuthorized = true;
                     }
                 }
-            }
-            catch
-            {
-                // Ignore all exceptions, failed to verify if the user is authorized to execute the method
             }
         }
     }
