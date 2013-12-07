@@ -2,13 +2,13 @@
 using nl.fhict.IntelliCloud.Common.DataTransfer;
 using nl.fhict.IntelliCloud.Data.Context;
 using nl.fhict.IntelliCloud.Data.Model;
+using nl.fhict.IntelliCloud.Data.OpenID.Context;
+using nl.fhict.IntelliCloud.Data.OpenID.Model;
 using System;
 using System.Data.Entity;
 using System.IO;
 using System.Linq;
-using System.Net;
 using System.Runtime.Serialization.Json;
-using System.Text;
 
 namespace nl.fhict.IntelliCloud.Business.Authorization
 {
@@ -28,11 +28,26 @@ namespace nl.fhict.IntelliCloud.Business.Authorization
         private ConvertEntities convertEntities;
 
         /// <summary>
+        /// Field that contains an instance of class OpenIDContext, used for retrieving user info from Access Token issuers.
+        /// </summary>
+        private IOpenIDContext openIDContext;
+
+        /// <summary>
         /// Default constructor.
         /// </summary>
         public AuthorizationHandler()
         {
             this.convertEntities = new ConvertEntities();
+            this.openIDContext = new OpenIDContext();
+        }
+
+        /// <summary>
+        /// Constructor that sets the instances of ConvertEntities and IOpenIDContext.
+        /// </summary>
+        public AuthorizationHandler(ConvertEntities convertEntities, IOpenIDContext openIDContext)
+        {
+            this.convertEntities = convertEntities;
+            this.openIDContext = openIDContext;
         }
 
         /// <summary>
@@ -40,7 +55,7 @@ namespace nl.fhict.IntelliCloud.Business.Authorization
         /// </summary>
         /// <param name="authenticationToken">Base64 encoded string of the JSON object (value of the AuthorizationToken HTTP header).<param>
         /// <returns>Instance of class AuthorizationToken.</returns>
-        public AuthorizationToken ParseToken(string authorizationToken)
+        private AuthorizationToken ParseToken(string authorizationToken)
         {
             // Decode the Base64 representation of the JSON object
             byte[] tokenBytes = Convert.FromBase64String(authorizationToken);
@@ -60,10 +75,10 @@ namespace nl.fhict.IntelliCloud.Business.Authorization
         /// </summary>
         /// <param name="token">Instance of class AuthorizationToken.<param>
         /// <returns>Instance of class OpenIDUserInfo.</returns>
-        public OpenIDUserInfo RetrieveUserInfo(AuthorizationToken token)
+        private OpenIDUserInfo RetrieveUserInfo(AuthorizationToken token)
         {
             // String that will contain the endpoint URL of the issuer specified in the token
-            string userInfoEndpointUrl = "";
+            string endpointUrl = "";
 
             // Get the endpoint URL of the issuer from the context
             using (IntelliCloudContext context = new IntelliCloudContext())
@@ -73,30 +88,11 @@ namespace nl.fhict.IntelliCloud.Business.Authorization
                 if (sourceDefinition == null)
                     throw new NotFoundException("No source definition entity exists for the specified issuer.");
 
-                userInfoEndpointUrl = sourceDefinition.Url;
+                endpointUrl = sourceDefinition.Url;
             }
 
             // Get available user information from the Access Token issuer.
-            string requestUrl = String.Format(userInfoEndpointUrl, token.AccessToken);
-            WebRequest request = WebRequest.Create(requestUrl);
-            WebResponse response = request.GetResponse();
-            StreamReader reader = new StreamReader(response.GetResponseStream());
-            string userInfo = reader.ReadToEnd();
-            reader.Close();
-            response.Close();
-
-            // Convert the user info string to a byte array for further processing
-            byte[] userInfoBytes = Encoding.UTF8.GetBytes(userInfo);
-
-            using (MemoryStream stream = new MemoryStream(userInfoBytes))
-            {
-                // Initialize serializer (used for deserializing the JSON representation of the AuthorizationToken)
-                DataContractJsonSerializer jsonSerializer = new DataContractJsonSerializer(typeof(OpenIDUserInfo));
-                OpenIDUserInfo parsedUserInfo = (OpenIDUserInfo)jsonSerializer.ReadObject(stream);
-                parsedUserInfo.Issuer = token.Issuer;
-
-                return parsedUserInfo;
-            }
+            return this.openIDContext.RetrieveUserInfo(endpointUrl, token);
         }
 
         /// <summary>
@@ -104,7 +100,7 @@ namespace nl.fhict.IntelliCloud.Business.Authorization
         /// </summary>
         /// <param name="userInfo">The instance of class OpenIDUserInfo that will be used to match a user.</param>
         /// <returns>Instance of class User on success.</returns>
-        public User MatchUser(OpenIDUserInfo userInfo)
+        private User MatchUser(OpenIDUserInfo userInfo)
         {
             // User object that will contain the matched User object on success
             User matchedUser = null;
@@ -144,7 +140,7 @@ namespace nl.fhict.IntelliCloud.Business.Authorization
         /// </summary>
         /// <param name="userInfo">The instance of class OpenIDUserInfo that will be used to create the new user.</param>
         /// <returns>Instance of class User on success.</returns>
-        public User CreateUser(OpenIDUserInfo userInfo)
+        private User CreateUser(OpenIDUserInfo userInfo)
         {
             // Create a new user based on the retrieved user info
             UserEntity userEntity = null;
