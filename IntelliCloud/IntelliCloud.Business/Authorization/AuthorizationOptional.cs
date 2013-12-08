@@ -39,7 +39,8 @@ namespace nl.fhict.IntelliCloud.Business.Authorization
             if (!String.IsNullOrWhiteSpace(authorizationToken))
             {
                 // Start the authorization process
-                AuthorizationHandler authorizationHandler = new AuthorizationHandler(authorizationToken, new UserType[0]);
+                AuthorizationHandler authorizationHandler = new AuthorizationHandler();
+                authorizationHandler.Authorize(new UserType[0]);
 
                 // Check if the user is authenticated and authorized to execute the method
                 if (!authorizationHandler.IsAuthenticated)

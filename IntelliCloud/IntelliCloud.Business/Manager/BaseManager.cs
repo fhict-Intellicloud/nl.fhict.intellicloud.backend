@@ -1,7 +1,5 @@
-﻿using nl.fhict.IntelliCloud.Business.Authorization;
-using nl.fhict.IntelliCloud.Common.DataTransfer;
-using nl.fhict.IntelliCloud.Data.Context;
-using System.ServiceModel.Web;
+﻿using nl.fhict.IntelliCloud.Data.Context;
+using nl.fhict.IntelliCloud.Data.OpenID.Context;
 
 namespace nl.fhict.IntelliCloud.Business.Manager
 {
@@ -14,6 +12,7 @@ namespace nl.fhict.IntelliCloud.Business.Manager
         protected IValidation Validation {get; set;}
         protected ConvertEntities ConvertEntities {get; set;}
         protected IntelliCloudContext IntelliCloudContext { get; set; }
+        protected IOpenIDContext OpenIDContext { get; set; }
 
         /// <summary>
         /// This constructor will construct the BaseManager and instantiate it's properties.
@@ -26,6 +25,7 @@ namespace nl.fhict.IntelliCloud.Business.Manager
             Validation = validation;
             ConvertEntities = new ConvertEntities();
             IntelliCloudContext = context;
+            OpenIDContext = new OpenIDContext();
         }
 
         /// <summary>
@@ -36,6 +36,7 @@ namespace nl.fhict.IntelliCloud.Business.Manager
             Validation = new Validation();
             ConvertEntities = new ConvertEntities();
             IntelliCloudContext = new IntelliCloudContext();
+            OpenIDContext = new OpenIDContext();
         }
     }
 }
