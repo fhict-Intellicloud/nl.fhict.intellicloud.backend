@@ -61,7 +61,7 @@ namespace nl.fhict.IntelliCloud.Business.Manager
                     // Get available user information from the Access Token issuer
                     userInfo = OpenIDContext.RetrieveUserInfo(endpointUrl, parsedToken);
                 }
-                catch
+                catch (Exception)
                 {
                     // Ignore all exceptions because we want to return null if no user info could be retrieved
                 }
