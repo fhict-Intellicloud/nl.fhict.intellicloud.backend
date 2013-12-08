@@ -74,6 +74,7 @@ namespace nl.fhict.IntelliCloud.Business.Manager
         /// <summary>
         /// Method for matching a user based on an instance of class OpenIDUserInfo.
         /// </summary>
+        /// <param name="userInfo">The instance of class OpenIDUserInfo that will be used to create the new user.</param>
         /// <returns>Instance of class User.</returns>
         public User MatchUser(OpenIDUserInfo userInfo)
         {
@@ -89,7 +90,7 @@ namespace nl.fhict.IntelliCloud.Business.Manager
         }
 
         /// <summary>
-        /// Method for creating a new user (customer) based on an instance of class OpenIDUserInfo.
+        /// Method for creating a new user (of UserType Customer) based on an instance of class OpenIDUserInfo.
         /// </summary>
         /// <param name="userInfo">The instance of class OpenIDUserInfo that will be used to create the new user.</param>
         /// <returns>Instance of class User on success.</returns>
@@ -113,7 +114,7 @@ namespace nl.fhict.IntelliCloud.Business.Manager
         /// <summary>
         /// Method for retrieving the User object for the currently authorized user.
         /// </summary>
-        /// <returns>Instance of class </returns>
+        /// <returns>Instance of class User on success or null on error.</returns>
         public User GetAuthorizedUser()
         {
             // Retrieve user info about the currently authorized user

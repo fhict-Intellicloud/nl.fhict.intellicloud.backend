@@ -37,7 +37,6 @@ namespace nl.fhict.IntelliCloud.Business.Authorization
         /// Method that checks if the user is authenticated and authorized to execute the method based on the authorization token.
         /// If authorization is optional and the user is not yet authenticated, a new account is created for the user.
         /// </summary>
-        /// <param name="authorizationToken">The token that should be used in the authorization process.</param>
         /// <param name="allowedUserTypes">Array of authorized UserTypes.</param>
         public void Authorize(UserType[] allowedUserTypes)
         {

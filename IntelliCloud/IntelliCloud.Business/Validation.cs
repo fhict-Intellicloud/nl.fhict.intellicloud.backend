@@ -64,7 +64,7 @@ namespace nl.fhict.IntelliCloud.Business
             {
                 AnswerState state = (AnswerState) Enum.Parse(typeof (AnswerState), answerState);
             }
-            catch (Exception ex)
+            catch
             {
                 throw new ArgumentException("Cannot parse string to AnswerState enum.");
             }
@@ -80,7 +80,7 @@ namespace nl.fhict.IntelliCloud.Business
             {
                 ReviewState state = (ReviewState)Enum.Parse(typeof(ReviewState), reviewState);
             }
-            catch (Exception ex)
+            catch
             {
                 throw new ArgumentException("Cannot parse string to ReviewState enum.");
             }
