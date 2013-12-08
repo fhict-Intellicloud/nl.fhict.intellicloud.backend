@@ -1,6 +1,6 @@
 ﻿using System.Runtime.Serialization;
 
-namespace nl.fhict.IntelliCloud.Business.Authorization
+namespace nl.fhict.IntelliCloud.Data.OpenID.Model
 {
     /// <summary>
     /// Class that represents the contents of an authorization token sent in the AuthorizationToken HTTP header.

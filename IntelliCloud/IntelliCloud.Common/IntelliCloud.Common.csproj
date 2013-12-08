@@ -32,6 +32,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Xml.Linq" />
@@ -47,6 +48,7 @@
     <Compile Include="DataTransfer\Feedback.cs" />
     <Compile Include="DataTransfer\FeedbackState.cs" />
     <Compile Include="DataTransfer\FeedbackType.cs" />
+    <Compile Include="DataTransfer\Input\UserSource.cs" />
     <Compile Include="DataTransfer\Keyword.cs" />
     <Compile Include="DataTransfer\LanguageDefinition.cs" />
     <Compile Include="DataTransfer\Question.cs" />
@@ -59,6 +61,9 @@
     <Compile Include="DataTransfer\User.cs" />
     <Compile Include="DataTransfer\UserType.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
