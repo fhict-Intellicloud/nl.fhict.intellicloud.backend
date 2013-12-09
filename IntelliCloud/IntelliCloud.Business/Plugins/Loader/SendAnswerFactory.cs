@@ -21,9 +21,8 @@ namespace nl.fhict.IntelliCloud.Business.Plugins.Loader
         {
             switch (sourceDefinition.Name)
             {
-                case "Mail":
-                    // TODO uncomment
-                    // return new MailSendAnswerPlugin();
+                case "Mail":                   
+                    return new MailSendAnswerPlugin();
                 case "Facebook":
                     // TODO uncomment
                     // return new FacebookSendAnswerPlugin();
