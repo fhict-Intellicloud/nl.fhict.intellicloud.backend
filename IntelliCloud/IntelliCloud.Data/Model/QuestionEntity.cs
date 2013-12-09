@@ -58,13 +58,6 @@ namespace nl.fhict.IntelliCloud.Data.Model
         public QuestionState QuestionState { get; set; }
 
         /// <summary>
-        /// Gets or sets the source definition that is used to return the answer to the question. The actual source can
-        /// be found using the <see cref="QuestionEntity.User"/> field.
-        /// </summary>
-        [Required]
-        public SourceDefinitionEntity SourceDefinition { get; set; }
-
-        /// <summary>
         /// Gets or sets the creation date and time of the question.
         /// </summary>
         [Required]
@@ -75,6 +68,14 @@ namespace nl.fhict.IntelliCloud.Data.Model
         /// viewed by users of type <see cref="UserType.Employee"/>.
         /// </summary>
         public bool IsPrivate { get; set; }
+
+        /// <summary>
+        /// Gets or sets the question source that is used to return the answer of the question. The question source 
+        /// represents the <see cref="SourceEntity"/> the question originated from and extra information about where
+        /// exactly the answer needs to be send.
+        /// </summary>
+        [Required]
+        public QuestionSourceEntity Source { get; set; }
 
         /// <summary>
         /// Gets or sets the feedback token required to provide feedback to answers on this question. This token is only

@@ -33,23 +33,29 @@ namespace nl.fhict.IntelliCloud.Business
         }
 
         /// <summary>
+        /// Converts a <see cref="SourceEntity"/> to a <see cref="Source"/>.
+        /// </summary>
+        /// <param name="entity">The <see cref="Source"/> that has to be converted.</param>
+        /// <returns>The <see cref="Source"/> object.</returns>
+        public Source SourceEntityToSource(SourceEntity entity)
+        {
+            return new Source()
+            {
+                Id = entity.Id,
+                Value = entity.Value,
+                SourceDefinition = SourceDefinitionEntityToSourceDefinition(entity.SourceDefinition),
+                CreationTime = entity.CreationTime                
+            };
+        }
+
+        /// <summary>
         /// Converts a list of SourceEntities to a list of Sources.
         /// </summary>
         /// <param name="sourceEntities">The SourceEntities that have to be converted.</param>
         /// <returns>The list of sources.</returns>
-        public List<Source> SourceEntityListToSources(ICollection<SourceEntity> sourceEntities)
+        public IList<Source> SourceEntityListToSources(ICollection<SourceEntity> sourceEntities)
         {
-            List<Source> sources = new List<Source>();
-            foreach (SourceEntity source in sourceEntities)
-            {
-                Source temp = new Source();
-                temp.Id = source.Id;
-                temp.SourceDefinition = SourceDefinitionEntityToSourceDefinition(source.SourceDefinition);
-                temp.Value = source.Value;
-                temp.CreationTime = source.CreationTime;
-                sources.Add(temp);
-            }
-            return sources;
+            return sourceEntities.Select(s => this.SourceEntityToSource(s)).ToList();
         }
 
         /// <summary>
@@ -85,8 +91,22 @@ namespace nl.fhict.IntelliCloud.Business
             question.Content = entity.Content;
             question.CreationTime = entity.CreationTime;
             question.QuestionState = entity.QuestionState;
-            question.SourceDefinition = SourceDefinitionEntityToSourceDefinition(entity.SourceDefinition);
+            question.Source = this.QuestionSourceEntityToQuestionSource(entity.Source);
             return question;
+        }
+
+        /// <summary>
+        /// Converts the <see cref="QuestionSourceEntity"/> to a <see cref="QuestionSource"/>.
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <returns></returns>
+        public QuestionSource QuestionSourceEntityToQuestionSource(QuestionSourceEntity entity)
+        {
+            return new QuestionSource
+            {
+                Source = this.SourceEntityToSource(entity.Source),
+                PostId = entity.PostId
+            };
         }
 
         /// <summary>

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using nl.fhict.IntelliCloud.Business.WordService;
 using nl.fhict.IntelliCloud.Common.DataTransfer;
 using nl.fhict.IntelliCloud.Data.Context;
 
@@ -32,8 +33,7 @@ namespace nl.fhict.IntelliCloud.Business
         /// <returns>A list containing the resolved words that are contained in the question</returns>
         internal static IList<Word> ResolveWords(String question)
         {
-            WordService service = new WordService();
-
+            IWordService service = new WordServiceClient();
             return ConvertQuestion(question)
                 .SelectMany(x => service.ResolveWord(x))
                 .ToList();
@@ -63,7 +63,7 @@ namespace nl.fhict.IntelliCloud.Business
             return distinctLanguages.Single(x => x.Count == distinctLanguages.Max(y => y.Count)).Language;
         }
     }
-
+    /*
     #region wordservice stub
     public class WordService
     {
@@ -116,4 +116,5 @@ namespace nl.fhict.IntelliCloud.Business
     public enum Language { English, Dutch, Unknown}
 
     #endregion
+     */
 }

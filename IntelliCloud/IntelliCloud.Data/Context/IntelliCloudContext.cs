@@ -15,6 +15,9 @@ namespace nl.fhict.IntelliCloud.Data.Context
     /// </summary>
     public class IntelliCloudContext : DbContext, IDisposable
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="IntelliCloudContext"/> class.
+        /// </summary>
         public IntelliCloudContext()
             : base(GetConnectionString())
         {
@@ -28,6 +31,9 @@ namespace nl.fhict.IntelliCloud.Data.Context
             this.SourceDefinitions = this.Set<SourceDefinitionEntity>();
             this.Sources = this.Set<SourceEntity>();
             this.Users = this.Set<UserEntity>();
+            this.LanguageDefinitions = this.Set<LanguageDefinitionEntity>();
+            this.UserKeys = this.Set<UserKeyEntity>();
+            this.QuestionSources = this.Set<QuestionSourceEntity>();            
         }
 
         /// <summary>
@@ -88,7 +94,12 @@ namespace nl.fhict.IntelliCloud.Data.Context
         /// <summary>
         /// Gets a database set for the <see cref="UserKeyEntity"/> entities.
         /// </summary>
-        public DbSet<UserKeyEntity> UserKeys { get; private set; }        
+        public DbSet<UserKeyEntity> UserKeys { get; private set; }
+
+        /// <summary>
+        /// Gets a database set for the <see cref="QuestionSourceEntity"/> entities.
+        /// </summary>
+        public DbSet<QuestionSourceEntity> QuestionSources { get; private set; }
 
         /// <summary>
         /// This method is called when the model for a derived context has been initialized, but before the model has been locked down and used to initialize the context. 

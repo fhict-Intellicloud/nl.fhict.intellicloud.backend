@@ -22,6 +22,12 @@ namespace nl.fhict.IntelliCloud.Data.Model
         /// <summary>
         /// Gets or sets the reference to the user.
         /// </summary>
+        [Required]
+        public UserEntity User { get; set; }
+
+        /// <summary>
+        /// Gets or sets the identifier of the reference to the user.
+        /// </summary>
         public int UserId { get; set; }
 
         /// <summary>
