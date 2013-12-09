@@ -9,6 +9,11 @@ namespace nl.fhict.IntelliCloud.Business.Authorization
     public class OpenIDUserInfo
     {
         /// <summary>
+        /// Gets or sets the issuer that provided the user info.
+        /// </summary>
+        public string Issuer { get; set; }
+
+        /// <summary>
         /// Gets or sets the identifier/subject of the user.
         /// </summary>
         [DataMember(Name = "sub")]

@@ -49,11 +49,16 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ReviewServiceTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\IntelliCloud.Common\IntelliCloud.Common.csproj">
       <Project>{22a9b283-420a-4325-990a-7c0a14e36590}</Project>
       <Name>IntelliCloud.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\IntelliCloud.Data\IntelliCloud.Data.csproj">
+      <Project>{FF97327B-0419-44F1-B71E-AB2086553EE2}</Project>
+      <Name>IntelliCloud.Data</Name>
     </ProjectReference>
     <ProjectReference Include="..\IntelliCloud.Service\IntelliCloud.Service.csproj">
       <Project>{2a2ce00d-8bba-445d-84cd-bfe3f2fe03d7}</Project>

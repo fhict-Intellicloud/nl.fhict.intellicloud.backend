@@ -34,12 +34,15 @@ namespace nl.fhict.IntelliCloud.Service
         /// <param name="answerId">The identifier of the answer for which the feedback is given.</param>
         /// <param name="questionId">The identifier of the question for which the feedback is given.</param>
         /// <param name="feedbackType">The feedback type indicating if the answer was accepted or declined.</param>
+        /// <param name="feedbackToken">The feedback token is required to provide feedback to answers on a question. It
+        /// is used to make sure the user that asked the question is also the user giving the feedback and that feedback
+        /// can only be given once.</param>
         [WebInvoke(Method = "POST",
             UriTemplate = "feedbacks",
             RequestFormat = WebMessageFormat.Json,
             ResponseFormat = WebMessageFormat.Json,
             BodyStyle = WebMessageBodyStyle.Wrapped)]
-        void CreateFeedback(string feedback, int answerId, int questionId, FeedbackType feedbackType);
+        void CreateFeedback(string feedback, int answerId, int questionId, FeedbackType feedbackType, string feedbackToken);
 
 
         /// <summary>

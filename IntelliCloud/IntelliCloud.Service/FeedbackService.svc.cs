@@ -21,9 +21,9 @@ namespace nl.fhict.IntelliCloud.Service
             return this.manager.GetFeedbacks(answerId);
         }
 
-        public void CreateFeedback(string feedback, int answerId, int questionId, FeedbackType feedbackType)
+        public void CreateFeedback(string feedback, int answerId, int questionId, FeedbackType feedbackType, string feedbackToken)
         {
-            this.manager.CreateFeedback(feedback, answerId, questionId, feedbackType);
+            this.manager.CreateFeedback(feedback, answerId, questionId, feedbackType, feedbackToken);
         }
 
         public void UpdateFeedback(string id, FeedbackState feedbackState)

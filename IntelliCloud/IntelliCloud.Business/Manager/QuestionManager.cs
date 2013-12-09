@@ -24,12 +24,11 @@ namespace nl.fhict.IntelliCloud.Business.Manager
 
 
         /// <summary>
-        /// Constructor class for teh question manager.
+        /// Constructor class for the question manager.
         /// </summary>
-        /// <param name="context">An instance of <see cref="IntelliCloudContext"/>.</param>
         /// <param name="validation">An in stance of <see cref="IValidation"/>.</param>
-        public QuestionManager(IntelliCloudContext context, IValidation validation)
-            : base(context, validation)
+        public QuestionManager(IValidation validation)
+            : base(validation)
         {
         }
 
@@ -193,9 +192,12 @@ namespace nl.fhict.IntelliCloud.Business.Manager
         /// </summary>
         /// <param name="question">A string representing a question that is to be decomposed.</param>
         /// <returns> A list with each word in the sentence is returned. </returns>
-        public IList<string> ConvertQuestion(String question)
+        internal IList<string> ConvertQuestion(String question)
         {
-            Regex regex = new Regex("[\\W-']+");
+            Regex regex = new Regex("[\\w-']+");
+
+
+
 
             return regex
                 .Matches(question.ToLowerInvariant())

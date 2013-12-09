@@ -61,12 +61,13 @@ namespace nl.fhict.IntelliCloud.Service
         /// </summary>
         /// <param name="id">The identifier of the answer that is updated.</param>
         /// <param name="answerState">The new state of the answer.</param>
+        /// <param name="answer">The new content of the given answer.</param>
         [OperationContract]
         [WebInvoke(Method = "PUT",
             UriTemplate = "answers/{id}",
             RequestFormat = WebMessageFormat.Json,
             ResponseFormat = WebMessageFormat.Json,
             BodyStyle = WebMessageBodyStyle.Wrapped)]
-        void UpdateAnswer(string id, AnswerState answerState);
+        void UpdateAnswer(string id, AnswerState answerState, string answer);
     }
 }
