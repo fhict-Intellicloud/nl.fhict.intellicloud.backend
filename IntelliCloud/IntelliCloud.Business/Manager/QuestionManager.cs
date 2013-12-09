@@ -184,6 +184,33 @@ namespace nl.fhict.IntelliCloud.Business.Manager
 
         }
 
+        public Question GetQuestionByFeedbackToken(string feedbackToken)
+        {
+            Validation.StringCheck(feedbackToken);
+
+            Question question = new Question();
+
+            using (IntelliCloudContext ctx = new IntelliCloudContext())
+            {
+                // TODO: make sure only users of type employee can retrieve private questions.
+                QuestionEntity entity = (from q in ctx.Questions
+                                                                 .Include(q => q.Source)
+                                                                 .Include(q => q.User)
+                                                                 .Include(q => q.User.Sources)
+                                                                 .Include(q => q.Answerer)
+                                                                 .Include(q => q.Answerer.Sources)
+                                                                 .Include(q => q.User.Sources.Select(s => s.SourceDefinition))
+                                         where q.FeedbackToken == feedbackToken
+                                         select q).SingleOrDefault();
+
+                if (entity == null)
+                    throw new NotFoundException("No Question entity exists with the specified feedback token.");
+
+                question = ConvertEntities.QuestionEntityToQuestion(entity);
+            }
+            return question;
+        }
+
         #region keyword algorith methods
 
         /// <summary>
