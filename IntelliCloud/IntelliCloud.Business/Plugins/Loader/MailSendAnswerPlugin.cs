@@ -5,6 +5,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Mail;
 using System.Text;
+using System.Configuration;
 
 namespace nl.fhict.IntelliCloud.Business.Plugins.Loader
 {
@@ -12,8 +13,10 @@ namespace nl.fhict.IntelliCloud.Business.Plugins.Loader
     {
         private SmtpClient client;
 
-        private string clientUsername = "intellicloudquestions@gmail.com";
-        private string clientPassword = "proftaaksm72";
+        private string clientUsername = ConfigurationManager.AppSettings["IntelliCloud.Mail.Username"];
+        private string clientPassword = ConfigurationManager.AppSettings["IntelliCloud.Mail.Password"];
+        private string host = ConfigurationManager.AppSettings["IntelliCloud.Mail.SmtpHost"];
+        private int port = Convert.ToInt32(ConfigurationManager.AppSettings["IntelliCloud.Mail.SmtpPort"]);
 
         /// <summary>
         /// Send an answer through e-mail with the related question
@@ -52,13 +55,10 @@ namespace nl.fhict.IntelliCloud.Business.Plugins.Loader
                 Subject = subject,
                 Body = body
             })
+
             //Send the mail
-            try
-            {
-                client.Send(message);
-            }
-            catch (Exception e)
-            { }
+            client.Send(message);
+            
             //Dispose the smtp client
             client.Dispose();
         }
@@ -70,20 +70,15 @@ namespace nl.fhict.IntelliCloud.Business.Plugins.Loader
         {
             if (client == null)
             {
-                try
+                client = new SmtpClient
                 {
-                    client = new SmtpClient
-                    {
-                        Host = "smtp.gmail.com",
-                        Port = 587,
-                        EnableSsl = true,
-                        DeliveryMethod = SmtpDeliveryMethod.Network,
-                        UseDefaultCredentials = false,
-                        Credentials = new NetworkCredential(clientUsername, clientPassword)
-                    };
-                }
-                catch (Exception e)
-                { }
+                    Host = host,
+                    Port = port,
+                    EnableSsl = true,
+                    DeliveryMethod = SmtpDeliveryMethod.Network,
+                    UseDefaultCredentials = false,
+                    Credentials = new NetworkCredential(clientUsername, clientPassword)
+                };                
             }
         }
     }
