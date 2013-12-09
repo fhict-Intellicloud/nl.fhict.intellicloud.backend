@@ -194,17 +194,13 @@ namespace nl.fhict.IntelliCloud.Business.Manager
         /// <returns> A list with each word in the sentence is returned. </returns>
         internal IList<string> ConvertQuestion(String question)
         {
-            Regex regex = new Regex("[\\w-']+");
+            //Regex that matches every single special character exluding the -
+            Regex regex = new Regex("[\\\\+=`~!@#$%^&*()_\\\\\\\\[\\]{}:\\\";\\?<>/.,|]");
 
+            string cleanQuestion = regex.Replace(question.ToLowerInvariant(), "");
 
-
-
-            return regex
-                .Matches(question.ToLowerInvariant())
-                .Cast<Match>()
-                .Where(x => x.Success)
-                .Select(x => x.Value)
-                .SelectMany(x => x.Split('_'))
+            return cleanQuestion.Split(' ')
+                .Where(x => x != "-" && x != "'")
                 .ToList();
         }
 

@@ -125,16 +125,18 @@ namespace nl.fhict.IntelliCloud.Business.UnitTest.Manager
         #endregion
 
         #region Question conversion tests
+
+
         /// <summary>
         /// Test if all punctuation is removed correctly.
         /// </summary>
         [TestMethod]
         public void convertQuestionTest_noPunctuation()
         {
-            string question = "Jui*ste text ,./<>?;':\"[]{}\\|`~!@#$%^&*()_-+= die ov(er mo&et blijven.";
+            string question = "Jui*ste text ,./<>?;:\"[]{}\\|`~!()_-+= die @#$%^&*' ov(er mo&et blijven.";
             IList<string> result = this.manager.ConvertQuestion(question);
 
-            Assert.IsTrue(result.Except(new List<string>() { "Juiste", "text", "die", "over", "moet", "blijven" }).Count() == 0);
+            Assert.IsTrue(result.Except(new List<string>() { "juiste", "text", "die", "over", "moet", "blijven" }).Count() == 0);
         }
 
         /// <summary>
