@@ -37,25 +37,90 @@ namespace nl.fhict.IntelliCloud.Business.Manager
             Validation.IdCheck(employeeId);
 
             List<Question> questions = new List<Question>();
-
+            
             using (IntelliCloudContext ctx = new IntelliCloudContext())
             {
                 UserEntity employee = (from u in ctx.Users
                                        where u.Id == employeeId
                                        select u).SingleOrDefault();
 
-                // TODO: Only retrieve questions for retrieved employee.
-                // TODO: Make sure only users of type employee can retrieve private questions.
-                List<QuestionEntity> questionEntities = (from q in ctx.Questions
-                                                                 .Include(q => q.Source)
-                                                                 .Include(q => q.User)
-                                                                 .Include(q => q.User.Sources)
-                                                                 .Include(q => q.Answerer)
-                                                                 .Include(q => q.Answerer.Sources)
-                                                                 .Include(q => q.User.Sources.Select(s => s.SourceDefinition))
-                                                         select q).ToList();
+                if (employee != null)
+                {
+                    List<QuestionEntity> questionEntities = (from q in ctx.Questions
+                                                                     .Include(q => q.Source)
+                                                                     .Include(q => q.User)
+                                                                     .Include(q => q.User.Sources)
+                                                                     .Include(q => q.Answerer)
+                                                                     .Include(q => q.Answerer.Sources)
+                                                                     .Include(q => q.User.Sources.Select(s => s.SourceDefinition))
+                                                             where q.Answer == null || q.Answer.AnswerState != AnswerState.Ready
 
-                questions = ConvertEntities.QuestionEntityListToQuestionList(questionEntities);
+                                                             select q).ToList();
+                    List<QuestionEntity> employeeQuestions = new List<QuestionEntity>();
+                    List<QuestionEntity> employeeNotFoundQuestions = new List<QuestionEntity>();
+                    List<UserKeyEntity> employeeKeys = (from x in ctx.UserKeys where x.User.Id == employee.Id select x).ToList();
+                    List<QuestionKeyEntity> questionKeyEntities = (from q in ctx.QuestionKeys select q).ToList();
+                    //Check if employee keys contains questions keys.
+                    foreach (QuestionEntity question in questionEntities)
+                    {
+                        bool foundUserQuestion = false;
+                        List<QuestionKeyEntity> questionKeys = (from q in questionKeyEntities where q.Question.Id == question.Id select q).ToList();
+                        foreach (QuestionKeyEntity qke in questionKeys)
+                        {
+                            if (!foundUserQuestion)
+                            {
+                                foreach (UserKeyEntity uke in employeeKeys)
+                                {
+                                    if (qke.Keyword.Id == uke.Keyword.Id && !foundUserQuestion)
+                                    {
+                                        employeeQuestions.Add(question);
+                                        foundUserQuestion = true;
+                                    }
+                                }
+                            }
+                        }
+                        if (!foundUserQuestion)
+                        {
+                            employeeNotFoundQuestions.Add(question);
+                        }
+                    }
+
+                    //If there are remaining questions that are open and not found for this employee
+                    //check if other employees are experts in this question. If not add them also to this employee
+                    if (employeeNotFoundQuestions.Count != 0)
+                    {
+                        List<UserKeyEntity> otherUserKeys = (from u in ctx.UserKeys where u.User.Id != employeeId select u).ToList();
+                        foreach (QuestionEntity question in employeeNotFoundQuestions)
+                        {
+                            bool foundUserQuestion = false;
+                            List<QuestionKeyEntity> questionKeys = (from q in questionKeyEntities where q.Question.Id == question.Id select q).ToList();
+                            foreach (QuestionKeyEntity qke in questionKeys)
+                            {
+                                if (!foundUserQuestion)
+                                {
+                                    foreach (UserKeyEntity uke in otherUserKeys)
+                                    {
+                                        if (qke.Keyword.Id == uke.Keyword.Id && !foundUserQuestion)
+                                        {
+                                            foundUserQuestion = true;
+                                        }
+                                    }
+                                }
+                            }
+                            if (!foundUserQuestion)
+                            {
+                                employeeQuestions.Add(question);
+                            }
+                        }
+                    }
+
+                    if (employee.Type != UserType.Employee)
+                    {
+                        employeeQuestions = (from x in employeeQuestions where x.IsPrivate == false select x).ToList();
+                    }
+
+                    questions = ConvertEntities.QuestionEntityListToQuestionList(employeeQuestions);
+                }
             }
 
             return questions;
