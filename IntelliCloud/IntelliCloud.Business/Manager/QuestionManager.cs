@@ -37,60 +37,40 @@ namespace nl.fhict.IntelliCloud.Business.Manager
             Validation.IdCheck(employeeId);
 
             List<Question> questions = new List<Question>();
-            
+
             using (IntelliCloudContext ctx = new IntelliCloudContext())
             {
                 UserEntity employee = (from u in ctx.Users
                                        where u.Id == employeeId
                                        select u).SingleOrDefault();
 
-                if (employee != null)
+
+                List<QuestionEntity> questionEntities = (from q in ctx.Questions
+                                                                 .Include(q => q.Source)
+                                                                 .Include(q => q.User)
+                                                                 .Include(q => q.User.Sources)
+                                                                 .Include(q => q.Answerer)
+                                                                 .Include(q => q.Answerer.Sources)
+                                                                 .Include(q => q.User.Sources.Select(s => s.SourceDefinition))
+                                                         where q.Answer == null || q.Answer.AnswerState != AnswerState.Ready
+
+                                                         select q).ToList();
+                if (employeeId != 0)
                 {
-                    List<QuestionEntity> questionEntities = (from q in ctx.Questions
-                                                                     .Include(q => q.Source)
-                                                                     .Include(q => q.User)
-                                                                     .Include(q => q.User.Sources)
-                                                                     .Include(q => q.Answerer)
-                                                                     .Include(q => q.Answerer.Sources)
-                                                                     .Include(q => q.User.Sources.Select(s => s.SourceDefinition))
-                                                             where q.Answer == null || q.Answer.AnswerState != AnswerState.Ready
-
-                                                             select q).ToList();
-                    List<QuestionEntity> employeeQuestions = new List<QuestionEntity>();
-                    List<QuestionEntity> employeeNotFoundQuestions = new List<QuestionEntity>();
-                    List<UserKeyEntity> employeeKeys = (from x in ctx.UserKeys where x.User.Id == employee.Id select x).ToList();
-                    List<QuestionKeyEntity> questionKeyEntities = (from q in ctx.QuestionKeys select q).ToList();
-                    //Check if employee keys contains questions keys.
-                    foreach (QuestionEntity question in questionEntities)
+                    if (employee != null)
                     {
-                        bool foundUserQuestion = false;
-                        List<QuestionKeyEntity> questionKeys = (from q in questionKeyEntities where q.Question.Id == question.Id select q).ToList();
-                        foreach (QuestionKeyEntity qke in questionKeys)
-                        {
-                            if (!foundUserQuestion)
-                            {
-                                foreach (UserKeyEntity uke in employeeKeys)
-                                {
-                                    if (qke.Keyword.Id == uke.Keyword.Id && !foundUserQuestion)
-                                    {
-                                        employeeQuestions.Add(question);
-                                        foundUserQuestion = true;
-                                    }
-                                }
-                            }
-                        }
-                        if (!foundUserQuestion)
-                        {
-                            employeeNotFoundQuestions.Add(question);
-                        }
-                    }
-
-                    //If there are remaining questions that are open and not found for this employee
-                    //check if other employees are experts in this question. If not add them also to this employee
-                    if (employeeNotFoundQuestions.Count != 0)
-                    {
-                        List<UserKeyEntity> otherUserKeys = (from u in ctx.UserKeys where u.User.Id != employeeId select u).ToList();
-                        foreach (QuestionEntity question in employeeNotFoundQuestions)
+                        List<QuestionEntity> employeeQuestions = new List<QuestionEntity>();
+                        List<QuestionEntity> employeeNotFoundQuestions = new List<QuestionEntity>();
+                        List<UserKeyEntity> employeeKeys = (from x in ctx.UserKeys where x.User.Id == employee.Id select x)
+                            .Include(q => q.User)
+                            .Include(q => q.Keyword)
+                            .Include(q => q.Affinity).ToList();
+                        List<QuestionKeyEntity> questionKeyEntities = (from q in ctx.QuestionKeys select q)
+                            .Include(q => q.Question)
+                            .Include(q => q.Keyword)
+                            .Include(q => q.Affinity).ToList();
+                        //Check if employee keys contains questions keys.
+                        foreach (QuestionEntity question in questionEntities)
                         {
                             bool foundUserQuestion = false;
                             List<QuestionKeyEntity> questionKeys = (from q in questionKeyEntities where q.Question.Id == question.Id select q).ToList();
@@ -98,10 +78,11 @@ namespace nl.fhict.IntelliCloud.Business.Manager
                             {
                                 if (!foundUserQuestion)
                                 {
-                                    foreach (UserKeyEntity uke in otherUserKeys)
+                                    foreach (UserKeyEntity uke in employeeKeys)
                                     {
                                         if (qke.Keyword.Id == uke.Keyword.Id && !foundUserQuestion)
                                         {
+                                            employeeQuestions.Add(question);
                                             foundUserQuestion = true;
                                         }
                                     }
@@ -109,18 +90,55 @@ namespace nl.fhict.IntelliCloud.Business.Manager
                             }
                             if (!foundUserQuestion)
                             {
-                                employeeQuestions.Add(question);
+                                employeeNotFoundQuestions.Add(question);
                             }
                         }
-                    }
 
-                    if (employee.Type != UserType.Employee)
+                        //If there are remaining questions that are open and not found for this employee
+                        //check if other employees are experts in this question. If not add them also to this employee
+                        if (employeeNotFoundQuestions.Count != 0)
+                        {
+                            List<UserKeyEntity> otherUserKeys = (from u in ctx.UserKeys where u.User.Id != employeeId select u).ToList();
+                            foreach (QuestionEntity question in employeeNotFoundQuestions)
+                            {
+                                bool foundUserQuestion = false;
+                                List<QuestionKeyEntity> questionKeys = (from q in questionKeyEntities where q.Question.Id == question.Id select q).ToList();
+                                foreach (QuestionKeyEntity qke in questionKeys)
+                                {
+                                    if (!foundUserQuestion)
+                                    {
+                                        foreach (UserKeyEntity uke in otherUserKeys)
+                                        {
+                                            if (qke.Keyword.Id == uke.Keyword.Id && !foundUserQuestion)
+                                            {
+                                                foundUserQuestion = true;
+                                            }
+                                        }
+                                    }
+                                }
+                                if (!foundUserQuestion)
+                                {
+                                    employeeQuestions.Add(question);
+                                }
+                            }
+                        }
+
+                        if (employee.Type != UserType.Employee)
+                        {
+                            employeeQuestions = (from x in employeeQuestions where x.IsPrivate == false select x).ToList();
+                        }
+                        questions = ConvertEntities.QuestionEntityListToQuestionList(employeeQuestions);
+                    }
+                    else
                     {
-                        employeeQuestions = (from x in employeeQuestions where x.IsPrivate == false select x).ToList();
+                        throw new NotFoundException("No User entity exists with the specified ID.");
                     }
-
-                    questions = ConvertEntities.QuestionEntityListToQuestionList(employeeQuestions);
                 }
+                else
+                {
+                    questions = ConvertEntities.QuestionEntityListToQuestionList(questionEntities);
+                }
+                
             }
 
             return questions;
@@ -275,7 +293,7 @@ namespace nl.fhict.IntelliCloud.Business.Manager
         /// </summary>
         /// <param name="question">A given question for which all words are to be resolved to their type.</param>
         /// <returns>A list containing the resolved words that were contained in the question</returns>
-       public IList<Word> ResolveWords(String question)
+        public IList<Word> ResolveWords(String question)
         {
             IWordService service = new WordServiceClient();
             return ConvertQuestion(question)
