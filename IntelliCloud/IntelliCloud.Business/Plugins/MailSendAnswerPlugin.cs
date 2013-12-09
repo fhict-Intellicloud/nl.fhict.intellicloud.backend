@@ -81,5 +81,11 @@ namespace nl.fhict.IntelliCloud.Business.Plugins.Loader
                 };                
             }
         }
+
+
+        public void SendQuestionRecieved(Question question)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
