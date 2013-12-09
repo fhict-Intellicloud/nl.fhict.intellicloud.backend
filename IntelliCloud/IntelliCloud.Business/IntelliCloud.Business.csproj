@@ -64,11 +64,28 @@
     <Compile Include="Plugins\Loader\ISendAnswerPlugin.cs" />
     <Compile Include="Plugins\Loader\SendAnswerFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Service References\WordService\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
     <Compile Include="Validation.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
     <None Include="packages.config" />
+    <None Include="Service References\WordService\nl.fhict.IntelliCloud.Business.WordService.Word.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\WordService\WordService.wsdl" />
+    <None Include="Service References\WordService\WordService.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\WordService\WordService1.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\WordService\WordService2.xsd">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\IntelliCloud.Common\IntelliCloud.Common.csproj">
@@ -82,6 +99,24 @@
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadataStorage Include="Service References\WordService\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\WordService\WordService.disco" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\WordService\configuration91.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\WordService\configuration.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\WordService\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
