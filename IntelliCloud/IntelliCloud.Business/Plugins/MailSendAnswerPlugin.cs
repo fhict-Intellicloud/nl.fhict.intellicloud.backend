@@ -9,7 +9,7 @@ using System.Configuration;
 
 namespace nl.fhict.IntelliCloud.Business.Plugins.Loader
 {
-    class MailSendAnswerPlugin : ISendAnswerPlugin
+    internal class MailSendAnswerPlugin : ISendAnswerPlugin
     {
         private SmtpClient client;
 
