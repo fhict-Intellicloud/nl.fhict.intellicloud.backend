@@ -24,8 +24,7 @@ namespace nl.fhict.IntelliCloud.Business.Plugins.Loader
                 case "Mail":                   
                     return new MailSendAnswerPlugin();
                 case "Facebook":
-                    // TODO uncomment
-                    // return new FacebookSendAnswerPlugin();
+                    return new FacebookSendAnswerPlugin();
                 case "Twitter":
                     // TODO uncomment
                     // return new TwitterSendAnswerPlugin();
