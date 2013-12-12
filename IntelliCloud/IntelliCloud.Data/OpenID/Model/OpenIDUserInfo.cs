@@ -1,6 +1,6 @@
 ﻿using System.Runtime.Serialization;
 
-namespace nl.fhict.IntelliCloud.Business.Authorization
+namespace nl.fhict.IntelliCloud.Data.OpenID.Model
 {
     /// <summary>
     /// Class that represents user information in the OpenID Connect schema.

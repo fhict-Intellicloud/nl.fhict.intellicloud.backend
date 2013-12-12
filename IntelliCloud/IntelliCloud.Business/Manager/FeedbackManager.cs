@@ -4,8 +4,8 @@ using nl.fhict.IntelliCloud.Data.Context;
 using nl.fhict.IntelliCloud.Data.Model;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Data.Entity;
+using System.Linq;
 
 namespace nl.fhict.IntelliCloud.Business.Manager
 {
@@ -14,6 +14,23 @@ namespace nl.fhict.IntelliCloud.Business.Manager
     /// </summary>
     public class FeedbackManager : BaseManager
     {
+        /// <summary>
+        /// Constructor that sets the IValidation property to the given value.
+        /// </summary>
+        /// <param name="validation">IValidation to be set.</param>
+        public FeedbackManager(IValidation validation)
+            : base(validation)
+        {
+        }
+
+        /// <summary>
+        /// Default constructor.
+        /// </summary>
+        public FeedbackManager()
+            : base()
+        {
+        }
+
         /// <summary>
         /// Method used for retrieving all feedback entries assigned to a specific answer.
         /// </summary>
