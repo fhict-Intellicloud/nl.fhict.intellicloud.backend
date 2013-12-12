@@ -50,6 +50,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Manager\FeedbackManagerTest.cs" />
     <Compile Include="Manager\QuestionManagerTest.cs" />
     <Compile Include="Manager\ReviewManagerTest.cs" />
     <Compile Include="Manager\UserManagerTest.cs" />
