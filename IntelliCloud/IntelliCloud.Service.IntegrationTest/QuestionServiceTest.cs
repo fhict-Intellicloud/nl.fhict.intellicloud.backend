@@ -13,10 +13,10 @@ namespace nl.fhict.IntelliCloud.Service.IntegrationTest
     [TestClass]
     public class QuestionServiceTest
     {
-         #region Fields
+        #region Fields
 
         /// <summary>
-        /// An instance of the service ReviewService that is being tested by this class.
+        /// An instance of the service QuestionService that is being tested by this class.
         /// </summary>
         private IQuestionService service;
         private QuestionEntity entity;
@@ -34,7 +34,6 @@ namespace nl.fhict.IntelliCloud.Service.IntegrationTest
         public void Initialize()
         {
             this.service = new QuestionService();
-
             this.initializeTestData();
 
         }
@@ -51,7 +50,7 @@ namespace nl.fhict.IntelliCloud.Service.IntegrationTest
                 newUser.FirstName = "integration";
                 newUser.LastName = "test";
                 newUser.Type = Common.DataTransfer.UserType.Customer;
-                
+
                 ctx.Users.Add(newUser);
                 ctx.SaveChanges();
 
@@ -69,16 +68,16 @@ namespace nl.fhict.IntelliCloud.Service.IntegrationTest
                 newSource.User = newUser;
                 newSource.Value = "test@test.nl";
                 newSource.CreationTime = DateTime.UtcNow;
-                newSource.SourceDefinition = new SourceDefinitionEntity { CreationTime = DateTime.UtcNow, Description = "integration test def", Name = "test def", Url = ""};
-                
+                newSource.SourceDefinition = new SourceDefinitionEntity { CreationTime = DateTime.UtcNow, Description = "integration test def", Name = "test def", Url = "" };
+
                 ctx.Sources.Add(newSource);
                 ctx.SaveChanges();
-                
+
                 QuestionEntity newEntity = new QuestionEntity();
                 newEntity.IsPrivate = false;
                 newEntity.LanguageDefinition = new LanguageDefinitionEntity { Name = "English", ResourceName = "English" };
                 newEntity.QuestionState = Common.DataTransfer.QuestionState.Open;
-                newEntity.Source = new QuestionSourceEntity {Source = newSource, PostId = ""};
+                newEntity.Source = new QuestionSourceEntity { Source = newSource, PostId = "" };
                 newEntity.Title = "this is a test question";
                 newEntity.User = newUser;
                 newEntity.Content = "this is the question i want to ask, please help me?";
@@ -113,7 +112,6 @@ namespace nl.fhict.IntelliCloud.Service.IntegrationTest
         }
 
         #region Tests
-
         /// <summary>
         /// Tests if the UpdateReview is updating a review, or at least calls something to the database.
         /// </summary>
@@ -131,7 +129,7 @@ namespace nl.fhict.IntelliCloud.Service.IntegrationTest
                 using (IntelliCloudContext ctx = new IntelliCloudContext())
                 {
                     var question = ctx.Questions.Single(q => q.Id == questionId);
-                
+
                     Assert.AreEqual(questionId, question.Id);
                 }
 
