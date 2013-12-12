@@ -86,36 +86,6 @@ namespace IntelliTwitterClient.Business.Managers
             }
         }
 
-        public void SendReplyTweet(string answer, string reference, string postId)
-        {
-            Validation.StringCheck(reference);
-            Validation.StringCheck(postId);
-            Validation.TweetCheck(answer);
-
-            using (TwitterContext twitterCtx = new TwitterContext(PinAutharizedUser))
-            {
-                try
-                {
-                    var status = reference + " " + answer + " " + DateTime.Now;
-
-                    var tweet = twitterCtx.UpdateStatus(status, postId);
-
-                    //Writes the tweet to the log
-                    serviceLog.WriteEntry(
-                        "Status returned: " +
-                        "(" + tweet.StatusID + ")" +
-                        "[" + tweet.User.ID + "]" +
-                        tweet.User.Name + ", " +
-                        tweet.Text + ", " +
-                        tweet.CreatedAt + "\n");
-                }
-                catch (Exception e)
-                {
-                    serviceLog.WriteEntry(e.Message);
-                }
-            }
-        }
-
         /// <summary>
         /// Creates a new question from an incoming tweet and sends it to the backend
         /// </summary>

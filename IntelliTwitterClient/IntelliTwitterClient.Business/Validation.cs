@@ -22,9 +22,7 @@ namespace IntelliTwitterClient.Business
 
         public static void TweetCheck(string value)
         {
-            if (value == null)
-                throw new ArgumentNullException();
-            else if (String.IsNullOrWhiteSpace(value))
+            if (String.IsNullOrWhiteSpace(value))
                 throw new ArgumentException("Tweet is empty");
             else if (value.Length > 140)
                 throw new ArgumentException("Tweet can't be longer then 140 characters");
