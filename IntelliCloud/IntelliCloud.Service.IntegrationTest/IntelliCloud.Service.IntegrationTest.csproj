@@ -41,6 +41,8 @@
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -48,10 +50,21 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="KeywordAlgorithmTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="QuestionServiceTest.cs" />
     <Compile Include="ReviewServiceTest.cs" />
+    <Compile Include="Service References\WordService\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\IntelliCloud.Business\IntelliCloud.Business.csproj">
+      <Project>{59a5b95e-1352-4b18-aaa4-71e1f334a2f5}</Project>
+      <Name>IntelliCloud.Business</Name>
+    </ProjectReference>
     <ProjectReference Include="..\IntelliCloud.Common\IntelliCloud.Common.csproj">
       <Project>{22a9b283-420a-4325-990a-7c0a14e36590}</Project>
       <Name>IntelliCloud.Common</Name>
@@ -66,8 +79,42 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="packages.config" />
+    <None Include="Properties\DataSources\nl.fhict.IntelliCloud.Business.WordService.Word.datasource" />
+    <None Include="Service References\WordService\WordService.wsdl" />
+    <None Include="Service References\WordService\WordService.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\WordService\WordService1.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\WordService\WordService2.xsd">
+      <SubType>Designer</SubType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadataStorage Include="Service References\WordService\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\WordService\WordService.disco" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\WordService\configuration91.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\WordService\configuration.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\WordService\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

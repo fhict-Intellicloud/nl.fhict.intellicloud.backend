@@ -21,5 +21,11 @@ namespace nl.fhict.IntelliCloud.Business.Plugins.Loader
         /// <param name="question">The question which is answered.</param>
         /// <param name="answer">The answer which needs to be send.</param>
         void SendAnswer(Question question, Answer answer);
+
+        /// <summary>
+        /// Send a recieved confirmation to the source.
+        /// </summary>
+        /// <param name="question"></param>
+        void SendQuestionRecieved(Question question);
     }
 }

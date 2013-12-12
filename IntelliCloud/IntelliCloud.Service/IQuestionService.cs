@@ -39,6 +39,17 @@ namespace nl.fhict.IntelliCloud.Service
         Question GetQuestion(string id);
 
         /// <summary>
+        /// Retrieve the question for this feedback token.
+        /// </summary>
+        /// <param name="feedbackToken">The feedback token of the question.</param>
+        /// <returns>Returns the question with the given feedbacktoken.</returns>
+        [OperationContract]
+        [WebGet(UriTemplate = "questions?feedbackToken={feedbackToken}",
+            RequestFormat = WebMessageFormat.Json,
+            ResponseFormat = WebMessageFormat.Json)]
+        Question GetQuestionByFeedbackToken(string feedbackToken);
+
+        /// <summary>
         /// Creates a new question.
         /// </summary>
         /// <param name="source">The source from which the question was send, e.g. "Mail", "Facebook" or "Twitter".

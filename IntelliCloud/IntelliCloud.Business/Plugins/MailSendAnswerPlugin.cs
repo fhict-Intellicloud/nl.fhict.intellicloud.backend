@@ -9,7 +9,7 @@ using System.Configuration;
 
 namespace nl.fhict.IntelliCloud.Business.Plugins.Loader
 {
-    class MailSendAnswerPlugin : ISendAnswerPlugin
+    internal class MailSendAnswerPlugin : ISendAnswerPlugin
     {
         private SmtpClient client;
 
@@ -80,6 +80,12 @@ namespace nl.fhict.IntelliCloud.Business.Plugins.Loader
                     Credentials = new NetworkCredential(clientUsername, clientPassword)
                 };                
             }
+        }
+
+
+        public void SendQuestionRecieved(Question question)
+        {
+            throw new NotImplementedException();
         }
     }
 }

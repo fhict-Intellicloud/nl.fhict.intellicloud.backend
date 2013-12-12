@@ -24,5 +24,11 @@ namespace nl.fhict.IntelliCloud.Data.Model
         /// </summary>
         [Required, MaxLength(254)]
         public string Name { get; set; }
+
+        /// <summary>
+        /// Gets or sets the resource name for this language definition. Used to send the correct email format.
+        /// </summary>
+        [Required, MaxLength(254)]
+        public string ResourceName { get; set; }
     }
 }

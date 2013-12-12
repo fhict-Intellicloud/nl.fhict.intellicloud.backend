@@ -42,5 +42,10 @@ namespace nl.fhict.IntelliCloud.Service
         {
             manager.UpdateQuestion(Convert.ToInt32(id), employeeId);
         }
+        
+        public Question GetQuestionByFeedbackToken(string feedbackToken)
+        {
+            return manager.GetQuestionByFeedbackToken(feedbackToken);
+        }
     }
 }

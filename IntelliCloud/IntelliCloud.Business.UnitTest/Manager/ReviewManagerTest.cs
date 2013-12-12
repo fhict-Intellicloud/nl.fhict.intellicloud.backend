@@ -30,7 +30,7 @@ namespace nl.fhict.IntelliCloud.Business.UnitTest.Manager
         public void Initialize()
         {
             validation = new Mock<IValidation>();
-            this.manager = new ReviewManager(null, validation.Object);
+            this.manager = new ReviewManager(validation.Object);
         }
 
         [TestCleanup]

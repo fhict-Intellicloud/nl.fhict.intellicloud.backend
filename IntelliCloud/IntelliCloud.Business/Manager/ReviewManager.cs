@@ -11,10 +11,9 @@ namespace nl.fhict.IntelliCloud.Business.Manager
 {
     public class ReviewManager : BaseManager
     {
-        public ReviewManager(IntelliCloudContext context, IValidation validation)
-            : base(context, validation)
+        public ReviewManager(IValidation validation)
+            : base(validation)
         {
-            //the intellicloudcontext and validation are given threw here
         }
 
         public ReviewManager()
