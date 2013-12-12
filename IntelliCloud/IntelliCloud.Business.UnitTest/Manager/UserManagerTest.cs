@@ -36,7 +36,7 @@ namespace nl.fhict.IntelliCloud.Business.UnitTest.Manager
         #region Tests
 
         /// <summary>
-        /// Test method that checks if no validation is performed when no parameters have been supplied.
+        /// GetUser test method that checks if no validation is performed when no parameters have been supplied.
         /// </summary>
         [TestMethod]
         public void GetUserTest_WithoutParameters()
@@ -56,7 +56,7 @@ namespace nl.fhict.IntelliCloud.Business.UnitTest.Manager
         }
 
         /// <summary>
-        /// Test method that checks if validation is performed when parameters have been supplied.
+        /// GetUser test method that checks if validation is performed when parameters have been supplied.
         /// </summary>
         [TestMethod]
         public void GetUserTest_WithParameters()
@@ -76,7 +76,7 @@ namespace nl.fhict.IntelliCloud.Business.UnitTest.Manager
         }
 
         /// <summary>
-        /// Test method that checks if no validation is performed when no parameters have been supplied.
+        /// CreateUser test method that checks if no validation is performed when no parameters have been supplied.
         /// </summary>
         [TestMethod]
         public void CreateUserTest_WithoutParameters()
@@ -102,7 +102,7 @@ namespace nl.fhict.IntelliCloud.Business.UnitTest.Manager
         }
 
         /// <summary>
-        /// Test method that checks if validation is performed when parameters have been supplied.
+        /// CreateUser test method that checks if validation is performed when parameters have been supplied.
         /// </summary>
         [TestMethod]
         public void CreateUserTest_WithParameters()
