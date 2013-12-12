@@ -18,6 +18,23 @@ namespace nl.fhict.IntelliCloud.Business.Manager
     /// </summary>
     public class UserManager : BaseManager
     {
+        /// <summary>
+        /// Constructor that sets the IValidation property to the given value.
+        /// </summary>
+        /// <param name="validation">IValidation to be set.</param>
+        public UserManager(IValidation validation)
+            : base(validation)
+        {
+        }
+
+        /// <summary>
+        /// Default constructor.
+        /// </summary>
+        public UserManager()
+            : base()
+        {
+        }
+
         #region Methods that are not available directly to the UserService
 
         /// <summary>

@@ -15,6 +15,23 @@ namespace nl.fhict.IntelliCloud.Business.Manager
     public class FeedbackManager : BaseManager
     {
         /// <summary>
+        /// Constructor that sets the IValidation property to the given value.
+        /// </summary>
+        /// <param name="validation">IValidation to be set.</param>
+        public FeedbackManager(IValidation validation)
+            : base(validation)
+        {
+        }
+
+        /// <summary>
+        /// Default constructor.
+        /// </summary>
+        public FeedbackManager()
+            : base()
+        {
+        }
+
+        /// <summary>
         /// Method used for retrieving all feedback entries assigned to a specific answer.
         /// </summary>
         /// <param name="answerId">The id of the answer to which all feedback entries to be retrieved are assigned to.</param>
