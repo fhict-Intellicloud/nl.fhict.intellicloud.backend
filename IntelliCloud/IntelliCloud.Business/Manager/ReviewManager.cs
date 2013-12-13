@@ -17,12 +17,13 @@ namespace nl.fhict.IntelliCloud.Business.Manager
         /// <summary>
         /// Constructor of the reviewmanager class used when testing.
         /// </summary>
-        /// <param name="validation">An instance of the validation object <see cref="Validation.cs"/></param>
+        /// <param name="validation">An instance that implements IValidation.</param>
         public ReviewManager(IValidation validation)
-            : base(validation)
-        {
-        }
+            : base(validation) { }
 
+        /// <summary>
+        /// Constructor of the reviewmanager class used when creating services.
+        /// </summary>
         public ReviewManager()
             : base() { }
 

@@ -11,9 +11,11 @@ using nl.fhict.IntelliCloud.Business.WordService;
 
 namespace nl.fhict.IntelliCloud.Business.Manager
 {
+    /// <summary>
+    /// A class providing functionality related to questions.
+    /// </summary>
     public class QuestionManager : BaseManager
     {
-
         /// <summary>
         /// Constructor method for the question manager class.
         /// </summary>
@@ -22,16 +24,20 @@ namespace nl.fhict.IntelliCloud.Business.Manager
         {
         }
 
-
         /// <summary>
         /// Constructor class for the question manager.
         /// </summary>
-        /// <param name="validation">An in stance of <see cref="IValidation"/>.</param>
+        /// <param name="validation">An instance of <see cref="IValidation"/>.</param>
         public QuestionManager(IValidation validation)
             : base(validation)
-        {
-        }
+        { }
 
+        /// <summary>
+        /// Retrieves the available questions and optionally filtering them using the employee identifier.
+        /// </summary>
+        /// <param name="employeeId">The optional employee identifier, only questions about which the employee has 
+        /// knowledge are returned (keywords between user and question match).</param>
+        /// <returns>Returns the questions that match the filters.</returns>
         public IList<Question> GetQuestions(int employeeId)
         {
             Validation.IdCheck(employeeId);
@@ -61,6 +67,11 @@ namespace nl.fhict.IntelliCloud.Business.Manager
             return questions;
         }
 
+        /// <summary>
+        /// Retrieve the question with the given identifier.
+        /// </summary>
+        /// <param name="id">The identifier of the question.</param>
+        /// <returns>Returns the question with the given identifier.</returns>
         public Question GetQuestion(int id)
         {
             Validation.IdCheck(id);
@@ -88,6 +99,18 @@ namespace nl.fhict.IntelliCloud.Business.Manager
             return question;
         }
 
+        /// <summary>
+        /// Creates a new question.
+        /// </summary>
+        /// <param name="source">The source from which the question was send, e.g. "Mail", "Facebook" or "Twitter".
+        /// </param>
+        /// <param name="reference">The identifier for the source, e.g. the username or email address.</param>
+        /// <param name="question">The question that was answered.</param>
+        /// <param name="title">The title of the question. The title contains a short summary of the question.</param>
+        /// <param name="postId">The identifier of the post this question originates from, for example the Facebook post
+        /// identifier.</param>
+        /// <param name="isPrivate">When <c>true</c> the question is private, otherwise the question is public. Private 
+        /// questions are only available to employees and will never be exposed to customers.</param>
         public void CreateQuestion(
             string source, string reference, string question, string title, string postId = null, bool isPrivate = false)
         {
@@ -165,6 +188,11 @@ namespace nl.fhict.IntelliCloud.Business.Manager
             }
         }
 
+        /// <summary>
+        /// Updates the question with the given identifier.
+        /// </summary>
+        /// <param name="id">The identifier of the question that is updated.</param>
+        /// <param name="employeeId">The identifier of the employee that is going to answer the question.</param>
         public void UpdateQuestion(int id, int employeeId)
         {
             Validation.IdCheck(id);
@@ -184,6 +212,11 @@ namespace nl.fhict.IntelliCloud.Business.Manager
 
         }
 
+        /// <summary>
+        /// Retrieve the question for this feedback token.
+        /// </summary>
+        /// <param name="feedbackToken">The feedback token of the question.</param>
+        /// <returns>Returns the question with the given feedbacktoken.</returns>
         public Question GetQuestionByFeedbackToken(string feedbackToken)
         {
             Validation.StringCheck(feedbackToken);
@@ -237,7 +270,7 @@ namespace nl.fhict.IntelliCloud.Business.Manager
         /// </summary>
         /// <param name="question">A given question for which all words are to be resolved to their type.</param>
         /// <returns>A list containing the resolved words that were contained in the question</returns>
-       public IList<Word> ResolveWords(String question)
+        internal IList<Word> ResolveWords(String question)
         {
             IWordService service = new WordServiceClient();
             return ConvertQuestion(question)
@@ -251,7 +284,7 @@ namespace nl.fhict.IntelliCloud.Business.Manager
         /// <param name="question">A question from which one needs the keywords.</param>
         /// <param name="language">The language one needs the found keywords of. </param>
         /// <returns>Returns a List containing the most likely keywords from a given question.</returns>
-        public IList<Word> FindMostLikelyKeywords(IList<Word> words, Language language)
+        internal IList<Word> FindMostLikelyKeywords(IList<Word> words, Language language)
         {
             return words
                 .Where(x =>
@@ -265,7 +298,7 @@ namespace nl.fhict.IntelliCloud.Business.Manager
         /// </summary>
         /// <param name="words">Set of words from which one needs to determine the language.</param>
         /// <returns>Returns the language that is the most common within the given set.</returns>
-        public Language GetLanguage(IList<Word> words)
+        internal Language GetLanguage(IList<Word> words)
         {
             var distinctLanguages = words
                 .GroupBy(x => x.Language)
@@ -273,8 +306,6 @@ namespace nl.fhict.IntelliCloud.Business.Manager
 
             return distinctLanguages.Single(x => x.Count == distinctLanguages.Max(y => y.Count)).Language;
         }
-
-
         #endregion
     }
 }
