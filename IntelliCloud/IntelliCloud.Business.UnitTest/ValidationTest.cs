@@ -103,11 +103,49 @@ namespace nl.fhict.IntelliCloud.Business.UnitTest
             }
             catch (Exception e)
             {
-                Assert.AreEqual("Id can not be converted to an integer.", e.Message);
+                Assert.AreEqual("Id has to be positive.", e.Message);
             }
         }
 
         #endregion IdCheck
+
+        #region TweetLengthCheck
+
+        /// <summary>
+        /// Test if the correct exception is thrown when passing a tweet that's too long
+        /// </summary>
+        [TestMethod]
+        public void TweetLengthCheck_Length()
+        {
+            try
+            {
+                validation.TweetLengthCheck("Hello this answer is too long so it can't be send to twitter test test test test test test test test test test test test test test test test!!");
+                Assert.Fail();
+            }
+            catch (Exception e)
+            {
+                Assert.AreEqual("Tweet can't be longer then 140 characters", e.Message);
+            }
+        }
+
+        /// <summary>
+        /// Test if the correct exception is thrown when passing a tweet empty
+        /// </summary>
+        [TestMethod]
+        public void TweetLengthCheck_Empty()
+        {
+            try
+            {
+                validation.TweetLengthCheck("");
+                Assert.Fail();
+            }
+            catch (Exception e)
+            {
+                Assert.AreEqual("Tweet is empty", e.Message);
+            }
+        }
+
+        #endregion TweetLengthCheck
 
         #endregion Tests
 

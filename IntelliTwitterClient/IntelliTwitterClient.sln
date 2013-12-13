@@ -1,0 +1,32 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IntelliTwitterClient.Service", "IntelliTwitterClient\IntelliTwitterClient.Service.csproj", "{AEE99F3C-98F0-4F69-8CB0-3B86EC384AA9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IntelliTwitterClient.Test", "IntelliTwitterClient.Test\IntelliTwitterClient.Test.csproj", "{C7DE1C09-A977-4234-A5FB-849531DCAFEE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IntelliTwitterClient.Business", "IntelliTwitterClient.Business\IntelliTwitterClient.Business.csproj", "{665ABC56-BBE0-4551-9590-669D28D7F984}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{AEE99F3C-98F0-4F69-8CB0-3B86EC384AA9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AEE99F3C-98F0-4F69-8CB0-3B86EC384AA9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AEE99F3C-98F0-4F69-8CB0-3B86EC384AA9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AEE99F3C-98F0-4F69-8CB0-3B86EC384AA9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C7DE1C09-A977-4234-A5FB-849531DCAFEE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C7DE1C09-A977-4234-A5FB-849531DCAFEE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C7DE1C09-A977-4234-A5FB-849531DCAFEE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C7DE1C09-A977-4234-A5FB-849531DCAFEE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{665ABC56-BBE0-4551-9590-669D28D7F984}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{665ABC56-BBE0-4551-9590-669D28D7F984}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{665ABC56-BBE0-4551-9590-669D28D7F984}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{665ABC56-BBE0-4551-9590-669D28D7F984}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
