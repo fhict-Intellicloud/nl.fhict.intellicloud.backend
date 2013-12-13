@@ -1,9 +1,10 @@
-﻿using System;
-using System.Linq;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using nl.fhict.IntelliCloud.Common.DataTransfer;
 using nl.fhict.IntelliCloud.Data.Context;
 using nl.fhict.IntelliCloud.Data.Model;
+using System;
+using System.Linq;
+using System.Data.Entity;
 
 namespace nl.fhict.IntelliCloud.Service.IntegrationTest
 {
@@ -20,6 +21,10 @@ namespace nl.fhict.IntelliCloud.Service.IntegrationTest
         /// </summary>
         private IReviewService service;
 
+        private UserEntity employee;
+        private AnswerEntity answer;
+        private ReviewEntity review;
+
         #endregion Fields
 
         #region Methods
@@ -32,7 +37,52 @@ namespace nl.fhict.IntelliCloud.Service.IntegrationTest
         public void Initialize()
         {
             this.service = new ReviewService();
-			//TODO: add review, answer and employee in database for methods being tested here
+			this.initializeTestData();
+        }
+
+        /// <summary>
+        /// This method adds a new question to the database and saves this in a variable
+        /// </summary>
+        private void initializeTestData()
+        {
+            using (IntelliCloudContext ctx = new IntelliCloudContext())
+            {
+                UserEntity newEmployee = new UserEntity();
+                newEmployee.CreationTime = DateTime.UtcNow;
+                newEmployee.FirstName = "employee";
+                newEmployee.Type = Common.DataTransfer.UserType.Employee;
+
+                ctx.Users.Add(newEmployee);
+                ctx.SaveChanges();
+
+                this.employee = newEmployee;
+
+                AnswerEntity newAnswer = new AnswerEntity();
+                newAnswer.CreationTime = DateTime.UtcNow;
+                newAnswer.Content = "Integration test for answer";
+                newAnswer.AnswerState = AnswerState.UnderReview;
+                newAnswer.IsPrivate = false;
+                newAnswer.LanguageDefinition = new LanguageDefinitionEntity() {Name = "Dutch", ResourceName = "NL"};
+                newAnswer.User = newEmployee;
+
+                ctx.Answers.Add(newAnswer);
+                ctx.SaveChanges();
+
+                this.answer = newAnswer;
+
+                ReviewEntity newReview = new ReviewEntity();
+                newReview.CreationTime = DateTime.UtcNow;
+                newReview.Content = "Integration test for review";
+                newReview.ReviewState = ReviewState.Open;
+                newReview.User = newEmployee;
+                newReview.Answer = newAnswer;
+
+                ctx.Reviews.Add(newReview);
+                ctx.SaveChanges();
+
+                this.review = newReview;
+
+            }
         }
 
         /// <summary>
@@ -42,7 +92,14 @@ namespace nl.fhict.IntelliCloud.Service.IntegrationTest
         [TestCleanup]
         public void Cleanup()
         {
-            //TODO: Add cleanup code or remove method.
+            using (IntelliCloudContext ctx = new IntelliCloudContext())
+            {
+                ctx.Reviews.RemoveRange(ctx.Reviews.ToList());
+                ctx.Answers.RemoveRange(ctx.Answers.ToList());
+                ctx.Users.RemoveRange(ctx.Users.ToList());
+
+                ctx.SaveChanges();
+            }
         }
 
         #region Tests
@@ -56,7 +113,7 @@ namespace nl.fhict.IntelliCloud.Service.IntegrationTest
         {
             try
             {
-                string reviewId = "1";
+                string reviewId = this.review.Id.ToString();
                 ReviewState reviewState = ReviewState.Open;;
 
                 service.UpdateReview(reviewId, reviewState);
@@ -64,11 +121,10 @@ namespace nl.fhict.IntelliCloud.Service.IntegrationTest
                 using (var context = new IntelliCloudContext())
                 {
                     int id = Convert.ToInt32(reviewId);
-                    ReviewEntity review = context.Reviews.FirstOrDefault(r => r.Id.Equals(id));
-                    if (review != null)
-                    {
-                        Assert.AreEqual(ReviewState.Open, review.ReviewState);
-                    }
+                    ReviewEntity updatedReview = context.Reviews.FirstOrDefault(r => r.Id.Equals(id));
+                    
+                    Assert.AreEqual(ReviewState.Open, updatedReview.ReviewState);
+                    Assert.AreEqual(review.Id, updatedReview.Id);
                 }
             }
             catch (Exception e) // TODO move exception test to different method, since this allows for skipping a part of the test...
@@ -86,15 +142,23 @@ namespace nl.fhict.IntelliCloud.Service.IntegrationTest
         {
             try
             {
-                int answerId = 2; // TODO use the created answer in InitializeTest
+                int answerId = answer.Id;
                 string review = "Hallo dit is mijn review";
-                int employeeId = 2; // TODO use the created employee in InitializeTest
+                int employeeId = employee.Id;
 
                 service.CreateReview(employeeId, answerId, review);
 
-                var reviews = service.GetReviews(answerId);
-                Assert.AreEqual("Hallo dit is mijn review", reviews.First().Content);
-                Assert.AreEqual(2, reviews.First().User.Id);
+                using (IntelliCloudContext ctx = new IntelliCloudContext())
+                {
+                    ReviewEntity newEntity = ctx.Reviews
+                    .Include(r => r.User)
+                    .Include(r => r.Answer).Single(r => r.Content == review && r.Answer.Id == answer.Id && r.User.Id == employee.Id);
+
+                    Assert.AreEqual("Hallo dit is mijn review", newEntity.Content);
+                    Assert.AreEqual(answer.Content, newEntity.Answer.Content);
+                    Assert.AreEqual(employee.FirstName, newEntity.User.FirstName);
+                    Assert.AreEqual(ReviewState.Open, newEntity.ReviewState);
+                }
             }
             catch (Exception e) // TODO move exception test to different method, since this allows for skipping a part of the test...
             {
@@ -111,11 +175,11 @@ namespace nl.fhict.IntelliCloud.Service.IntegrationTest
         {
             try
             {
-                int answerId = 2; // TODO use the created answer in InitializeTest
+                int answerId = answer.Id;
 
                 var reviews = service.GetReviews(answerId);
 
-                Assert.AreEqual(2, reviews.First().AnswerId);
+                Assert.AreEqual(true, reviews.Count > 0);
             }
             catch (Exception e) // TODO move exception test to different method, since this allows for skipping a part of the test...
             {
