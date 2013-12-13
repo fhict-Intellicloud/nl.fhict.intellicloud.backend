@@ -86,11 +86,8 @@ namespace nl.fhict.IntelliCloud.Business.Manager
                                              select a).Single();
 
                 answer = ConvertEntities.AnswerEntityToAnswer(answerentity);
-
             }
-
             return answer;
-
         }
 
         /// <summary>
