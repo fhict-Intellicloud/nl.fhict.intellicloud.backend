@@ -54,14 +54,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Authorization\AuthorizationHandler.cs" />
-    <Compile Include="Authorization\AuthorizationToken.cs" />
     <Compile Include="Authorization\AuthorizationOptional.cs" />
-    <Compile Include="Authorization\OpenIDUserInfo.cs" />
     <Compile Include="Authorization\AuthorizationRequired.cs" />
     <Compile Include="ConvertEntities.cs" />
     <Compile Include="IValidation.cs" />
     <Compile Include="Manager\BaseManager.cs" />
     <Compile Include="Manager\AnswerManager.cs" />
+    <Compile Include="Manager\UserManager.cs" />
     <Compile Include="Manager\FeedbackManager.cs" />
     <Compile Include="Manager\QuestionManager.cs" />
     <Compile Include="Manager\ReviewManager.cs" />

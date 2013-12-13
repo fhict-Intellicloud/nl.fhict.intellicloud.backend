@@ -83,37 +83,6 @@
       </SubType>
     </None>
     <None Include="Properties\DataSources\nl.fhict.IntelliCloud.Business.WordService.Word.datasource" />
-    <None Include="Service References\WordService\WordService.wsdl" />
-    <None Include="Service References\WordService\WordService.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\WordService\WordService1.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\WordService\WordService2.xsd">
-      <SubType>Designer</SubType>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <WCFMetadata Include="Service References\" />
-  </ItemGroup>
-  <ItemGroup>
-    <WCFMetadataStorage Include="Service References\WordService\" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Service References\WordService\WordService.disco" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Service References\WordService\configuration91.svcinfo" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Service References\WordService\configuration.svcinfo" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Service References\WordService\Reference.svcmap">
-      <Generator>WCF Proxy Generator</Generator>
-      <LastGenOutput>Reference.cs</LastGenOutput>
-    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

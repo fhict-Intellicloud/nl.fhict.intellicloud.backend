@@ -15,6 +15,9 @@ namespace nl.fhict.IntelliCloud.Business.UnitTest
     {
         #region Fields
 
+        /// <summary>
+        /// Validation object with which its functionality is tested.
+        /// </summary>
         private Validation validation;
 
         #endregion Fields

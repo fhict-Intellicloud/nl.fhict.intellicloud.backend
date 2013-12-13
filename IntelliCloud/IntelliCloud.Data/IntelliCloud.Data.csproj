@@ -40,6 +40,7 @@
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -63,6 +64,10 @@
     <Compile Include="Model\SourceDefinitionEntity.cs" />
     <Compile Include="Model\UserEntity.cs" />
     <Compile Include="Model\UserKeyEntity.cs" />
+    <Compile Include="OpenID\Context\IOpenIDContext.cs" />
+    <Compile Include="OpenID\Context\OpenIDContext.cs" />
+    <Compile Include="OpenID\Model\AuthorizationToken.cs" />
+    <Compile Include="OpenID\Model\OpenIDUserInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -74,6 +79,7 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
