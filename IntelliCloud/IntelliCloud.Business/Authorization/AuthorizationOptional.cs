@@ -14,19 +14,6 @@ namespace nl.fhict.IntelliCloud.Business.Authorization
     public class AuthorizationOptional : Attribute, IOperationBehavior, IParameterInspector
     {
         /// <summary>
-        /// The AuthorizationHandler used to parse the AuthorizationToken HTTP header value and retrieve user info from the Access Token issuer.
-        /// </summary>
-        private AuthorizationHandler authorizationHandler;
-
-        /// <summary>
-        /// Default constructor.
-        /// </summary>
-        public AuthorizationOptional()
-        {
-            this.authorizationHandler = new AuthorizationHandler();
-        }
-
-        /// <summary>
         /// Method that provides the ability to change run-time property values or insert custom extension objects such as error handlers, message or parameter interceptors, security extensions, and other custom extension objects.
         /// </summary>
         /// <param name="operationDescription">The operation being examined. Use for examination only. If the operation description is modified, the results are undefined.</param>
@@ -48,38 +35,19 @@ namespace nl.fhict.IntelliCloud.Business.Authorization
             IncomingWebRequestContext requestContext = WebOperationContext.Current.IncomingRequest;
             string authorizationToken = requestContext.Headers["AuthorizationToken"];
 
-            // Object of class OpenIDUserInfo that will contain an instance of class OpenIDUserInfo on success or null if no user info could be retrieved
-            OpenIDUserInfo userInfo = null;
-
-            // Object of class User that will contain an instance of class User on success or null if no user could be matched
-            User matchedUser = null;
-
             // Check if an authorization token has been supplied
             if (!String.IsNullOrWhiteSpace(authorizationToken))
             {
-                // Check if user info could be retrieved
-                if (this.authorizationHandler.TryRetrieveUserInfo(authorizationToken, out userInfo))
-                {
-                    // Try to match a user and set it in the matchedUser reference
-                    if (!this.authorizationHandler.TryMatchUser(userInfo, out matchedUser))
-                    {
-                        // Try to create a new user based on the retrieved user info
-                        if (!this.authorizationHandler.TryCreateNewUser(userInfo, out matchedUser))
-                        {
-                            // Failed to create a new user - throw a 500 Internal Server Error error
-                            throw new WebFaultException(HttpStatusCode.InternalServerError);
-                        }
-                    }
-                }
-                else
-                {
-                    // An invalid authorization token has been supplied - throw a 401 Unauthorized error
-                    throw new WebFaultException(HttpStatusCode.Unauthorized);
-                }
-            }
+                // Start the authorization process
+                AuthorizationHandler authorizationHandler = new AuthorizationHandler();
+                authorizationHandler.Authorize(new UserType[0]);
 
-            // Store the matched User object (which may also be a newly created User object if no existing user could be matched)
-            AuthorizationHandler.AuthorizedUser = matchedUser;
+                // Check if the user is authenticated and authorized to execute the method
+                if (!authorizationHandler.IsAuthenticated)
+                    throw new WebFaultException(HttpStatusCode.Unauthorized);
+                else if (!authorizationHandler.IsAuthorized)
+                    throw new WebFaultException(HttpStatusCode.Forbidden);
+            }
 
             // We do not intend to use a correlation state, so we just return null
             return null;
