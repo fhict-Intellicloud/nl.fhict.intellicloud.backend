@@ -13,16 +13,43 @@ using System.Threading.Tasks;
 
 namespace IntelliTwitterClient.Business.Managers
 {
+    /// <summary>
+    /// A class that handles all the incoming tweets
+    /// </summary>
     public class TwitterManager
     {
-        private EventLog serviceLog;
+        //A log to write messages to, e.g. exceptions
+        private EventLog serviceLog { get; set; }
 
+        //The id of the last tweet handled by the manager
         private string lastPostId;
-
-        private const string sourceName = "Twitter";
 
         //The accountname of the twitteraccount you want to stream
         private readonly string myScreenName;
+
+        /// <summary>
+        /// Creates a new PinAutharizedUser
+        /// Autorization needed since twitter api 1.1
+        /// Account settings can be found in drive - Configuratie settings
+        /// </summary>
+        private PinAuthorizer PinAutharizedUser
+        {
+            get
+            {
+                var auth = new PinAuthorizer
+                {
+                    Credentials = new InMemoryCredentials
+                    {
+                        ConsumerKey = ConfigurationManager.AppSettings["ConsumerKey"],
+                        ConsumerSecret = ConfigurationManager.AppSettings["ConsumerSecret"],
+                        OAuthToken = ConfigurationManager.AppSettings["OAuthToken"],
+                        AccessToken = ConfigurationManager.AppSettings["AccessToken"]
+                    }
+                };
+
+                return auth;
+            }
+        }
 
         public TwitterManager(EventLog serviceLog)
         {
@@ -127,7 +154,7 @@ namespace IntelliTwitterClient.Business.Managers
                         }
                         catch (Exception e)
                         {
-                            serviceLog.WriteEntry("Sending data to backend faild: " + e.Message);
+                            serviceLog.WriteEntry("An exepction occurred during json serialization: " + e.Message);
                         }
                     }
                 })
@@ -135,29 +162,7 @@ namespace IntelliTwitterClient.Business.Managers
             }
         }
 
-        /// <summary>
-        /// Creates a new PinAutharizedUser
-        /// Autorization needed since twitter api 1.1
-        /// Account settings can be found in drive - Configuratie settings
-        /// </summary>
-        private PinAuthorizer PinAutharizedUser
-        {
-            get
-            {
-                var auth = new PinAuthorizer
-                {
-                    Credentials = new InMemoryCredentials
-                    {
-                        ConsumerKey = ConfigurationManager.AppSettings["ConsumerKey"],
-                        ConsumerSecret = ConfigurationManager.AppSettings["ConsumerSecret"],
-                        OAuthToken = ConfigurationManager.AppSettings["OAuthToken"],
-                        AccessToken = ConfigurationManager.AppSettings["AccessToken"]
-                    }
-                };
-
-                return auth;
-            }
-        }
+        
 
         /// <summary>
         /// Creates a new question from an incoming tweet and sends it to the backend
@@ -180,7 +185,7 @@ namespace IntelliTwitterClient.Business.Managers
             using (var streamWriter = new StreamWriter(httpWebRequest.GetRequestStream()))
             {
                 //Serialize the data to json
-                TwitterQuestionObject jsonObject = new TwitterQuestionObject(sourceName, reference, question, question);
+                TwitterQuestionObject jsonObject = new TwitterQuestionObject(reference, question, question);
                 String json = JsonConvert.SerializeObject(jsonObject);
 
                 streamWriter.Write(json);

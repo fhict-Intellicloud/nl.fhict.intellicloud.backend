@@ -15,10 +15,12 @@ using IntelliTwitterClient.Business.Managers;
 
 namespace IntelliTwitterClient
 {
+    /// <summary>
+    /// A windows service to handle incoming tweets
+    /// </summary>
     public partial class IntelliTwitterService : ServiceBase
     {
-        //public ulong LastTweetId { get; set; }
-
+        //The manager holds all the business code for the service
         private readonly TwitterManager manager;
 
         public IntelliTwitterService()
@@ -65,6 +67,7 @@ namespace IntelliTwitterClient
         /// </summary>
         protected override void OnStop()
         {
+            //Save the last tweet id to app.config
             manager.SaveLastTweetId();
             serviceLog.WriteEntry("IntelliTwitterService stopped");
             this.Dispose();

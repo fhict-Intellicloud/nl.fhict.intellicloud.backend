@@ -8,9 +8,45 @@ using System.Text;
 
 namespace nl.fhict.IntelliCloud.Business.Plugins
 {
+    /// <summary>
+    /// A plugin to handle outgoing tweets
+    /// </summary>
     internal class TwitterSendAnswerPlugin : ISendAnswerPlugin
     {
         IValidation validation;
+
+        /// <summary>
+        /// Creates a new PinAutharizedUser
+        /// Autorization needed since twitter api 1.1
+        /// Account settings can be found in drive - Configuratie settings
+        /// </summary>
+        private PinAuthorizer _pinAutharizedUser;
+        private PinAuthorizer PinAutharizedUser
+        {
+            get
+            {
+                if (_pinAutharizedUser == null)
+                {
+                    var auth = new PinAuthorizer
+                    {
+                        Credentials = new InMemoryCredentials
+                        {
+                            ConsumerKey = "5SFAC0n3LhszMHKvpDkvw",
+                            ConsumerSecret = "TkP98l0xDl4FEucVq6WYfEAHyCgJi0b6IwSrOGfhCs",
+                            OAuthToken = "2221459926-pUrExE5ls8d0m4D9rIkvSmL7a590XEzKElBOtrr",
+                            AccessToken = "2eaC8UZsCdh9E5Pi0JebSZa04VwFFnahkuMf3NVYT41yd"
+                        }
+                    };
+
+                    _pinAutharizedUser = auth;
+                    return _pinAutharizedUser;
+                }
+                else
+                {
+                    return _pinAutharizedUser;
+                }
+            }
+        }
 
         public TwitterSendAnswerPlugin()
         {
@@ -36,41 +72,12 @@ namespace nl.fhict.IntelliCloud.Business.Plugins
             {
                 var tweet = twitterCtx.UpdateStatus(status, postId);                
             }
-        }
+        }        
 
         /// <summary>
-        /// Creates a new PinAutharizedUser
-        /// Autorization needed since twitter api 1.1
-        /// Account settings can be found in drive - Configuratie settings
+        /// Sends a confirmation the the asker of the question
         /// </summary>
-        private PinAuthorizer _pinAutharizedUser;
-        private PinAuthorizer PinAutharizedUser
-        {
-            get
-            {
-                if (_pinAutharizedUser == null)
-                {
-                    var auth = new PinAuthorizer
-                    {
-                        Credentials = new InMemoryCredentials
-                        {
-                            ConsumerKey = "5SFAC0n3LhszMHKvpDkvw",
-                            ConsumerSecret = "TkP98l0xDl4FEucVq6WYfEAHyCgJi0b6IwSrOGfhCs",
-                            OAuthToken = "2221459926-pUrExE5ls8d0m4D9rIkvSmL7a590XEzKElBOtrr",
-                            AccessToken = "2eaC8UZsCdh9E5Pi0JebSZa04VwFFnahkuMf3NVYT41yd"
-                        }
-                    };
-
-                    _pinAutharizedUser =  auth;
-                    return _pinAutharizedUser;
-                }
-                else
-                {
-                    return _pinAutharizedUser;
-                }
-            }
-        }
-
+        /// <param name="question">the question asked by a user</param>
         public void SendQuestionRecieved(Question question)
         {
             throw new NotImplementedException();

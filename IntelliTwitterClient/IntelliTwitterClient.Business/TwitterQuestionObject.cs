@@ -6,58 +6,36 @@ using System.Threading.Tasks;
 
 namespace IntelliTwitterClient.Business
 {
+    /// <summary>
+    /// Object representing an outgoing question
+    /// </summary>
     class TwitterQuestionObject
     {
-        String _source;
-        String _reference;
-        String _question;
-        String _title;
-
         /// <summary>
-        /// Create new QuestionMailObject
+        /// Create new TwitterQuestionObject
         /// </summary>
-        /// <param name="source">The source of the question, in this case "Mail"</param>
+        /// <param name="source">The source of the question, in this case "Twitter"</param>
         /// <param name="reference">The e-mailaddress of the sender</param>
         /// <param name="question">The content of the e-mail</param>
         /// <param name="title">The subject of the e-mail</param>
-        public TwitterQuestionObject(String source, String reference, String question, String title)
+        public TwitterQuestionObject(String reference, String question, String title)
         {
-            this._source = source;
-            this._reference = reference;
-            this._question = question;
-            this._title = title;
+            this.source = "Twitter";
+            this.reference = reference;
+            this.question = question;
+            this.title = title;
         }
 
-        public String source
-        {
-            get
-            {
-                return _source;
-            }
-        }
+        //The source of the question in this case twitter
+        public String source { get; set; }
 
-        public String reference
-        {
-            get
-            {
-                return _reference;
-            }
-        }
+        //The screename of the asker, e.g. @IntelliCloudQ
+        public String reference { get; set; }
 
-        public String question
-        {
-            get
-            {
-                return _question;
-            }
-        }
+        //The question asked by the user
+        public String question { get; set; }
 
-        public String title
-        {
-            get
-            {
-                return _title;
-            }
-        }
+        //The title of the question asked
+        public String title { get; set; }
     }
 }

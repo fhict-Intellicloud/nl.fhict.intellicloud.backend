@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace IntelliTwitterClient.Business
 {
+    /// <summary>
+    /// A class to validate parameters
+    /// </summary>
     public class Validation
     {
         /// <summary>
