@@ -21,13 +21,13 @@ namespace IntelliCloudFacebookService
         /// <param name="reference">The e-mailaddress of the sender</param>
         /// <param name="question">The content of the e-mail</param>
         /// <param name="title">The subject of the e-mail</param>
-        public JsonFacebookQuestion(String source, String reference, String question, String title)
+        public JsonFacebookQuestion(String source, String reference, String question, String title, String postid)
         {
             this._source = source;
             this._reference = reference;
             this._question = question;
             this._title = title;
-            //this._postid = postid;
+            this._postid = postid;
         }
 
         public String source 
@@ -62,12 +62,12 @@ namespace IntelliCloudFacebookService
             }
         }
 
-        //public String postId
-        //{
-        //    get
-        //    {
-        //        return _postid;
-        //    }
-        //}
+        public String postId
+        {
+            get
+            {
+                return _postid;
+            }
+        }
     }
 }

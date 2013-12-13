@@ -145,7 +145,7 @@ namespace IntelliCloudFacebookService
                 String postId = Convert.ToString(post.id);
 
                 //Serialize the data to json
-                JsonFacebookQuestion jsonObject = new JsonFacebookQuestion("Facebook", postFromId, postMessage, "title");
+                JsonFacebookQuestion jsonObject = new JsonFacebookQuestion("Facebook", postFromId, postMessage, "title", postId);
                 String json = JsonConvert.SerializeObject(jsonObject);
 
                 //Write the json data

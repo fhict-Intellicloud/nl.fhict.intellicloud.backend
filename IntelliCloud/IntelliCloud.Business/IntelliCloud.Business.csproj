@@ -36,6 +36,9 @@
     <Reference Include="EntityFramework.SqlServer">
       <HintPath>..\packages\EntityFramework.6.0.1\lib\net40\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
+    <Reference Include="Facebook">
+      <HintPath>..\packages\Facebook.6.4.2\lib\net40-client\Facebook.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.configuration" />
@@ -62,8 +65,8 @@
     <Compile Include="Manager\FeedbackManager.cs" />
     <Compile Include="Manager\QuestionManager.cs" />
     <Compile Include="Manager\ReviewManager.cs" />
+    <Compile Include="Plugins\FacebookSendAnswerPlugin.cs" />
     <Compile Include="Plugins\Loader\ISendAnswerPlugin.cs" />
-    <Compile Include="Plugins\Loader\MailSendAnswerPlugin.cs" />
     <Compile Include="Plugins\Loader\SendAnswerFactory.cs" />
     <Compile Include="Plugins\MailSendAnswerPlugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
