@@ -9,16 +9,28 @@ using nl.fhict.IntelliCloud.Data.Model;
 
 namespace nl.fhict.IntelliCloud.Business.Manager
 {
+    /// <summary>
+    /// A class providing functionality related to answer reviewing.
+    /// </summary>
     public class ReviewManager : BaseManager
     {
+        /// <summary>
+        /// Constructor of the reviewmanager class used when testing.
+        /// </summary>
+        /// <param name="validation">An instance of the validation object <see cref="Validation.cs"/></param>
         public ReviewManager(IValidation validation)
             : base(validation)
         {
         }
 
         public ReviewManager()
-            : base() {}
+            : base() { }
 
+        /// <summary>
+        /// Updates the review with the given identifier.
+        /// </summary>
+        /// <param name="reviewId">The identifier of the review that is updated.</param>
+        /// <param name="reviewState">The new state of the review.</param>
         public void UpdateReview(string reviewId, ReviewState reviewState)
         {
             Validation.IdCheck(reviewId);
@@ -40,6 +52,12 @@ namespace nl.fhict.IntelliCloud.Business.Manager
             }
         }
 
+        /// <summary>
+        /// Creates a review for an answer.
+        /// </summary>
+        /// <param name="employeeId">The identifier of the employee who wrote the review.</param>
+        /// <param name="answerId">The identifier of the answer this review is written for.</param>
+        /// <param name="review">The review that is given.</param>
         public void CreateReview(int employeeId, int answerId, string review)
         {
             Validation.IdCheck(answerId);
@@ -78,6 +96,11 @@ namespace nl.fhict.IntelliCloud.Business.Manager
             }
         }
 
+        /// <summary>
+        /// Retrieves the reviews for the given answer.
+        /// </summary>
+        /// <param name="answerId">The identifier of the answer, only reviews for this answer are returned.</param>
+        /// <returns>Returns the reviews for the given answer.</returns>
         public List<Review> GetReviews(int answerId)
         {
             Validation.IdCheck(answerId);
