@@ -42,5 +42,11 @@ namespace nl.fhict.IntelliCloud.Business
         /// </summary>
         /// <param name="SourceDefinitionName">SourceDefinitionName that has to be checked.</param>
         void SourceDefinitionExistsCheck(string SourceDefinitionName);
+
+        /// <summary>
+        /// Checks if a tweet is less or equal to 140 characters
+        /// </summary>
+        /// <param name="tweet">The answer to be send</param>
+        void TweetLengthCheck(string tweet);
     }
 }

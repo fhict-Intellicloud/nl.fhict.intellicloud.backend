@@ -55,6 +55,7 @@
     <Compile Include="Manager\QuestionManagerTest.cs" />
     <Compile Include="Manager\ReviewManagerTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TwitterSendAnswerPluginTest.cs" />
     <Compile Include="ValidationTest.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -72,6 +73,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
     <None Include="packages.config">
       <SubType>
       </SubType>
