@@ -57,7 +57,7 @@ namespace IntelliTwitterClient
         protected override void OnStart(string[] args)
         {
             serviceLog.WriteEntry("IntelliTwitterService started");
-            StartStreaming();
+            manager.StartStreaming();
         }
 
         /// <summary>
@@ -65,30 +65,10 @@ namespace IntelliTwitterClient
         /// </summary>
         protected override void OnStop()
         {
+            manager.SaveLastTweetId();
             serviceLog.WriteEntry("IntelliTwitterService stopped");
             this.Dispose();
         }
-
-        /// <summary>
-        /// Starts a twitter api stream it gets all the tweets that are send to the IntelliCloudQ account
-        /// It uses the PinAuthorized user to get acces to the stream
-        /// </summary>
-        private void StartStreaming()
-        {
-            manager.StartStreaming();
-        }
-
-        /// <summary>
-        /// Sends a reply to tweet
-        /// </summary>
-        /// <param name="answer">The answer given by the expert</param>
-        /// <param name="reference">The username of the user you want to reply to</param>
-        /// <param name="postId">The id of the tweet you want to reply to</param>
-        public void SendReplyTweet(string answer, string reference, string postId)
-        {
-            manager.SendReplyTweet(answer, reference, postId);
-        }
-
-        
+      
     }
 }

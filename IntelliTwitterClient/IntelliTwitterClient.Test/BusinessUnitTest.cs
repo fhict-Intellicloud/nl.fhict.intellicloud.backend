@@ -53,54 +53,7 @@ namespace IntelliTwitterClient.Test
                 Assert.Fail();
             }
             catch (ArgumentException) { }
-        }
-        
-        [TestMethod]
-        public void SendReplyTweetTest()
-        {
-            string reference = "";
-            string answer = "No";
-            string postId = "28289289298272762";
 
-            //Reference can't be null or empty
-            try
-            {
-                twitterManager.SendReplyTweet(answer, reference, postId);
-                Assert.Fail();
-            }
-            catch (ArgumentException) { }
-
-            reference = "@IntelliCloudQ";
-            answer = "";
-
-            //Answer can't be null or empty
-            try
-            {
-                twitterManager.SendReplyTweet(answer, reference, postId);
-                Assert.Fail();
-            }
-            catch (ArgumentException) { }
-
-            answer = "Hello this answer is to long so it can't be send to twitter test test test test test test test test test test test test test test test test ";
-
-            //Answer can't be more then 140 characters long
-            try
-            {
-                twitterManager.SendReplyTweet(answer, reference, postId);
-                Assert.Fail();
-            }
-            catch (ArgumentException) { }
-
-            answer = "No";
-            postId = "";
-
-            //PostId can't be null or empty
-            try
-            {
-                twitterManager.SendReplyTweet(answer, reference, postId);
-                Assert.Fail();
-            }
-            catch (ArgumentException) { }
         }
     }
 }

@@ -17,26 +17,91 @@ namespace IntelliTwitterClient.Business.Managers
     {
         private EventLog serviceLog;
 
+        private string lastPostId;
+
+        private const string sourceName = "Twitter";
+
+        //The accountname of the twitteraccount you want to stream
+        private readonly string myScreenName;
+
         public TwitterManager(EventLog serviceLog)
         {
             this.serviceLog = serviceLog;
+            this.myScreenName = ConfigurationManager.AppSettings["ScreenName"];
         }
 
-        public void StartStreaming()
+        /// <summary>
+        /// Gets all the tweets since the last tweet that entered the system
+        /// This method is used to put tweets in the system that were send when the service wasn't running
+        /// </summary>
+        /// <param name="postId">Id of the last tweet from the stream</param>
+        public void GetTweetSinceId(string postId)
         {
+            serviceLog.WriteEntry("GetTweetSinceId SinceID: " + postId);
+            ulong sinceId;
+            if (ulong.TryParse(postId, out sinceId))
+            {
+                using (TwitterContext twitterCtx = new TwitterContext(PinAutharizedUser))
+                {
+                    var userStatusResponse =
+                        (from tweet in twitterCtx.Status
+                         where tweet.Type == StatusType.Mentions &&
+                               tweet.ScreenName == myScreenName &&
+                               tweet.SinceID == sinceId
+                         select tweet)
+                        .ToList();
+
+                    foreach (var tweet in userStatusResponse)
+                    {
+                        if (!string.IsNullOrWhiteSpace(tweet.Text))
+                        {
+                            CreateQuestion(tweet.User.Identifier.ScreenName, tweet.Text, tweet.ID);
+                        }
+                    }
+                }
+            }
+            else
+            {
+                serviceLog.WriteEntry("Not a valid postId" + sinceId);
+            }
+        }
+
+        /// <summary>
+        /// Saves the id of the last tweet in the app.config file to use when the service has to restart
+        /// </summary>
+        public void SaveLastTweetId()
+        {
+            System.Configuration.Configuration config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+            config.AppSettings.Settings.Remove("LastPostId");
+            config.AppSettings.Settings.Add("LastPostId", lastPostId);
+
+            // Force a reload of a changed section.
+            ConfigurationManager.RefreshSection("appSettings");
+
+            config.Save(ConfigurationSaveMode.Modified);
+        }
+
+        /// <summary>
+        /// Starts a twitter api stream it gets all the tweets that are send to the IntelliCloudQ account
+        /// It uses the PinAuthorized user to get acces to the stream
+        /// </summary>
+        public void StartStreaming()
+        {            
+            GetTweetSinceId(ConfigurationManager.AppSettings["LastPostId"]);
+
             //Creates a new TwitterContext with the authorized user 
             using (TwitterContext twitterCtx = new TwitterContext(PinAutharizedUser))
             {
                 //Starts a stream which keeps track of the IntelliCloudQ account
                 (from strm in twitterCtx.Streaming
                  where strm.Type == StreamingType.Filter &&
-                       strm.Track == "IntelliCloudQ"
+                       strm.Track == myScreenName
                  select strm)
                 .StreamingCallback(strm =>
                 {
                     if (strm.Status != TwitterErrorStatus.Success)
                     {
-                        //If the stream gives an error status in it's callback we write backend answer in the service log
+                        //If the stream gives an error status in it's callback we write the backend answer in the service log
                         //And we return cause the Content doesn't have to go to the backend
                         serviceLog.WriteEntry(strm.Content);
                         return;
@@ -45,16 +110,24 @@ namespace IntelliTwitterClient.Business.Managers
                     //If the content contains a Question we pass the question the the backend
                     if (!string.IsNullOrWhiteSpace(strm.Content))
                     {
-                        var json = JsonMapper.ToObject(strm.Content);
-                        var jsonDict = json as IDictionary<string, JsonData>;
-
-                        if (jsonDict.ContainsKey("user") && jsonDict.ContainsKey("text") && jsonDict.ContainsKey("id"))
+                        try
                         {
-                            var scrName = "@" + json["user"]["screen_name"].ToString();
-                            var question = json["text"].ToString();
-                            var postId = json["id"].ToString();
+                            var json = JsonMapper.ToObject(strm.Content);
+                            var jsonDict = json as IDictionary<string, JsonData>;
 
-                            CreateQuestion(scrName, question, postId);
+                            if (jsonDict.ContainsKey("user") && jsonDict.ContainsKey("text") && jsonDict.ContainsKey("id"))
+                            {
+                                var scrName = "@" + json["user"]["screen_name"].ToString();
+                                var question = json["text"].ToString();
+                                var postId = json["id"].ToString();
+
+                                lastPostId = postId;
+                                CreateQuestion(scrName, question, postId);
+                            }
+                        }
+                        catch (Exception e)
+                        {
+                            serviceLog.WriteEntry("Sending data to backend faild: " + e.Message);
                         }
                     }
                 })
@@ -75,10 +148,10 @@ namespace IntelliTwitterClient.Business.Managers
                 {
                     Credentials = new InMemoryCredentials
                     {
-                        ConsumerKey = "5SFAC0n3LhszMHKvpDkvw",
-                        ConsumerSecret = "TkP98l0xDl4FEucVq6WYfEAHyCgJi0b6IwSrOGfhCs",
-                        OAuthToken = "2221459926-pUrExE5ls8d0m4D9rIkvSmL7a590XEzKElBOtrr",
-                        AccessToken = "2eaC8UZsCdh9E5Pi0JebSZa04VwFFnahkuMf3NVYT41yd"
+                        ConsumerKey = ConfigurationManager.AppSettings["ConsumerKey"],
+                        ConsumerSecret = ConfigurationManager.AppSettings["ConsumerSecret"],
+                        OAuthToken = ConfigurationManager.AppSettings["OAuthToken"],
+                        AccessToken = ConfigurationManager.AppSettings["AccessToken"]
                     }
                 };
 
@@ -96,7 +169,7 @@ namespace IntelliTwitterClient.Business.Managers
         {
             Validation.StringCheck(reference);
             Validation.StringCheck(postId);
-            Validation.TweetCheck(question);
+            Validation.StringCheck(question);
 
             //Create a new POST request with the correct webmethod
             var httpWebRequest = (HttpWebRequest)WebRequest.Create("http://81.204.121.229/IntelliCloudService/QuestionService.svc/questions");
@@ -107,7 +180,7 @@ namespace IntelliTwitterClient.Business.Managers
             using (var streamWriter = new StreamWriter(httpWebRequest.GetRequestStream()))
             {
                 //Serialize the data to json
-                TwitterQuestionObject jsonObject = new TwitterQuestionObject("Twitter", reference, question, question);
+                TwitterQuestionObject jsonObject = new TwitterQuestionObject(sourceName, reference, question, question);
                 String json = JsonConvert.SerializeObject(jsonObject);
 
                 streamWriter.Write(json);

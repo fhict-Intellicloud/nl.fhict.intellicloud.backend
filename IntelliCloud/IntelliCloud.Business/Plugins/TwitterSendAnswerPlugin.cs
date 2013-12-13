@@ -29,7 +29,8 @@ namespace nl.fhict.IntelliCloud.Business.Plugins
 
             var status = reference + " " + answer.Content;
 
-            validation.CheckTweetLength(status);
+            validation.StringCheck(postId);
+            validation.TweetLengthCheck(status);
 
             using (TwitterContext twitterCtx = new TwitterContext(PinAutharizedUser))
             {
@@ -60,13 +61,19 @@ namespace nl.fhict.IntelliCloud.Business.Plugins
                         }
                     };
 
-                    return auth;
+                    _pinAutharizedUser =  auth;
+                    return _pinAutharizedUser;
                 }
                 else
                 {
                     return _pinAutharizedUser;
                 }
             }
+        }
+
+        public void SendQuestionRecieved(Question question)
+        {
+            throw new NotImplementedException();
         }
     }
 }

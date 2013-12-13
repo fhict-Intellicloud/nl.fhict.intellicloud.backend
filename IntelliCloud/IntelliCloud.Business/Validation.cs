@@ -110,7 +110,7 @@ namespace nl.fhict.IntelliCloud.Business
         /// Checks if a tweet is less or equal to 140 characters
         /// </summary>
         /// <param name="tweet">The answer to be send</param>
-        public void CheckTweetLength(string tweet)
+        public void TweetLengthCheck(string tweet)
         {
             if (String.IsNullOrWhiteSpace(tweet))
                 throw new ArgumentException("Tweet is empty");
