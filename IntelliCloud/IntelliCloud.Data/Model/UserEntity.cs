@@ -62,5 +62,10 @@ namespace nl.fhict.IntelliCloud.Data.Model
         /// </summary>
         public ICollection<SourceEntity> Sources { get; set; }
 
+        /// <summary>
+        /// Gets or sets the URL to the avatar image of the user.
+        /// </summary>
+        [MaxLength(254)]
+        public string Avatar { get; set; }
     }
 }

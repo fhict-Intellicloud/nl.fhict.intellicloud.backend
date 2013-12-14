@@ -58,5 +58,11 @@ namespace nl.fhict.IntelliCloud.Common.DataTransfer
         /// </summary>
         [DataMember]
         public IList<Keyword> Keywords { get; set; }
+
+        /// <summary>
+        /// Gets or sets the URL to the avatar image of the user.
+        /// </summary>
+        [DataMember]
+        public string Avatar { get; set; }
     }
 }

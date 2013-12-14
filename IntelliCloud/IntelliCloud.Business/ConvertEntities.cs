@@ -28,6 +28,7 @@ namespace nl.fhict.IntelliCloud.Business
             user.Type = entity.Type;
             user.CreationTime = entity.CreationTime;
             user.Sources = SourceEntityListToSources(entity.Sources);
+            user.Avatar = entity.Avatar;
 
             return user;
         }
