@@ -161,6 +161,7 @@ namespace nl.fhict.IntelliCloud.Business.Manager
 
                 // Update the state of the feedback entry
                 feedback.FeedbackState = feedbackState;
+                feedback.LastChangedTime = DateTime.UtcNow;
 
                 // Save the changes to the context
                 context.SaveChanges();

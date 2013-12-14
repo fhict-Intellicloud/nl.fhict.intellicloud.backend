@@ -207,6 +207,8 @@ namespace nl.fhict.IntelliCloud.Business.Manager
                 questionEntity.Answerer = (from u in ctx.Users
                                            where u.Id == employeeId
                                            select u).Single();
+                questionEntity.LastChangedTime = DateTime.UtcNow;
+
                 ctx.SaveChanges();
             }
 

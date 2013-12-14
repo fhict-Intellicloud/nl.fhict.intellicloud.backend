@@ -50,6 +50,11 @@ namespace nl.fhict.IntelliCloud.Data.Model
         public DateTime CreationTime { get; set; }
 
         /// <summary>
+        /// Gets or sets the last changed date and time of the answer.
+        /// </summary>
+        public DateTime? LastChangedTime { get; set; }
+
+        /// <summary>
         /// Gets or sets a value indicating whether the answer is private. When a answer is private it can only be 
         /// viewed by users of type <see cref="UserType.Employee"/>.
         /// </summary>

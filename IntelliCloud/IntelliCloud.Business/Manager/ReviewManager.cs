@@ -43,6 +43,7 @@ namespace nl.fhict.IntelliCloud.Business.Manager
                 if (review != null)
                 {
                     review.ReviewState = reviewState;
+                    review.LastChangedTime = DateTime.UtcNow;
 
                     context.SaveChanges();
                 }

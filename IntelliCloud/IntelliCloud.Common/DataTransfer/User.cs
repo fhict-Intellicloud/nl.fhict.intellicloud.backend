@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.Serialization;
-using System.Web;
 
 namespace nl.fhict.IntelliCloud.Common.DataTransfer
 {
@@ -52,6 +50,12 @@ namespace nl.fhict.IntelliCloud.Common.DataTransfer
         /// </summary>
         [DataMember]
         public DateTime? CreationTime { get; set; }
+
+        /// <summary>
+        /// Gets or sets the last changed date and time of the user.
+        /// </summary>
+        [DataMember]
+        public DateTime? LastChangedTime { get; set; }
 
         /// <summary>
         /// Gets or sets the keywords that are linked to the user.

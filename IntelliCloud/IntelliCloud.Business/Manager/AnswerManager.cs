@@ -169,6 +169,7 @@ namespace nl.fhict.IntelliCloud.Business.Manager
 
                 answerEntity.AnswerState = answerState;
                 answerEntity.Content = answer;
+                answerEntity.LastChangedTime = DateTime.UtcNow;
 
                 ctx.SaveChanges();
 
