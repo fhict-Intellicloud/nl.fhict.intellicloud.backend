@@ -1,11 +1,11 @@
-﻿using nl.fhict.IntelliCloud.Common.CustomException;
-using nl.fhict.IntelliCloud.Common.DataTransfer;
-using nl.fhict.IntelliCloud.Data.Context;
-using nl.fhict.IntelliCloud.Data.Model;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
+using nl.fhict.IntelliCloud.Common.CustomException;
+using nl.fhict.IntelliCloud.Common.DataTransfer;
+using nl.fhict.IntelliCloud.Data.IntelliCloud.Context;
+using nl.fhict.IntelliCloud.Data.IntelliCloud.Model;
 
 namespace nl.fhict.IntelliCloud.Business.Manager
 {
@@ -161,6 +161,7 @@ namespace nl.fhict.IntelliCloud.Business.Manager
 
                 // Update the state of the feedback entry
                 feedback.FeedbackState = feedbackState;
+                feedback.LastChangedTime = DateTime.UtcNow;
 
                 // Save the changes to the context
                 context.SaveChanges();

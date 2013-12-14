@@ -1,10 +1,9 @@
 ﻿using nl.fhict.IntelliCloud.Common.DataTransfer;
-using nl.fhict.IntelliCloud.Data.Context;
-using nl.fhict.IntelliCloud.Data.Model;
+using nl.fhict.IntelliCloud.Data.IntelliCloud.Context;
+using nl.fhict.IntelliCloud.Data.IntelliCloud.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Data.Entity;
 using nl.fhict.IntelliCloud.Common.CustomException;
 
@@ -169,6 +168,7 @@ namespace nl.fhict.IntelliCloud.Business.Manager
 
                 answerEntity.AnswerState = answerState;
                 answerEntity.Content = answer;
+                answerEntity.LastChangedTime = DateTime.UtcNow;
 
                 ctx.SaveChanges();
 

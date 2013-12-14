@@ -86,10 +86,11 @@ namespace nl.fhict.IntelliCloud.Business.UnitTest.Manager
             string firstName = null;
             string infix = null;
             string lastName = null;
+            string avatar = null;
 
             try
             {
-                manager.CreateUser(userType, sources, firstName, infix, lastName);
+                manager.CreateUser(userType, sources, firstName, infix, lastName, avatar);
             }
             catch (Exception)
             {
@@ -99,6 +100,7 @@ namespace nl.fhict.IntelliCloud.Business.UnitTest.Manager
             validation.Verify(v => v.StringCheck(firstName), Times.Never);
             validation.Verify(v => v.StringCheck(infix), Times.Never);
             validation.Verify(v => v.StringCheck(lastName), Times.Never);
+            validation.Verify(v => v.StringCheck(avatar), Times.Never);
         }
 
         /// <summary>
@@ -112,10 +114,11 @@ namespace nl.fhict.IntelliCloud.Business.UnitTest.Manager
             string firstName = "Lorem";
             string infix = "ipsum";
             string lastName = "Dolor";
+            string avatar = "picture";
 
             try
             {
-                manager.CreateUser(userType, sources, firstName, infix, lastName);
+                manager.CreateUser(userType, sources, firstName, infix, lastName, avatar);
             }
             catch (Exception)
             {
@@ -125,6 +128,7 @@ namespace nl.fhict.IntelliCloud.Business.UnitTest.Manager
             validation.Verify(v => v.StringCheck(firstName), Times.Once);
             validation.Verify(v => v.StringCheck(infix), Times.Once);
             validation.Verify(v => v.StringCheck(lastName), Times.Once);
+            validation.Verify(v => v.StringCheck(avatar), Times.Once);
         }
 
         #endregion Tests

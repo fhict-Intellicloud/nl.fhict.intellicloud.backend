@@ -6,9 +6,9 @@ using System.Data.Entity.ModelConfiguration.Conventions;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
-using nl.fhict.IntelliCloud.Data.Model;
+using nl.fhict.IntelliCloud.Data.IntelliCloud.Model;
 
-namespace nl.fhict.IntelliCloud.Data.Context
+namespace nl.fhict.IntelliCloud.Data.IntelliCloud.Context
 {
     /// <summary>
     /// A data context providing access to the IntelliCloud database.

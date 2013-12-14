@@ -1,13 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Runtime.Serialization;
-using System.Web;
 using nl.fhict.IntelliCloud.Common.DataTransfer;
 
-namespace nl.fhict.IntelliCloud.Data.Model
+namespace nl.fhict.IntelliCloud.Data.IntelliCloud.Model
 {
     /// <summary>
     /// A class representing a review that is made about a specific <see cref="Answer"/>.
@@ -48,5 +44,10 @@ namespace nl.fhict.IntelliCloud.Data.Model
         /// </summary>
         [Required]
         public DateTime CreationTime { get; set; }
+
+        /// <summary>
+        /// Gets or sets the last changed date and time of the review.
+        /// </summary>
+        public DateTime? LastChangedTime { get; set; }
     }
 }

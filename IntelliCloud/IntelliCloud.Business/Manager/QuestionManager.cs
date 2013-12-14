@@ -1,13 +1,13 @@
-﻿using nl.fhict.IntelliCloud.Common.CustomException;
-using nl.fhict.IntelliCloud.Common.DataTransfer;
-using nl.fhict.IntelliCloud.Data.Context;
-using nl.fhict.IntelliCloud.Data.Model;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Data.Entity;
+using System.Linq;
 using System.Text.RegularExpressions;
 using nl.fhict.IntelliCloud.Business.WordService;
+using nl.fhict.IntelliCloud.Common.CustomException;
+using nl.fhict.IntelliCloud.Common.DataTransfer;
+using nl.fhict.IntelliCloud.Data.IntelliCloud.Context;
+using nl.fhict.IntelliCloud.Data.IntelliCloud.Model;
 
 namespace nl.fhict.IntelliCloud.Business.Manager
 {
@@ -207,6 +207,8 @@ namespace nl.fhict.IntelliCloud.Business.Manager
                 questionEntity.Answerer = (from u in ctx.Users
                                            where u.Id == employeeId
                                            select u).Single();
+                questionEntity.LastChangedTime = DateTime.UtcNow;
+
                 ctx.SaveChanges();
             }
 

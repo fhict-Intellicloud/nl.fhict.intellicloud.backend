@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using nl.fhict.IntelliCloud.Common.DataTransfer;
 
-namespace nl.fhict.IntelliCloud.Data.Model
+namespace nl.fhict.IntelliCloud.Data.IntelliCloud.Model
 {
     /// <summary>
     /// A class representing a question that is made by a <see cref="User"/>.
@@ -62,6 +62,11 @@ namespace nl.fhict.IntelliCloud.Data.Model
         /// </summary>
         [Required]
         public DateTime CreationTime { get; set; }
+
+        /// <summary>
+        /// Gets or sets the last changed date and time of the question.
+        /// </summary>
+        public DateTime? LastChangedTime { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether the question is private. When a question is private it can only be 

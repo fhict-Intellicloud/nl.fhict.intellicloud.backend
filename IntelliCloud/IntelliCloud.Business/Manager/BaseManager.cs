@@ -1,5 +1,4 @@
-﻿using nl.fhict.IntelliCloud.Data.Context;
-using nl.fhict.IntelliCloud.Data.OpenID.Context;
+﻿using nl.fhict.IntelliCloud.Data.OpenID.Context;
 
 namespace nl.fhict.IntelliCloud.Business.Manager
 {

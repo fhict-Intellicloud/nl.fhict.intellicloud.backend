@@ -30,7 +30,7 @@ namespace nl.fhict.IntelliCloud.Common.DataTransfer
         public int Affinity { get; set; }
 
         /// <summary>
-        /// Gets or sets the creation date and time of the releation between the user, answer or question and the 
+        /// Gets or sets the creation date and time of the relation between the user, answer or question and the 
         /// keyword.
         /// </summary>
         [DataMember]

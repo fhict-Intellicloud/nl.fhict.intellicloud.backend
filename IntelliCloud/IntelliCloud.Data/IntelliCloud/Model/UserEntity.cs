@@ -2,12 +2,9 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Runtime.Serialization;
-using System.Web;
 using nl.fhict.IntelliCloud.Common.DataTransfer;
 
-namespace nl.fhict.IntelliCloud.Data.Model
+namespace nl.fhict.IntelliCloud.Data.IntelliCloud.Model
 {
     /// <summary>
     /// A class representing a user.
@@ -58,9 +55,19 @@ namespace nl.fhict.IntelliCloud.Data.Model
         public DateTime CreationTime { get; set; }
 
         /// <summary>
+        /// Gets or sets the last changed date and time of the user.
+        /// </summary>
+        public DateTime? LastChangedTime { get; set; }
+
+        /// <summary>
         /// Gets or sets a collection of sources the user supports.
         /// </summary>
         public ICollection<SourceEntity> Sources { get; set; }
 
+        /// <summary>
+        /// Gets or sets the URL to the avatar image of the user.
+        /// </summary>
+        [MaxLength(254)]
+        public string Avatar { get; set; }
     }
 }

@@ -7,7 +7,7 @@ using System.Linq;
 using System.Web;
 using nl.fhict.IntelliCloud.Common.DataTransfer;
 
-namespace nl.fhict.IntelliCloud.Data.Model
+namespace nl.fhict.IntelliCloud.Data.IntelliCloud.Model
 {
     /// <summary>
     /// A class representing the answer to a <see cref="Question"/>.
@@ -48,6 +48,11 @@ namespace nl.fhict.IntelliCloud.Data.Model
         /// </summary>
         [Required]
         public DateTime CreationTime { get; set; }
+
+        /// <summary>
+        /// Gets or sets the last changed date and time of the answer.
+        /// </summary>
+        public DateTime? LastChangedTime { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether the answer is private. When a answer is private it can only be 
