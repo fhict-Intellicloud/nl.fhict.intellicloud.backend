@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using nl.fhict.IntelliCloud.Common.DataTransfer;
 
-namespace nl.fhict.IntelliCloud.Data.Model
+namespace nl.fhict.IntelliCloud.Data.IntelliCloud.Model
 {
     /// <summary>
     /// A class representing the feedback that is given on a <see cref="Answer"/>.

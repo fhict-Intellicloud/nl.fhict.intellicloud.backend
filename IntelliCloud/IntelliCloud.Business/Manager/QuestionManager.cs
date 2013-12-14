@@ -1,13 +1,13 @@
-﻿using nl.fhict.IntelliCloud.Common.CustomException;
-using nl.fhict.IntelliCloud.Common.DataTransfer;
-using nl.fhict.IntelliCloud.Data.Context;
-using nl.fhict.IntelliCloud.Data.Model;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Data.Entity;
+using System.Linq;
 using System.Text.RegularExpressions;
 using nl.fhict.IntelliCloud.Business.WordService;
+using nl.fhict.IntelliCloud.Common.CustomException;
+using nl.fhict.IntelliCloud.Common.DataTransfer;
+using nl.fhict.IntelliCloud.Data.IntelliCloud.Context;
+using nl.fhict.IntelliCloud.Data.IntelliCloud.Model;
 
 namespace nl.fhict.IntelliCloud.Business.Manager
 {

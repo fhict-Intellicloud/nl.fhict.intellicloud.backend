@@ -6,7 +6,7 @@ using System.Linq;
 using System.Runtime.Serialization;
 using System.Web;
 
-namespace nl.fhict.IntelliCloud.Data.Model
+namespace nl.fhict.IntelliCloud.Data.IntelliCloud.Model
 {
     /// <summary>
     /// A class representing the definition of a source. A source can be a account for some service, like facebook, 

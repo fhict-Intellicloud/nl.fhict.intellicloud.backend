@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 
-namespace nl.fhict.IntelliCloud.Data.Model
+namespace nl.fhict.IntelliCloud.Data.IntelliCloud.Model
 {
     /// <summary>
     /// A class representing the relation between a keyword and question.

@@ -4,7 +4,7 @@ using System.Data.Entity;
 using System.Linq;
 using System.Text;
 
-namespace nl.fhict.IntelliCloud.Data.Migration
+namespace nl.fhict.IntelliCloud.Data.IntelliCloud.Migration
 {
     /// <summary>
     /// An internal class containing extension methods for the Entity Framework.

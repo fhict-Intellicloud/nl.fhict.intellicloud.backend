@@ -1,7 +1,7 @@
 ﻿using System.Data.Entity.Migrations;
-using nl.fhict.IntelliCloud.Data.Context;
+using nl.fhict.IntelliCloud.Data.IntelliCloud.Context;
 
-namespace nl.fhict.IntelliCloud.Data.Migration
+namespace nl.fhict.IntelliCloud.Data.IntelliCloud.Migration
 {
     /// <summary>
     /// Configuration class for the <see cref="IntelliCloudContext"/> model.
