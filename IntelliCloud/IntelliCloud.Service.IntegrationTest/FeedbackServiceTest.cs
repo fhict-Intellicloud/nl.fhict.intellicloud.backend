@@ -236,9 +236,6 @@ namespace nl.fhict.IntelliCloud.Service.IntegrationTest
                     FeedbackEntity entity = context.Feedbacks
                                             .Include(f => f.Answer)
                                             .Include(f => f.Question)
-                                            .Include(f => f.Question.Source)
-                                            .Include(f => f.User)
-                                            .Include(f => f.User.Sources)
                                             .Single(f => f.Content.Equals(feedback));
 
                     Assert.AreEqual(entity.Answer.Id, answerId);
