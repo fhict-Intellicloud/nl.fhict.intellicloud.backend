@@ -18,7 +18,7 @@ namespace nl.fhict.IntelliCloud.Service
         private readonly QuestionManager manager;
 
         public QuestionService()
-        {
+        {            
             this.manager = new QuestionManager();
         }
 

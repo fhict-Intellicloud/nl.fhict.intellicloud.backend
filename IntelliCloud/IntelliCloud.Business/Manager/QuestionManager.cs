@@ -8,6 +8,8 @@ using System.Linq;
 using System.Data.Entity;
 using System.Text.RegularExpressions;
 using nl.fhict.IntelliCloud.Business.WordService;
+using DialogueMaster.Babel;
+using System.Globalization;
 
 namespace nl.fhict.IntelliCloud.Business.Manager
 {
@@ -122,11 +124,6 @@ namespace nl.fhict.IntelliCloud.Business.Manager
                                 }
                             }
                         }
-
-                        if (employee.Type != UserType.Employee)
-                        {
-                            employeeQuestions = (from x in employeeQuestions where x.IsPrivate == false select x).ToList();
-                        }
                         questions = ConvertEntities.QuestionEntityListToQuestionList(employeeQuestions);
                     }
                     else
@@ -182,11 +179,24 @@ namespace nl.fhict.IntelliCloud.Business.Manager
             using (IntelliCloudContext ctx = new IntelliCloudContext())
             {
                 // TODO determine real language 
-                LanguageDefinitionEntity languageDefinition = ctx.LanguageDefinitions.SingleOrDefault(ld => ld.Name.Equals("English"));
+                String languageName = "English";
+                IBabelModel m_Model = BabelModel._AllModel;
+                DialogueMaster.Classification.ICategoryList result = m_Model.ClassifyText(question);
+                if (result.Count > 0)
+                {
+                    CultureInfo info = CultureInfo.GetCultureInfoByIetfLanguageTag(result[0].Name);
+                    languageName = info.EnglishName;
+                }
+                LanguageDefinitionEntity languageDefinition = ctx.LanguageDefinitions.SingleOrDefault(ld => ld.Name.Equals(languageName));
 
-                // TODO remove exception as you probably want to create the language if it doesn't exist.
+                // create the language if it doesn't exist.
                 if (languageDefinition == null)
-                    throw new NotFoundException("No languageDefinition entity exists with the specified ID.");
+                {
+                    languageDefinition = new LanguageDefinitionEntity();
+                    languageDefinition.Name = languageName;
+                    ctx.LanguageDefinitions.Add(languageDefinition);
+                    ctx.SaveChanges();
+                }
 
                 SourceDefinitionEntity sourceDefinition = ctx.SourceDefinitions.SingleOrDefault(sd => sd.Name.Equals(source));
 
