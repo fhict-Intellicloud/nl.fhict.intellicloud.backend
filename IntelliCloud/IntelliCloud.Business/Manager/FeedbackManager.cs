@@ -1,11 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.Entity;
-using System.Linq;
-using nl.fhict.IntelliCloud.Common.CustomException;
+﻿using nl.fhict.IntelliCloud.Common.CustomException;
 using nl.fhict.IntelliCloud.Common.DataTransfer;
 using nl.fhict.IntelliCloud.Data.IntelliCloud.Context;
 using nl.fhict.IntelliCloud.Data.IntelliCloud.Model;
+using System;
+using System.Collections.Generic;
+using System.Data.Entity;
+using System.Linq;
 
 namespace nl.fhict.IntelliCloud.Business.Manager
 {
