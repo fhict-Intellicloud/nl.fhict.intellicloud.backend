@@ -6,6 +6,9 @@ using System.Runtime.Serialization;
 using System.ServiceModel;
 using System.Text;
 using nl.fhict.IntelliCloud.Common.DataTransfer;
+using nl.fhict.IntelliCloud.Common.CustomException;
+using System.ServiceModel.Web;
+using System.Net;
 
 namespace nl.fhict.IntelliCloud.Service
 {
@@ -22,7 +25,7 @@ namespace nl.fhict.IntelliCloud.Service
             this.manager = new AnswerManager();
         }
 
-        public IList<Answer> GetAnswers(AnswerState answerState, int employeeId)
+        public IList<Answer> GetAnswers(AnswerState answerState, int? employeeId)
         {
             return manager.GetAnswers(answerState, employeeId);
         }

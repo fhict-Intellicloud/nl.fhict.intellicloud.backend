@@ -43,7 +43,7 @@ namespace nl.fhict.IntelliCloud.Business
         }
 
         /// <summary>
-        /// Checks if the id  is postiive.
+        /// Checks if the id  is positive.
         /// </summary>
         /// <param name="value">The int that needs to be checked as an id.</param>
         public void IdCheck(int value)
