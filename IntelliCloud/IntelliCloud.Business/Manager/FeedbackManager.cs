@@ -50,6 +50,7 @@ namespace nl.fhict.IntelliCloud.Business.Manager
                        .Include(f => f.Question.Source)
                        .Include(f => f.User)
                        .Include(f => f.User.Sources)
+                       .Include(f => f.User.Sources.Select(s => s.SourceDefinition))
                        .Where(f => f.Answer.Id == answerId)
                        .ToList()
                        .Select(f => ConvertEntities.FeedbackEntityToFeedback(f))
@@ -78,11 +79,7 @@ namespace nl.fhict.IntelliCloud.Business.Manager
             using (IntelliCloudContext context = new IntelliCloudContext())
             {
                 // Get the answer entity from the context
-                AnswerEntity answer = context.Answers
-                    .Include(a => a.User)
-                    .Include(a => a.User.Sources)
-                    .Include(a => a.LanguageDefinition)
-                    .SingleOrDefault(a => a.Id == answerId);
+                AnswerEntity answer = context.Answers.SingleOrDefault(a => a.Id == answerId);
 
                 if (answer == null)
                     throw new NotFoundException("No answer entity exists with the specified ID.");
@@ -93,15 +90,10 @@ namespace nl.fhict.IntelliCloud.Business.Manager
                 // Get the question entity from the context
                 QuestionEntity question = context.Questions
                                           .Include(q => q.User)
-                                          .Include(q => q.User.Sources)
                                           .Include(q => q.Source)
                                           .Include(q => q.LanguageDefinition)
                                           .Include(q => q.Answer)
-                                          .Include(q => q.Answer.LanguageDefinition)
                                           .Include(q => q.Answer.User)
-                                          .Include(q => q.Answer.User.Sources)
-                                          .Include(q => q.Answerer)
-                                          .Include(q => q.Answerer.Sources)
                                           .SingleOrDefault(q => q.Id == questionId);
 
                 if (question == null)
@@ -151,10 +143,9 @@ namespace nl.fhict.IntelliCloud.Business.Manager
             {
                 // Get the feedback entity from the context
                 FeedbackEntity feedback = context.Feedbacks
-                    .Include(f => f.Question)
-                    .Include(f => f.User)
-                    .Include(f => f.Answer)
-                    .SingleOrDefault(f => f.Id == iFeedbackId);
+                                          .Include(f => f.Question)
+                                          .Include(f => f.Answer)
+                                          .SingleOrDefault(f => f.Id == iFeedbackId);
 
                 if (feedback == null)
                     throw new NotFoundException("No feedback entity exists with the specified ID.");
