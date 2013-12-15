@@ -94,6 +94,11 @@
     <Compile Include="ReviewService.svc.cs">
       <DependentUpon>ReviewService.svc</DependentUpon>
     </Compile>
+    <Compile Include="NewServices\IAnswerService.cs" />
+    <Compile Include="NewServices\IFeedbackService.cs" />
+    <Compile Include="NewServices\IQuestionService.cs" />
+    <Compile Include="NewServices\IReviewService.cs" />
+    <Compile Include="NewServices\IUserService.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
