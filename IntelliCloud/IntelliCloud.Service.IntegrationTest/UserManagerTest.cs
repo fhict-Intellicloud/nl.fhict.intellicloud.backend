@@ -3,6 +3,7 @@ using nl.fhict.IntelliCloud.Business.Manager;
 using nl.fhict.IntelliCloud.Common.DataTransfer;
 using nl.fhict.IntelliCloud.Data.IntelliCloud.Context;
 using nl.fhict.IntelliCloud.Data.IntelliCloud.Model;
+using nl.fhict.IntelliCloud.Data.OpenID.Model;
 using System;
 using System.Linq;
 
@@ -54,6 +55,10 @@ namespace nl.fhict.IntelliCloud.Service.IntegrationTest
                 // Add a new mail definition
                 SourceDefinitionEntity mailSourceDefinition = new SourceDefinitionEntity() { Name = "Mail", CreationTime = DateTime.UtcNow };
                 context.SourceDefinitions.Add(mailSourceDefinition);
+
+                // Add a new Access Token issuer definition
+                SourceDefinitionEntity issuerDefinition = new SourceDefinitionEntity() { Name = "accounts.google.com", CreationTime = DateTime.UtcNow };
+                context.SourceDefinitions.Add(issuerDefinition);
 
                 // Create a new user
                 this.userEntity = new UserEntity()
@@ -120,7 +125,21 @@ namespace nl.fhict.IntelliCloud.Service.IntegrationTest
         {
             try
             {
-                // TODO: Create a new user using an instance of class OpenIDUserInfo
+                // Create an instance of class OpenIDUserInfo
+                OpenIDUserInfo userInfo = new OpenIDUserInfo()
+                {
+                    Issuer = "accounts.google.com",
+                    Sub = "987654321",
+                    GivenName = "Name of",
+                    FamilyName = "second customer",
+                    Name = "Name of second customer",
+                    Email = "customer2@domain.com"
+                };
+
+                // Create a user using the user info
+                this.manager.CreateUser(userInfo);
+
+                // TODO: check if the user object contains the correct data
             }
             catch (Exception e)
             {
@@ -136,7 +155,21 @@ namespace nl.fhict.IntelliCloud.Service.IntegrationTest
         {
             try
             {
-                // TODO: Match a user using an instance of class OpenIDUserInfo
+                // Create an instance of class OpenIDUserInfo
+                OpenIDUserInfo userInfo = new OpenIDUserInfo()
+                {
+                    Issuer = "accounts.google.com",
+                    Sub = "123456789",
+                    GivenName = "Name of",
+                    FamilyName = "customer",
+                    Name = "Name of customer",
+                    Email = "customer1@domain.com"
+                };
+
+                // Match a user using the user info
+                User matchedUser = this.manager.MatchUser(userInfo);
+
+                // TODO: check if the user object contains the correct data
             }
             catch (Exception e)
             {
