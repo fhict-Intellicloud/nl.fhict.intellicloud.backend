@@ -20,13 +20,10 @@ namespace IntelliTwitterClient.Business.Managers
     {
         //A log to write messages to, e.g. exceptions
         private EventLog serviceLog { get; set; }
-
-        //The id of the last tweet handled by the manager
-        private string lastPostId;
-
+        
         //The accountname of the twitteraccount you want to stream
         private readonly string myScreenName;
-
+        
         /// <summary>
         /// Creates a new PinAutharizedUser
         /// Autorization needed since twitter api 1.1
@@ -80,9 +77,10 @@ namespace IntelliTwitterClient.Business.Managers
 
                     foreach (var tweet in userStatusResponse)
                     {
-                        if (!string.IsNullOrWhiteSpace(tweet.Text))
+                        if (!string.IsNullOrWhiteSpace(tweet.Text) && !string.IsNullOrEmpty(tweet.StatusID))
                         {
-                            CreateQuestion(tweet.User.Identifier.ScreenName, tweet.Text, tweet.ID);
+                            CreateQuestion(tweet.User.Identifier.ScreenName, tweet.Text, tweet.StatusID);
+                            SaveLastTweetId(tweet.StatusID);
                         }
                     }
                 }
@@ -96,7 +94,7 @@ namespace IntelliTwitterClient.Business.Managers
         /// <summary>
         /// Saves the id of the last tweet in the app.config file to use when the service has to restart
         /// </summary>
-        public void SaveLastTweetId()
+        public void SaveLastTweetId(String lastPostId)
         {
             System.Configuration.Configuration config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
             config.AppSettings.Settings.Remove("LastPostId");
@@ -106,6 +104,7 @@ namespace IntelliTwitterClient.Business.Managers
             ConfigurationManager.RefreshSection("appSettings");
 
             config.Save(ConfigurationSaveMode.Modified);
+
         }
 
         /// <summary>
@@ -113,7 +112,8 @@ namespace IntelliTwitterClient.Business.Managers
         /// It uses the PinAuthorized user to get acces to the stream
         /// </summary>
         public void StartStreaming()
-        {            
+        {
+
             GetTweetSinceId(ConfigurationManager.AppSettings["LastPostId"]);
 
             //Creates a new TwitterContext with the authorized user 
@@ -148,7 +148,7 @@ namespace IntelliTwitterClient.Business.Managers
                                 var question = json["text"].ToString();
                                 var postId = json["id"].ToString();
 
-                                lastPostId = postId;
+                                SaveLastTweetId(postId);
                                 CreateQuestion(scrName, question, postId);
                             }
                         }
@@ -185,7 +185,7 @@ namespace IntelliTwitterClient.Business.Managers
             using (var streamWriter = new StreamWriter(httpWebRequest.GetRequestStream()))
             {
                 //Serialize the data to json
-                TwitterQuestionObject jsonObject = new TwitterQuestionObject(reference, question, question);
+                TwitterQuestionObject jsonObject = new TwitterQuestionObject(reference, question, question, postId);
                 String json = JsonConvert.SerializeObject(jsonObject);
 
                 streamWriter.Write(json);

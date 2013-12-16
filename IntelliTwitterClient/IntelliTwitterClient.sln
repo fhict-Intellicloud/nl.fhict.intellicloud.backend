@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IntelliTwitterClient.Test",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IntelliTwitterClient.Business", "IntelliTwitterClient.Business\IntelliTwitterClient.Business.csproj", "{665ABC56-BBE0-4551-9590-669D28D7F984}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServiceTestConsole", "ServiceTestConsole\ServiceTestConsole.csproj", "{D0EF711A-182D-4303-8629-B02E7033EFE1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -25,6 +27,10 @@ Global
 		{665ABC56-BBE0-4551-9590-669D28D7F984}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{665ABC56-BBE0-4551-9590-669D28D7F984}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{665ABC56-BBE0-4551-9590-669D28D7F984}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D0EF711A-182D-4303-8629-B02E7033EFE1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D0EF711A-182D-4303-8629-B02E7033EFE1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D0EF711A-182D-4303-8629-B02E7033EFE1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D0EF711A-182D-4303-8629-B02E7033EFE1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

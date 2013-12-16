@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using nl.fhict.IntelliCloud.Common.DataTransfer;
 
 namespace nl.fhict.IntelliCloud.Business.Plugins.Loader
@@ -10,7 +7,7 @@ namespace nl.fhict.IntelliCloud.Business.Plugins.Loader
     /// A factory that loads the correct send answer plugin according to the given <see cref="SourceDefinition"/>.
     /// A send answer plugin can send an answer using a specific service, like mail, Facebook or Twitter.
     /// </summary>
-    internal class SendAnswerFactory
+    public class SendAnswerFactory
     {
         /// <summary>
         /// Loads the send answer plugin for the given <see cref="SourceDefinition"/>.
