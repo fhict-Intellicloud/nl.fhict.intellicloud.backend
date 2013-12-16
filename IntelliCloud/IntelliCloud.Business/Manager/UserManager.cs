@@ -1,7 +1,7 @@
 ﻿using nl.fhict.IntelliCloud.Common.DataTransfer;
 using nl.fhict.IntelliCloud.Common.DataTransfer.Input;
-using nl.fhict.IntelliCloud.Data.Context;
-using nl.fhict.IntelliCloud.Data.Model;
+using nl.fhict.IntelliCloud.Data.IntelliCloud.Context;
+using nl.fhict.IntelliCloud.Data.IntelliCloud.Model;
 using nl.fhict.IntelliCloud.Data.OpenID.Model;
 using System;
 using System.Collections.Generic;
@@ -123,9 +123,10 @@ namespace nl.fhict.IntelliCloud.Business.Manager
             // Check if the retrieved user info contains the first name and last name
             string firstName = (!String.IsNullOrWhiteSpace(userInfo.GivenName)) ? userInfo.GivenName : null;
             string lastName = (!String.IsNullOrWhiteSpace(userInfo.FamilyName)) ? userInfo.FamilyName : null;
+            string avatar = (!String.IsNullOrWhiteSpace(userInfo.Picture)) ? userInfo.Picture : null;
 
             // Attempt to create a new user
-            this.CreateUser(UserType.Customer, sources, firstName, null, lastName);
+            this.CreateUser(UserType.Customer, sources, firstName, null, lastName, avatar);
         }
 
         /// <summary>
@@ -175,7 +176,9 @@ namespace nl.fhict.IntelliCloud.Business.Manager
                     UserEntity userEntity = null;
 
                     // Build the query
-                    var query = context.Users.Include(u => u.Sources.Select(s => s.SourceDefinition));
+                    var query = context.Users
+                                .Include(u => u.Sources)        
+                                .Include(u => u.Sources.Select(s => s.SourceDefinition));
 
                     // Check if an id has been supplied
                     if (id != null)
@@ -209,12 +212,14 @@ namespace nl.fhict.IntelliCloud.Business.Manager
         /// <param name="firstName">The user's first name. Optional.</param>
         /// <param name="infix">The user's infix. Optional.</param>
         /// <param name="lastName">The user's last name. Optional.</param>
-        public void CreateUser(UserType type, IList<UserSource> sources, string firstName = null, string infix = null, string lastName = null)
+        /// <param name="avatar">The user's avatar URL. Optional.</param>
+        public void CreateUser(UserType type, IList<UserSource> sources, string firstName = null, string infix = null, string lastName = null, string avatar = null)
         {
             // Validate supplied input data
             if (firstName != null) Validation.StringCheck(firstName);
             if (infix != null) Validation.StringCheck(infix);
             if (lastName != null) Validation.StringCheck(lastName);
+            if (avatar != null) Validation.StringCheck(avatar);
 
             using (IntelliCloudContext context = new IntelliCloudContext())
             {
@@ -225,7 +230,8 @@ namespace nl.fhict.IntelliCloud.Business.Manager
                     Infix = infix,
                     LastName = lastName,
                     Type = type,
-                    CreationTime = DateTime.UtcNow
+                    CreationTime = DateTime.UtcNow,
+                    Avatar = avatar
                 };
                 context.Users.Add(userEntity);
 

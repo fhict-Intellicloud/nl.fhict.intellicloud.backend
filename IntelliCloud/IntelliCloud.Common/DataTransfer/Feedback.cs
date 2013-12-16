@@ -57,5 +57,11 @@ namespace nl.fhict.IntelliCloud.Common.DataTransfer
         /// </summary>
         [DataMember]
         public DateTime CreationTime { get; set; }
+
+        /// <summary>
+        /// Gets or sets the last changed date and time of the feedback.
+        /// </summary>
+        [DataMember]
+        public DateTime? LastChangedTime { get; set; }
     }
 }

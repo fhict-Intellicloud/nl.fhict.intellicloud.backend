@@ -53,8 +53,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Manager\AnswerManagerTest.cs" />
+    <Compile Include="Manager\FeedbackManagerTest.cs" />
     <Compile Include="Manager\QuestionManagerTest.cs" />
     <Compile Include="Manager\ReviewManagerTest.cs" />
+    <Compile Include="Manager\UserManagerTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TwitterSendAnswerPluginTest.cs" />
     <Compile Include="ValidationTest.cs" />

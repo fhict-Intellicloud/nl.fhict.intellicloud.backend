@@ -1,10 +1,9 @@
-﻿using nl.fhict.IntelliCloud.Common.DataTransfer;
-using nl.fhict.IntelliCloud.Data.Context;
-using nl.fhict.IntelliCloud.Data.Model;
+using nl.fhict.IntelliCloud.Common.DataTransfer;
+using nl.fhict.IntelliCloud.Data.IntelliCloud.Context;
+using nl.fhict.IntelliCloud.Data.IntelliCloud.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Data.Entity;
 using nl.fhict.IntelliCloud.Common.CustomException;
 
@@ -39,7 +38,7 @@ namespace nl.fhict.IntelliCloud.Business.Manager
         /// <param name="employeeId">The optional employee identifier, only answers about which the employee has 
         /// knowledge are returned (keywords between user and answer match).</param>
         /// <returns>Returns the answers that match the filters.</returns>
-        public IList<Answer> GetAnswers(AnswerState answerState, int? employeeId = null)
+        public IList<Answer> GetAnswers(AnswerState answerState, int? employeeId)
         {
             List<Answer> answers = new List<Answer>();
 
@@ -87,8 +86,11 @@ namespace nl.fhict.IntelliCloud.Business.Manager
                                              select a).Single();
 
                 answer = ConvertEntities.AnswerEntityToAnswer(answerentity);
+
             }
+
             return answer;
+
         }
 
         /// <summary>
@@ -139,6 +141,7 @@ namespace nl.fhict.IntelliCloud.Business.Manager
 
             // TODO put the SendAnswerFactory in the BaseManager.
             // TODO send the answer using the this.SendAnswerFactory.LoadPlugin(question.Source.Source.SourDefinition).SendAnswer(question, answer) method.
+            // this.SendAnswerFactory.LoadPlugin(question.Source.Source.SourDefinition).SendAnswer(question, answer);
         }
 
         /// <summary>
@@ -167,6 +170,7 @@ namespace nl.fhict.IntelliCloud.Business.Manager
 
                 answerEntity.AnswerState = answerState;
                 answerEntity.Content = answer;
+                answerEntity.LastChangedTime = DateTime.UtcNow;
 
                 ctx.SaveChanges();
 

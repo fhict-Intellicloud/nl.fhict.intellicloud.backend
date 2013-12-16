@@ -1,9 +1,9 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using nl.fhict.IntelliCloud.Data.Context;
-using nl.fhict.IntelliCloud.Data.Model;
-using System;
-using System.Linq;
+﻿using System;
 using System.Data.Entity;
+using System.Linq;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using nl.fhict.IntelliCloud.Data.IntelliCloud.Context;
+using nl.fhict.IntelliCloud.Data.IntelliCloud.Model;
 
 namespace nl.fhict.IntelliCloud.Service.IntegrationTest
 {

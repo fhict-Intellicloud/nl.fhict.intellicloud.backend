@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using nl.fhict.IntelliCloud.Common.DataTransfer;
-using nl.fhict.IntelliCloud.Data.Context;
+using nl.fhict.IntelliCloud.Data.IntelliCloud.Context;
 
 namespace nl.fhict.IntelliCloud.Business
 {

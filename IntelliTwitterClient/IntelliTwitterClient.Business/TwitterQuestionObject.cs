@@ -18,12 +18,14 @@ namespace IntelliTwitterClient.Business
         /// <param name="reference">The e-mailaddress of the sender</param>
         /// <param name="question">The content of the e-mail</param>
         /// <param name="title">The subject of the e-mail</param>
-        public TwitterQuestionObject(String reference, String question, String title)
+        /// <param name="postId">The postId of the tweet</param>
+        public TwitterQuestionObject(String reference, String question, String title, String postId)
         {
             this.source = "Twitter";
             this.reference = reference;
             this.question = question;
             this.title = title;
+            this.postId = postId;
         }
 
         //The source of the question in this case twitter
@@ -37,5 +39,8 @@ namespace IntelliTwitterClient.Business
 
         //The title of the question asked
         public String title { get; set; }
+
+        //The postId of the question asked
+        public String postId { get; set; }
     }
 }

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using nl.fhict.IntelliCloud.Common.DataTransfer;
-using nl.fhict.IntelliCloud.Data.Model;
+using nl.fhict.IntelliCloud.Data.IntelliCloud.Model;
 
 namespace nl.fhict.IntelliCloud.Business
 {
@@ -28,6 +28,8 @@ namespace nl.fhict.IntelliCloud.Business
             user.Type = entity.Type;
             user.CreationTime = entity.CreationTime;
             user.Sources = SourceEntityListToSources(entity.Sources);
+            user.Avatar = entity.Avatar;
+            user.LastChangedTime = entity.LastChangedTime;
 
             return user;
         }
@@ -92,6 +94,7 @@ namespace nl.fhict.IntelliCloud.Business
             question.CreationTime = entity.CreationTime;
             question.QuestionState = entity.QuestionState;
             question.Source = this.QuestionSourceEntityToQuestionSource(entity.Source);
+            question.LastChangedTime = entity.LastChangedTime;
             return question;
         }
 
@@ -123,6 +126,7 @@ namespace nl.fhict.IntelliCloud.Business
             answer.Content = entity.Content;
             answer.AnswerState = entity.AnswerState;
             answer.User = UserEntityToUser(entity.User);
+            answer.LastChangedTime = entity.LastChangedTime;
 
             return answer;
         }
@@ -159,6 +163,7 @@ namespace nl.fhict.IntelliCloud.Business
                 temp.ReviewState = entity.ReviewState;
                 temp.AnswerId = entity.Answer.Id;
                 temp.CreationTime = entity.CreationTime;
+                temp.LastChangedTime = entity.LastChangedTime;
                 temp.User = this.UserEntityToUser(entity.User);
                 reviews.Add(temp);
             }
@@ -197,7 +202,8 @@ namespace nl.fhict.IntelliCloud.Business
                 User = UserEntityToUser(entity.User),
                 FeedbackType = entity.FeedbackType,
                 FeedbackState = entity.FeedbackState,
-                CreationTime = entity.CreationTime
+                CreationTime = entity.CreationTime,
+                LastChangedTime = entity.LastChangedTime
             };
         }
     }

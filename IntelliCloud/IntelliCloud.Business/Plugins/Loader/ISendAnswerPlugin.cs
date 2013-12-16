@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using nl.fhict.IntelliCloud.Common.DataTransfer;
+﻿using nl.fhict.IntelliCloud.Common.DataTransfer;
 
 namespace nl.fhict.IntelliCloud.Business.Plugins.Loader
 {
@@ -10,7 +6,7 @@ namespace nl.fhict.IntelliCloud.Business.Plugins.Loader
     /// An interface for a plugin providing functionality to send answers using a specified service, like mail, 
     /// Facebook or Twitter.
     /// </summary>
-    internal interface ISendAnswerPlugin
+    public interface ISendAnswerPlugin
     {
         /// <summary>
         /// Send the answer using the plugin. The answer is send to the source specified in 
