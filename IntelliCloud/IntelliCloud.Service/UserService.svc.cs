@@ -30,7 +30,7 @@ namespace nl.fhict.IntelliCloud.Service
         /// <param name="id">The ID of the user. Optional.</param>
         /// <param name="sources">A list of UserSource instances. Optional.</param>
         /// <returns>The matched user based on the values of the parameters, otherwise the currently logged in user.</returns>
-        public User GetUser(string userId, IList<UserSource> sources)
+        public User GetUser(string userId, List<UserSource> sources)
         {
             return this.manager.GetUser(userId, sources);
         }

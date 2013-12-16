@@ -19,11 +19,13 @@ namespace nl.fhict.IntelliCloud.Service
         /// <param name="sources">A list of UserSource instances. Optional.</param>
         /// <returns>The matched user based on the values of the parameters, otherwise the currently logged in user.</returns>
         [OperationContract]
-        [WebGet(UriTemplate = "users/{userId}",
+        [WebInvoke(Method = "PUT",
+            UriTemplate = "users?userId={userId}",
             RequestFormat = WebMessageFormat.Json,
-            ResponseFormat = WebMessageFormat.Json)]
+            ResponseFormat = WebMessageFormat.Json,
+            BodyStyle = WebMessageBodyStyle.Wrapped)]
         [AuthorizationRequired(UserType.Customer, UserType.Employee)]
-        User GetUser(String userId, IList<UserSource> sources);
+        User GetUser(string userId, List<UserSource> sources);
 
         /// <summary>
         /// Method used for creating a new user.
