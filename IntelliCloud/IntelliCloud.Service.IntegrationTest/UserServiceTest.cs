@@ -1,5 +1,4 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using nl.fhict.IntelliCloud.Business.Manager;
 using nl.fhict.IntelliCloud.Common.DataTransfer;
 using nl.fhict.IntelliCloud.Common.DataTransfer.Input;
 using nl.fhict.IntelliCloud.Data.IntelliCloud.Context;
@@ -163,7 +162,7 @@ namespace nl.fhict.IntelliCloud.Service.IntegrationTest
             {
                 // Get the user from the context
                 int userId = this.userEntity.Id;
-                User user = this.service.GetUser(userId.ToString());
+                User user = this.service.GetUser(userId.ToString(), null);
 
                 // Check if the correct data is returned
                 Assert.AreEqual(user.FirstName, this.userEntity.FirstName);
