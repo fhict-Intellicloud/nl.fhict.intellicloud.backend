@@ -1,7 +1,6 @@
 ﻿using nl.fhict.IntelliCloud.Business.Authorization;
 using nl.fhict.IntelliCloud.Common.DataTransfer;
 using nl.fhict.IntelliCloud.Common.DataTransfer.Input;
-using System;
 using System.Collections.Generic;
 using System.ServiceModel;
 using System.ServiceModel.Web;
