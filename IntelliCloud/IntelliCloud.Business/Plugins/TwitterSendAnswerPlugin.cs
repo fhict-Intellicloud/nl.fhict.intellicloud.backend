@@ -2,16 +2,13 @@
 using nl.fhict.IntelliCloud.Business.Plugins.Loader;
 using nl.fhict.IntelliCloud.Common.DataTransfer;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace nl.fhict.IntelliCloud.Business.Plugins
 {
     /// <summary>
     /// A plugin to handle outgoing tweets
     /// </summary>
-    internal class TwitterSendAnswerPlugin : ISendAnswerPlugin
+    public class TwitterSendAnswerPlugin : ISendAnswerPlugin
     {
         IValidation validation;
 

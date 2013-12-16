@@ -1,25 +1,23 @@
 ﻿using nl.fhict.IntelliCloud.Common.DataTransfer;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Net.Mail;
-using System.Text;
 using System.Configuration;
+using nl.fhict.IntelliCloud.Business.Plugins.Loader;
 
-namespace nl.fhict.IntelliCloud.Business.Plugins.Loader
+namespace nl.fhict.IntelliCloud.Business.Plugins
 {
     /// <summary>
     /// A plugin to handle outgoing mails
     /// </summary>
-    internal class MailSendAnswerPlugin : ISendAnswerPlugin
+    public class MailSendAnswerPlugin : ISendAnswerPlugin
     {
         private SmtpClient client;
 
-        private string clientUsername = ConfigurationManager.AppSettings["IntelliCloud.Mail.Username"];
-        private string clientPassword = ConfigurationManager.AppSettings["IntelliCloud.Mail.Password"];
-        private string host = ConfigurationManager.AppSettings["IntelliCloud.Mail.SmtpHost"];
-        private int port = Convert.ToInt32(ConfigurationManager.AppSettings["IntelliCloud.Mail.SmtpPort"]);
+        private readonly string clientUsername = ConfigurationManager.AppSettings["IntelliCloud.Mail.Username"];
+        private readonly string clientPassword = ConfigurationManager.AppSettings["IntelliCloud.Mail.Password"];
+        private readonly string host = ConfigurationManager.AppSettings["IntelliCloud.Mail.SmtpHost"];
+        private readonly int port = Convert.ToInt32(ConfigurationManager.AppSettings["IntelliCloud.Mail.SmtpPort"]);
 
         /// <summary>
         /// Send an answer through e-mail with the related question
