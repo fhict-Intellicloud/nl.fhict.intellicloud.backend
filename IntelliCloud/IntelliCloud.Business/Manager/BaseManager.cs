@@ -1,4 +1,5 @@
-﻿using nl.fhict.IntelliCloud.Data.OpenID.Context;
+﻿using nl.fhict.IntelliCloud.Business.Plugins.Loader;
+using nl.fhict.IntelliCloud.Data.OpenID.Context;
 
 namespace nl.fhict.IntelliCloud.Business.Manager
 {
@@ -11,6 +12,7 @@ namespace nl.fhict.IntelliCloud.Business.Manager
         protected IValidation Validation {get; set;}
         protected ConvertEntities ConvertEntities {get; set;}
         protected IOpenIDContext OpenIDContext { get; set; }
+        protected SendAnswerFactory SendAnswerFactory { get; set; }
 
         /// <summary>
         /// This constructor will construct the BaseManager and instantiate it's properties.

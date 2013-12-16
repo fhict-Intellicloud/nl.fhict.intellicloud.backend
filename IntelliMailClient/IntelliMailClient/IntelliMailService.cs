@@ -1,15 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
 using System.Diagnostics;
 using System.Linq;
 using System.ServiceProcess;
-using System.Text;
-using System.Threading.Tasks;
 using ActiveUp.Net.Mail;
 using System.Configuration;
-using IntelliMailClient.QuestionService;
 using System.Net.Mail;
 using System.Net;
 using System.IO;

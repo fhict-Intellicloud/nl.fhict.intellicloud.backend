@@ -68,7 +68,6 @@ namespace IntelliTwitterClient
         protected override void OnStop()
         {
             //Save the last tweet id to app.config
-            manager.SaveLastTweetId();
             serviceLog.WriteEntry("IntelliTwitterService stopped");
             this.Dispose();
         }

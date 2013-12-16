@@ -1,4 +1,5 @@
-﻿using nl.fhict.IntelliCloud.Common.DataTransfer;
+﻿using nl.fhict.IntelliCloud.Common.CustomException;
+using nl.fhict.IntelliCloud.Common.DataTransfer;
 using nl.fhict.IntelliCloud.Common.DataTransfer.Input;
 using nl.fhict.IntelliCloud.Data.IntelliCloud.Context;
 using nl.fhict.IntelliCloud.Data.IntelliCloud.Model;
@@ -253,6 +254,26 @@ namespace nl.fhict.IntelliCloud.Business.Manager
 
                 // Save the changes to the context
                 context.SaveChanges();
+            }
+        }
+
+        public User GetUser(string username, string password)
+        {
+            Validation.StringCheck(username);
+            Validation.StringCheck(password);
+            
+            using (IntelliCloudContext ctx = new IntelliCloudContext())
+            {
+                UserEntity user = (from u in ctx.Users 
+                                   where u.Username == username
+                                   && u.Password == password
+                                   select u).SingleOrDefault();
+
+                if (user == null)
+                    throw new NotFoundException("No UserEntity was found with this username and password combo");
+
+                return ConvertEntities.UserEntityToUser(user);
+                
             }
         }
     }

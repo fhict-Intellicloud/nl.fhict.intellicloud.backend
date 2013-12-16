@@ -140,6 +140,7 @@ namespace nl.fhict.IntelliCloud.Business.Manager
 
             // TODO put the SendAnswerFactory in the BaseManager.
             // TODO send the answer using the this.SendAnswerFactory.LoadPlugin(question.Source.Source.SourDefinition).SendAnswer(question, answer) method.
+            // this.SendAnswerFactory.LoadPlugin(question.Source.Source.SourDefinition).SendAnswer(question, answer);
         }
 
         /// <summary>
