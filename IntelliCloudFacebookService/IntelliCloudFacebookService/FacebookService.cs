@@ -94,7 +94,9 @@ namespace IntelliCloudFacebookService
                 //Get the feed from the facebook page bteween the time of the last post and the date of tomorrow
                 var wall = (JsonObject)null;
                 wall = (JsonObject)facebookClient.Get("Intellicloudquestions/feed?since=" + timeOfLastPost.ToShortDateString() + "&until=" + DateTime.Now.AddDays(1).ToShortDateString());
-                dynamic obj = JsonFacebookWall.GetDynamicJsonObject(wall.ToString());
+                dynamic obj = JsonConvert.DeserializeObject(wall.ToString());
+                    
+                    //JsonFacebookWall.GetDynamicJsonObject(wall.ToString());
 
                 //Check for each posts if its new
                 foreach (var post in obj.data)

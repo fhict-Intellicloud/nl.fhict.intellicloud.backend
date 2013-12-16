@@ -6,14 +6,11 @@ using System.Threading.Tasks;
 
 namespace IntelliCloudFacebookService
 {
-    class JsonFacebookQuestion
+    /// <summary>
+    /// Used to create a JSON String for the webrequest
+    /// </summary>
+    public class JsonFacebookQuestion
     {
-        String _source;
-        String _reference;
-        String _question;
-        String _title;
-        String _postid;
-
         /// <summary>
         /// Create new QuestionMailObject
         /// </summary>
@@ -23,51 +20,21 @@ namespace IntelliCloudFacebookService
         /// <param name="title">The subject of the e-mail</param>
         public JsonFacebookQuestion(String source, String reference, String question, String title, String postid)
         {
-            this._source = source;
-            this._reference = reference;
-            this._question = question;
-            this._title = title;
-            this._postid = postid;
+            this.source = source;
+            this.reference = reference;
+            this.question = question;
+            this.title = title;
+            this.postId = postid;
         }
 
-        public String source 
-        {
-            get
-            {
-                return _source;
-            }
-        }
+        public String source { get; set; }
 
-        public String reference
-        {
-            get
-            {
-                return _reference;
-            }
-        }
+        public String reference { get; set; }
 
-        public String question
-        {
-            get
-            {
-                return _question;
-            }
-        }
+        public String question { get; set; }
 
-        public String title
-        {
-            get
-            {
-                return _title;
-            }
-        }
+        public String title { get; set; }
 
-        public String postId
-        {
-            get
-            {
-                return _postid;
-            }
-        }
+        public String postId { get; set; }
     }
 }
