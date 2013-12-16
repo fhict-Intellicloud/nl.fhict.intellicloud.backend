@@ -21,9 +21,8 @@ namespace nl.fhict.IntelliCloud.Service.IntegrationTest
 
         /// <summary>
         /// Instance of class UserService.
-        /// TODO: temporarily of class UserManager - should be changed as soon as IUserService is available
         /// </summary>
-        private UserManager service;
+        private IUserService service;
 
         /// <summary>
         /// Fields used during testing.
@@ -40,8 +39,7 @@ namespace nl.fhict.IntelliCloud.Service.IntegrationTest
         [TestInitialize]
         public void Initialize()
         {
-            // TODO: temporarily of class UserManager - should be changed as soon as UserService is available 
-            this.service = new UserManager();
+            this.service = new UserService();
             this.initializeTestData();
         }
 
