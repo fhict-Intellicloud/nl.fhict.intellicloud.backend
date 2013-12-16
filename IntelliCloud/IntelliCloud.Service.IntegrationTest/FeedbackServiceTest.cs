@@ -10,7 +10,7 @@ using System.Linq;
 namespace nl.fhict.IntelliCloud.Service.IntegrationTest
 {
     /// <summary>
-    /// Test class for the FeedbackManager class.
+    /// Test class for the service FeedbackService.
     /// </summary>
     [TestClass]
     public class FeedbackServiceTest

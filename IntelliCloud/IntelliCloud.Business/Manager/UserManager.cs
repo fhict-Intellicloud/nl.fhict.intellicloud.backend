@@ -176,7 +176,9 @@ namespace nl.fhict.IntelliCloud.Business.Manager
                     UserEntity userEntity = null;
 
                     // Build the query
-                    var query = context.Users.Include(u => u.Sources.Select(s => s.SourceDefinition));
+                    var query = context.Users
+                                .Include(u => u.Sources)        
+                                .Include(u => u.Sources.Select(s => s.SourceDefinition));
 
                     // Check if an id has been supplied
                     if (id != null)
