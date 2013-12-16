@@ -66,6 +66,7 @@ namespace nl.fhict.IntelliCloud.Service.IntegrationTest
                     FirstName = "Name",
                     Infix = "of",
                     LastName = "first customer",
+                    Avatar = "http://domain.com/avatar1.jpg",
                     Type = UserType.Customer,
                     CreationTime = DateTime.UtcNow
                 };
@@ -132,7 +133,7 @@ namespace nl.fhict.IntelliCloud.Service.IntegrationTest
                 string firstName = "Name";
                 string infix = "of";
                 string lastName = "second customer";
-                string avatar = "http://domain.com/avatar.jpg";
+                string avatar = "http://domain.com/avatar2.jpg";
                 this.service.CreateUser(userType, sources, firstName, infix, lastName, avatar);
 
                 // Check if the user was added and contains the correct data

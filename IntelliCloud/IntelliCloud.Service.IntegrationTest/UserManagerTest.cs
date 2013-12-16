@@ -5,6 +5,7 @@ using nl.fhict.IntelliCloud.Data.IntelliCloud.Context;
 using nl.fhict.IntelliCloud.Data.IntelliCloud.Model;
 using nl.fhict.IntelliCloud.Data.OpenID.Model;
 using System;
+using System.Data.Entity;
 using System.Linq;
 
 namespace nl.fhict.IntelliCloud.Service.IntegrationTest
@@ -66,6 +67,7 @@ namespace nl.fhict.IntelliCloud.Service.IntegrationTest
                     FirstName = "Name",
                     Infix = "of",
                     LastName = "first customer",
+                    Avatar = "http://domain.com/avatar1.jpg",
                     Type = UserType.Customer,
                     CreationTime = DateTime.UtcNow
                 };
@@ -132,14 +134,26 @@ namespace nl.fhict.IntelliCloud.Service.IntegrationTest
                     Sub = "987654321",
                     GivenName = "Name of",
                     FamilyName = "second customer",
-                    Name = "Name of second customer",
-                    Email = "customer2@domain.com"
+                    Email = "customer2@domain.com",
+                    Picture = "http://domain.com/avatar2.jpg"
                 };
 
                 // Create a user using the user info
                 this.manager.CreateUser(userInfo);
 
-                // TODO: check if the user object contains the correct data
+                // Check if the user was added and contains the correct data
+                using (IntelliCloudContext context = new IntelliCloudContext())
+                {
+                    UserEntity entity = context.Users
+                                        .Include(u => u.Sources)
+                                        .Include(u => u.Sources.Select(s => s.SourceDefinition))
+                                        .Single(u => u.FirstName.Equals(userInfo.GivenName) && u.LastName.Equals(userInfo.FamilyName));
+
+                    Assert.AreEqual(entity.Type, UserType.Customer);
+                    entity.Sources.Select(s => s.SourceDefinition.Name.Equals("accounts.google.com") && s.Value.Equals(userInfo.Sub));
+                    entity.Sources.Select(s => s.SourceDefinition.Name.Equals("Mail") && s.Value.Equals(userInfo.Email));
+                    Assert.AreEqual(entity.Avatar, userInfo.Picture);
+                }
             }
             catch (Exception e)
             {
@@ -160,16 +174,22 @@ namespace nl.fhict.IntelliCloud.Service.IntegrationTest
                 {
                     Issuer = "accounts.google.com",
                     Sub = "123456789",
-                    GivenName = "Name of",
-                    FamilyName = "customer",
-                    Name = "Name of customer",
-                    Email = "customer1@domain.com"
+                    GivenName = "Name",
+                    FamilyName = "first customer",
+                    Email = "customer1@domain.com",
+                    Picture = "http://domain.com/avatar1.jpg"
                 };
 
                 // Match a user using the user info
-                User matchedUser = this.manager.MatchUser(userInfo);
+                User user = this.manager.MatchUser(userInfo);
 
-                // TODO: check if the user object contains the correct data
+                // Check if the user contains the correct data
+                Assert.AreEqual(user.Type, UserType.Customer);
+                Assert.AreEqual(user.FirstName, userInfo.GivenName);
+                Assert.AreEqual(user.LastName, userInfo.FamilyName);
+                user.Sources.Select(s => s.SourceDefinition.Name.Equals("accounts.google.com") && s.Value.Equals(userInfo.Sub));
+                user.Sources.Select(s => s.SourceDefinition.Name.Equals("Mail") && s.Value.Equals(userInfo.Email));
+                Assert.AreEqual(user.Avatar, userInfo.Picture);
             }
             catch (Exception e)
             {
