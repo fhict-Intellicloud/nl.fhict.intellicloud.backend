@@ -39,54 +39,25 @@ namespace nl.fhict.IntelliCloud.Business.Manager
         /// <param name="employeeId">The optional employee identifier, only answers about which the employee has 
         /// knowledge are returned (keywords between user and answer match).</param>
         /// <returns>Returns the answers that match the filters.</returns>
-        public IList<Answer> GetAnswers(AnswerState answerState, int? employeeId)
+        public IList<Answer> GetAnswers(AnswerState answerState, int? employeeId = null)
         {
             List<Answer> answers = new List<Answer>();
-            List<AnswerEntity> answerentities;
 
             using (var ctx = new IntelliCloudContext())
             {
-                if (answerState == AnswerState.NotNeeded && employeeId == null)
-                {
 
-                    answerentities = (from a in ctx.Answers
+                var query = (from a in ctx.Answers
                                                                .Include(a => a.User)
                                                                .Include(a => a.User.Sources)
                                                                .Include(a => a.User.Sources.Select(s => s.SourceDefinition))
-                                      select a).ToList();
-                }
-                else if (answerState == AnswerState.NotNeeded)
+                             select a).Where(x => x.AnswerState == answerState);
+
+                if (employeeId != null)
                 {
-                    Validation.IdCheck(employeeId.ToString());
-                    answerentities = (from a in ctx.Answers
-                                                               .Include(a => a.User)
-                                                               .Include(a => a.User.Sources)
-                                                               .Include(a => a.User.Sources.Select(s => s.SourceDefinition))
-                                      where a.User.Id == employeeId
-                                      select a).ToList();
-                }
-                else if (employeeId == null)
-                {
-                    answerentities = (from a in ctx.Answers
-                                                       .Include(a => a.User)
-                                                       .Include(a => a.User.Sources)
-                                                       .Include(a => a.User.Sources.Select(s => s.SourceDefinition))
-                                      where a.AnswerState == answerState
-                                      select a).ToList();
-                }
-                else
-                {
-                    Validation.IdCheck(employeeId.ToString());
-                    answerentities = (from a in ctx.Answers
-                                                       .Include(a => a.User)
-                                                       .Include(a => a.User.Sources)
-                                                       .Include(a => a.User.Sources.Select(s => s.SourceDefinition))
-                                      where a.AnswerState == answerState &&
-                                            a.User.Id == employeeId
-                                      select a).ToList();
+                    query.Where(x => x.User.Id == employeeId);
                 }
 
-                answers = ConvertEntities.AnswerEntityListToAnswerList(answerentities);
+                answers = ConvertEntities.AnswerEntityListToAnswerList(query.ToList());
             }
 
             return answers;

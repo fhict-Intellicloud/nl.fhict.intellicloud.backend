@@ -60,6 +60,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Compile>
+    <Compile Include="ValidationTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\IntelliCloud.Business\IntelliCloud.Business.csproj">

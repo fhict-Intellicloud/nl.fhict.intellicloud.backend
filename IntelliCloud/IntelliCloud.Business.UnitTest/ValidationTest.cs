@@ -24,6 +24,9 @@ namespace nl.fhict.IntelliCloud.Business.UnitTest
 
         #region Methods
 
+        /// <summary>
+        /// Method that gets called each time a test is run.
+        /// </summary>
         [TestInitialize]
         public void Initialize()
         {
@@ -72,39 +75,44 @@ namespace nl.fhict.IntelliCloud.Business.UnitTest
         #endregion StringCheck
 
         #region IdCheck
+        /// <summary>
+        /// Test if the correct exception is thrown when passing a value that cannot be converted to an integer
+        /// </summary>
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void IdCheck_NegativeInt()
+        {
+            validation.IdCheck(-1);
+        }
 
         /// <summary>
         /// Test if the correct exception is thrown when passing a value that cannot be converted to an integer
         /// </summary>
         [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
         public void IdCheck_Unparseable()
         {
-            try
-            {
-                validation.IdCheck("UnparseableValue");
-                Assert.Fail();
-            }
-            catch (Exception e)
-            {
-                Assert.AreEqual("Id can not be converted to an integer.", e.Message);
-            }
+            validation.IdCheck("UnparseableValue");
         }
 
         /// <summary>
         /// Test if the correct exception is thrown when passing a negative value
         /// </summary>
         [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
         public void IdCheck_Negative()
         {
-            try
-            {
-                validation.IdCheck("-1");
-                Assert.Fail();
-            }
-            catch (Exception e)
-            {
-                Assert.AreEqual("Id has to be positive.", e.Message);
-            }
+            validation.IdCheck("-1");
+        }
+
+        /// <summary>
+        /// Test if the correct exception is thrown when passing a null value
+        /// </summary>
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void IdCheck_Null()
+        {
+            validation.IdCheck(null);
         }
 
         #endregion IdCheck
@@ -115,34 +123,30 @@ namespace nl.fhict.IntelliCloud.Business.UnitTest
         /// Test if the correct exception is thrown when passing a tweet that's too long
         /// </summary>
         [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
         public void TweetLengthCheck_Length()
         {
-            try
-            {
-                validation.TweetLengthCheck("Hello this answer is too long so it can't be send to twitter test test test test test test test test test test test test test test test test!!");
-                Assert.Fail();
-            }
-            catch (Exception e)
-            {
-                Assert.AreEqual("Tweet can't be longer then 140 characters", e.Message);
-            }
+            validation.TweetLengthCheck("Hello this answer is too long so it can't be send to twitter test test test test test test test test test test test test test test test test!!");
         }
 
         /// <summary>
         /// Test if the correct exception is thrown when passing a tweet empty
         /// </summary>
         [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
         public void TweetLengthCheck_Empty()
         {
-            try
-            {
                 validation.TweetLengthCheck("");
-                Assert.Fail();
-            }
-            catch (Exception e)
-            {
-                Assert.AreEqual("Tweet is empty", e.Message);
-            }
+        }
+
+        /// <summary>
+        /// Test if the correct exception is thrown when passing a tweet empty
+        /// </summary>
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void TweetLengthCheck_Null()
+        {
+            validation.TweetLengthCheck(null);
         }
 
         #endregion TweetLengthCheck

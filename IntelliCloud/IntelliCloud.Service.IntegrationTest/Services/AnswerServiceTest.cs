@@ -144,7 +144,7 @@ namespace nl.fhict.IntelliCloud.Service.IntegrationTest.Manager
             try
             {
                 // TODO: getAnswer summary states that paramters are optional this is not the case.
-                var questions = this.service.GetAnswers(AnswerState.NotNeeded, null);
+                var questions = this.service.GetAnswers(AnswerState.Ready);
                 Assert.IsTrue(questions.Count == 1);
 
             }
@@ -184,7 +184,7 @@ namespace nl.fhict.IntelliCloud.Service.IntegrationTest.Manager
             try
             {
                 // TODO: getAnswer summary states that paramters are optional this is not the case.
-                var questions = this.service.GetAnswers(AnswerState.NotNeeded, this.employee.Id);
+                var questions = this.service.GetAnswers(AnswerState.Ready, this.employee.Id);
                 Assert.IsTrue(questions.Count == 1);
 
             }

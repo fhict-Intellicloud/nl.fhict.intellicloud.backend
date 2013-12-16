@@ -13,12 +13,6 @@ namespace nl.fhict.IntelliCloud.Common.DataTransfer
     public enum AnswerState
     {
         /// <summary>
-        /// A state indicating that the answers of alle states need to be found when getting them.
-        /// </summary>
-        [EnumMember]
-        NotNeeded,
-
-        /// <summary>
         /// A state indicating that the <see cref="Answer"/> is ready to be used by the system. This means the system
         /// can used it to automatically answer questions and employees can use it to manually send it.
         /// </summary>
