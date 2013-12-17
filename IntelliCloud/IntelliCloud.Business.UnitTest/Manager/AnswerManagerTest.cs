@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using nl.fhict.IntelliCloud.Business.Manager;
@@ -47,26 +43,7 @@ namespace nl.fhict.IntelliCloud.Business.UnitTest.Manager
         #endregion Methods
 
         #region Tests
-
-        /// <summary>
-        /// Test to validate that the employee idee is being validated.
-        /// </summary>
-        [TestMethod]
-        public void GetAnswersTest()
-        {
-            int employeeId = 1;
-            AnswerState answerState = AnswerState.Ready;
-
-            try
-            {
-                this.manager.GetAnswers(answerState, employeeId);
-            }
-            catch (Exception)
-            { }
-
-            validation.Verify(v => v.IdCheck(employeeId), Times.Once());
-        }
-
+        
         /// <summary>
         /// Test to validate that the answer id is being validated.
         /// </summary>
@@ -117,6 +94,28 @@ namespace nl.fhict.IntelliCloud.Business.UnitTest.Manager
         /// Validates that the answerId answer are validated.
         /// </summary>
         [TestMethod]
+        public void GetAnswersSearchTest()
+        {
+            string answerId = "1";
+
+            string answer = "Go to you my documents folder and itt will be there.";
+            AnswerState answerState = AnswerState.Ready;
+
+            try
+            {
+                this.manager.UpdateAnswer(answerId, answerState, answer);
+            }
+            catch (Exception)
+            { }
+
+            validation.Verify(v => v.IdCheck(answerId), Times.Once());
+            validation.Verify(v => v.StringCheck(answer), Times.Once());
+        }
+
+        /// <summary>
+        /// Validates that the answerId answer are validated.
+        /// </summary>
+        [TestMethod]
         public void UpdateAnswerTest()
         {
             string answerId = "1";
@@ -133,6 +132,97 @@ namespace nl.fhict.IntelliCloud.Business.UnitTest.Manager
 
             validation.Verify(v => v.IdCheck(answerId), Times.Once());
             validation.Verify(v => v.StringCheck(answer), Times.Once());
+        }
+
+        /// <summary>
+        /// Validates that the answerId answer are validated.
+        /// </summary>
+        [TestMethod]
+        public void UpdateAnswersTest()
+        {
+            AnswerState answerState = AnswerState.Ready;
+            string searchString = "This is a search string";
+
+            try
+            {
+                this.manager.GetAnswers(answerState,searchString);
+            }
+            catch (Exception)
+            { }
+
+            validation.Verify(v => v.StringCheck(searchString), Times.Once());
+        }
+
+        /// <summary>
+        /// Validates that the answerId answer are validated.
+        /// </summary>
+        [TestMethod]
+        public void GetAnswererTest()
+        {
+            string answerId = "1";
+
+            try
+            {
+                this.manager.GetAnswerer(answerId);
+            }
+            catch (Exception)
+            { }
+
+            validation.Verify(v => v.IdCheck(answerId), Times.Once());
+        }
+
+        /// <summary>
+        /// Validates that the answerId answer are validated.
+        /// </summary>
+        [TestMethod]
+        public void GetFeedbacksTest()
+        {
+            string answerId = "1";
+
+            try
+            {
+                this.manager.GetFeedbacks(answerId, null);
+            }
+            catch (Exception)
+            { }
+
+            validation.Verify(v => v.IdCheck(answerId), Times.Once());
+        }
+
+        /// <summary>
+        /// Validates that the answerId answer are validated.
+        /// </summary>
+        [TestMethod]
+        public void GetReviewsTest()
+        {
+            string answerId = "1";
+
+            try
+            {
+                this.manager.GetReviews(answerId, null);
+            }
+            catch (Exception)
+            { }
+
+            validation.Verify(v => v.IdCheck(answerId), Times.Once());
+        }
+
+        /// <summary>
+        /// Validates that the answerId answer are validated.
+        /// </summary>
+        [TestMethod]
+        public void GetKeywordsTest()
+        {
+            string answerId = "1";
+
+            try
+            {
+                this.manager.GetKeywords(answerId);
+            }
+            catch (Exception)
+            { }
+
+            validation.Verify(v => v.IdCheck(answerId), Times.Once());
         }
 
         #endregion Tests

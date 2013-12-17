@@ -1,15 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using nl.fhict.IntelliCloud.Business.UnitTest.Manager;
 using nl.fhict.IntelliCloud.Common.CustomException;
 using nl.fhict.IntelliCloud.Common.DataTransfer;
 using nl.fhict.IntelliCloud.Data.IntelliCloud.Context;
 using nl.fhict.IntelliCloud.Data.IntelliCloud.Model;
 
-namespace nl.fhict.IntelliCloud.Service.IntegrationTest.Manager
+namespace nl.fhict.IntelliCloud.Service.IntegrationTest.Services
 {
     /// <summary>
     /// This class inhibits the integration tests for the AnswerService.
@@ -125,6 +124,40 @@ namespace nl.fhict.IntelliCloud.Service.IntegrationTest.Manager
                 this.answer.User = this.employee;
                 this.answer.AnswerState = AnswerState.Ready;
 
+                ReviewEntity review = new ReviewEntity();
+                review.Answer = answer;
+                review.Content = "This is a review";
+                review.CreationTime = DateTime.UtcNow;
+                review.LastChangedTime = DateTime.UtcNow;
+                review.ReviewState = ReviewState.Open;
+                review.User = this.employee;
+
+                FeedbackEntity feedback = new FeedbackEntity();
+                feedback.Answer = answer;
+                feedback.Content = "This is feedback";
+                feedback.CreationTime = DateTime.UtcNow;
+                feedback.FeedbackState = FeedbackState.Open;
+                feedback.FeedbackType = FeedbackType.Declined;
+                feedback.LastChangedTime = DateTime.UtcNow;
+                feedback.Question = question;
+                feedback.User = customer;
+
+                KeywordEntity keyword = new KeywordEntity();
+                keyword.Name = "This";
+                keyword.CreationTime = DateTime.UtcNow;
+                
+                AnswerKeyEntity answerKeyEntity = new AnswerKeyEntity();
+                answerKeyEntity.Answer = answer;
+                answerKeyEntity.CreationTime = DateTime.UtcNow;
+                answerKeyEntity.Keyword = keyword;
+                answerKeyEntity.Affinity = 9;
+
+                ctx.Keywords.Add(keyword);
+                ctx.AnswerKeys.Add(answerKeyEntity);
+
+                ctx.Feedbacks.Add(feedback);
+                ctx.Reviews.Add(review);
+
                 ctx.Questions.Add(this.question);
                 ctx.Answers.Add(this.answer);
                 ctx.SaveChanges();
@@ -184,7 +217,7 @@ namespace nl.fhict.IntelliCloud.Service.IntegrationTest.Manager
             try
             {
                 // TODO: getAnswer summary states that paramters are optional this is not the case.
-                var questions = this.service.GetAnswers(AnswerState.Ready, this.employee.Id);
+                var questions = this.service.GetAnswers(AnswerState.Ready, "");
                 Assert.IsTrue(questions.Count == 1);
 
             }
@@ -314,6 +347,106 @@ namespace nl.fhict.IntelliCloud.Service.IntegrationTest.Manager
             }
         }
         #endregion UpdateAnswer tests
+
+        #region GetAnswerer tests
+        /// <summary>
+        /// Test to validate if the service returns the answerer
+        /// </summary>
+        [TestMethod]
+        [TestCategory("nl.fhict.IntelliCloud.Service.IntegrationTest")]
+        public void GetAnswerer_Test()
+        {
+            try
+            {
+                var answerId = this.answer.Id;
+
+                User answerer = this.service.GetAnswerer(answerId.ToString());
+
+                using (IntelliCloudContext ctx = new IntelliCloudContext())
+                {
+                    var ctxAnswerer = ctx.Users.Single(a => a.Id == this.employee.Id);
+
+                    Assert.AreEqual(ctxAnswerer.Id, answerer.Id);
+                }
+            }
+            catch (Exception e)
+            {
+                Assert.AreEqual(e.Message, "Sequence contains no elements");
+            }
+        }
+        #endregion GetAnswerer tests
+
+        #region GetFeedbacks tests
+        /// <summary>
+        /// Test to validate if the service returns the feedbacks
+        /// </summary>
+        [TestMethod]
+        [TestCategory("nl.fhict.IntelliCloud.Service.IntegrationTest")]
+        public void GetFeedbacks_test()
+        {
+            try
+            {
+                var answerId = this.answer.Id;
+
+                IList<Feedback> feedbacks = this.service.GetFeedbacks(answerId.ToString());
+
+                Assert.AreEqual(1, feedbacks.Count);
+            }
+            catch (Exception e)
+            {
+                Assert.AreEqual(e.Message, "Sequence contains no elements");
+            }
+        }
+
+        #endregion
+
+        #region GetReviews tests
+        /// <summary>
+        /// Test to validate if the service returns the Reviews
+        /// </summary>
+        [TestMethod]
+        [TestCategory("nl.fhict.IntelliCloud.Service.IntegrationTest")]
+        public void GetReviews_test()
+        {
+            try
+            {
+                var answerId = this.answer.Id;
+
+                IList<Review> reviews = this.service.GetReviews(answerId.ToString());
+
+                Assert.AreEqual(1, reviews.Count);
+            }
+            catch (Exception e)
+            {
+                Assert.AreEqual(e.Message, "Sequence contains no elements");
+            }
+        }
+
+        #endregion
+
+        #region GetKeywords tests
+        /// <summary>
+        /// Test to validate if the service returns the Reviews
+        /// </summary>
+        [TestMethod]
+        [TestCategory("nl.fhict.IntelliCloud.Service.IntegrationTest")]
+        public void GetKeywords_test()
+        {
+            try
+            {
+                var answerId = this.answer.Id;
+
+                IList<Keyword> keywords = this.service.GetKeywords(answerId.ToString());
+
+                Assert.AreEqual(1, keywords.Count);
+            }
+            catch (Exception e)
+            {
+                Assert.AreEqual(e.Message, "Sequence contains no elements");
+            }
+        }
+
+        #endregion
 
         #region Error handling tests
 

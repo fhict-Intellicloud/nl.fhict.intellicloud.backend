@@ -30,42 +30,6 @@ namespace nl.fhict.IntelliCloud.Business.Manager
         { }
 
         /// <summary>
-        /// Retrieves all the available answers and optionally filtering them using the answer state or employee 
-        /// identifier.
-        /// </summary>
-        /// <param name="answerState">The optional answer state, only answers with this state will be returned.
-        /// </param>
-        /// <param name="employeeId">The optional employee identifier, only answers about which the employee has 
-        /// knowledge are returned (keywords between user and answer match).</param>
-        /// <returns>Returns the answers that match the filters.</returns>
-        public IList<Answer> GetAnswers(AnswerState? answerState, int? employeeId)
-        {
-            List<Answer> answers = new List<Answer>();
-
-            using (var ctx = new IntelliCloudContext())
-            {
-
-                var query = ctx.Answers
-                    .Include(a => a.LanguageDefinition);
-
-                if (employeeId != null)
-                {
-                    query = query.Where(a => a.User.Id == employeeId);
-                }
-
-                if (answerState != null)
-                {
-                    query = query.Where(a => a.AnswerState == answerState);
-                }
-
-                answers = ConvertEntities.AnswerEntityListToAnswerList(query.ToList());
-            }
-
-            return answers;
-
-        }
-
-        /// <summary>
         /// Retrieve the answer with the given identifier.
         /// </summary>
         /// <param name="id">The identifier of the answer.</param>
@@ -197,6 +161,8 @@ namespace nl.fhict.IntelliCloud.Business.Manager
 
         public IList<Answer> GetAnswers(AnswerState? state, string search)
         {
+            Validation.StringCheck(search);
+            
             throw new NotImplementedException();
         }
 
