@@ -20,20 +20,30 @@ namespace nl.fhict.IntelliCloud.Service
         {
             this.manager = new ReviewManager();
         }
-
-        public IList<Review> GetReviews(int answerId)
-        {
-            return manager.GetReviews(answerId);
-        }
-
+        
         public void CreateReview(int employeeId, int answerId, string review)
         {
-            manager.CreateReview(employeeId, answerId, review);
+            this.manager.CreateReview(employeeId, answerId, review);
         }
 
         public void UpdateReview(string id, ReviewState reviewState)
         {
-            manager.UpdateReview(id, reviewState);
+            this.manager.UpdateReview(id, reviewState);
+        }
+
+        public Feedback GetReview(string id)
+        {
+            return this.manager.GetReview(id);
+        }
+
+        public User GetUser(string id)
+        {
+            return this.manager.GetUser(id);
+        }
+
+        public Answer GetAnswer(string id)
+        {
+            return this.manager.GetAnswer(id);
         }
     }
 }

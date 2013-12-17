@@ -257,5 +257,20 @@ namespace nl.fhict.IntelliCloud.Business.Manager
                 context.SaveChanges();
             }
         }
+
+        public IList<User> GetUsers(DateTime? after)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IList<Keyword> GetKeywords(string id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IList<Question> GetQuestions(string id, DateTime? after)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

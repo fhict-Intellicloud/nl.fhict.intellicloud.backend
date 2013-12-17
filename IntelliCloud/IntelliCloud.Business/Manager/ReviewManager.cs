@@ -117,5 +117,20 @@ namespace nl.fhict.IntelliCloud.Business.Manager
                 return ConvertEntities.ReviewEntityListToReviewList(reviewEntities);
             }
         }
+
+        public Answer GetAnswer(string id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public User GetUser(string id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Feedback GetReview(string id)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

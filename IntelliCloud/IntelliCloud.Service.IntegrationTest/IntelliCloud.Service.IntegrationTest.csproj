@@ -63,6 +63,10 @@
     <Compile Include="ValidationTest.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\IntelliCloud.Business.UnitTest\IntelliCloud.Business.UnitTest.csproj">
+      <Project>{482D3E09-31B9-4642-8C08-01FE70223490}</Project>
+      <Name>IntelliCloud.Business.UnitTest</Name>
+    </ProjectReference>
     <ProjectReference Include="..\IntelliCloud.Business\IntelliCloud.Business.csproj">
       <Project>{59a5b95e-1352-4b18-aaa4-71e1f334a2f5}</Project>
       <Name>IntelliCloud.Business</Name>

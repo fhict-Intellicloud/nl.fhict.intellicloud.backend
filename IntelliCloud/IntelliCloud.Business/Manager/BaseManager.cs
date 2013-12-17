@@ -24,6 +24,7 @@ namespace nl.fhict.IntelliCloud.Business.Manager
             Validation = validation;
             ConvertEntities = new ConvertEntities();
             OpenIDContext = new OpenIDContext();
+            SendAnswerFactory = new SendAnswerFactory();
         }
 
         /// <summary>
@@ -34,6 +35,7 @@ namespace nl.fhict.IntelliCloud.Business.Manager
             Validation = new Validation();
             ConvertEntities = new ConvertEntities();
             OpenIDContext = new OpenIDContext();
+            SendAnswerFactory = new SendAnswerFactory();
         }
     }
 }
