@@ -114,16 +114,16 @@ namespace nl.fhict.IntelliCloud.Business.Manager
                 answerEntity.AnswerState = answerState;
                 answerEntity.Content = answer;
                 answerEntity.CreationTime = DateTime.UtcNow;
+                answerEntity.LastChangedTime = DateTime.UtcNow;
 
-                UserEntity user = ctx.Users.SingleOrDefault(ld => ld.Id == answererId);
+                UserEntity user = ctx.Users
+                    .Include(u => u.Sources)
+                    .SingleOrDefault(ld => ld.Id == answererId);
 
                 if (user == null)
                     throw new NotFoundException("No user entity exists with the specified ID.");
 
                 answerEntity.User = user;
-                // TODO link answer to question and generate a feedbackToken using GUID (can both be set in the question).
-                // TODO set IsPrivate based on private settings in question.
-                answerEntity.IsPrivate = false;
 
                 // TODO determine real language 
                 LanguageDefinitionEntity languageDefinition = ctx.LanguageDefinitions.SingleOrDefault(ld => ld.Name.Equals("English"));
@@ -137,11 +137,32 @@ namespace nl.fhict.IntelliCloud.Business.Manager
 
                 ctx.SaveChanges();
 
+                QuestionEntity question = ctx.Questions
+                    .Include(q => q.User)
+                    .Include(q => q.User.Sources)
+                    .Include(q => q.Source)
+                    .Include(q => q.Source.Source)
+                    .Include(q => q.Source.Source.SourceDefinition)
+                    .Single(q => q.Id == questionId);
+
+                question.Answer = answerEntity;
+                question.Answerer = user;
+
+                Guid token = Guid.NewGuid();
+                question.FeedbackToken = token.ToString();
+
+                answerEntity.IsPrivate = question.IsPrivate;
+
+                ctx.SaveChanges();
+
+                Question quest = ConvertEntities.QuestionEntityToQuestion(question);
+                Answer a = ConvertEntities.AnswerEntityToAnswer(answerEntity);
+
+
+                this.SendAnswerFactory.LoadPlugin(ConvertEntities.SourceDefinitionEntityToSourceDefinition(question.Source.Source.SourceDefinition))
+                    .SendAnswer(quest, a);
             }
 
-            // TODO put the SendAnswerFactory in the BaseManager.
-            // TODO send the answer using the this.SendAnswerFactory.LoadPlugin(question.Source.Source.SourDefinition).SendAnswer(question, answer) method.
-            // this.SendAnswerFactory.LoadPlugin(question.Source.Source.SourDefinition).SendAnswer(question, answer);
         }
 
         /// <summary>
