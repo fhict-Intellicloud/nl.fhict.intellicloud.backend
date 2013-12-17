@@ -13,10 +13,10 @@ namespace nl.fhict.IntelliCloud.Common.DataTransfer
     public class Review
     {
         /// <summary>
-        /// Gets or sets the unique identifier of the review.
+        /// Gets or sets the URL to this specific review.
         /// </summary>
         [DataMember]
-        public int Id { get; set; }
+        public Uri Id { get; set; }
 
         /// <summary>
         /// Gets or sets the content of the review. The content contains the comments a user made about the answer.
@@ -25,10 +25,10 @@ namespace nl.fhict.IntelliCloud.Common.DataTransfer
         public string Content { get; set; }
 
         /// <summary>
-        /// Gets or sets the identifier of the answer that the review applies to.
+        /// Gets or sets the URL to the answer that the review applies to.
         /// </summary>
         [DataMember]
-        public int AnswerId { get; set; }
+        public Uri Answer { get; set; }
 
         /// <summary>
         /// Gets or sets the state of the review. This state indicates if the review is processed.
@@ -36,10 +36,10 @@ namespace nl.fhict.IntelliCloud.Common.DataTransfer
         public ReviewState ReviewState { get; set; }
         
         /// <summary>
-        /// Gets or sets the user that made the review.
+        /// Gets or sets the URL to the user that made the review.
         /// </summary>
         [DataMember]
-        public User User { get; set; }
+        public Uri User { get; set; }
 
         /// <summary>
         /// Gets or sets the creation date and time of the review.
