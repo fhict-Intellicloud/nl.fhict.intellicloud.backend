@@ -94,28 +94,6 @@ namespace nl.fhict.IntelliCloud.Business.UnitTest.Manager
         /// Validates that the answerId answer are validated.
         /// </summary>
         [TestMethod]
-        public void GetAnswersSearchTest()
-        {
-            string answerId = "1";
-
-            string answer = "Go to you my documents folder and itt will be there.";
-            AnswerState answerState = AnswerState.Ready;
-
-            try
-            {
-                this.manager.UpdateAnswer(answerId, answerState, answer);
-            }
-            catch (Exception)
-            { }
-
-            validation.Verify(v => v.IdCheck(answerId), Times.Once());
-            validation.Verify(v => v.StringCheck(answer), Times.Once());
-        }
-
-        /// <summary>
-        /// Validates that the answerId answer are validated.
-        /// </summary>
-        [TestMethod]
         public void UpdateAnswerTest()
         {
             string answerId = "1";
@@ -133,12 +111,12 @@ namespace nl.fhict.IntelliCloud.Business.UnitTest.Manager
             validation.Verify(v => v.IdCheck(answerId), Times.Once());
             validation.Verify(v => v.StringCheck(answer), Times.Once());
         }
-
+        
         /// <summary>
         /// Validates that the answerId answer are validated.
         /// </summary>
         [TestMethod]
-        public void UpdateAnswersTest()
+        public void GetAnswersTest()
         {
             AnswerState answerState = AnswerState.Ready;
             string searchString = "This is a search string";
