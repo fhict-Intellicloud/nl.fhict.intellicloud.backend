@@ -82,22 +82,59 @@ namespace nl.fhict.IntelliCloud.Business.UnitTest.Manager
         }
 
         /// <summary>
-        /// In this test we check if the answerId is being validated in the GetReviews method.
+        /// In this test we check if the id is being validated in the GetAnswer method.
         /// </summary>
         [TestMethod]
-        public void GetReviewsTest()
+        public void GetAnswerTest()
         {
-            int answerId = 2;
+            string id = "2";
 
             try
             {
-                manager.GetReviews(answerId);
+                manager.GetAnswer(id);
             }
             catch (Exception)
             { }
 
-            validation.Verify(v => v.IdCheck(answerId), Times.Once());
+            validation.Verify(v => v.IdCheck(id), Times.Once());
         }
+
+        /// <summary>
+        /// In this test we check if the id is being validated in the GetUser method.
+        /// </summary>
+        [TestMethod]
+        public void GetUserTest()
+        {
+            string id = "2";
+
+            try
+            {
+                manager.GetUser(id);
+            }
+            catch (Exception)
+            { }
+
+            validation.Verify(v => v.IdCheck(id), Times.Once());
+        }
+
+        /// <summary>
+        /// In this test we check if the id is being validated in the GetReview method.
+        /// </summary>
+        [TestMethod]
+        public void GetReviewTest()
+        {
+            string id = "2";
+
+            try
+            {
+                manager.GetReview(id);
+            }
+            catch (Exception)
+            { }
+
+            validation.Verify(v => v.IdCheck(id), Times.Once());
+        }
+        
 
         #endregion Tests
 

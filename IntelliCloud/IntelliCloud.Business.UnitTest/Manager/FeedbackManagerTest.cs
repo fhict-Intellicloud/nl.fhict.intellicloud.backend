@@ -34,26 +34,6 @@ namespace nl.fhict.IntelliCloud.Business.UnitTest.Manager
         #region Tests
 
         /// <summary>
-        /// GetFeedbacks test method that checks if validation is performed.
-        /// </summary>
-        [TestMethod]
-        public void GetFeedbacksTest()
-        {
-            int answerId = 1;
-
-            try
-            {
-                manager.GetFeedbacks(answerId);
-            }
-            catch (Exception)
-            {
-            }
-
-            // Validation should be performed
-            validation.Verify(v => v.IdCheck(answerId), Times.Once);
-        }
-
-        /// <summary>
         /// CreateFeedback test method that checks if validation is performed.
         /// </summary>
         [TestMethod]
@@ -99,6 +79,78 @@ namespace nl.fhict.IntelliCloud.Business.UnitTest.Manager
 
             // Validation should be performed
             validation.Verify(v => v.IdCheck(feedbackId), Times.Once);
+        }
+
+        /// <summary>
+        /// In this test we check if the id is being validated in the GetAnswer method.
+        /// </summary>
+        [TestMethod]
+        public void GetAnswerTest()
+        {
+            string id = "2";
+
+            try
+            {
+                manager.GetAnswer(id);
+            }
+            catch (Exception)
+            { }
+
+            validation.Verify(v => v.IdCheck(id), Times.Once());
+        }
+
+        /// <summary>
+        /// In this test we check if the id is being validated in the GetUser method.
+        /// </summary>
+        [TestMethod]
+        public void GetUserTest()
+        {
+            string id = "2";
+
+            try
+            {
+                manager.GetUser(id);
+            }
+            catch (Exception)
+            { }
+
+            validation.Verify(v => v.IdCheck(id), Times.Once());
+        }
+
+        /// <summary>
+        /// In this test we check if the id is being validated in the GetQuestion method.
+        /// </summary>
+        [TestMethod]
+        public void GetQuestionTest()
+        {
+            string id = "2";
+
+            try
+            {
+                manager.GetQuestion(id);
+            }
+            catch (Exception)
+            { }
+
+            validation.Verify(v => v.IdCheck(id), Times.Once());
+        }
+
+        /// <summary>
+        /// In this test we check if the id is being validated in the GetFeedback method.
+        /// </summary>
+        [TestMethod]
+        public void GetFeedbackTest()
+        {
+            string id = "2";
+
+            try
+            {
+                manager.GetFeedback(id);
+            }
+            catch (Exception)
+            { }
+
+            validation.Verify(v => v.IdCheck(id), Times.Once());
         }
 
         #endregion Tests
