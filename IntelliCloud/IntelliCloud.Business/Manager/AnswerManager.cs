@@ -38,22 +38,24 @@ namespace nl.fhict.IntelliCloud.Business.Manager
         /// <param name="employeeId">The optional employee identifier, only answers about which the employee has 
         /// knowledge are returned (keywords between user and answer match).</param>
         /// <returns>Returns the answers that match the filters.</returns>
-        public IList<Answer> GetAnswers(AnswerState answerState, int? employeeId)
+        public IList<Answer> GetAnswers(AnswerState? answerState, int? employeeId)
         {
             List<Answer> answers = new List<Answer>();
 
             using (var ctx = new IntelliCloudContext())
             {
 
-                var query = (from a in ctx.Answers
-                                                               .Include(a => a.User)
-                                                               .Include(a => a.User.Sources)
-                                                               .Include(a => a.User.Sources.Select(s => s.SourceDefinition))
-                             select a).Where(x => x.AnswerState == answerState);
+                var query = ctx.Answers
+                    .Include(a => a.LanguageDefinition);
 
                 if (employeeId != null)
                 {
-                    query.Where(x => x.User.Id == employeeId);
+                    query = query.Where(a => a.User.Id == employeeId);
+                }
+
+                if (answerState != null)
+                {
+                    query = query.Where(a => a.AnswerState == answerState);
                 }
 
                 answers = ConvertEntities.AnswerEntityListToAnswerList(query.ToList());
@@ -78,15 +80,11 @@ namespace nl.fhict.IntelliCloud.Business.Manager
             {
                 int iId = Convert.ToInt32(id);
 
-                AnswerEntity answerentity = (from a in ctx.Answers
-                                                         .Include(a => a.User)
-                                                         .Include(a => a.User.Sources)
-                                                         .Include(a => a.User.Sources.Select(s => s.SourceDefinition))
-                                             where a.Id == iId
-                                             select a).Single();
+                AnswerEntity answerentity = ctx.Answers
+                    .Include(a => a.LanguageDefinition)
+                    .Single(a => a.Id == iId);
 
                 answer = ConvertEntities.AnswerEntityToAnswer(answerentity);
-
             }
 
             return answer;
@@ -129,7 +127,7 @@ namespace nl.fhict.IntelliCloud.Business.Manager
                 LanguageDefinitionEntity languageDefinition = ctx.LanguageDefinitions.SingleOrDefault(ld => ld.Name.Equals("English"));
 
                 if (languageDefinition == null)
-                    throw new NotFoundException("No languageDefinition entity exists with the specified ID.");
+                    throw new NotFoundException("No languageDefinition entity exists with the specified name.");
 
                 answerEntity.LanguageDefinition = languageDefinition;
 
@@ -180,11 +178,10 @@ namespace nl.fhict.IntelliCloud.Business.Manager
             {
                 int iId = Convert.ToInt32(id);
 
-                AnswerEntity answerEntity = (from a in ctx.Answers
-                                                 .Include(a => a.User)
-                                                 .Include(a => a.LanguageDefinition)
-                                             where a.Id == iId
-                                             select a).SingleOrDefault();
+                AnswerEntity answerEntity = ctx.Answers
+                    .Include(a => a.LanguageDefinition)
+                    .Include(a => a.User)
+                    .SingleOrDefault(a => a.Id == iId);
 
                 if (answerEntity == null)
                     throw new NotFoundException("No answer entity exists with the specified ID.");
@@ -205,22 +202,100 @@ namespace nl.fhict.IntelliCloud.Business.Manager
 
         public User GetAnswerer(string id)
         {
-            throw new NotImplementedException();
+            Validation.IdCheck(id);
+
+            User user = new User();
+
+            using (IntelliCloudContext ctx = new IntelliCloudContext())
+            {
+                int iId = Convert.ToInt32(id);
+
+                AnswerEntity answerEntity = ctx.Answers
+                    .Include(a => a.User)
+                    .Include(a => a.User.Sources)
+                    .Include(a => a.User.Sources.Select(s => s.SourceDefinition))
+                    .SingleOrDefault(a => a.Id == iId);
+
+                if (answerEntity == null)
+                    throw new NotFoundException("No answer found for the given Id");
+
+                user = ConvertEntities.UserEntityToUser(answerEntity.User);
+            }
+
+            return user;
         }
 
         public IList<Feedback> GetFeedbacks(string id, FeedbackState? state)
         {
-            throw new NotImplementedException();
+            Validation.IdCheck(id);
+
+            List<Feedback> feedbacks = new List<Feedback>();
+
+            using (IntelliCloudContext ctx = new IntelliCloudContext())
+            {
+                int iId = Convert.ToInt32(id);
+                
+                var query = ctx.Feedbacks.Where(f => f.Answer.Id == iId);
+
+                if (state != null)
+                {
+                    query = query.Where(f => f.FeedbackState == state);
+                }
+
+                List<FeedbackEntity> feedbackEntities = query.ToList();
+
+                feedbacks = feedbackEntities.Select(s => ConvertEntities.FeedbackEntityToFeedback(s)).ToList();
+            }
+
+            return feedbacks;
         }
 
         public IList<Review> GetReviews(string id, ReviewState? state)
         {
-            throw new NotImplementedException();
+            Validation.IdCheck(id);
+
+            List<Review> reviews = new List<Review>();
+
+            using (IntelliCloudContext ctx = new IntelliCloudContext())
+            {
+                int iId = Convert.ToInt32(id);
+
+                var query = ctx.Reviews.Where(f => f.Answer.Id == iId);
+
+                if (state != null)
+                {
+                    query = query.Where(f => f.ReviewState == state);
+                }
+
+                List<ReviewEntity> reviewEntities = query.ToList();
+
+                reviews = ConvertEntities.ReviewEntityListToReviewList(reviewEntities);
+            }
+
+            return reviews;
         }
 
         public IList<Keyword> GetKeywords(string id)
         {
-            throw new NotImplementedException();
+            Validation.IdCheck(id);
+
+            List<Keyword> keywords = new List<Keyword>();
+
+            using (IntelliCloudContext ctx = new IntelliCloudContext())
+            {
+                int iId = Convert.ToInt32(id);
+
+                List<KeywordEntity> keywordEntities = (from k in ctx.Keywords
+                                                      join ak in ctx.AnswerKeys
+                                                      on k.Id equals ak.Keyword.Id
+                                                      select k).ToList();
+
+                // TODO convert to keyword list
+
+                //keywords = ConvertEntities(reviewEntities);
+            }
+
+            return keywords;
         }
     }
 }
