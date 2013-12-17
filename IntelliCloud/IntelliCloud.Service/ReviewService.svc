@@ -1,1 +1,0 @@
-﻿<%@ ServiceHost Language="C#" Debug="true" Service="nl.fhict.IntelliCloud.Service.ReviewService" CodeBehind="ReviewService.svc.cs" %>
