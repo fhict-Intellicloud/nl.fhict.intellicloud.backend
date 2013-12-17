@@ -6,6 +6,7 @@ using System.Runtime.Serialization;
 using System.ServiceModel;
 using System.ServiceModel.Web;
 using System.Text;
+using nl.fhict.IntelliCloud.Business.Authorization;
 
 namespace nl.fhict.IntelliCloud.Service
 {
@@ -16,30 +17,92 @@ namespace nl.fhict.IntelliCloud.Service
     public interface IAnswerService
     {
         /// <summary>
-        /// Retrieves all the available answers and optionally filtering them using the answer state or employee 
-        /// identifier.
+        /// Retrieves all the available answers and filtering them using the answer state.
         /// </summary>
-        /// <param name="answerState">The optional answer state, only answers with this state will be returned.
+        /// <param name="state">The optional answer state, only answers with this state will be returned.</param>
+        /// <param name="search">The optional search string for which possible answers are returned.
         /// </param>
-        /// <param name="employeeId">The optional employee identifier, only answers about which the employee has 
-        /// knowledge are returned (keywords between user and answer match).</param>
-        /// <returns>Returns the answers that match the filters.</returns>
+        /// <returns>Returns the answers that match the filter.</returns> 
+        /// <remarks>Users of type <see cref="UserType.Customer"/> can only retrieve answers of state 
+        /// <see cref="AnswerState.Closed"/>.</remarks>
         [OperationContract]
-        [WebGet(UriTemplate = "answers?state={answerState}&employeeId={employeeId}",
+        [WebGet(UriTemplate = "answers?state={state}&search={search}",
             RequestFormat = WebMessageFormat.Json,
             ResponseFormat = WebMessageFormat.Json)]
-        IList<Answer> GetAnswers(AnswerState answerState, int employeeId);
+        [AuthorizationOptional]
+        IList<Answer> GetAnswers(AnswerState? state = null, string search = null);
 
         /// <summary>
         /// Retrieve the answer with the given identifier.
         /// </summary>
         /// <param name="id">The identifier of the answer.</param>
         /// <returns>Returns the answer with the given identifier.</returns>
+        /// <remarks>Only users of type <see cref="UserType.Employee"/> are able to retrieve answers by identifier.
+        /// </remarks>
         [OperationContract]
         [WebGet(UriTemplate = "answers/{id}",
             RequestFormat = WebMessageFormat.Json,
             ResponseFormat = WebMessageFormat.Json)]
+        [AuthorizationRequired(UserType.Employee)]
         Answer GetAnswer(string id);
+
+        /// <summary>
+        /// Retrieve the answerer of the answer with the given identifier.
+        /// </summary>
+        /// <param name="id">The identifier of the answer.</param>
+        /// <returns>Returns the user which created the answer with the given identifier.</returns>
+        /// <remarks>Only users of type <see cref="UserType.Employee"/> are able to retrieve the answerer of an answer.
+        /// </remarks>
+        [OperationContract]
+        [WebGet(UriTemplate = "answers/{id}/answerer",
+            RequestFormat = WebMessageFormat.Json,
+            ResponseFormat = WebMessageFormat.Json)]
+        [AuthorizationRequired(UserType.Employee)]
+        User GetAnswerer(string id);
+
+        /// <summary>
+        /// Retrieve the feedbacks for the answer with the given identifier, filtered by state.
+        /// </summary>
+        /// <param name="id">The identifier of the answer.</param>
+        /// <param name="state">The optional state of the feedbacks which are returned.</param>
+        /// <returns>Returns the feedbacks for the answer with the given identifier.</returns>
+        /// <remarks>Only users of type <see cref="UserType.Employee"/> are able to retrieve the feedbacks of an answer.
+        /// </remarks>
+        [OperationContract]
+        [WebGet(UriTemplate = "answers/{id}/feedbacks?state={state}",
+            RequestFormat = WebMessageFormat.Json,
+            ResponseFormat = WebMessageFormat.Json)]
+        [AuthorizationRequired(UserType.Employee)]
+        IList<Feedback> GetFeedbacks(string id, FeedbackState? state = null);
+
+        /// <summary>
+        /// Retrieve the reviews for the answer with the given identifier, filtered by state.
+        /// </summary>
+        /// <param name="id">The identifier of the answer.</param>
+        /// <param name="state">The optional state of the reviews which are returned.</param>
+        /// <returns>Returns the reviews for the answer with the given identifier.</returns>
+        /// <remarks>Only users of type <see cref="UserType.Employee"/> are able to retrieve the reviews of an answer.
+        /// </remarks>
+        [OperationContract]
+        [WebGet(UriTemplate = "answers/{id}/reviews?state={state}",
+            RequestFormat = WebMessageFormat.Json,
+            ResponseFormat = WebMessageFormat.Json)]
+        [AuthorizationRequired(UserType.Employee)]
+        IList<Review> GetReviews(string id, ReviewState? state = null);
+
+        /// <summary>
+        /// Retrieve the keywords for the answer with the given identifier.
+        /// </summary>
+        /// <param name="id">The identifier of the answer.</param>        
+        /// <returns>Returns the keywords for the answer with the given identifier.</returns>
+        /// <remarks>Only users of type <see cref="UserType.Employee"/> are able to retrieve the keywords of an answer.
+        /// </remarks>
+        [OperationContract]
+        [WebGet(UriTemplate = "answers/{id}/keywords",
+            RequestFormat = WebMessageFormat.Json,
+            ResponseFormat = WebMessageFormat.Json)]
+        [AuthorizationRequired(UserType.Employee)]
+        IList<Keyword> GetKeywords(string id);
 
         /// <summary>
         /// Creates a new answer.
@@ -48,12 +111,15 @@ namespace nl.fhict.IntelliCloud.Service
         /// <param name="answer">The content of the given answer.</param>
         /// <param name="answererId">The employee who answered the question.</param>
         /// <param name="answerState">The state of the answer.</param>
+        /// <remarks>Only users of type <see cref="UserType.Employee"/> are able to create an answer.
+        /// </remarks>
         [OperationContract]
         [WebInvoke(Method = "POST",
             UriTemplate = "answers",
             RequestFormat = WebMessageFormat.Json,
             ResponseFormat = WebMessageFormat.Json,
             BodyStyle = WebMessageBodyStyle.Wrapped)]
+        [AuthorizationRequired(UserType.Employee)]
         void CreateAnswer(int questionId, string answer, int answererId, AnswerState answerState);
 
         /// <summary>
@@ -62,12 +128,15 @@ namespace nl.fhict.IntelliCloud.Service
         /// <param name="id">The identifier of the answer that is updated.</param>
         /// <param name="answerState">The new state of the answer.</param>
         /// <param name="answer">The new content of the given answer.</param>
+        /// <remarks>Only users of type <see cref="UserType.Employee"/> are able to update an answer.
+        /// </remarks>
         [OperationContract]
         [WebInvoke(Method = "PUT",
             UriTemplate = "answers/{id}",
             RequestFormat = WebMessageFormat.Json,
             ResponseFormat = WebMessageFormat.Json,
             BodyStyle = WebMessageBodyStyle.Wrapped)]
+        [AuthorizationRequired(UserType.Employee)]
         void UpdateAnswer(string id, AnswerState answerState, string answer);
     }
 }

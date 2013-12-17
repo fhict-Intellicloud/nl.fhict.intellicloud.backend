@@ -7,7 +7,7 @@ using System.Text;
 using nl.fhict.IntelliCloud.Business.Authorization;
 using nl.fhict.IntelliCloud.Common.DataTransfer;
 
-namespace nl.fhict.IntelliCloud.Service.Services.NewServices
+namespace nl.fhict.IntelliCloud.Service.Services
 {
     /// <summary>
     /// An interface for a service providing functionality related to users.
