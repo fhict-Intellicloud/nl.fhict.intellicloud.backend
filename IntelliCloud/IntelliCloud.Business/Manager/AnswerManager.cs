@@ -163,6 +163,7 @@ namespace nl.fhict.IntelliCloud.Business.Manager
         {
             Validation.StringCheck(search);
             
+            // TODO implement geerts algorithm
             throw new NotImplementedException();
         }
 

@@ -553,6 +553,12 @@ namespace nl.fhict.IntelliCloud.Service.IntegrationTest.Services
 
         #endregion Error handling tests
 
+        #region GetAnswers tests
+
+        // TODO add tests for the getanswers method
+
+        #endregion
+
         #endregion Tests
 
         #endregion Methods
