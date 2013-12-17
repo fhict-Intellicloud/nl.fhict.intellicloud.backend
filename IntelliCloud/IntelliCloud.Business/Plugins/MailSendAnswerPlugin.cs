@@ -1,4 +1,5 @@
-﻿using nl.fhict.IntelliCloud.Common.DataTransfer;
+﻿using System.Linq;
+using nl.fhict.IntelliCloud.Common.DataTransfer;
 using System;
 using System.Net;
 using System.Net.Mail;
@@ -82,11 +83,54 @@ namespace nl.fhict.IntelliCloud.Business.Plugins
                 };                
             }
         }
-
-
+        
+        /// <summary>
+        /// Send a confirmation mail to the address that send in a question
+        /// </summary>
+        /// <param name="from">Address that send in a question</param>
         public void SendQuestionRecieved(Question question)
         {
-            throw new NotImplementedException();
+            //Create the from and to addresses that are needed to send the e-mail
+            MailAddress fromAddress = new MailAddress(clientUsername, "IntelliCloud Team");
+            MailAddress toAddress = new MailAddress(question.User.Sources.Single(s => s.SourceDefinition.Name == "Mail").Value);
+            
+            //Set the e-mail content
+            string subject = "Thank you for your question!";
+            string body = "Hello guest,\n\n" + 
+                "We received your question. You will soon receive an answer.\n\n" +
+                "Kind regards,\n" +
+                "IntelliCloud Team";
+
+            //Create a new smtp client with credentials
+            SmtpClient smtp = new SmtpClient
+            {
+                Host = "smtp.gmail.com",
+                Port = 587,
+                EnableSsl = true,
+                DeliveryMethod = SmtpDeliveryMethod.Network,
+                UseDefaultCredentials = false,
+                Credentials = new NetworkCredential(fromAddress.Address, clientPassword)
+            };
+
+            //Create the e-mail with the addresses and content
+            using (MailMessage message = new MailMessage(fromAddress, toAddress)
+            {
+                Subject = subject,
+                Body = body
+            })
+            //Send the mail
+                try
+                {
+                    smtp.Send(message);
+                }
+                catch (Exception e)
+                {
+                    //If it fails, the error is written to the logfile
+                    // TODO log real error
+                    //serviceLog.WriteEntry("Sending e-mail failed: " + e.ToString());
+                }
+            //Dispose the smtp client
+            smtp.Dispose();
         }
     }
 }

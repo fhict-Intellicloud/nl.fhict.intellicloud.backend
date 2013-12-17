@@ -309,5 +309,40 @@ namespace nl.fhict.IntelliCloud.Business.Manager
             return distinctLanguages.Single(x => x.Count == distinctLanguages.Max(y => y.Count)).Language;
         }
         #endregion
+
+        public void UpdateQuestion(string id, int employeeId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Question GetQuestion(string id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IList<Question> GetQuestions(QuestionState? state)
+        {
+            throw new NotImplementedException();
+        }
+
+        public User GetAsker(string id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public User GetAnswerer(string id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public User GetAnswer(string id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IList<Keyword> GetKeywords(string id)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

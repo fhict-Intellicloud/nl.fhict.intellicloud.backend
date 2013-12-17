@@ -197,5 +197,30 @@ namespace nl.fhict.IntelliCloud.Business.Manager
 
             }
         }
+
+        public IList<Answer> GetAnswers(AnswerState? state, string search)
+        {
+            throw new NotImplementedException();
+        }
+
+        public User GetAnswerer(string id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IList<Feedback> GetFeedbacks(string id, FeedbackState? state)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IList<Review> GetReviews(string id, ReviewState? state)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IList<Keyword> GetKeywords(string id)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

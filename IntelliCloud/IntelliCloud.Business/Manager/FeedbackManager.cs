@@ -158,5 +158,25 @@ namespace nl.fhict.IntelliCloud.Business.Manager
                 context.SaveChanges();
             }
         }
+
+        public Answer GetAnswer(string id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Question GetQuestion(string id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public User GetUser(string id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Feedback GetFeedbacks(string id)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
