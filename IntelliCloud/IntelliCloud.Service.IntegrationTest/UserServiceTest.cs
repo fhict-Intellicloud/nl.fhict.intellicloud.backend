@@ -187,7 +187,7 @@ namespace nl.fhict.IntelliCloud.Service.IntegrationTest
             try
             {
                 // Get the user from the context
-                IList<UserSource> sources = new List<UserSource>();
+                List<UserSource> sources = new List<UserSource>();
                 sources.Add(new UserSource() { Name = "Mail", Value = "customer1@domain.com" });
                 User user = this.service.GetUser(null, sources);
 
