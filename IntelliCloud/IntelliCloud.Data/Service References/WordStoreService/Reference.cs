@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace nl.fhict.IntelliCloud.Business.WordService {
+namespace nl.fhict.IntelliCloud.Data.WordStoreService {
     using System.Runtime.Serialization;
     using System;
     
@@ -23,10 +23,10 @@ namespace nl.fhict.IntelliCloud.Business.WordService {
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private nl.fhict.IntelliCloud.Business.WordService.Language LanguageField;
+        private nl.fhict.IntelliCloud.Data.WordStoreService.Language LanguageField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private nl.fhict.IntelliCloud.Business.WordService.WordType TypeField;
+        private nl.fhict.IntelliCloud.Data.WordStoreService.WordType TypeField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string ValueField;
@@ -42,7 +42,7 @@ namespace nl.fhict.IntelliCloud.Business.WordService {
         }
         
         [System.Runtime.Serialization.DataMemberAttribute()]
-        public nl.fhict.IntelliCloud.Business.WordService.Language Language {
+        public nl.fhict.IntelliCloud.Data.WordStoreService.Language Language {
             get {
                 return this.LanguageField;
             }
@@ -55,7 +55,7 @@ namespace nl.fhict.IntelliCloud.Business.WordService {
         }
         
         [System.Runtime.Serialization.DataMemberAttribute()]
-        public nl.fhict.IntelliCloud.Business.WordService.WordType Type {
+        public nl.fhict.IntelliCloud.Data.WordStoreService.WordType Type {
             get {
                 return this.TypeField;
             }
@@ -134,20 +134,20 @@ namespace nl.fhict.IntelliCloud.Business.WordService {
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    [System.ServiceModel.ServiceContractAttribute(ConfigurationName="WordService.IWordService")]
+    [System.ServiceModel.ServiceContractAttribute(ConfigurationName="WordStoreService.IWordService")]
     public interface IWordService {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IWordService/ResolveWord", ReplyAction="http://tempuri.org/IWordService/ResolveWordResponse")]
-        nl.fhict.IntelliCloud.Business.WordService.Word[] ResolveWord(string word);
+        nl.fhict.IntelliCloud.Data.WordStoreService.Word[] ResolveWord(string word);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    public interface IWordServiceChannel : nl.fhict.IntelliCloud.Business.WordService.IWordService, System.ServiceModel.IClientChannel {
+    public interface IWordServiceChannel : nl.fhict.IntelliCloud.Data.WordStoreService.IWordService, System.ServiceModel.IClientChannel {
     }
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    public partial class WordServiceClient : System.ServiceModel.ClientBase<nl.fhict.IntelliCloud.Business.WordService.IWordService>, nl.fhict.IntelliCloud.Business.WordService.IWordService {
+    public partial class WordServiceClient : System.ServiceModel.ClientBase<nl.fhict.IntelliCloud.Data.WordStoreService.IWordService>, nl.fhict.IntelliCloud.Data.WordStoreService.IWordService {
         
         public WordServiceClient() {
         }
@@ -168,7 +168,7 @@ namespace nl.fhict.IntelliCloud.Business.WordService {
                 base(binding, remoteAddress) {
         }
         
-        public nl.fhict.IntelliCloud.Business.WordService.Word[] ResolveWord(string word) {
+        public nl.fhict.IntelliCloud.Data.WordStoreService.Word[] ResolveWord(string word) {
             return base.Channel.ResolveWord(word);
         }
     }

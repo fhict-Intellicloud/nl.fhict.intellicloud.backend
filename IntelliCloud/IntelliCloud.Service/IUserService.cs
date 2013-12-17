@@ -24,7 +24,7 @@ namespace nl.fhict.IntelliCloud.Service
             ResponseFormat = WebMessageFormat.Json,
             BodyStyle = WebMessageBodyStyle.Wrapped)]
         [AuthorizationRequired(UserType.Customer, UserType.Employee)]
-        User GetUser(string userId, List<UserSource> sources);
+        User GetUser(string userId, IList<UserSource> sources);
 
         /// <summary>
         /// Method used for creating a new user.
