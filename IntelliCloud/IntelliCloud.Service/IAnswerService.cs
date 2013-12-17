@@ -28,7 +28,7 @@ namespace nl.fhict.IntelliCloud.Service
         [WebGet(UriTemplate = "answers?state={answerState}&employeeId={employeeId}",
             RequestFormat = WebMessageFormat.Json,
             ResponseFormat = WebMessageFormat.Json)]
-        IList<Answer> GetAnswers(AnswerState answerState, int employeeId);
+        IList<Answer> GetAnswers(AnswerState answerState, int? employeeId=null);
 
         /// <summary>
         /// Retrieve the answer with the given identifier.

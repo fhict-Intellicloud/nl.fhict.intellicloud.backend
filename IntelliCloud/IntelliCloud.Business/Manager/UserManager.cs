@@ -55,7 +55,7 @@ namespace nl.fhict.IntelliCloud.Business.Manager
             {
                 try
                 {
-                    // Decode the Base64 representation of the JSON object
+                    // Decode the Base64 representation of the JSON object 
                     byte[] tokenBytes = Convert.FromBase64String(authorizationToken);
 
                     // Parse the token

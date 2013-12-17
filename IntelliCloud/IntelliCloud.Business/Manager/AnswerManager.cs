@@ -1,4 +1,4 @@
-﻿using nl.fhict.IntelliCloud.Common.DataTransfer;
+using nl.fhict.IntelliCloud.Common.DataTransfer;
 using nl.fhict.IntelliCloud.Data.IntelliCloud.Context;
 using nl.fhict.IntelliCloud.Data.IntelliCloud.Model;
 using System;
@@ -38,24 +38,25 @@ namespace nl.fhict.IntelliCloud.Business.Manager
         /// <param name="employeeId">The optional employee identifier, only answers about which the employee has 
         /// knowledge are returned (keywords between user and answer match).</param>
         /// <returns>Returns the answers that match the filters.</returns>
-        public IList<Answer> GetAnswers(AnswerState answerState, int employeeId)
+        public IList<Answer> GetAnswers(AnswerState answerState, int? employeeId)
         {
-            Validation.IdCheck(employeeId);
-
             List<Answer> answers = new List<Answer>();
 
             using (var ctx = new IntelliCloudContext())
             {
 
-                List<AnswerEntity> answerentities = (from a in ctx.Answers
-                                                         .Include(a => a.User)
-                                                         .Include(a => a.User.Sources)
-                                                         .Include(a => a.User.Sources.Select(s => s.SourceDefinition))
-                                                     where a.AnswerState == answerState
-                                                     select a).ToList();
+                var query = (from a in ctx.Answers
+                                                               .Include(a => a.User)
+                                                               .Include(a => a.User.Sources)
+                                                               .Include(a => a.User.Sources.Select(s => s.SourceDefinition))
+                             select a).Where(x => x.AnswerState == answerState);
 
-                answers = ConvertEntities.AnswerEntityListToAnswerList(answerentities);
+                if (employeeId != null)
+                {
+                    query.Where(x => x.User.Id == employeeId);
+                }
 
+                answers = ConvertEntities.AnswerEntityListToAnswerList(query.ToList());
             }
 
             return answers;
