@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.ServiceModel;
 using System.Text;
 using nl.fhict.IntelliCloud.Data.WordStoreService;
 
@@ -9,25 +10,38 @@ namespace nl.fhict.IntelliCloud.Data.IntelliCloud.Context
     /// <summary>
     /// A data context providing acces to wordstore service.
     /// </summary>
-    public class WordStoreContext : IDisposable
+    public class WordStoreContext
     {
-        
         /// <summary>
-        /// Initializes a new instance of the <see cref="WordStoreContext"/> class.
+        /// Function to call the WordStore service ResolveWord while ensuring all resources are 
+        /// correctly disposed after each call. 
         /// </summary>
-        public WordStoreContext()
+        /// <param name="word">The word that needs to be resolved.</param>
+        /// <returns>A list with the possibly multiple translations of a given word. 
+        /// Null is returned when an error occurs while comminicating.</returns>
+        public IList<Word> ResolveWord(string word)
         {
-           this.Client = new WordServiceClient();
+            // Instance of the wordservice client proxy to communicate with the wordstore service.
+            WordServiceClient client = new WordServiceClient();
+
+            try
+            {
+                client.Open();
+                var words = client.ResolveWord(word);
+
+                // Whenever a error occurs while communicating with the service the state is set to Faulted.
+                if (client.State == CommunicationState.Faulted)
+                    client.Abort();
+                else
+                    client.Close();
+
+                return words;
+            }
+            catch (Exception)
+            {
+                client.Abort();
+                throw;
+            }
         }
-
-
-        public void Dispose()
-        {
-        }
-
-        /// <summary>
-        /// Gets a instance proxy class to communicate with the WordStoreService.
-        /// </summary>
-        public IWordService Client { get; private set; }
     }
 }

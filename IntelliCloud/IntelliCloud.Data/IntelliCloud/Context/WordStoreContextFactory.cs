@@ -9,13 +9,13 @@ namespace nl.fhict.IntelliCloud.Data.IntelliCloud.Context
     /// A class following the factory design pattern to create Contexts for the services that are used
     /// within intellicloud.
     /// </summary>
-    public class ServiceContextFactory
+    public class WordStoreContextFactory
     {
         /// <summary>
         /// Factory method to create new WordStoreContext.
         /// </summary>
         /// <returns></returns>
-        public WordStoreContext GetWordStoreContext() {
+        public WordStoreContext Create() {
             return new WordStoreContext();
         }
     }
