@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.ServiceModel;
 using System.ServiceModel.Web;
-using System.Text;
 using nl.fhict.IntelliCloud.Common.DataTransfer;
 using nl.fhict.IntelliCloud.Data.IntelliCloud.Model;
 
@@ -189,25 +187,6 @@ namespace nl.fhict.IntelliCloud.Business
         public static IList<User> AsUsers(this IList<UserEntity> entities)
         {
             return entities.Select(s => s.AsUser()).ToList();
-        }
-
-        /// <summary>
-        /// Method for converting a ReviewEntity instance to a Review instance.
-        /// </summary>
-        /// <param name="entity"></param>
-        /// <returns>Instance of class Review.</returns>
-        public Review ReviewEntityToReview(ReviewEntity entity)
-        {
-            // Construct and return a new instance of class Feedback, containing the data from the passed entity class
-            return new Review()
-            {
-                Content = entity.Content,
-                AnswerId = entity.Answer.Id,
-                ReviewState = entity.ReviewState,
-                User = UserEntityToUser(entity.User),
-                CreationTime = entity.CreationTime,
-                LastChangedTime = entity.LastChangedTime
-            };
         }
     }
 }

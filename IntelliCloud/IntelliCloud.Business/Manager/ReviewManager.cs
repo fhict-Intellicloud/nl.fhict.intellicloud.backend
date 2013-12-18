@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using nl.fhict.IntelliCloud.Common.CustomException;
@@ -115,7 +114,7 @@ namespace nl.fhict.IntelliCloud.Business.Manager
                 if (review == null)
                     throw new NotFoundException("No review entity exists with the specified ID.");                                         
 
-                return ConvertEntities.AnswerEntityToAnswer(review.Answer);                
+                return review.Answer.AsAnswer();                
             }
         }
 
@@ -135,8 +134,8 @@ namespace nl.fhict.IntelliCloud.Business.Manager
 
                 if (review == null)
                     throw new NotFoundException("No review entity exists with the specified ID.");
-                
-                return ConvertEntities.UserEntityToUser(review.User);
+
+                return review.User.AsUser();
             }
         }
 
@@ -157,7 +156,7 @@ namespace nl.fhict.IntelliCloud.Business.Manager
                 if (review == null)
                     throw new NotFoundException("No review entity exists with the specified ID.");
 
-                return ConvertEntities.ReviewEntityToReview(review);
+                return review.AsReview();
             }
         }
     }

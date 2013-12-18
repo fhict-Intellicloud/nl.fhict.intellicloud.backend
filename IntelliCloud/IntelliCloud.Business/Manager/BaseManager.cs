@@ -10,7 +10,6 @@ namespace nl.fhict.IntelliCloud.Business.Manager
     public abstract class BaseManager
     {
         protected IValidation Validation {get; set;}
-        protected ConvertEntities ConvertEntities {get; set;}
         protected IOpenIDContext OpenIDContext { get; set; }
         protected SendAnswerFactory SendAnswerFactory { get; set; }
 
@@ -22,7 +21,6 @@ namespace nl.fhict.IntelliCloud.Business.Manager
         protected BaseManager(IValidation validation)
         {
             Validation = validation;
-            ConvertEntities = new ConvertEntities();
             OpenIDContext = new OpenIDContext();
             SendAnswerFactory = new SendAnswerFactory();
         }
@@ -33,7 +31,6 @@ namespace nl.fhict.IntelliCloud.Business.Manager
         protected BaseManager()
         {
             Validation = new Validation();
-            ConvertEntities = new ConvertEntities();
             OpenIDContext = new OpenIDContext();
             SendAnswerFactory = new SendAnswerFactory();
         }

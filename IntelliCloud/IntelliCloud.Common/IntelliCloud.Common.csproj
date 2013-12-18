@@ -48,16 +48,12 @@
     <Compile Include="DataTransfer\Feedback.cs" />
     <Compile Include="DataTransfer\FeedbackState.cs" />
     <Compile Include="DataTransfer\FeedbackType.cs" />
-    <Compile Include="DataTransfer\Input\UserSource.cs" />
+    <Compile Include="DataTransfer\UserSource.cs" />
     <Compile Include="DataTransfer\Keyword.cs" />
-    <Compile Include="DataTransfer\LanguageDefinition.cs" />
     <Compile Include="DataTransfer\Question.cs" />
-    <Compile Include="DataTransfer\QuestionSource.cs" />
     <Compile Include="DataTransfer\QuestionState.cs" />
     <Compile Include="DataTransfer\Review.cs" />
     <Compile Include="DataTransfer\ReviewState.cs" />
-    <Compile Include="DataTransfer\Source.cs" />
-    <Compile Include="DataTransfer\SourceDefinition.cs" />
     <Compile Include="DataTransfer\User.cs" />
     <Compile Include="DataTransfer\UserType.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
