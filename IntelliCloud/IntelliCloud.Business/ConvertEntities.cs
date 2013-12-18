@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.ServiceModel;
+using System.ServiceModel.Web;
 using System.Text;
 using nl.fhict.IntelliCloud.Common.DataTransfer;
 using nl.fhict.IntelliCloud.Data.IntelliCloud.Model;
@@ -8,203 +10,185 @@ using nl.fhict.IntelliCloud.Data.IntelliCloud.Model;
 namespace nl.fhict.IntelliCloud.Business
 {
     /// <summary>
-    /// This class will implement methods for converting Entities to domain objects.
-    /// Only if it is necessary.
+    /// A class containing functionality for converting entities to data transfer objects.
     /// </summary>
-    public class ConvertEntities
+    public static class ConvertEntities
     {
         /// <summary>
-        /// Converts a UserEntity object to a User object.
+        /// The base URL of the server.
         /// </summary>
-        /// <param name="entity">The UserEntity that has to be converted.</param>
-        /// <returns>The user object.</returns>
-        public User UserEntityToUser(UserEntity entity)
-        {
-            User user = new User();
-            user.Id = entity.Id;
-            user.FirstName = entity.FirstName;
-            user.Infix = entity.Infix;
-            user.LastName = entity.LastName;
-            user.Type = entity.Type;
-            user.CreationTime = entity.CreationTime;
-            user.Sources = SourceEntityListToSources(entity.Sources);
-            user.Avatar = entity.Avatar;
-            user.LastChangedTime = entity.LastChangedTime;
-
-            return user;
-        }
+        public static readonly Uri baseUrl = WebOperationContext.Current.IncomingRequest.UriTemplateMatch.RequestUri;
 
         /// <summary>
-        /// Converts a <see cref="SourceEntity"/> to a <see cref="Source"/>.
+        /// Converts an <see cref="AnswerEntity"/> to a <see cref="Answer"/>.
         /// </summary>
-        /// <param name="entity">The <see cref="Source"/> that has to be converted.</param>
-        /// <returns>The <see cref="Source"/> object.</returns>
-        public Source SourceEntityToSource(SourceEntity entity)
+        /// <param name="entity">The entity to convert.</param>
+        /// <returns>Returns the converted data transfer object.</returns>
+        public static Answer AsAnswer(this AnswerEntity entity)
         {
-            return new Source()
+            return new Answer
             {
-                Id = entity.Id,
-                Value = entity.Value,
-                SourceDefinition = SourceDefinitionEntityToSourceDefinition(entity.SourceDefinition),
-                CreationTime = entity.CreationTime                
-            };
-        }
-
-        /// <summary>
-        /// Converts a list of SourceEntities to a list of Sources.
-        /// </summary>
-        /// <param name="sourceEntities">The SourceEntities that have to be converted.</param>
-        /// <returns>The list of sources.</returns>
-        public IList<Source> SourceEntityListToSources(ICollection<SourceEntity> sourceEntities)
-        {
-            return sourceEntities.Select(s => this.SourceEntityToSource(s)).ToList();
-        }
-
-        /// <summary>
-        /// Converts a SourceDefinitionEntity to a SourceDefinition.
-        /// </summary>
-        /// <param name="sourceDefinitionEntity">The SourceDefinitionEntity that have to be converted.</param>
-        /// <returns>The sourcedefinition object.</returns>
-        public SourceDefinition SourceDefinitionEntityToSourceDefinition(
-            SourceDefinitionEntity sourceDefinitionEntity)
-        {
-            SourceDefinition sourceDefinition = new SourceDefinition();
-            sourceDefinition.Id = sourceDefinitionEntity.Id;
-            sourceDefinition.Name = sourceDefinitionEntity.Name;
-            sourceDefinition.Description = sourceDefinitionEntity.Description;
-            sourceDefinition.CreationTime = sourceDefinitionEntity.CreationTime;
-            return sourceDefinition;
-        }
-
-        /// <summary>
-        /// Converts a QuestionEntity to a Question.
-        /// </summary>
-        /// <param name="entity">The QuestionEntity that has to be converted.</param>
-        /// <returns>The question object.</returns>
-        public Question QuestionEntityToQuestion(QuestionEntity entity)
-        {
-            Question question = new Question();
-            question.Id = entity.Id;
-            if (entity.Answerer != null)
-            {
-                question.Answerer = UserEntityToUser(entity.Answerer);
-            }
-            question.User = UserEntityToUser(entity.User);
-            question.Content = entity.Content;
-            question.CreationTime = entity.CreationTime;
-            question.QuestionState = entity.QuestionState;
-            question.Source = this.QuestionSourceEntityToQuestionSource(entity.Source);
-            question.LastChangedTime = entity.LastChangedTime;
-            return question;
-        }
-
-        /// <summary>
-        /// Converts the <see cref="QuestionSourceEntity"/> to a <see cref="QuestionSource"/>.
-        /// </summary>
-        /// <param name="entity"></param>
-        /// <returns></returns>
-        public QuestionSource QuestionSourceEntityToQuestionSource(QuestionSourceEntity entity)
-        {
-            return new QuestionSource
-            {
-                Source = this.SourceEntityToSource(entity.Source),
-                PostId = entity.PostId
-            };
-        }
-
-        /// <summary>
-        /// Converts an AnswerEntity to an Answer.
-        /// </summary>
-        /// <param name="entity">The AnswerEntity that has to be converted.</param>
-        /// <returns>The Answer object.</returns>
-        public Answer AnswerEntityToAnswer(AnswerEntity entity)
-        {
-            Answer answer = new Answer();
-
-            answer.Id = entity.Id;
-            answer.CreationTime = entity.CreationTime;
-            answer.Content = entity.Content;
-            answer.AnswerState = entity.AnswerState;
-            answer.User = UserEntityToUser(entity.User);
-            answer.LastChangedTime = entity.LastChangedTime;
-
-            return answer;
-        }
-
-        /// <summary>
-        /// Converts a list of AnswerEntities to a list of Answers.
-        /// </summary>
-        /// <param name="entities">The AnswerEntities that have to be converted.</param>
-        /// <returns>The list of answers.</returns>
-        public List<Answer> AnswerEntityListToAnswerList(List<AnswerEntity> entities)
-        {
-            List<Answer> answers = new List<Answer>();
-            foreach (AnswerEntity entity in entities)
-            {                
-                answers.Add(AnswerEntityToAnswer(entity));
-            }
-
-            return answers;
-        }
-
-        /// <summary>
-        /// Converts a list of ReviewEntities to a list of Reviews.
-        /// </summary>
-        /// <param name="entities">The ReviewEntities that have to be converted.</param>
-        /// <returns>The list of reviews.</returns>
-        public List<Review> ReviewEntityListToReviewList(List<ReviewEntity> entities)
-        {
-            List<Review> reviews = new List<Review>();
-            foreach (ReviewEntity entity in entities)
-            {
-                Review temp = new Review();
-                temp.Id = entity.Id;
-                temp.Content = entity.Content;
-                temp.ReviewState = entity.ReviewState;
-                temp.AnswerId = entity.Answer.Id;
-                temp.CreationTime = entity.CreationTime;
-                temp.LastChangedTime = entity.LastChangedTime;
-                temp.User = this.UserEntityToUser(entity.User);
-                reviews.Add(temp);
-            }
-
-            return reviews;
-        }
-
-        /// <summary>
-        /// Converts a list of QuestionEntities to a list of Questions.
-        /// </summary>
-        /// <param name="entities">The QuestionEntities that have to be converted.</param>
-        /// <returns>The list of questions.</returns>
-        public List<Question> QuestionEntityListToQuestionList(List<QuestionEntity> entities)
-        {
-            List<Question> questions = new List<Question>();
-            foreach (QuestionEntity entity in entities)
-            {
-                questions.Add(QuestionEntityToQuestion(entity));
-            }
-            return questions;
-        }
-
-        /// <summary>
-        /// Method for converting a FeedbackEntity instance to a Feedback instance.
-        /// </summary>
-        /// <param name="entity"></param>
-        /// <returns>Instance of class Feedback.</returns>
-        public Feedback FeedbackEntityToFeedback(FeedbackEntity entity)
-        {
-            // Construct and return a new instance of class Feedback, containing the data from the passed entity class
-            return new Feedback()
-            {
+                Id = new Uri(string.Format("{0}/answers/{1}", baseUrl, entity.Id)),
                 Content = entity.Content,
-                AnswerId = entity.Answer.Id,
-                QuestionId = entity.Question.Id,
-                User = UserEntityToUser(entity.User),
+                Language = entity.LanguageDefinition.Name,
+                User = new Uri(string.Format("{0}/answer/{1}/answerer", baseUrl, entity.Id)),
+                AnswerState = entity.AnswerState,
+                CreationTime = entity.CreationTime,
+                LastChangedTime = entity.LastChangedTime,
+                Keywords = new Uri(string.Format("{0}/answer/{1}/keywords", baseUrl, entity.Id)),
+                IsPrivate = entity.IsPrivate,
+                Feedbacks = new Uri(string.Format("{0}/answer/{1}/feedbacks", baseUrl, entity.Id)),
+                Reviews = new Uri(string.Format("{0}/answer/{1}/reviews", baseUrl, entity.Id))
+            };
+        }
+
+        /// <summary>
+        /// Converts a <see cref="AnswerEntity"/> collection to a <see cref="Answer"/> collection.
+        /// </summary>
+        /// <param name="entities">The entities to convert.</param>
+        /// <returns>Returns the converted data transfer objects.</returns>
+        public static IList<Answer> AsAnswers(this IList<AnswerEntity> entities)
+        {
+            return entities.Select(s => s.AsAnswer()).ToList();
+        }
+
+        /// <summary>
+        /// Converts an <see cref="FeedbackEntity"/> to a <see cref="Feedback"/>.
+        /// </summary>
+        /// <param name="entity">The entity to convert.</param>
+        /// <returns>Returns the converted data transfer object.</returns>
+        public static Feedback AsFeedback(this FeedbackEntity entity)
+        {
+            return new Feedback
+            {
+                Id = new Uri(string.Format("{0}/feedbacks/{1}", baseUrl, entity.Id)),
+                Content = entity.Content,
+                Answer = new Uri(string.Format("{0}/feedbacks/{1}/answer", baseUrl, entity.Id)),
+                Question = new Uri(string.Format("{0}/feedbacks/{1}/question", baseUrl, entity.Id)),
+                User = new Uri(string.Format("{0}/feedbacks/{1}/user", baseUrl, entity.Id)),
                 FeedbackType = entity.FeedbackType,
                 FeedbackState = entity.FeedbackState,
                 CreationTime = entity.CreationTime,
                 LastChangedTime = entity.LastChangedTime
             };
+        }
+
+        /// <summary>
+        /// Converts a <see cref="FeedbackEntity"/> collection to a <see cref="Feedback"/> collection.
+        /// </summary>
+        /// <param name="entities">The entities to convert.</param>
+        /// <returns>Returns the converted data transfer objects.</returns>
+        public static IList<Feedback> AsFeedbacks(this IList<FeedbackEntity> entities)
+        {
+            return entities.Select(s => s.AsFeedback()).ToList();
+        }
+
+        /// <summary>
+        /// Converts an <see cref="QuestionEntity"/> to a <see cref="Question"/>.
+        /// </summary>
+        /// <param name="entity">The entity to convert.</param>
+        /// <returns>Returns the converted data transfer object.</returns>
+        public static Question AsQuestion(this QuestionEntity entity)
+        {
+            return new Question
+            {
+                Id = new Uri(string.Format("{0}/questions/{1}", baseUrl, entity.Id)),
+                Title = entity.Title,
+                Content = entity.Content,
+                Language = entity.LanguageDefinition.Name,
+                Answer = new Uri(string.Format("{0}/questions/{1}/answer", baseUrl, entity.Id)),
+                User = new Uri(string.Format("{0}/questions/{1}/asker", baseUrl, entity.Id)),
+                Answerer = new Uri(string.Format("{0}/questions/{1}/answerer", baseUrl, entity.Id)),
+                QuestionState = entity.QuestionState,
+                CreationTime = entity.CreationTime,
+                LastChangedTime = entity.LastChangedTime,
+                Keywords = new Uri(string.Format("{0}/questions/{1}/keywords", baseUrl, entity.Id)),
+                IsPrivate = entity.IsPrivate,
+                SourcePostId = entity.Source.PostId,
+                Source = new UserSource
+                {
+                    Name = entity.Source.Source.SourceDefinition.Name,
+                    Value = entity.Source.Source.Value
+                }
+            };
+        }
+
+        /// <summary>
+        /// Converts a <see cref="QuestionEntity"/> collection to a <see cref="Question"/> collection.
+        /// </summary>
+        /// <param name="entities">The entities to convert.</param>
+        /// <returns>Returns the converted data transfer objects.</returns>
+        public static IList<Question> AsQuestions(this IList<QuestionEntity> entities)
+        {
+            return entities.Select(s => s.AsQuestion()).ToList();
+        }
+
+        /// <summary>
+        /// Converts an <see cref="ReviewEntity"/> to a <see cref="Review"/>.
+        /// </summary>
+        /// <param name="entity">The entity to convert.</param>
+        /// <returns>Returns the converted data transfer object.</returns>
+        public static Review AsReview(this ReviewEntity entity)
+        {
+            return new Review
+            {
+                Id = new Uri(string.Format("{0}/reviews/{1}", baseUrl, entity.Id)),
+                Content = entity.Content,
+                Answer = new Uri(string.Format("{0}/reviews/{1}/answer", baseUrl, entity.Id)),
+                ReviewState = entity.ReviewState,
+                User = new Uri(string.Format("{0}/reviews/{1}/user", baseUrl, entity.Id)),
+                CreationTime = entity.CreationTime,
+                LastChangedTime = entity.LastChangedTime
+            };
+        }
+
+        /// <summary>
+        /// Converts a <see cref="ReviewEntity"/> collection to a <see cref="Review"/> collection.
+        /// </summary>
+        /// <param name="entities">The entities to convert.</param>
+        /// <returns>Returns the converted data transfer objects.</returns>
+        public static IList<Review> AsReviews(this IList<ReviewEntity> entities)
+        {
+            return entities.Select(s => s.AsReview()).ToList();
+        }
+
+        /// <summary>
+        /// Converts an <see cref="UserEntity"/> to a <see cref="User"/>.
+        /// </summary>
+        /// <param name="entity">The entity to convert.</param>
+        /// <returns>Returns the converted data transfer object.</returns>
+        public static User AsUser(this UserEntity entity)
+        {
+            return new User
+            {
+                Id = new Uri(string.Format("{0}/users/{1}", baseUrl, entity.Id)),
+                FirstName = entity.FirstName,
+                Infix = entity.Infix,
+                LastName = entity.LastName,
+                Type = entity.Type,
+                Sources = entity.Sources.Select(s => new UserSource
+                {
+                    Name = s.SourceDefinition.Name,
+                    Value = s.Value
+                }).ToList(),
+                CreationTime = entity.CreationTime,
+                LastChangedTime = entity.LastChangedTime,
+                Keywords = new Uri(string.Format("{0}/users/{1}/keywords", baseUrl, entity.Id)),
+                Avatar = new Uri(entity.Avatar),
+                Questions = new Uri(string.Format("{0}/users/{1}/questions", baseUrl, entity.Id)),
+                Feedbacks = new Uri(string.Format("{0}/users/{1}/feedbacks", baseUrl, entity.Id)),
+                Reviews = new Uri(string.Format("{0}/users/{1}/reviews", baseUrl, entity.Id)),
+            };
+        }
+
+        /// <summary>
+        /// Converts a <see cref="UserEntity"/> collection to a <see cref="User"/> collection.
+        /// </summary>
+        /// <param name="entities">The entities to convert.</param>
+        /// <returns>Returns the converted data transfer objects.</returns>
+        public static IList<User> AsUsers(this IList<UserEntity> entities)
+        {
+            return entities.Select(s => s.AsUser()).ToList();
         }
 
         /// <summary>
