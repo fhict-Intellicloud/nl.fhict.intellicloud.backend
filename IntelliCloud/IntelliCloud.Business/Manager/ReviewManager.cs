@@ -113,15 +113,9 @@ namespace nl.fhict.IntelliCloud.Business.Manager
                 ReviewEntity review = context.Reviews.Include(r => r.Answer).SingleOrDefault(r => r.Id.Equals(reviewId));
 
                 if (review == null)
-                    throw new NotFoundException("No review entity exists with the specified ID.");
+                    throw new NotFoundException("No review entity exists with the specified ID.");                                         
 
-                AnswerEntity answer = context.Answers.Include(a => a.User)
-                                                     .Include(a => a.User.Sources)
-                                                     .Include(a => a.User.Sources.Select(s => s.SourceDefinition))
-                                                     .SingleOrDefault(a => a.Id.Equals(review.Answer.Id));                                                         
-
-                return ConvertEntities.AnswerEntityToAnswer(answer);
-                //TODO review.answer will become an id
+                return ConvertEntities.AnswerEntityToAnswer(review.Answer);                
             }
         }
 
@@ -141,13 +135,8 @@ namespace nl.fhict.IntelliCloud.Business.Manager
 
                 if (review == null)
                     throw new NotFoundException("No review entity exists with the specified ID.");
-
-                UserEntity user = context.Users.Include(u => u.Sources)
-                                               .Include(u => u.Sources.Select(s => s.SourceDefinition))
-                                               .SingleOrDefault(u => u.Id.Equals(review.User.Id));
-
-                return ConvertEntities.UserEntityToUser(user);
-                //TODO review.user will become an id
+                
+                return ConvertEntities.UserEntityToUser(review.User);
             }
         }
 
@@ -168,8 +157,7 @@ namespace nl.fhict.IntelliCloud.Business.Manager
                 if (review == null)
                     throw new NotFoundException("No review entity exists with the specified ID.");
 
-                return null;
-                //TODO return ConvertEntities.ReviewEntityToReview(review);
+                return ConvertEntities.ReviewEntityToReview(review);
             }
         }
     }

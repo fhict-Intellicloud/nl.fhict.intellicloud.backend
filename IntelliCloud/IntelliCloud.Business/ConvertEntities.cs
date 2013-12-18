@@ -206,5 +206,24 @@ namespace nl.fhict.IntelliCloud.Business
                 LastChangedTime = entity.LastChangedTime
             };
         }
+
+        /// <summary>
+        /// Method for converting a ReviewEntity instance to a Review instance.
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <returns>Instance of class Review.</returns>
+        public Review ReviewEntityToReview(ReviewEntity entity)
+        {
+            // Construct and return a new instance of class Feedback, containing the data from the passed entity class
+            return new Review()
+            {
+                Content = entity.Content,
+                AnswerId = entity.Answer.Id,
+                ReviewState = entity.ReviewState,
+                User = UserEntityToUser(entity.User),
+                CreationTime = entity.CreationTime,
+                LastChangedTime = entity.LastChangedTime
+            };
+        }
     }
 }

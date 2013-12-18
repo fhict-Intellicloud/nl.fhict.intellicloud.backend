@@ -149,13 +149,7 @@ namespace nl.fhict.IntelliCloud.Business.Manager
                 if (feedback == null)
                     throw new NotFoundException("No feedback entity exists with the specified ID.");
 
-                AnswerEntity answer = context.Answers.Include(a => a.User)
-                                                     .Include(a => a.User.Sources)
-                                                     .Include(a => a.User.Sources.Select(s => s.SourceDefinition))
-                                                     .SingleOrDefault(a => a.Id.Equals(feedback.Answer.Id));
-
-                return ConvertEntities.AnswerEntityToAnswer(answer);
-                //TODO feedback.answer will become an id
+                return ConvertEntities.AnswerEntityToAnswer(feedback.Answer);
             }
         }
 
@@ -171,16 +165,7 @@ namespace nl.fhict.IntelliCloud.Business.Manager
                 if (feedback == null)
                     throw new NotFoundException("No feedback entity exists with the specified ID.");
 
-                QuestionEntity question = context.Questions
-                                          .Include(q => q.User)
-                                          .Include(q => q.Source)
-                                          .Include(q => q.LanguageDefinition)
-                                          .Include(q => q.Answer)
-                                          .Include(q => q.Answer.User)
-                                          .SingleOrDefault(q => q.Id.Equals(feedback.Question.Id));
-
-                return ConvertEntities.QuestionEntityToQuestion(question);
-                //TODO feedback.question will become an id
+                return ConvertEntities.QuestionEntityToQuestion(feedback.Question);
             }
         }
 
@@ -201,12 +186,7 @@ namespace nl.fhict.IntelliCloud.Business.Manager
                 if (feedback == null)
                     throw new NotFoundException("No feedback entity exists with the specified ID.");
 
-                UserEntity user = context.Users.Include(u => u.Sources)
-                                               .Include(u => u.Sources.Select(s => s.SourceDefinition))
-                                               .SingleOrDefault(u => u.Id.Equals(feedback.User.Id));
-
-                return ConvertEntities.UserEntityToUser(user);
-                //TODO feedback.user will become an id
+                return ConvertEntities.UserEntityToUser(feedback.User);
             }
         }
 
