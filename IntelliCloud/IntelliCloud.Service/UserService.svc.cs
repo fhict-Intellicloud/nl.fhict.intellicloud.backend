@@ -1,4 +1,6 @@
-﻿using nl.fhict.IntelliCloud.Business.Manager;
+﻿using System;
+using System.Collections.Generic;
+using nl.fhict.IntelliCloud.Business.Manager;
 using nl.fhict.IntelliCloud.Common.DataTransfer;
 
 namespace nl.fhict.IntelliCloud.Service
@@ -17,34 +19,34 @@ namespace nl.fhict.IntelliCloud.Service
             return this.manager.GetUser(userId);
         }
 
-        public System.Collections.Generic.IList<User> GetUsers(System.DateTime? after = null)
+        public IList<User> GetUsers(DateTime? after = null)
         {
             return this.manager.GetUsers(after);
         }
 
-        public System.Collections.Generic.IList<Keyword> GetKeywords(string id)
+        public IList<Keyword> GetKeywords(string id)
         {
             return this.manager.GetKeywords(id);
         }
 
-        public System.Collections.Generic.IList<Question> GetQuestions(string id, System.DateTime? after = null)
+        public IList<Question> GetQuestions(string id, DateTime? after = null)
         {
             return this.manager.GetQuestions(id, after);
         }
 
-        public System.Collections.Generic.IList<Answer> GetFeedbacks(string id, System.DateTime? after = null)
+        public IList<Answer> GetFeedbacks(string id, DateTime? after = null)
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
 
-        public System.Collections.Generic.IList<Answer> GetReviews(string id, System.DateTime? after = null)
+        public IList<Answer> GetReviews(string id, DateTime? after = null)
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
 
         public void AssignKeyword(string id, string keyword, int affinity)
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
     }
 }
