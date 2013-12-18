@@ -33,16 +33,16 @@ namespace nl.fhict.IntelliCloud.Service
         /// <summary>
         /// Retrieve the question with the given identifier.
         /// </summary>
-        /// <param name="id">The identifier of the question.</param>
+        /// <param name="questionId">The identifier of the question.</param>
         /// <returns>Returns the question with the given identifier.</returns>
         /// <remarks>Only users of type <see cref="UserType.Employee"/> are able to retrieve questions by identifier.
         /// </remarks>
         [OperationContract]
-        [WebGet(UriTemplate = "questions/{id}",
+        [WebGet(UriTemplate = "questions/{questionId}",
             RequestFormat = WebMessageFormat.Json,
             ResponseFormat = WebMessageFormat.Json)]
         [AuthorizationRequired(UserType.Employee)]
-        Question GetQuestion(string id);
+        Question GetQuestion(string questionId);
 
         /// <summary>
         /// Retrieve the question for this feedback token.
@@ -59,58 +59,58 @@ namespace nl.fhict.IntelliCloud.Service
         /// <summary>
         /// Retrieve the user that asked the question with the given identifier.
         /// </summary>
-        /// <param name="id">The identifier of the question.</param>
+        /// <param name="questionId">The identifier of the question.</param>
         /// <returns>Returns the user that asked the question with the given identifier.</returns>
         /// <remarks>Only users of type <see cref="UserType.Employee"/> are able to retrieve the asker of a question.
         /// </remarks>
         [OperationContract]
-        [WebGet(UriTemplate = "questions/{id}/asker",
+        [WebGet(UriTemplate = "questions/{questionId}/asker",
             RequestFormat = WebMessageFormat.Json,
             ResponseFormat = WebMessageFormat.Json)]
         [AuthorizationRequired(UserType.Employee)]
-        User GetAsker(string id);
+        User GetAsker(string questionId);
 
         /// <summary>
         /// Retrieve the user that has answered the question with the given identifier.
         /// </summary>
-        /// <param name="id">The identifier of the question.</param>
+        /// <param name="questionId">The identifier of the question.</param>
         /// <returns>Returns the user that answered the question with the given identifier.</returns>
         /// <remarks>Only users of type <see cref="UserType.Employee"/> are able to retrieve the answerer of a question.
         /// </remarks>
         [OperationContract]
-        [WebGet(UriTemplate = "questions/{id}/answerer",
+        [WebGet(UriTemplate = "questions/{questionId}/answerer",
             RequestFormat = WebMessageFormat.Json,
             ResponseFormat = WebMessageFormat.Json)]
         [AuthorizationRequired(UserType.Employee)]
-        User GetAnswerer(string id);
+        User GetAnswerer(string questionId);
 
         /// <summary>
         /// Retrieve the answer that answered the question with the given identifier.
         /// </summary>
-        /// <param name="id">The identifier of the question.</param>
+        /// <param name="questionId">The identifier of the question.</param>
         /// <returns>Returns the answer that answered the question with the given identifier.</returns>
         /// <remarks>Only users of type <see cref="UserType.Employee"/> are able to retrieve the answer of a question.
         /// </remarks>
         [OperationContract]
-        [WebGet(UriTemplate = "questions/{id}/answer",
+        [WebGet(UriTemplate = "questions/{questionId}/answer",
             RequestFormat = WebMessageFormat.Json,
             ResponseFormat = WebMessageFormat.Json)]
         [AuthorizationRequired(UserType.Employee)]
-        User GetAnswer(string id);
+        User GetAnswer(string questionId);
 
         /// <summary>
         /// Retrieve the keywords that are linked to the question with the given identifier.
         /// </summary>
-        /// <param name="id">The identifier of the question.</param>
+        /// <param name="questionId">The identifier of the question.</param>
         /// <returns>Returns the keywords that are linked to the question with the given identifier.</returns>
         /// <remarks>Only users of type <see cref="UserType.Employee"/> are able to retrieve the keywords of a question.
         /// </remarks>
         [OperationContract]
-        [WebGet(UriTemplate = "questions/{id}/keywords",
+        [WebGet(UriTemplate = "questions/{questionId}/keywords",
             RequestFormat = WebMessageFormat.Json,
             ResponseFormat = WebMessageFormat.Json)]
         [AuthorizationRequired(UserType.Employee)]
-        IList<Keyword> GetKeywords(string id);
+        IList<Keyword> GetKeywords(string questionId);
 
         /// <summary>
         /// Creates a new question.
@@ -137,16 +137,16 @@ namespace nl.fhict.IntelliCloud.Service
         /// <summary>
         /// Updates the question with the given identifier.
         /// </summary>
-        /// <param name="id">The identifier of the question that is updated.</param>
+        /// <param name="questionId">The identifier of the question that is updated.</param>
         /// <param name="employeeId">The identifier of the employee that is going to answer the question.</param>
         /// <remarks>Only users of type <see cref="UserType.Employee"/> are able to update questions.</remarks>
         [OperationContract]
         [WebInvoke(Method = "PUT",
-            UriTemplate = "questions/{id}",
+            UriTemplate = "questions/{questionId}",
             RequestFormat = WebMessageFormat.Json,
             ResponseFormat = WebMessageFormat.Json,
             BodyStyle = WebMessageBodyStyle.Wrapped)]
         [AuthorizationRequired(UserType.Employee)]
-        void UpdateQuestion(string id, int employeeId);
+        void UpdateQuestion(string questionId, int employeeId);
     }
 }

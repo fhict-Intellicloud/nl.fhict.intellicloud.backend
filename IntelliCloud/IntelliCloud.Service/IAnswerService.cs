@@ -35,74 +35,74 @@ namespace nl.fhict.IntelliCloud.Service
         /// <summary>
         /// Retrieve the answer with the given identifier.
         /// </summary>
-        /// <param name="id">The identifier of the answer.</param>
+        /// <param name="answerId">The identifier of the answer.</param>
         /// <returns>Returns the answer with the given identifier.</returns>
         /// <remarks>Only users of type <see cref="UserType.Employee"/> are able to retrieve answers by identifier.
         /// </remarks>
         [OperationContract]
-        [WebGet(UriTemplate = "answers/{id}",
+        [WebGet(UriTemplate = "answers/{answerId}",
             RequestFormat = WebMessageFormat.Json,
             ResponseFormat = WebMessageFormat.Json)]
         [AuthorizationRequired(UserType.Employee)]
-        Answer GetAnswer(string id);
+        Answer GetAnswer(string answerId);
 
         /// <summary>
         /// Retrieve the answerer of the answer with the given identifier.
         /// </summary>
-        /// <param name="id">The identifier of the answer.</param>
+        /// <param name="answerId">The identifier of the answer.</param>
         /// <returns>Returns the user which created the answer with the given identifier.</returns>
         /// <remarks>Only users of type <see cref="UserType.Employee"/> are able to retrieve the answerer of an answer.
         /// </remarks>
         [OperationContract]
-        [WebGet(UriTemplate = "answers/{id}/answerer",
+        [WebGet(UriTemplate = "answers/{answerId}/answerer",
             RequestFormat = WebMessageFormat.Json,
             ResponseFormat = WebMessageFormat.Json)]
         [AuthorizationRequired(UserType.Employee)]
-        User GetAnswerer(string id);
+        User GetAnswerer(string answerId);
 
         /// <summary>
         /// Retrieve the feedbacks for the answer with the given identifier, filtered by state.
         /// </summary>
-        /// <param name="id">The identifier of the answer.</param>
+        /// <param name="answerId">The identifier of the answer.</param>
         /// <param name="state">The optional state of the feedbacks which are returned.</param>
         /// <returns>Returns the feedbacks for the answer with the given identifier.</returns>
         /// <remarks>Only users of type <see cref="UserType.Employee"/> are able to retrieve the feedbacks of an answer.
         /// </remarks>
         [OperationContract]
-        [WebGet(UriTemplate = "answers/{id}/feedbacks?state={state}",
+        [WebGet(UriTemplate = "answers/{answerId}/feedbacks?state={state}",
             RequestFormat = WebMessageFormat.Json,
             ResponseFormat = WebMessageFormat.Json)]
         [AuthorizationRequired(UserType.Employee)]
-        IList<Feedback> GetFeedbacks(string id, FeedbackState? state = null);
+        IList<Feedback> GetFeedbacks(string answerId, FeedbackState? state = null);
 
         /// <summary>
         /// Retrieve the reviews for the answer with the given identifier, filtered by state.
         /// </summary>
-        /// <param name="id">The identifier of the answer.</param>
+        /// <param name="answerId">The identifier of the answer.</param>
         /// <param name="state">The optional state of the reviews which are returned.</param>
         /// <returns>Returns the reviews for the answer with the given identifier.</returns>
         /// <remarks>Only users of type <see cref="UserType.Employee"/> are able to retrieve the reviews of an answer.
         /// </remarks>
         [OperationContract]
-        [WebGet(UriTemplate = "answers/{id}/reviews?state={state}",
+        [WebGet(UriTemplate = "answers/{answerId}/reviews?state={state}",
             RequestFormat = WebMessageFormat.Json,
             ResponseFormat = WebMessageFormat.Json)]
         [AuthorizationRequired(UserType.Employee)]
-        IList<Review> GetReviews(string id, ReviewState? state = null);
+        IList<Review> GetReviews(string answerId, ReviewState? state = null);
 
         /// <summary>
         /// Retrieve the keywords for the answer with the given identifier.
         /// </summary>
-        /// <param name="id">The identifier of the answer.</param>        
+        /// <param name="answerId">The identifier of the answer.</param>        
         /// <returns>Returns the keywords for the answer with the given identifier.</returns>
         /// <remarks>Only users of type <see cref="UserType.Employee"/> are able to retrieve the keywords of an answer.
         /// </remarks>
         [OperationContract]
-        [WebGet(UriTemplate = "answers/{id}/keywords",
+        [WebGet(UriTemplate = "answers/{answerId}/keywords",
             RequestFormat = WebMessageFormat.Json,
             ResponseFormat = WebMessageFormat.Json)]
         [AuthorizationRequired(UserType.Employee)]
-        IList<Keyword> GetKeywords(string id);
+        IList<Keyword> GetKeywords(string answerId);
 
         /// <summary>
         /// Creates a new answer.
@@ -125,18 +125,18 @@ namespace nl.fhict.IntelliCloud.Service
         /// <summary>
         /// Updates the answer with the given identifier.
         /// </summary>
-        /// <param name="id">The identifier of the answer that is updated.</param>
+        /// <param name="answerId">The identifier of the answer that is updated.</param>
         /// <param name="answerState">The new state of the answer.</param>
         /// <param name="answer">The new content of the given answer.</param>
         /// <remarks>Only users of type <see cref="UserType.Employee"/> are able to update an answer.
         /// </remarks>
         [OperationContract]
         [WebInvoke(Method = "PUT",
-            UriTemplate = "answers/{id}",
+            UriTemplate = "answers/{answerId}",
             RequestFormat = WebMessageFormat.Json,
             ResponseFormat = WebMessageFormat.Json,
             BodyStyle = WebMessageBodyStyle.Wrapped)]
         [AuthorizationRequired(UserType.Employee)]
-        void UpdateAnswer(string id, AnswerState answerState, string answer);
+        void UpdateAnswer(string answerId, AnswerState answerState, string answer);
     }
 }
