@@ -19,44 +19,44 @@ namespace nl.fhict.IntelliCloud.Service
         /// <summary>
         /// Retrieve the review with the given identifier.
         /// </summary>
-        /// <param name="id">The identifier of the review.</param>
+        /// <param name="reviewId">The identifier of the review.</param>
         /// <returns>Returns the review with the given identifier.</returns>
         /// <remarks>Only users of type <see cref="UserType.Employee"/> are able to retrieve reviews by identifier.
         /// </remarks>
         [OperationContract]
-        [WebGet(UriTemplate = "reviews/{id}",
+        [WebGet(UriTemplate = "reviews/{reviewId}",
             RequestFormat = WebMessageFormat.Json,
             ResponseFormat = WebMessageFormat.Json)]
         [AuthorizationRequired(UserType.Employee)]
-        Feedback GetReview(string id);
+        Feedback GetReview(string reviewId);
 
         /// <summary>
         /// Retrieve the user that gave the review with the given identifier.
         /// </summary>
-        /// <param name="id">The identifier of the review.</param>
+        /// <param name="reviewId">The identifier of the review.</param>
         /// <returns>Returns the user that gave the review with the given identifier.</returns>
         /// <remarks>Only users of type <see cref="UserType.Employee"/> are able to retrieve the user that gave the 
         /// review.</remarks>
         [OperationContract]
-        [WebGet(UriTemplate = "reviews/{id}/user",
+        [WebGet(UriTemplate = "reviews/{reviewId}/user",
             RequestFormat = WebMessageFormat.Json,
             ResponseFormat = WebMessageFormat.Json)]
         [AuthorizationRequired(UserType.Employee)]
-        User GetUser(string id);
+        User GetUser(string reviewId);
 
         /// <summary>
         /// Retrieve the answer for the review with the given identifier.
         /// </summary>
-        /// <param name="id">The identifier of the review.</param>
+        /// <param name="reviewId">The identifier of the review.</param>
         /// <returns>Returns the answer for the review with the given identifier.</returns>
         /// <remarks>Only users of type <see cref="UserType.Employee"/> are able to retrieve the answer of the review.
         /// </remarks>
         [OperationContract]
-        [WebGet(UriTemplate = "reviews/{id}/answer",
+        [WebGet(UriTemplate = "reviews/{reviewId}/answer",
             RequestFormat = WebMessageFormat.Json,
             ResponseFormat = WebMessageFormat.Json)]
         [AuthorizationRequired(UserType.Employee)]
-        Answer GetAnswer(string id);
+        Answer GetAnswer(string reviewId);
 
         /// <summary>
         /// Creates a review for an answer.
@@ -77,16 +77,16 @@ namespace nl.fhict.IntelliCloud.Service
         /// <summary>
         /// Updates the review with the given identifier.
         /// </summary>
-        /// <param name="id">The identifier of the review that is updated.</param>
+        /// <param name="reviewId">The identifier of the review that is updated.</param>
         /// <param name="reviewState">The new state of the review.</param>
         /// <remarks>Only users of type <see cref="UserType.Employee"/> are able to update a review.</remarks>
         [OperationContract]
         [WebInvoke(Method = "PUT",
-            UriTemplate = "reviews/{id}",
+            UriTemplate = "reviews/{reviewId}",
             RequestFormat = WebMessageFormat.Json,
             ResponseFormat = WebMessageFormat.Json,
             BodyStyle = WebMessageBodyStyle.Wrapped)]
         [AuthorizationRequired(UserType.Employee)]
-        void UpdateReview(string id, ReviewState reviewState);
+        void UpdateReview(string reviewId, ReviewState reviewState);
     }
 }

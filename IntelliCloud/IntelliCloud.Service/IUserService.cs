@@ -32,29 +32,29 @@ namespace nl.fhict.IntelliCloud.Service
         /// <summary>
         /// Retrieves the user with the given identifier.
         /// </summary>
-        /// <param name="id">The identifier of the user.</param>
+        /// <param name="userId">The identifier of the user.</param>
         /// <returns>Returns the user with the given identifier.</returns>
         /// <remarks>Only users that are logged in can retrieve a user. Only users with type 
         /// <see cref="UserType.Employee"/> are able to retrieve other users than their own.</remarks>
         [OperationContract]
-        [WebGet(UriTemplate = "users/{id}",
+        [WebGet(UriTemplate = "users/{userId}",
             RequestFormat = WebMessageFormat.Json,
             ResponseFormat = WebMessageFormat.Json)]
         [AuthorizationRequired]
-        User GetUser(string id);
+        User GetUser(string userId);
 
         /// <summary>
         /// Retrieves the keywords for the user with the given identifier.
         /// </summary>
-        /// <param name="id">The identifier of the user.</param>
+        /// <param name="userId">The identifier of the user.</param>
         /// <returns>Returns the keywords for the user with the given identifier.</returns>
         /// <remarks>Only users of type <see cref="UserType.Employee"/> are able to retrieve their keywords.</remarks>
         [OperationContract]
-        [WebGet(UriTemplate = "users/{id}/keywords",
+        [WebGet(UriTemplate = "users/{userId}/keywords",
             RequestFormat = WebMessageFormat.Json,
             ResponseFormat = WebMessageFormat.Json)]
         [AuthorizationRequired(UserType.Employee)]
-        IList<Keyword> GetKeywords(string id);
+        IList<Keyword> GetKeywords(string userId);
 
         /// <summary>
         /// Retrieves the questions for the user with the given identifier. The retrieved questions have keywords which
@@ -62,34 +62,34 @@ namespace nl.fhict.IntelliCloud.Service
         /// Only questions with state <see cref="QuestionState.Open"/> and <see cref="QuestionState.UpForAnswer"/> are 
         /// returned.
         /// </summary>
-        /// <param name="id">The identifier of the user.</param>
+        /// <param name="userId">The identifier of the user.</param>
         /// <param name="after">Optional: Only questions that are created or modified after this date time are retrieved,
         /// in UTC time.</param>
         /// <returns>Returns the questions for the user with the given identifier.</returns>
         /// <remarks>Only users of type <see cref="UserType.Employee"/> are able to retrieve their questions.</remarks>
         [OperationContract]
-        [WebGet(UriTemplate = "users/{id}/questions?after={after}",
+        [WebGet(UriTemplate = "users/{userId}/questions?after={after}",
             RequestFormat = WebMessageFormat.Json,
             ResponseFormat = WebMessageFormat.Json)]
         [AuthorizationRequired(UserType.Employee)]
-        IList<Question> GetQuestions(string id, DateTime? after = null);
+        IList<Question> GetQuestions(string userId, DateTime? after = null);
 
         /// <summary>
         /// Retrieves the answers which received feedback for the user with the given identifier. The feedback applies
         /// to an answer which has keywords which match with one or more keywords of the user. Also feedback which don't
         /// match with any user is retrieved. Only answers which have open feedback items are returned.
         /// </summary>
-        /// <param name="id">The identifier of the user.</param>
+        /// <param name="userId">The identifier of the user.</param>
         /// <param name="after">Optional: Only answers that are created or modified after this date time are retrieved,
         /// in UTC time.</param>
         /// <returns>Returns the feedback for the user with the given identifier.</returns>
         /// <remarks>Only users of type <see cref="UserType.Employee"/> are able to retrieve feedback.</remarks>
         [OperationContract]
-        [WebGet(UriTemplate = "users/{id}/feedbacks?after={after}",
+        [WebGet(UriTemplate = "users/{userId}/feedbacks?after={after}",
             RequestFormat = WebMessageFormat.Json,
             ResponseFormat = WebMessageFormat.Json)]
         [AuthorizationRequired(UserType.Employee)]
-        IList<Answer> GetFeedbacks(string id, DateTime? after = null);
+        IList<Answer> GetFeedbacks(string userId, DateTime? after = null);
 
         /// <summary>
         /// Retrieves the answers that are under review which can be reviewed by the user with the given identifier. 
@@ -97,33 +97,33 @@ namespace nl.fhict.IntelliCloud.Service
         /// of the user or if the keywords of the answer don't match with any user. Only answers which have open review
         /// items are returned.
         /// </summary>
-        /// <param name="id">The identifier of the user.</param>
+        /// <param name="userId">The identifier of the user.</param>
         /// <param name="after">Optional: Only answers that are created or modified after this date time are retrieved,
         /// in UTC time.</param>
         /// <returns>Returns the reviewable answers for the user with the given identifier.</returns>
         /// <remarks>Only users of type <see cref="UserType.Employee"/> are able to retrieve reviewable answers.
         /// </remarks>
         [OperationContract]
-        [WebGet(UriTemplate = "users/{id}/reviews?after={after}",
+        [WebGet(UriTemplate = "users/{userId}/reviews?after={after}",
             RequestFormat = WebMessageFormat.Json,
             ResponseFormat = WebMessageFormat.Json)]
         [AuthorizationRequired(UserType.Employee)]
-        IList<Answer> GetReviews(string id, DateTime? after = null);
+        IList<Answer> GetReviews(string userId, DateTime? after = null);
 
         /// <summary>
         /// Assign a keyword to the user with the given identifier.
         /// </summary>
-        /// <param name="id">The identifier of the user.</param>
+        /// <param name="userId">The identifier of the user.</param>
         /// <param name="keyword">The keyword which is assigned to the user.</param>
         /// <param name="affinity">The affinity the user has with the assigned keyword, on a scale of 1 to 10.</param>
         /// <remarks>Only users of type <see cref="UserType.Employee"/> are able to assign keywords.</remarks>
         [OperationContract]
         [WebInvoke(Method = "POST",
-            UriTemplate = "users/{id}/keywords",
+            UriTemplate = "users/{userId}/keywords",
             RequestFormat = WebMessageFormat.Json,
             ResponseFormat = WebMessageFormat.Json,
             BodyStyle = WebMessageBodyStyle.Wrapped)]
         [AuthorizationRequired(UserType.Employee)]
-        void AssignKeyword(string id, string keyword, int affinity);
+        void AssignKeyword(string userId, string keyword, int affinity);
     }
 }
