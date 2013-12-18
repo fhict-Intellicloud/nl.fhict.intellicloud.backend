@@ -13,9 +13,9 @@ namespace nl.fhict.IntelliCloud.Common.DataTransfer
     public class Keyword
     {
         /// <summary>
-        /// Gets or sets the unique identifier of the relation between the user, answer or question and the keyword.
+        /// Gets or sets the URL to the keywords that have a relation with an answer or question.
         /// </summary>
-        public int Id { get; set; }
+        public Uri Id { get; set; }
 
         /// <summary>
         /// Gets or sets the name of the keyword. In this case the keyword itself.
