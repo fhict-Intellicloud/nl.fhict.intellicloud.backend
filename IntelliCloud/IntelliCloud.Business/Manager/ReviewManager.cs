@@ -114,7 +114,7 @@ namespace nl.fhict.IntelliCloud.Business.Manager
                                                      where r.Answer.Id == answerId
                                                      select r).ToList();
 
-                return ConvertEntities.ReviewEntityListToReviewList(reviewEntities);
+                return reviewEntities.AsReviews().ToList();
             }
         }
 

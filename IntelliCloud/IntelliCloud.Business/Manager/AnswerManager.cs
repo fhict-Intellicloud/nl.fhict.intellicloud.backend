@@ -48,7 +48,7 @@ namespace nl.fhict.IntelliCloud.Business.Manager
                     .Include(a => a.LanguageDefinition)
                     .Single(a => a.Id == iId);
 
-                answer = ConvertEntities.AnswerEntityToAnswer(answerentity);
+                answer = answerentity.AsAnswer();
             }
 
             return answer;
@@ -117,12 +117,7 @@ namespace nl.fhict.IntelliCloud.Business.Manager
 
                 ctx.SaveChanges();
 
-                Question quest = ConvertEntities.QuestionEntityToQuestion(question);
-                Answer a = ConvertEntities.AnswerEntityToAnswer(answerEntity);
-
-
-                this.SendAnswerFactory.LoadPlugin(ConvertEntities.SourceDefinitionEntityToSourceDefinition(question.Source.Source.SourceDefinition))
-                    .SendAnswer(quest, a);
+                this.SendAnswerFactory.LoadPlugin(question.Source.Source.SourceDefinition).SendAnswer(question, answerEntity);
             }
 
         }
@@ -163,7 +158,7 @@ namespace nl.fhict.IntelliCloud.Business.Manager
         {
             Validation.StringCheck(search);
             
-            // TODO implement geerts algorithm
+            // TODO implement Daniks algorithm
             throw new NotImplementedException();
         }
 
@@ -180,13 +175,12 @@ namespace nl.fhict.IntelliCloud.Business.Manager
                 AnswerEntity answerEntity = ctx.Answers
                     .Include(a => a.User)
                     .Include(a => a.User.Sources)
-                    .Include(a => a.User.Sources.Select(s => s.SourceDefinition))
                     .SingleOrDefault(a => a.Id == iId);
 
                 if (answerEntity == null)
                     throw new NotFoundException("No answer found for the given Id");
 
-                user = ConvertEntities.UserEntityToUser(answerEntity.User);
+                user = answerEntity.User.AsUser();
             }
 
             return user;
@@ -211,7 +205,7 @@ namespace nl.fhict.IntelliCloud.Business.Manager
 
                 List<FeedbackEntity> feedbackEntities = query.ToList();
 
-                feedbacks = feedbackEntities.Select(s => ConvertEntities.FeedbackEntityToFeedback(s)).ToList();
+                feedbacks.AddRange(feedbackEntities.AsFeedbacks());
             }
 
             return feedbacks;
@@ -236,7 +230,7 @@ namespace nl.fhict.IntelliCloud.Business.Manager
 
                 List<ReviewEntity> reviewEntities = query.ToList();
 
-                reviews = ConvertEntities.ReviewEntityListToReviewList(reviewEntities);
+                reviews.AddRange(reviewEntities.AsReviews());
             }
 
             return reviews;
@@ -257,9 +251,7 @@ namespace nl.fhict.IntelliCloud.Business.Manager
                                                       on k.Id equals ak.Keyword.Id
                                                       select k).ToList();
 
-                // TODO convert to keyword list
-
-                //keywords = ConvertEntities(reviewEntities);
+                keywords.AddRange(keywordEntities.AsKeywords());
             }
 
             return keywords;

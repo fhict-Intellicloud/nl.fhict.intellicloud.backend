@@ -61,6 +61,48 @@ namespace nl.fhict.IntelliCloud.Business.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Bedankt voor U vraag, U zult spoedig antwoord van ons ontvangen..
+        /// </summary>
+        internal static string DUTCH_FACEBOOK_AUTO_RESPONSE {
+            get {
+                return ResourceManager.GetString("DUTCH_FACEBOOK_AUTO_RESPONSE", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;div style=\&quot;width:500px; margin:auto;\&quot;&gt;
+        ///	&lt;font &lt;font face=\&quot;arial\&quot;&gt;
+        ///		&lt;table border=\&quot;0\&quot;&gt;
+        ///			&lt;tr&gt;
+        ///				&lt;td style=\&quot;width:276px; height:118px; \&quot;&gt; 
+        ///					&lt;img width=\&quot;276px\&quot; height=\&quot;118px\&quot; src=\&quot;http://athena.fhict.nl/users/i241221/intelliCloud.png\&quot; alt=\&quot;intelliCloud\&quot;/&gt; 
+        ///				&lt;/td&gt;
+        ///				&lt;td&gt; 
+        ///					&lt;p style=\&quot;float: right; \&quot;&gt; IntelliCloud bv &lt;br&gt; Rachelsmolen 1&lt;br&gt;5612MA Eindhoven&lt;br&gt;040 - 224488 &lt;/p&gt;
+        ///					&lt;br&gt;
+        ///				&lt;/td&gt;
+        ///			&lt;/tr&gt;
+        ///		&lt;/table&gt;
+        ///	&lt;/font&gt;
+        ///	&lt;font face=\&quot;arial\&quot;&gt;
+        ///		&lt;table border [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string DUTCH_MAIL_AUTO_RESPONSE {
+            get {
+                return ResourceManager.GetString("DUTCH_MAIL_AUTO_RESPONSE", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Bedankt voor u vraag!.
+        /// </summary>
+        internal static string DUTCH_MAIL_AUTO_RESPONSE_SUBJECT {
+            get {
+                return ResourceManager.GetString("DUTCH_MAIL_AUTO_RESPONSE_SUBJECT", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to .
         /// </summary>
         internal static string DUTCH_MAIL_RESPONSE {
@@ -70,11 +112,158 @@ namespace nl.fhict.IntelliCloud.Business.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Antwoord op u vraag.
+        /// </summary>
+        internal static string DUTCH_MAIL_RESPONSE_SUBJECT {
+            get {
+                return ResourceManager.GetString("DUTCH_MAIL_RESPONSE_SUBJECT", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Bedankt voor U vraag, U zult spoedig antwoord van ons ontvangen..
+        /// </summary>
+        internal static string DUTCH_TWITTER_AUTO_RESPONSE {
+            get {
+                return ResourceManager.GetString("DUTCH_TWITTER_AUTO_RESPONSE", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Thank you for your question, you will recieve a answer shortly..
+        /// </summary>
+        internal static string ENGLISH_FACEBOOK_AUTO_RESPONSE {
+            get {
+                return ResourceManager.GetString("ENGLISH_FACEBOOK_AUTO_RESPONSE", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;div style=\&quot;width:500px; margin:auto;\&quot;&gt;
+        ///	&lt;font &lt;font face=\&quot;arial\&quot;&gt;
+        ///		&lt;table border=\&quot;0\&quot;&gt;
+        ///			&lt;tr&gt;
+        ///				&lt;td style=\&quot;width:276px; height:118px; \&quot;&gt; 
+        ///					&lt;img width=\&quot;276px\&quot; height=\&quot;118px\&quot; src=\&quot;http://81.204.121.229/IntelliCloud/images/intelliCloud.png\&quot; alt=\&quot;intelliCloud\&quot;/&gt; 
+        ///				&lt;/td&gt;
+        ///				&lt;td&gt; 
+        ///					&lt;p style=\&quot;float: right; \&quot;&gt; IntelliCloud bv &lt;br&gt; Rachelsmolen 1&lt;br&gt;5612MA Eindhoven&lt;br&gt;040 - 224488 &lt;/p&gt;
+        ///					&lt;br&gt;
+        ///				&lt;/td&gt;
+        ///			&lt;/tr&gt;
+        ///		&lt;/table&gt;
+        ///	&lt;/font&gt;
+        ///	&lt;font face=\&quot;arial\&quot;&gt;
+        ///		&lt;table b [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string ENGLISH_MAIL_AUTO_RESPONSE {
+            get {
+                return ResourceManager.GetString("ENGLISH_MAIL_AUTO_RESPONSE", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to .
         /// </summary>
         internal static string ENGLISH_MAIL_RESPONSE {
             get {
                 return ResourceManager.GetString("ENGLISH_MAIL_RESPONSE", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Answer to your question.
+        /// </summary>
+        internal static string ENGLISH_MAIL_RESPONSE_SUBJECT {
+            get {
+                return ResourceManager.GetString("ENGLISH_MAIL_RESPONSE_SUBJECT", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Thank you for your question, you will recieve a answer shortly..
+        /// </summary>
+        internal static string ENGLISH_TWITTER_AUTO_RESPONSE {
+            get {
+                return ResourceManager.GetString("ENGLISH_TWITTER_AUTO_RESPONSE", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Thank you for your question!.
+        /// </summary>
+        internal static string ENSLIGH_MAIL_AUTO_RESPONSE_SUBJECT {
+            get {
+                return ResourceManager.GetString("ENSLIGH_MAIL_AUTO_RESPONSE_SUBJECT", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Thank you for your question, you will recieve a answer shortly..
+        /// </summary>
+        internal static string UNKNOWN_FACEBOOK_AUTO_RESPONSE1 {
+            get {
+                return ResourceManager.GetString("UNKNOWN_FACEBOOK_AUTO_RESPONSE1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Thank you for your question!.
+        /// </summary>
+        internal static string UNKNOWN_MAIL_AUTO_RESPONSE_SUBJECT1 {
+            get {
+                return ResourceManager.GetString("UNKNOWN_MAIL_AUTO_RESPONSE_SUBJECT1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;div style=\&quot;width:500px; margin:auto;\&quot;&gt;
+        ///	&lt;font &lt;font face=\&quot;arial\&quot;&gt;
+        ///		&lt;table border=\&quot;0\&quot;&gt;
+        ///			&lt;tr&gt;
+        ///				&lt;td style=\&quot;width:276px; height:118px; \&quot;&gt; 
+        ///					&lt;img width=\&quot;276px\&quot; height=\&quot;118px\&quot; src=\&quot;http://81.204.121.229/IntelliCloud/images/intelliCloud.png\&quot; alt=\&quot;intelliCloud\&quot;/&gt; 
+        ///				&lt;/td&gt;
+        ///				&lt;td&gt; 
+        ///					&lt;p style=\&quot;float: right; \&quot;&gt; IntelliCloud bv &lt;br&gt; Rachelsmolen 1&lt;br&gt;5612MA Eindhoven&lt;br&gt;040 - 224488 &lt;/p&gt;
+        ///					&lt;br&gt;
+        ///				&lt;/td&gt;
+        ///			&lt;/tr&gt;
+        ///		&lt;/table&gt;
+        ///	&lt;/font&gt;
+        ///	&lt;font face=\&quot;arial\&quot;&gt;
+        ///		&lt;table b [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string UNKNOWN_MAIL_AUTO_RESPONSE1 {
+            get {
+                return ResourceManager.GetString("UNKNOWN_MAIL_AUTO_RESPONSE1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Answer to your question.
+        /// </summary>
+        internal static string UNKNOWN_MAIL_RESPONSE_SUBJECT1 {
+            get {
+                return ResourceManager.GetString("UNKNOWN_MAIL_RESPONSE_SUBJECT1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string UNKNOWN_MAIL_RESPONSE1 {
+            get {
+                return ResourceManager.GetString("UNKNOWN_MAIL_RESPONSE1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Thank you for your question, you will recieve a answer shortly..
+        /// </summary>
+        internal static string UNKNOWN_TWITTER_AUTO_RESPONSE1 {
+            get {
+                return ResourceManager.GetString("UNKNOWN_TWITTER_AUTO_RESPONSE1", resourceCulture);
             }
         }
     }

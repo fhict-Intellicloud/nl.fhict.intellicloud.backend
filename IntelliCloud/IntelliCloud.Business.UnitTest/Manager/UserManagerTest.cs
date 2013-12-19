@@ -2,7 +2,6 @@
 using Moq;
 using nl.fhict.IntelliCloud.Business.Manager;
 using nl.fhict.IntelliCloud.Common.DataTransfer;
-using nl.fhict.IntelliCloud.Common.DataTransfer.Input;
 using System;
 using System.Collections.Generic;
 
