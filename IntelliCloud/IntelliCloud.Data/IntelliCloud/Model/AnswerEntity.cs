@@ -61,11 +61,11 @@ namespace nl.fhict.IntelliCloud.Data.IntelliCloud.Model
         public bool IsPrivate { get; set; }
         
         /// <summary>
-        /// Gets or sets the identifier of the original <see cref="Answer"/>, e.g. the first version of the answer. This
-        /// identifier is required so the different versions of an answer can be easily retrieved. When this answer is 
-        /// the first version of the answer the value is <c>null</c>.
+        /// Gets or sets the original <see cref="Answer"/>, e.g. the first version of the answer. This answer is 
+        /// required so the different versions of an answer can be easily retrieved. When this answer is the first 
+        /// version of the answer the value is <c>null</c>.
         /// </summary>
-        public int? OriginalId { get; set; }
+        public AnswerEntity OriginalAnswer { get; set; }
 
         /// <summary>
         /// Gets or sets the date time which marks the time from which this answer is valid.
@@ -77,7 +77,7 @@ namespace nl.fhict.IntelliCloud.Data.IntelliCloud.Model
         /// Gets or sets the date time which marks the time after this answer is no longer valid, e.g. a newer version 
         /// is available. When the record is valid this value is <see cref="DateTime.MaxValue"/>.
         /// </summary>
-        [Required]
+        [Required, ConcurrencyCheck]
         public DateTime ValidTo { get; set; }
     }
 }
