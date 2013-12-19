@@ -50,7 +50,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="IntelliCloud\Context\IntelliCloudContext.cs" />
-    <Compile Include="IntelliCloud\Context\ServiceContextFactory.cs" />
     <Compile Include="IntelliCloud\Context\WordStoreContext.cs" />
     <Compile Include="IntelliCloud\Migration\Configuration.cs" />
     <Compile Include="IntelliCloud\Migration\Extension.cs" />

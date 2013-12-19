@@ -117,10 +117,251 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="DUTCH_FACEBOOK_AUTO_RESPONSE" xml:space="preserve">
+    <value>Bedankt voor U vraag, U zult spoedig antwoord van ons ontvangen.</value>
+  </data>
+  <data name="DUTCH_MAIL_AUTO_RESPONSE" xml:space="preserve">
+    <value>&lt;div style=\"width:500px; margin:auto;\"&gt;
+	&lt;font &lt;font face=\"arial\"&gt;
+		&lt;table border=\"0\"&gt;
+			&lt;tr&gt;
+				&lt;td style=\"width:276px; height:118px; \"&gt; 
+					&lt;img width=\"276px\" height=\"118px\" src=\"http://athena.fhict.nl/users/i241221/intelliCloud.png\" alt=\"intelliCloud\"/&gt; 
+				&lt;/td&gt;
+				&lt;td&gt; 
+					&lt;p style=\"float: right; \"&gt; IntelliCloud bv &lt;br&gt; Rachelsmolen 1&lt;br&gt;5612MA Eindhoven&lt;br&gt;040 - 224488 &lt;/p&gt;
+					&lt;br&gt;
+				&lt;/td&gt;
+			&lt;/tr&gt;
+		&lt;/table&gt;
+	&lt;/font&gt;
+	&lt;font face=\"arial\"&gt;
+		&lt;table border=\"0\" width=\"500px\"&gt;
+			&lt;tr&gt;
+				&lt;td&gt;
+					&lt;br&gt;&lt;p&gt;U heeft onlangs een vraag gesteld op IntelliCloud. Deze vraag kon helaas niet direct door het systeem beantwoord worden en is naar een van onze medewerkers gestuurd. Wij hopen u met dit antwoord voldoende informatie te geven zodat uw probleem is opgelost.&lt;/p&gt;&lt;br&gt;
+				&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+				&lt;td&gt;
+					&lt;p&gt;Het antwoord op uw vraag is met de grootste zorg samengesteld. Mocht het antwoord toch niet ondersteunend of onvolledig zijn, dan vinden wij het fijn om dit te horen via het feedback formulier.&lt;/p&gt;
+					&lt;br&gt;
+				&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+				&lt;td&gt;
+					&lt;p&gt;Uw vraag:&lt;/p&gt;
+					&lt;td&gt;
+				&lt;/td&gt;
+				&lt;tr&gt;
+					&lt;td&gt;
+						&lt;p&gt;&lt;b&gt;{0}&lt;/b&gt;&lt;/p&gt;
+					&lt;/td&gt;
+				&lt;/tr&gt;
+				&lt;tr&gt;
+					&lt;td&gt;
+						&lt;a href=\"#\"&gt;&lt;img src=\"http://athena.fhict.nl/users/i241221/bekijkAntwoord.png\" alt=\"Bekijk antwoord\"/&gt;&lt;/a&gt;
+					&lt;/td&gt;
+				&lt;/tr&gt;
+				&lt;tr&gt;
+					&lt;td&gt;
+						&lt;br&gt;
+							&lt;p&gt;Wij hopen u op deze manier voldoende ge&amp;iuml;nformeerd te hebben.&lt;/p&gt;
+						&lt;br&gt;
+					&lt;/td&gt;
+				&lt;/tr&gt;
+				&lt;tr&gt;
+					&lt;td&gt;
+						&lt;p&gt;Bedankt voor het gebruik van IntelliCloud.&lt;/p&gt;
+						&lt;br&gt;
+					&lt;/td&gt;
+				&lt;/tr&gt;
+				&lt;tr&gt;
+					&lt;td&gt;&lt;p&gt;Met vriendelijke groet, &lt;br&gt;IntelliCloud Service Team&lt;/p&gt;
+					&lt;/td&gt;
+				&lt;/tr&gt;
+			&lt;/table&gt;
+		&lt;/font&gt;
+	&lt;/div&gt;</value>
+  </data>
+  <data name="DUTCH_MAIL_AUTO_RESPONSE_SUBJECT" xml:space="preserve">
+    <value>Bedankt voor u vraag!</value>
+  </data>
   <data name="DUTCH_MAIL_RESPONSE" xml:space="preserve">
     <value />
   </data>
+  <data name="DUTCH_MAIL_RESPONSE_SUBJECT" xml:space="preserve">
+    <value>Antwoord op u vraag</value>
+  </data>
+  <data name="DUTCH_TWITTER_AUTO_RESPONSE" xml:space="preserve">
+    <value>Bedankt voor U vraag, U zult spoedig antwoord van ons ontvangen.</value>
+  </data>
+  <data name="ENGLISH_FACEBOOK_AUTO_RESPONSE" xml:space="preserve">
+    <value>Thank you for your question, you will recieve a answer shortly.</value>
+  </data>
+  <data name="ENGLISH_MAIL_AUTO_RESPONSE" xml:space="preserve">
+    <value>&lt;div style=\"width:500px; margin:auto;\"&gt;
+	&lt;font &lt;font face=\"arial\"&gt;
+		&lt;table border=\"0\"&gt;
+			&lt;tr&gt;
+				&lt;td style=\"width:276px; height:118px; \"&gt; 
+					&lt;img width=\"276px\" height=\"118px\" src=\"http://81.204.121.229/IntelliCloud/images/intelliCloud.png\" alt=\"intelliCloud\"/&gt; 
+				&lt;/td&gt;
+				&lt;td&gt; 
+					&lt;p style=\"float: right; \"&gt; IntelliCloud bv &lt;br&gt; Rachelsmolen 1&lt;br&gt;5612MA Eindhoven&lt;br&gt;040 - 224488 &lt;/p&gt;
+					&lt;br&gt;
+				&lt;/td&gt;
+			&lt;/tr&gt;
+		&lt;/table&gt;
+	&lt;/font&gt;
+	&lt;font face=\"arial\"&gt;
+		&lt;table border=\"0\" width=\"500px\"&gt;
+			&lt;tr&gt;
+				&lt;td&gt;
+					&lt;br&gt;
+						&lt;p&gt;You have recently asked a question on IntelliCloud. The system couldn't answer this question immediately and had been forwarded to one of our employees. We hope that this answer provides enough information to solve your problem.&lt;/p&gt;
+						&lt;br&gt;
+				&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+				&lt;td&gt;
+					&lt;p&gt;The answer to your question has been composed with the greatest care. If the answer is not useful or missing components, we appreciate your feedback.&lt;/p&gt;
+					&lt;br&gt;
+				&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+				&lt;td&gt;
+					&lt;p&gt;Your question:&lt;/p&gt;
+					&lt;td&gt;
+					&lt;/td&gt;
+					&lt;tr&gt;
+					&lt;td&gt;
+						&lt;p&gt;
+							&lt;b&gt;{0}&lt;/b&gt;
+						&lt;/p&gt;
+					&lt;/td&gt;
+				&lt;/tr&gt;
+				&lt;tr&gt;
+					&lt;td&gt;
+						&lt;a href=\"#\"&gt;&lt;img src=\"http://81.204.121.229/IntelliCloud/images/yourAnswer.png\" alt=\"Your Answer\"/&gt;&lt;/a&gt;
+					&lt;/td&gt;
+				&lt;/tr&gt;
+				&lt;tr&gt;
+					&lt;td&gt;
+						&lt;br&gt;
+							&lt;p&gt;We hope we have provided you enough information.&lt;/p&gt;
+							&lt;br&gt;
+					&lt;/td&gt;
+				&lt;/tr&gt;
+				&lt;tr&gt;
+					&lt;td&gt;
+						&lt;p&gt;Thank you for using IntelliCloud.&lt;/p&gt;
+					&lt;br&gt;
+				&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+				&lt;td&gt;
+					&lt;p&gt;Best regards, &lt;br&gt;IntelliCloud Service Team&lt;/p&gt;
+				&lt;/td&gt;
+			&lt;/tr&gt;
+		&lt;/table&gt;
+	&lt;/font&gt;
+&lt;/div&gt;</value>
+  </data>
   <data name="ENGLISH_MAIL_RESPONSE" xml:space="preserve">
     <value />
+  </data>
+  <data name="ENGLISH_MAIL_RESPONSE_SUBJECT" xml:space="preserve">
+    <value>Answer to your question</value>
+  </data>
+  <data name="ENGLISH_TWITTER_AUTO_RESPONSE" xml:space="preserve">
+    <value>Thank you for your question, you will recieve a answer shortly.</value>
+  </data>
+  <data name="ENSLIGH_MAIL_AUTO_RESPONSE_SUBJECT" xml:space="preserve">
+    <value>Thank you for your question!</value>
+  </data>
+  <data name="UNKNOWN_FACEBOOK_AUTO_RESPONSE1" xml:space="preserve">
+    <value>Thank you for your question, you will recieve a answer shortly.</value>
+  </data>
+  <data name="UNKNOWN_MAIL_AUTO_RESPONSE1" xml:space="preserve">
+    <value>&lt;div style=\"width:500px; margin:auto;\"&gt;
+	&lt;font &lt;font face=\"arial\"&gt;
+		&lt;table border=\"0\"&gt;
+			&lt;tr&gt;
+				&lt;td style=\"width:276px; height:118px; \"&gt; 
+					&lt;img width=\"276px\" height=\"118px\" src=\"http://81.204.121.229/IntelliCloud/images/intelliCloud.png\" alt=\"intelliCloud\"/&gt; 
+				&lt;/td&gt;
+				&lt;td&gt; 
+					&lt;p style=\"float: right; \"&gt; IntelliCloud bv &lt;br&gt; Rachelsmolen 1&lt;br&gt;5612MA Eindhoven&lt;br&gt;040 - 224488 &lt;/p&gt;
+					&lt;br&gt;
+				&lt;/td&gt;
+			&lt;/tr&gt;
+		&lt;/table&gt;
+	&lt;/font&gt;
+	&lt;font face=\"arial\"&gt;
+		&lt;table border=\"0\" width=\"500px\"&gt;
+			&lt;tr&gt;
+				&lt;td&gt;
+					&lt;br&gt;
+						&lt;p&gt;You have recently asked a question on IntelliCloud. The system couldn't answer this question immediately and had been forwarded to one of our employees. We hope that this answer provides enough information to solve your problem.&lt;/p&gt;
+						&lt;br&gt;
+				&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+				&lt;td&gt;
+					&lt;p&gt;The answer to your question has been composed with the greatest care. If the answer is not useful or missing components, we appreciate your feedback.&lt;/p&gt;
+					&lt;br&gt;
+				&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+				&lt;td&gt;
+					&lt;p&gt;Your question:&lt;/p&gt;
+					&lt;td&gt;
+					&lt;/td&gt;
+					&lt;tr&gt;
+					&lt;td&gt;
+						&lt;p&gt;
+							&lt;b&gt;{0}&lt;/b&gt;
+						&lt;/p&gt;
+					&lt;/td&gt;
+				&lt;/tr&gt;
+				&lt;tr&gt;
+					&lt;td&gt;
+						&lt;a href=\"#\"&gt;&lt;img src=\"http://81.204.121.229/IntelliCloud/images/yourAnswer.png\" alt=\"Your Answer\"/&gt;&lt;/a&gt;
+					&lt;/td&gt;
+				&lt;/tr&gt;
+				&lt;tr&gt;
+					&lt;td&gt;
+						&lt;br&gt;
+							&lt;p&gt;We hope we have provided you enough information.&lt;/p&gt;
+							&lt;br&gt;
+					&lt;/td&gt;
+				&lt;/tr&gt;
+				&lt;tr&gt;
+					&lt;td&gt;
+						&lt;p&gt;Thank you for using IntelliCloud.&lt;/p&gt;
+					&lt;br&gt;
+				&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+				&lt;td&gt;
+					&lt;p&gt;Best regards, &lt;br&gt;IntelliCloud Service Team&lt;/p&gt;
+				&lt;/td&gt;
+			&lt;/tr&gt;
+		&lt;/table&gt;
+	&lt;/font&gt;
+&lt;/div&gt;</value>
+  </data>
+  <data name="UNKNOWN_MAIL_AUTO_RESPONSE_SUBJECT1" xml:space="preserve">
+    <value>Thank you for your question!</value>
+  </data>
+  <data name="UNKNOWN_MAIL_RESPONSE1" xml:space="preserve">
+    <value />
+  </data>
+  <data name="UNKNOWN_MAIL_RESPONSE_SUBJECT1" xml:space="preserve">
+    <value>Answer to your question</value>
+  </data>
+  <data name="UNKNOWN_TWITTER_AUTO_RESPONSE1" xml:space="preserve">
+    <value>Thank you for your question, you will recieve a answer shortly.</value>
   </data>
 </root>

@@ -53,7 +53,7 @@ namespace nl.fhict.IntelliCloud.Business.Manager
                        .Include(f => f.User.Sources.Select(s => s.SourceDefinition))
                        .Where(f => f.Answer.Id == answerId)
                        .ToList()
-                       .Select(f => ConvertEntities.FeedbackEntityToFeedback(f))
+                       .Select(f => f.AsFeedback())
                        .ToList();
             }
         }

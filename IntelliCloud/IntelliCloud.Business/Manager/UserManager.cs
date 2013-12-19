@@ -195,7 +195,7 @@ namespace nl.fhict.IntelliCloud.Business.Manager
 
                     // Convert the UserEntity (if found) to an instance of class User and set in the reference
                     if (userEntity != null)
-                        user = ConvertEntities.UserEntityToUser(userEntity);
+                        user = userEntity.AsUser();
                 }
             }
 

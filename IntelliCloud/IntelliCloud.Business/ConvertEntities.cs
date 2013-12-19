@@ -190,5 +190,31 @@ namespace nl.fhict.IntelliCloud.Business
         {
             return entities.Select(s => s.AsUser()).ToList();
         }
+
+        /// <summary>
+        /// Converts an <see cref="KeywordEntity"/> to a <see cref="Keyword"/>.
+        /// </summary>
+        /// <param name="entity">The entity to convert</param>
+        /// <returns>returns a converted DTO</returns>
+        public static Keyword AsKeyword(this KeywordEntity entity)
+        {
+            return new Keyword()
+            {
+                Id = new Uri(string.Format("{0}/keywords/{1}", baseUrl, entity.Id)),
+                Name = entity.Name,
+                CreationTime = entity.CreationTime
+            };
+        }
+
+        /// <summary>
+        /// Converts a <see cref="KeywordEntity"/> collection to a <see cref="Keyword"/> collection.
+        /// </summary>
+        /// <param name="entities">The entities to convert</param>
+        /// <returns>Returns the converted DTOs</returns>
+        public static IList<Keyword> AsKeywords(this IList<KeywordEntity> entities)
+        {
+            return entities.Select(k => k.AsKeyword()).ToList();
+        } 
+
     }
 }
