@@ -167,19 +167,61 @@ namespace nl.fhict.IntelliCloud.Service.IntegrationTest
         }
 
         /// <summary>
-        /// Tests if the GetReviews is getting all reviews of an answer, or atleast calls something to the database.
+        /// Tests if the GetReview is getting a review of the specific id, or atleast calls something to the database.
         /// </summary>
         [TestMethod]
         [TestCategory("nl.fhict.IntelliCloud.Service.IntegrationTest")]
-        public void GetReviews()
+        public void GetReview()
         {
             try
             {
-                int answerId = answer.Id;
+                string reviewId = review.Id.ToString();
 
-                var reviews = service.GetReviews(answerId);
+                var newReview = service.GetReview(reviewId);
 
-                Assert.AreEqual(true, reviews.Count > 0);
+                Assert.AreEqual(review.Content, newReview.Content);
+            }
+            catch (Exception e) // TODO move exception test to different method, since this allows for skipping a part of the test...
+            {
+                Assert.AreEqual(e.Message, "Sequence contains no elements");
+            }
+        }
+
+        /// <summary>
+        /// Tests if the GetAnswer is getting an answer of the review, or atleast calls something to the database.
+        /// </summary>
+        [TestMethod]
+        [TestCategory("nl.fhict.IntelliCloud.Service.IntegrationTest")]
+        public void GetAnswer()
+        {
+            try
+            {
+                string reviewId = review.Id.ToString();
+
+                var newAnswer = service.GetAnswer(reviewId);
+
+                Assert.AreEqual(answer.Content, newAnswer.Content);
+            }
+            catch (Exception e) // TODO move exception test to different method, since this allows for skipping a part of the test...
+            {
+                Assert.AreEqual(e.Message, "Sequence contains no elements");
+            }
+        }
+
+        /// <summary>
+        /// Tests if the GetUser is getting an user of the review, or atleast calls something to the database.
+        /// </summary>
+        [TestMethod]
+        [TestCategory("nl.fhict.IntelliCloud.Service.IntegrationTest")]
+        public void GetUser()
+        {
+            try
+            {
+                string reviewId = review.Id.ToString();
+
+                var newUser = service.GetUser(reviewId);
+
+                Assert.AreEqual(employee.FirstName, newUser.FirstName);
             }
             catch (Exception e) // TODO move exception test to different method, since this allows for skipping a part of the test...
             {

@@ -53,9 +53,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Services\AnswerServiceTest.cs" />
-    <Compile Include="UserServiceTest.cs" />
+    <Compile Include="Services\UserServiceTest.cs" />
     <Compile Include="UserManagerTest.cs" />
-    <Compile Include="FeedbackServiceTest.cs" />
+    <Compile Include="Services\FeedbackServiceTest.cs" />
     <Compile Include="KeywordAlgorithmTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\QuestionServiceTest.cs" />
