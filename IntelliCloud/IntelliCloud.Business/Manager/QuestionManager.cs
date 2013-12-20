@@ -202,32 +202,6 @@ namespace nl.fhict.IntelliCloud.Business.Manager
         }
 
         /// <summary>
-        /// Updates the question with the given identifier.
-        /// </summary>
-        /// <param name="id">The identifier of the question that is updated.</param>
-        /// <param name="employeeId">The identifier of the employee that is going to answer the question.</param>
-        public void UpdateQuestion(int id, int employeeId)
-        {
-            Validation.IdCheck(id);
-            Validation.IdCheck(employeeId);
-
-            using (IntelliCloudContext ctx = new IntelliCloudContext())
-            {
-                QuestionEntity questionEntity = (from q in ctx.Questions
-                                                 where q.Id == id
-                                                 select q).Single();
-
-                questionEntity.Answerer = (from u in ctx.Users
-                                           where u.Id == employeeId
-                                           select u).Single();
-                questionEntity.LastChangedTime = DateTime.UtcNow;
-
-                ctx.SaveChanges();
-            }
-
-        }
-
-        /// <summary>
         /// Retrieve the question for this feedback token.
         /// </summary>
         /// <param name="feedbackToken">The feedback token of the question.</param>

@@ -29,10 +29,12 @@ namespace nl.fhict.IntelliCloud.Business.UnitTest.Manager
         public void Initialize()
         {
             this.validation = new Mock<IValidation>();
-            this.manager = new UserManager(this.validation.Object);            
+            this.manager = new UserManager(this.validation.Object);
         }
 
         #region Tests
+
+        #region GetUserTests
 
         /// <summary>
         /// GetUser test method that checks if no validation is performed when no parameters have been supplied.
@@ -41,14 +43,12 @@ namespace nl.fhict.IntelliCloud.Business.UnitTest.Manager
         public void GetUserTest_WithoutParameters()
         {
             string id = null;
-
             try
             {
-                manager.GetUser(id);
+                manager.GetUser();
             }
             catch (Exception)
-            {
-            }
+            { }
 
             // No validation should be performed when no parameters have been supplied
             validation.Verify(v => v.IdCheck(id), Times.Never);
@@ -67,12 +67,15 @@ namespace nl.fhict.IntelliCloud.Business.UnitTest.Manager
                 manager.GetUser(id);
             }
             catch (Exception)
-            {
-            }
+            { }
 
             // Validation should be performed when parameters have been supplied
             validation.Verify(v => v.IdCheck(id), Times.Once);
         }
+
+        #endregion GetUserTests
+
+        #region CreateUserTests
 
         /// <summary>
         /// CreateUser test method that checks if no validation is performed when no parameters have been supplied.
@@ -129,6 +132,124 @@ namespace nl.fhict.IntelliCloud.Business.UnitTest.Manager
             validation.Verify(v => v.StringCheck(lastName), Times.Once);
             validation.Verify(v => v.StringCheck(avatar), Times.Once);
         }
+
+        #endregion CreateUserTests
+
+        #region GetKeywordsTests
+
+        /// <summary>
+        /// Test to validate parameters.
+        /// </summary>
+        [TestMethod]
+        public void GetKeywordTest()
+        {
+            string id = "1";
+
+            try
+            {
+                manager.GetKeywords(id);
+            }
+            catch (Exception)
+            { }
+
+            // Validation should be performed when parameters have been supplied
+            validation.Verify(v => v.IdCheck(id), Times.Once);
+        }
+
+        #endregion GetKeywordsTests
+
+        #region GetQuestionsTests
+
+        /// <summary>
+        /// Test to validate parameters.
+        /// </summary>
+        [TestMethod]
+        public void GetQuestionsTest()
+        {
+            string id = "1";
+
+            try
+            {
+                manager.GetQuestions(id, null);
+            }
+            catch (Exception)
+            { }
+
+            // Validation should be performed when parameters have been supplied
+            validation.Verify(v => v.IdCheck(id), Times.Once);
+        }
+
+        #endregion GetQuestionsTests
+
+        #region GetFeedbacksTest
+        /// <summary>
+        /// Test to validate parameters.
+        /// </summary>
+        [TestMethod]
+        public void GetFeedbacksTest()
+        {
+            string id = "1";
+
+            try
+            {
+                manager.GetFeedbacks(id, null);
+            }
+            catch (Exception)
+            { }
+
+            // Validation should be performed when parameters have been supplied
+            validation.Verify(v => v.IdCheck(id), Times.Once);
+        }
+
+        #endregion GetFeedbacksTests
+
+        #region GetReviewsTests
+
+        /// <summary>
+        /// Test to validate parameters.
+        /// </summary>
+        [TestMethod]
+        public void GetReviewsTest()
+        {
+            string id = "1";
+
+            try
+            {
+                manager.GetKeywords(id);
+            }
+            catch (Exception)
+            { }
+
+            // Validation should be performed when parameters have been supplied
+            validation.Verify(v => v.IdCheck(id), Times.Once);
+        }
+
+        #endregion GetReviewsTest
+
+        #region AssignKeywordTests
+        /// <summary>
+        /// Test to validate parameters.
+        /// </summary>
+        [TestMethod]
+        public void AssignKeywordTest()
+        {
+            string id = "1",
+             keyword = "keyword";
+            int affinity = 10;
+
+            try
+            {
+                manager.AssignKeyword(id, keyword, affinity);
+            }
+            catch (Exception)
+            { }
+
+            // Validation should be performed when parameters have been supplied
+            validation.Verify(v => v.IdCheck(id), Times.Once);
+            validation.Verify(v => v.AffinityCheck(affinity), Times.Once);
+            validation.Verify(v => v.StringCheck(keyword), Times.Once);
+        }
+        #endregion AssignKeywordTest
 
         #endregion Tests
 

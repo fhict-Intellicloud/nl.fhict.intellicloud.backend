@@ -49,7 +49,7 @@ namespace nl.fhict.IntelliCloud.Business.UnitTest.Manager
 
             try
             {
-                manager.UpdateQuestion(questionId, employeeId);
+             //   manager.UpdateQuestion(questionId, employeeId);
             }
             catch (Exception)
             { }
