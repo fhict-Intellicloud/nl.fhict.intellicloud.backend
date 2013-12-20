@@ -1,7 +1,8 @@
-﻿using LinqToTwitter;
+﻿using System.Resources;
+using LinqToTwitter;
 using nl.fhict.IntelliCloud.Business.Plugins.Loader;
-using nl.fhict.IntelliCloud.Common.DataTransfer;
-using System;
+using nl.fhict.IntelliCloud.Business.Properties;
+using nl.fhict.IntelliCloud.Data.IntelliCloud.Model;
 
 namespace nl.fhict.IntelliCloud.Business.Plugins
 {
@@ -51,11 +52,34 @@ namespace nl.fhict.IntelliCloud.Business.Plugins
         }
         
         /// <summary>
+        /// Sends a confirmation the the asker of the question
+        /// </summary>
+        /// <param name="question">the question asked by a user</param>
+        public void SendQuestionRecieved(QuestionEntity question)
+        {
+            var reference = question.Source.Source.Value;
+            var postId = question.Source.PostId;
+
+            ResourceManager rm = Resources.ResourceManager;
+            string tweetBody = rm.GetString(question.LanguageDefinition.ResourceName + "_TWITTER_AUTO_RESPONSE");
+
+            var status = reference + " " + tweetBody;
+
+            validation.StringCheck(postId);
+            validation.TweetLengthCheck(status);
+
+            using (TwitterContext twitterCtx = new TwitterContext(PinAutharizedUser))
+            {
+                twitterCtx.UpdateStatus(status, postId);
+            }
+        }
+
+        /// <summary>
         /// Send an answer through twitter with the related question
         /// </summary>
         /// <param name="question"></param>
         /// <param name="answer">The answer given by expert, answer.Content + reference can't be longer then 140 characters</param>
-        public void SendAnswer(Question question, Answer answer)
+        public void SendAnswer(QuestionEntity question, AnswerEntity answer)
         {
             var reference = question.Source.Source.Value;
             var postId = question.Source.PostId;
@@ -67,17 +91,8 @@ namespace nl.fhict.IntelliCloud.Business.Plugins
 
             using (TwitterContext twitterCtx = new TwitterContext(PinAutharizedUser))
             {
-                var tweet = twitterCtx.UpdateStatus(status, postId);                
+                twitterCtx.UpdateStatus(status, postId);
             }
-        }        
-
-        /// <summary>
-        /// Sends a confirmation the the asker of the question
-        /// </summary>
-        /// <param name="question">the question asked by a user</param>
-        public void SendQuestionRecieved(Question question)
-        {
-            throw new NotImplementedException();
         }
     }
 }

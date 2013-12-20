@@ -193,7 +193,6 @@ namespace nl.fhict.IntelliCloud.Service.IntegrationTest
 
         #region Tests
 
-        /// <summary>
         /// CreateFeedback test method.
         /// </summary>
         [TestMethod]

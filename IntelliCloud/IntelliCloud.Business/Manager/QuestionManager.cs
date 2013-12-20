@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Text.RegularExpressions;
-using nl.fhict.IntelliCloud.Business.WordService;
 using nl.fhict.IntelliCloud.Common.CustomException;
 using nl.fhict.IntelliCloud.Common.DataTransfer;
 using nl.fhict.IntelliCloud.Data.IntelliCloud.Context;
 using nl.fhict.IntelliCloud.Data.IntelliCloud.Model;
+using nl.fhict.IntelliCloud.Data.WordStoreService;
 
 namespace nl.fhict.IntelliCloud.Business.Manager
 {
@@ -61,7 +61,7 @@ namespace nl.fhict.IntelliCloud.Business.Manager
                                                                  .Include(q => q.User.Sources.Select(s => s.SourceDefinition))
                                                          select q).ToList();
 
-                questions = ConvertEntities.QuestionEntityListToQuestionList(questionEntities);
+                questions.AddRange(questionEntities.AsQuestions());
             }
 
             return questions;
@@ -94,7 +94,7 @@ namespace nl.fhict.IntelliCloud.Business.Manager
                 if (entity == null)
                     throw new NotFoundException("No Question entity exists with the specified ID.");
 
-                question = ConvertEntities.QuestionEntityToQuestion(entity);
+                question = entity.AsQuestion();
             }
             return question;
         }
@@ -185,6 +185,19 @@ namespace nl.fhict.IntelliCloud.Business.Manager
                 ctx.Questions.Add(questionEntity);
 
                 ctx.SaveChanges();
+                
+                // TODO check if there is a 90%+  match
+                Boolean match = false;
+
+
+
+                // Send auto response
+                if (!match)
+                {
+                    this.SendAnswerFactory.LoadPlugin(questionEntity.Source.Source.SourceDefinition)
+                        .SendQuestionRecieved(questionEntity);
+                }
+
             }
         }
 
@@ -241,7 +254,7 @@ namespace nl.fhict.IntelliCloud.Business.Manager
                 if (entity == null)
                     throw new NotFoundException("No Question entity exists with the specified feedback token.");
 
-                question = ConvertEntities.QuestionEntityToQuestion(entity);
+                question = entity.AsQuestion();
             }
             return question;
         }
