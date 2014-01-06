@@ -219,15 +219,10 @@ namespace nl.fhict.IntelliCloud.Service.IntegrationTest
             {
                 string reviewId = review.Id.ToString();
 
-<<<<<<< HEAD
                 var newUser = service.GetUser(reviewId);
 
                 Assert.AreEqual(employee.FirstName, newUser.FirstName);
-=======
-            //    var reviews = service.GetReviews(answerId);
 
-            //    Assert.AreEqual(true, reviews.Count > 0);
->>>>>>> upstream/master
             }
             catch (Exception e) // TODO move exception test to different method, since this allows for skipping a part of the test...
             {

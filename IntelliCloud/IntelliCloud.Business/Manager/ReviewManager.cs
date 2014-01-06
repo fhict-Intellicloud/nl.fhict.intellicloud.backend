@@ -114,11 +114,7 @@ namespace nl.fhict.IntelliCloud.Business.Manager
                 if (review == null)
                     throw new NotFoundException("No review entity exists with the specified ID.");                                         
 
-<<<<<<< HEAD
                 return review.Answer.AsAnswer();                
-=======
-                return reviewEntities.AsReviews().ToList();
->>>>>>> upstream/master
             }
         }
 
