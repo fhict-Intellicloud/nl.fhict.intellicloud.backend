@@ -1,0 +1,50 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WordStore.Service", "WordStore.Service\WordStore.Service.csproj", "{AEC0DE85-91A7-43E9-B52E-67018F07B013}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WordStore.Data", "WordStore.Data\WordStore.Data.csproj", "{C93B4BE0-CE9A-4AA5-A622-5080CB47BB45}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WordStore.Business", "WordStore.Business\WordStore.Business.csproj", "{D3CA9E62-5FFC-4723-B891-A98D600215D0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WordStore.Common", "WordStore.Common\WordStore.Common.csproj", "{C21B8EFD-E63A-4633-AB55-2E445527DAB9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WordStore.Business.UnitTest", "WordStore.Business.UnitTest\WordStore.Business.UnitTest.csproj", "{D94DA4AD-DA42-411C-B08C-6C80CAAEC881}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WordStore.Service.IntegrationTest", "WordStore.Service.IntegrationTest\WordStore.Service.IntegrationTest.csproj", "{5C2AB7ED-C61D-4FC2-A9EE-25260C1955F8}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{AEC0DE85-91A7-43E9-B52E-67018F07B013}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AEC0DE85-91A7-43E9-B52E-67018F07B013}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AEC0DE85-91A7-43E9-B52E-67018F07B013}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AEC0DE85-91A7-43E9-B52E-67018F07B013}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C93B4BE0-CE9A-4AA5-A622-5080CB47BB45}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C93B4BE0-CE9A-4AA5-A622-5080CB47BB45}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C93B4BE0-CE9A-4AA5-A622-5080CB47BB45}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C93B4BE0-CE9A-4AA5-A622-5080CB47BB45}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D3CA9E62-5FFC-4723-B891-A98D600215D0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D3CA9E62-5FFC-4723-B891-A98D600215D0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D3CA9E62-5FFC-4723-B891-A98D600215D0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D3CA9E62-5FFC-4723-B891-A98D600215D0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C21B8EFD-E63A-4633-AB55-2E445527DAB9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C21B8EFD-E63A-4633-AB55-2E445527DAB9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C21B8EFD-E63A-4633-AB55-2E445527DAB9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C21B8EFD-E63A-4633-AB55-2E445527DAB9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D94DA4AD-DA42-411C-B08C-6C80CAAEC881}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D94DA4AD-DA42-411C-B08C-6C80CAAEC881}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D94DA4AD-DA42-411C-B08C-6C80CAAEC881}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D94DA4AD-DA42-411C-B08C-6C80CAAEC881}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5C2AB7ED-C61D-4FC2-A9EE-25260C1955F8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5C2AB7ED-C61D-4FC2-A9EE-25260C1955F8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5C2AB7ED-C61D-4FC2-A9EE-25260C1955F8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5C2AB7ED-C61D-4FC2-A9EE-25260C1955F8}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

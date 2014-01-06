@@ -31,6 +31,36 @@ namespace nl.fhict.IntelliCloud.Business.Manager
         }
 
         /// <summary>
+<<<<<<< HEAD
+=======
+        /// Method used for retrieving all feedback entries assigned to a specific answer.
+        /// </summary>
+        /// <param name="answerId">The id of the answer to which all feedback entries to be retrieved are assigned to.</param>
+        /// <returns>A list of instances of class Feedback.</returns>
+        public IList<Feedback> GetFeedbacks(int answerId)
+        {
+            // Validate input data
+            Validation.IdCheck(answerId);
+
+            // Return all feedback entries assigned to the specified answer
+            using (IntelliCloudContext context = new IntelliCloudContext())
+            {
+                return context.Feedbacks
+                       .Include(f => f.Answer)
+                       .Include(f => f.Question)
+                       .Include(f => f.Question.Source)
+                       .Include(f => f.User)
+                       .Include(f => f.User.Sources)
+                       .Include(f => f.User.Sources.Select(s => s.SourceDefinition))
+                       .Where(f => f.Answer.Id == answerId)
+                       .ToList()
+                       .Select(f => f.AsFeedback())
+                       .ToList();
+            }
+        }
+
+        /// <summary>
+>>>>>>> upstream/master
         /// Method used for saving user feedback for an answer.
         /// </summary>
         /// <param name="feedback">The textual feedback given by the user.</param>

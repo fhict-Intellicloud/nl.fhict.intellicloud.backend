@@ -193,6 +193,31 @@ namespace nl.fhict.IntelliCloud.Service.IntegrationTest
 
         #region Tests
 
+<<<<<<< HEAD:IntelliCloud/IntelliCloud.Service.IntegrationTest/Services/FeedbackServiceTest.cs
+=======
+        /// <summary>
+        /// GetFeedbacks test method.
+        /// </summary>
+        [TestMethod]
+        public void GetFeedbacksTest()
+        {
+            try
+            {
+                // Get all feedbacks for the answer that was added in the Initialize method
+                //int answerId = this.answerEntity.Id;
+                //IList<Feedback> feedbacks = this.service.GetFeedbacks(answerId);
+
+                // The amount of feedbacks should be greater than zero
+                // Assert.IsTrue(feedbacks.Count > 0);
+            }
+            catch (Exception e)
+            {
+                Assert.Fail(e.Message);
+            }
+        }
+
+        /// <summary>
+>>>>>>> upstream/master:IntelliCloud/IntelliCloud.Service.IntegrationTest/FeedbackServiceTest.cs
         /// CreateFeedback test method.
         /// </summary>
         [TestMethod]
