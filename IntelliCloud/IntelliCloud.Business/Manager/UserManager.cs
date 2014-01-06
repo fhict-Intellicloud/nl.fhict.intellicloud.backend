@@ -200,8 +200,6 @@ namespace nl.fhict.IntelliCloud.Business.Manager
             }
         }
 
-        #endregion
-
         /// <summary>
         /// Method for getting a user based on it's ID or a list of UserSource instances.
         /// All parameters are optional - if no parameters are provided the currently logged in user will be returned.
@@ -257,6 +255,28 @@ namespace nl.fhict.IntelliCloud.Business.Manager
 
             // Return the User object
             return user;
+        }
+ 
+        #endregion
+
+        public User GetUser(string userId) {
+
+            // Validate the userId
+            base.Validation.IdCheck(userId);
+
+            // Get the user from the context
+            using (IntelliCloudContext context = new IntelliCloudContext())
+            {
+                // convert id to int
+                int parsedId = Convert.ToInt32(userId);
+
+                // Build the query
+                var query = context.Users
+                    .Where(u => u.Id == parsedId);
+
+                // execute the query and convert the userEntities to Users.
+                return query.Single().AsUser();
+            }
         }
 
         /// <summary>
@@ -570,6 +590,5 @@ namespace nl.fhict.IntelliCloud.Business.Manager
                 context.SaveChanges();
             }
         }
-
     }
 }
