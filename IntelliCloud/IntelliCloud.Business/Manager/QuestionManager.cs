@@ -176,65 +176,16 @@ namespace nl.fhict.IntelliCloud.Business.Manager
             Validation.StringCheck(question);
             Validation.StringCheck(title);
 
+            var words = this.ResolveWords(question);
+            var language = this.GetLanguage(words);
+            var keywordScores = this.GetKeywordScores(words, language);
+
             using (IntelliCloudContext ctx = new IntelliCloudContext())
             {
-                // TODO determine real language 
-                String languageName = "English";
-                IBabelModel m_Model = BabelModel._AllModel;
-                DialogueMaster.Classification.ICategoryList result = m_Model.ClassifyText(question);
-                if (result.Count > 0)
-                {
-                    CultureInfo info = CultureInfo.GetCultureInfoByIetfLanguageTag(result[0].Name);
-                    languageName = info.EnglishName;
-                }
-                LanguageDefinitionEntity languageDefinition = ctx.LanguageDefinitions.SingleOrDefault(ld => ld.Name.Equals(languageName));
+                var userEntity = this.GetUserEntity(source, reference);
 
-                // create the language if it doesn't exist.
-                if (languageDefinition == null)
-                {
-                    languageDefinition = new LanguageDefinitionEntity();
-                    languageDefinition.Name = languageName;
-                    ctx.LanguageDefinitions.Add(languageDefinition);
-                    ctx.SaveChanges();
-                }
-
-                SourceDefinitionEntity sourceDefinition = ctx.SourceDefinitions.SingleOrDefault(sd => sd.Name.Equals(source));
-
-                if (sourceDefinition == null)
-                    throw new NotFoundException("The provided source doesn't exists.");
-
-                // Check if the user already exists
-                SourceEntity sourceEntity = ctx.Sources.SingleOrDefault(s => s.SourceDefinition.Id == sourceDefinition.Id && s.Value == reference);
-
-                UserEntity userEntity;
-
-                if (sourceEntity != null)
-                {
-                    // user already has an account, use this
-                    userEntity = ctx.Users.Single(u => u.Id == sourceEntity.UserId);
-                }
-                else
-                {
-                    // user has no account, create one
-                    userEntity = new UserEntity()
-                    {
-                        CreationTime = DateTime.UtcNow,
-                        Type = UserType.Customer
-                    };
-
-                    ctx.Users.Add(userEntity);
-
-                    // Mount the source to the new user
-                    sourceEntity = new SourceEntity()
-                    {
-                        Value = reference,
-                        CreationTime = DateTime.UtcNow,
-                        SourceDefinition = sourceDefinition,
-                        User = userEntity,
-                    };
-
-                    ctx.Sources.Add(sourceEntity);
-                }
+                // TODO: Add method to get or create keywords in database.
+                
 
                 QuestionEntity questionEntity = new QuestionEntity()
                 {
@@ -245,14 +196,16 @@ namespace nl.fhict.IntelliCloud.Business.Manager
                     Title = title,
                     Source = new QuestionSourceEntity()
                     {
-                        Source = sourceEntity,
+                        Source = null, //TODO: sourceEntity,
                         PostId = postId
                     },
-                    LanguageDefinition = languageDefinition,
+                    LanguageDefinition = ctx.LanguageDefinitions.Single(x => x.Name == language.ToString()),
                     User = userEntity
                 };
 
                 ctx.Questions.Add(questionEntity);
+
+                // TODO: Link keyword entities with affinity to question. using questionkeyentity
 
                 ctx.SaveChanges();
             }
@@ -311,19 +264,15 @@ namespace nl.fhict.IntelliCloud.Business.Manager
                 .ToList();
         }
 
-        /// <summary>
-        /// Function that finds the most likely keywords from a given question. This is done by returning all Nouns, Pronouns and Verbs. 
-        /// </summary>
-        /// <param name="question">A question from which one needs the keywords.</param>
-        /// <param name="language">The language one needs the found keywords of. </param>
-        /// <returns>Returns a List containing the most likely keywords from a given question.</returns>
-        public IList<Word> FindMostLikelyKeywords(IList<Word> words, Language language)
+        public IDictionary<Word, int> GetKeywordScores(IList<Word> words, Language language)
         {
-            return words
+            /*return words
                 .Where(x =>
                     (x.Type == WordType.Noun || x.Type == WordType.Verb || x.Type == WordType.Pronoun)
                     && x.Language == language)
-                .ToList();
+                .ToList();*/
+
+            return null;
         }
 
         /// <summary>
@@ -334,10 +283,59 @@ namespace nl.fhict.IntelliCloud.Business.Manager
         public Language GetLanguage(IList<Word> words)
         {
             var distinctLanguages = words
+                .Where(x => x.Language != Language.Unknown)
                 .GroupBy(x => x.Language)
                 .Select(x => new { Language = x.Key, Count = x.Distinct().Count() });
 
-            return distinctLanguages.Single(x => x.Count == distinctLanguages.Max(y => y.Count)).Language;
+            return distinctLanguages.Any()
+                ? distinctLanguages.Single(x => x.Count == distinctLanguages.Max(y => y.Count)).Language
+                : Language.Unknown;
+        }
+
+        private UserEntity GetUserEntity(string source, string reference)
+        {
+            using (var context = new IntelliCloudContext())
+            {
+                SourceDefinitionEntity sourceDefinition = context.SourceDefinitions
+                    .SingleOrDefault(sd => sd.Name == source);
+
+                if (sourceDefinition == null)
+                    throw new NotFoundException("The provided source doesn't exists.");
+
+                // Check if the user already exists
+                SourceEntity sourceEntity = context.Sources
+                    .SingleOrDefault(s => s.SourceDefinition.Id == sourceDefinition.Id && s.Value == reference);
+
+                UserEntity userEntity;
+                if (sourceEntity != null)
+                {
+                    // user already has an account, use this
+                    userEntity = context.Users.Single(u => u.Id == sourceEntity.UserId);
+                }
+                else
+                {
+                    // user has no account, create one
+                    userEntity = new UserEntity()
+                    {
+                        CreationTime = DateTime.UtcNow,
+                        Type = UserType.Customer
+                    };
+
+                    context.Users.Add(userEntity);
+
+                    // Mount the source to the new user
+                    sourceEntity = new SourceEntity()
+                    {
+                        Value = reference,
+                        CreationTime = DateTime.UtcNow,
+                        SourceDefinition = sourceDefinition,
+                        User = userEntity,
+                    };
+
+                    context.Sources.Add(sourceEntity);
+                }
+                return userEntity;
+            }
         }
 
 
