@@ -30,7 +30,7 @@ namespace nl.fhict.IntelliCloud.Service
             RequestFormat = WebMessageFormat.Json,
             ResponseFormat = WebMessageFormat.Json)]
         [AuthorizationOptional]
-        IList<Answer> GetAnswers(AnswerState? state = null, string search = null);
+        IList<Answer> GetAnswers(AnswerState state = AnswerState.Ready, string search = null);
 
         /// <summary>
         /// Retrieve the answer with the given identifier.
@@ -73,7 +73,7 @@ namespace nl.fhict.IntelliCloud.Service
             RequestFormat = WebMessageFormat.Json,
             ResponseFormat = WebMessageFormat.Json)]
         [AuthorizationRequired(UserType.Employee)]
-        IList<Feedback> GetFeedbacks(string answerId, FeedbackState? state = null);
+        IList<Feedback> GetFeedbacks(string answerId, FeedbackState state = FeedbackState.Open);
 
         /// <summary>
         /// Retrieve the reviews for the answer with the given identifier, filtered by state.
@@ -88,7 +88,7 @@ namespace nl.fhict.IntelliCloud.Service
             RequestFormat = WebMessageFormat.Json,
             ResponseFormat = WebMessageFormat.Json)]
         [AuthorizationRequired(UserType.Employee)]
-        IList<Review> GetReviews(string answerId, ReviewState? state = null);
+        IList<Review> GetReviews(string answerId, ReviewState state = ReviewState.Open);
 
         /// <summary>
         /// Retrieve the keywords for the answer with the given identifier.
@@ -119,7 +119,6 @@ namespace nl.fhict.IntelliCloud.Service
             RequestFormat = WebMessageFormat.Json,
             ResponseFormat = WebMessageFormat.Json,
             BodyStyle = WebMessageBodyStyle.Wrapped)]
-        [AuthorizationRequired(UserType.Employee)]
         void CreateAnswer(int questionId, string answer, int answererId, AnswerState answerState);
 
         /// <summary>

@@ -67,17 +67,5 @@ namespace nl.fhict.IntelliCloud.Data.IntelliCloud.Model
         /// </summary>
         public AnswerEntity OriginalAnswer { get; set; }
 
-        /// <summary>
-        /// Gets or sets the date time which marks the time from which this answer is valid.
-        /// </summary>
-        [Required]
-        public DateTime ValidFrom { get; set; }
-
-        /// <summary>
-        /// Gets or sets the date time which marks the time after this answer is no longer valid, e.g. a newer version 
-        /// is available. When the record is valid this value is <see cref="DateTime.MaxValue"/>.
-        /// </summary>
-        [Required, ConcurrencyCheck]
-        public DateTime ValidTo { get; set; }
     }
 }

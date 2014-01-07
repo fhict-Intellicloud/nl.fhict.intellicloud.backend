@@ -103,7 +103,11 @@ namespace nl.fhict.IntelliCloud.Business.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to &lt;div style=\&quot;width:500px; margin:auto;\&quot;&gt;
+        ///&lt;font 
+        ///&lt;font face=\&quot;arial\&quot;&gt;&lt;table border=\&quot;0\&quot;&gt;&lt;tr&gt;&lt;td style=\&quot;width:276px; height:118px; \&quot;&gt; &lt;img width=\&quot;276px\&quot; height=\&quot;118px\&quot; src=&quot;http://81.204.121.229/intellicloud/mailimages/intellilogo.png&quot; alt=\&quot;intelliCloud\&quot;/&gt; &lt;/td&gt;&lt;td&gt; 
+        ///&lt;p style=\&quot;float: right; \&quot;&gt; IntelliCloud bv &lt;br&gt; Rachelsmolen 1&lt;br&gt;5612MA Eindhoven&lt;br&gt;040 - 224488 &lt;/p&gt;&lt;br&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/font&gt;&lt;font face=\&quot;arial\&quot;&gt;&lt;table border=\&quot;0\&quot; width=\&quot;500px\&quot;&gt;&lt;tr&gt;&lt;td&gt;&lt;br&gt;
+        ///&lt;p&gt;U heeft onlangs een vraa [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string DUTCH_MAIL_RESPONSE {
             get {
@@ -163,7 +167,10 @@ namespace nl.fhict.IntelliCloud.Business.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to &lt;div style=\&quot;width:500px; margin:auto;\&quot;&gt;&lt;font &lt;font face=\&quot;arial\&quot;&gt;&lt;table border=\&quot;0\&quot;&gt;&lt;tr&gt;&lt;td style=\&quot;width:276px; height:118px; \&quot;&gt; 
+        ///&lt;img width=\&quot;276px\&quot; height=\&quot;118px\&quot; src=&quot;http://81.204.121.229/intellicloud/mailimages/intellilogo.png&quot; alt=\&quot;intelliCloud\&quot;/&gt; &lt;/td&gt;&lt;td&gt; 
+        ///&lt;p style=\&quot;float: right; \&quot;&gt; IntelliCloud bv &lt;br&gt; Rachelsmolen 1&lt;br&gt;5612MA Eindhoven&lt;br&gt;040 - 224488 &lt;/p&gt;&lt;br&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/font&gt;&lt;font face=\&quot;arial\&quot;&gt;&lt;table border=\&quot;0\&quot; width=\&quot;500px\&quot;&gt;&lt;tr&gt;&lt;td&gt;&lt;br&gt;
+        ///&lt;p&gt;You have recently asked a  [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string ENGLISH_MAIL_RESPONSE {
             get {
@@ -250,7 +257,10 @@ namespace nl.fhict.IntelliCloud.Business.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to &lt;div style=\&quot;width:500px; margin:auto;\&quot;&gt;&lt;font &lt;font face=\&quot;arial\&quot;&gt;&lt;table border=\&quot;0\&quot;&gt;&lt;tr&gt;&lt;td style=\&quot;width:276px; height:118px; \&quot;&gt; 
+        ///&lt;img width=\&quot;276px\&quot; height=\&quot;118px\&quot; src=\&quot;http://athena.fhict.nl/users/i241221/intelliCloud.png\&quot; alt=\&quot;intelliCloud\&quot;/&gt; &lt;/td&gt;&lt;td&gt; 
+        ///&lt;p style=\&quot;float: right; \&quot;&gt; IntelliCloud bv &lt;br&gt; Rachelsmolen 1&lt;br&gt;5612MA Eindhoven&lt;br&gt;040 - 224488 &lt;/p&gt;&lt;br&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/font&gt;&lt;font face=\&quot;arial\&quot;&gt;&lt;table border=\&quot;0\&quot; width=\&quot;500px\&quot;&gt;&lt;tr&gt;&lt;td&gt;&lt;br&gt;
+        ///&lt;p&gt;You have recently asked a questi [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string UNKNOWN_MAIL_RESPONSE1 {
             get {

@@ -32,7 +32,7 @@ namespace nl.fhict.IntelliCloud.Service
             this.manager.UpdateAnswer(id, answerState, answer);
         }
 
-        public IList<Answer> GetAnswers(AnswerState? state = null, string search = null)
+        public IList<Answer> GetAnswers(AnswerState state, string search = null)
         {
             return this.manager.GetAnswers(state, search);
         }
@@ -42,12 +42,12 @@ namespace nl.fhict.IntelliCloud.Service
             return this.manager.GetAnswerer(id);
         }
 
-        public IList<Feedback> GetFeedbacks(string id, FeedbackState? state = null)
+        public IList<Feedback> GetFeedbacks(string id, FeedbackState state)
         {
             return this.manager.GetFeedbacks(id, state);
         }
 
-        public IList<Review> GetReviews(string id, ReviewState? state = null)
+        public IList<Review> GetReviews(string id, ReviewState state)
         {
             return this.manager.GetReviews(id, state);
         }
