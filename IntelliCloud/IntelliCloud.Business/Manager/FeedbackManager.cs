@@ -1,9 +1,9 @@
-﻿using nl.fhict.IntelliCloud.Common.CustomException;
+﻿using System.Collections.Generic;
+using nl.fhict.IntelliCloud.Common.CustomException;
 using nl.fhict.IntelliCloud.Common.DataTransfer;
 using nl.fhict.IntelliCloud.Data.IntelliCloud.Context;
 using nl.fhict.IntelliCloud.Data.IntelliCloud.Model;
 using System;
-using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 
@@ -29,34 +29,7 @@ namespace nl.fhict.IntelliCloud.Business.Manager
         public FeedbackManager()
             : base()
         {
-        }
-
-        /// <summary>
-        /// Method used for retrieving all feedback entries assigned to a specific answer.
-        /// </summary>
-        /// <param name="answerId">The id of the answer to which all feedback entries to be retrieved are assigned to.</param>
-        /// <returns>A list of instances of class Feedback.</returns>
-        public IList<Feedback> GetFeedbacks(int answerId)
-        {
-            // Validate input data
-            Validation.IdCheck(answerId);
-
-            // Return all feedback entries assigned to the specified answer
-            using (IntelliCloudContext context = new IntelliCloudContext())
-            {
-                return context.Feedbacks
-                       .Include(f => f.Answer)
-                       .Include(f => f.Question)
-                       .Include(f => f.Question.Source)
-                       .Include(f => f.User)
-                       .Include(f => f.User.Sources)
-                       .Include(f => f.User.Sources.Select(s => s.SourceDefinition))
-                       .Where(f => f.Answer.Id == answerId)
-                       .ToList()
-                       .Select(f => f.AsFeedback())
-                       .ToList();
-            }
-        }
+        }  
 
         /// <summary>
         /// Method used for saving user feedback for an answer.
@@ -145,6 +118,7 @@ namespace nl.fhict.IntelliCloud.Business.Manager
                 FeedbackEntity feedback = context.Feedbacks
                                           .Include(f => f.Question)
                                           .Include(f => f.Answer)
+                                          .Include(r => r.User)
                                           .SingleOrDefault(f => f.Id == iFeedbackId);
 
                 if (feedback == null)
@@ -159,24 +133,92 @@ namespace nl.fhict.IntelliCloud.Business.Manager
             }
         }
 
+        /// <summary>
+        /// Retrieve the answer for the feedback with the given identifier.
+        /// </summary>
+        /// <param name="id">The identifier of the feedback.</param>
+        /// <returns>Returns the answer for the feedback with the given identifier.</returns>
         public Answer GetAnswer(string id)
         {
-            throw new NotImplementedException();
+            Validation.IdCheck(id);
+
+            using (var context = new IntelliCloudContext())
+            {
+                var feedbackId = Convert.ToInt32(id);
+                FeedbackEntity feedback = context.Feedbacks.Include(r => r.Answer).Include(r => r.Answer.LanguageDefinition).SingleOrDefault(r => r.Id.Equals(feedbackId));
+
+                if (feedback == null)
+                    throw new NotFoundException("No feedback entity exists with the specified ID.");
+
+                return feedback.Answer.AsAnswer();
+            }
         }
 
+        /// <summary>
+        /// Retrieve the question that the feedback is given on with the given identifier.
+        /// </summary>
+        /// <param name="id">The identifier of the feedback.</param>
+        /// <returns>Returns the question that the feedback is given on with the given identifier.</returns>
         public Question GetQuestion(string id)
         {
-            throw new NotImplementedException();
+            Validation.IdCheck(id);
+
+            using (var context = new IntelliCloudContext())
+            {
+                var feedbackId = Convert.ToInt32(id);
+                FeedbackEntity feedback = context.Feedbacks.Include(r => r.Question)
+                                                           .Include(r => r.Question.LanguageDefinition)
+                                                           .Include(q => q.Question.Source)
+                                                           .Include(q => q.User.Sources.Select(s => s.SourceDefinition))
+                                                           .SingleOrDefault(r => r.Id.Equals(feedbackId));
+
+                if (feedback == null)
+                    throw new NotFoundException("No feedback entity exists with the specified ID.");
+
+                return feedback.Question.AsQuestion();
+            }
         }
 
+        /// <summary>
+        /// Retrieve the user that gave the feedback with the given identifier.
+        /// </summary>
+        /// <param name="id">The identifier of the feedback.</param>
+        /// <returns>Returns the user that gave the feedback with the given identifier.</returns>
         public User GetUser(string id)
         {
-            throw new NotImplementedException();
+            Validation.IdCheck(id);
+
+            using (var context = new IntelliCloudContext())
+            {
+                var feedbackId = Convert.ToInt32(id);
+                FeedbackEntity feedback = context.Feedbacks.Include(r => r.User).SingleOrDefault(r => r.Id.Equals(feedbackId));
+
+                if (feedback == null)
+                    throw new NotFoundException("No feedback entity exists with the specified ID.");
+
+                return feedback.User.AsUser();
+            }
         }
 
-        public Feedback GetFeedbacks(string id)
+        /// <summary>
+        /// Retrieve the feedback with the given identifier.
+        /// </summary>
+        /// <param name="id">The identifier of the feedback.</param>
+        /// <returns>Returns the feedback with the given identifier.</returns>
+        public Feedback GetFeedback(string id)
         {
-            throw new NotImplementedException();
+            Validation.IdCheck(id);
+
+            using (var context = new IntelliCloudContext())
+            {
+                var feedbackId = Convert.ToInt32(id);
+                FeedbackEntity feedback = context.Feedbacks.SingleOrDefault(r => r.Id.Equals(feedbackId));
+
+                if (feedback == null)
+                    throw new NotFoundException("No feedback entity exists with the specified ID.");
+
+                return feedback.AsFeedback();
+            }
         }
     }
 }

@@ -17,7 +17,19 @@ namespace nl.fhict.IntelliCloud.Business
         /// <summary>
         /// The base URL of the server.
         /// </summary>
-        public static readonly Uri baseUrl = WebOperationContext.Current.IncomingRequest.UriTemplateMatch.RequestUri;
+        public static Uri baseUrl;
+
+        static ConvertEntities()
+        {
+            try
+            {
+                baseUrl = WebOperationContext.Current.IncomingRequest.UriTemplateMatch.RequestUri;
+            }
+            catch (Exception e)
+            {
+                baseUrl = new Uri("http://localhost");
+            }
+        }
 
         /// <summary>
         /// Converts an <see cref="AnswerEntity"/> to a <see cref="Answer"/>.
@@ -174,7 +186,7 @@ namespace nl.fhict.IntelliCloud.Business
                 CreationTime = entity.CreationTime,
                 LastChangedTime = entity.LastChangedTime,
                 Keywords = new Uri(string.Format("{0}/users/{1}/keywords", baseUrl, entity.Id)),
-                Avatar = new Uri(entity.Avatar),
+                Avatar = entity.Avatar == null ? null : new Uri(entity.Avatar),
                 Questions = new Uri(string.Format("{0}/users/{1}/questions", baseUrl, entity.Id)),
                 Feedbacks = new Uri(string.Format("{0}/users/{1}/feedbacks", baseUrl, entity.Id)),
                 Reviews = new Uri(string.Format("{0}/users/{1}/reviews", baseUrl, entity.Id)),
