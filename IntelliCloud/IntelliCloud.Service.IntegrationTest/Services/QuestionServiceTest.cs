@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using nl.fhict.IntelliCloud.Common.CustomException;
 using nl.fhict.IntelliCloud.Common.DataTransfer;
 using nl.fhict.IntelliCloud.Data.IntelliCloud.Context;
 using nl.fhict.IntelliCloud.Data.IntelliCloud.Model;
@@ -97,7 +98,7 @@ namespace nl.fhict.IntelliCloud.Service.IntegrationTest
                 newEntity.User = newUser;
                 newEntity.Content = "this is the question i want to ask, please help me?";
                 newEntity.CreationTime = DateTime.UtcNow;
-                newEntity.FeedbackToken = "feedbackyeah!!@#$%^&*()";
+                newEntity.FeedbackToken = "feedbackyeah!!@#$%^&*d()";
                 ctx.Questions.Add(newEntity);
                 ctx.SaveChanges();
 
@@ -114,7 +115,7 @@ namespace nl.fhict.IntelliCloud.Service.IntegrationTest
                 qk.Affinity = 5;
 
                 ctx.QuestionKeys.Add(qk);
-                
+
                 ctx.SaveChanges();
 
                 this.entity = newEntity;
@@ -142,7 +143,6 @@ namespace nl.fhict.IntelliCloud.Service.IntegrationTest
         }
 
         #region Tests
-
         #region GetQuestion test
 
         /// <summary>
@@ -388,6 +388,63 @@ namespace nl.fhict.IntelliCloud.Service.IntegrationTest
         #endregion GetKeywords tests
 
         #endregion Tests
+
+        #region Error handeling tests
+        /// <summary>
+        /// Test if a NotFoundException is thrown when attempting to get a question
+        /// </summary>
+        [TestMethod]
+        [TestCategory("nl.fhict.IntelliCloud.Service.IntegrationTest")]
+        [ExpectedException(typeof(NotFoundException))]
+        public void GetQuestion_NoQuestion()
+        {
+            this.service.GetQuestion("12");
+        }
+
+        /// <summary>
+        /// Test if a NotFoundException is thrown when attempting to get a question with an unrecognizable language.
+        /// </summary>
+        [TestMethod]
+        [TestCategory("nl.fhict.IntelliCloud.Service.IntegrationTest")]
+        [ExpectedException(typeof(NotFoundException))]
+        public void CreateQuestion_NoLanguageDefinition()
+        {
+            this.service.CreateQuestion("test@test.nl", "ding", "7e094q0 djf a988 900?", "The great question", isPrivate: false);
+        }
+
+        /// <summary>
+        /// Test if a NotFoundException is thrown when attempting to get a question with an unrecognizable language.
+        /// </summary>
+        [TestMethod]
+        [TestCategory("nl.fhict.IntelliCloud.Service.IntegrationTest")]
+        [ExpectedException(typeof(NotFoundException))]
+        public void CreateQuestion_NoSourceDefinition()
+        {
+            this.service.CreateQuestion("unregistered source", "ding", "What is the answer to life, the universe and all?", "The great question", isPrivate: false);
+        }
+
+        /// <summary>
+        /// Test if a NotFoundException is thrown when attempting to get a question that doesnt exist
+        /// </summary>
+        [TestMethod]
+        [TestCategory("nl.fhict.IntelliCloud.Service.IntegrationTest")]
+        [ExpectedException(typeof(NotFoundException))]
+        public void UpdateQuestion_NoQuestion()
+        {
+            this.service.UpdateQuestion("1234", this.employee.Id);
+        }
+
+        /// <summary>
+        /// Test if a NotFoundException is thrown when attempting to get a user that doesnt exist
+        /// </summary>
+        [TestMethod]
+        [TestCategory("nl.fhict.IntelliCloud.Service.IntegrationTest")]
+        [ExpectedException(typeof(NotFoundException))]
+        public void UpdateQuestion_NonExistingEmployee()
+        {
+            this.service.UpdateQuestion(this.entity.Id.ToString(), 1234);
+        }
+        #endregion Error handeling tests
 
         #endregion Methods
     }
