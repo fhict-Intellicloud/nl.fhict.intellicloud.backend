@@ -20,6 +20,15 @@ namespace nl.fhict.IntelliCloud.Business.Manager
     public class UserManager : BaseManager
     {
         /// <summary>
+        /// Constructor that uses a given base managers properties as its own.
+        /// </summary>
+        /// <param name="manager">Manager supplying the needed values.</param>
+        public UserManager(BaseManager manager)
+            : base(manager)
+        {
+        }
+
+        /// <summary>
         /// Constructor that sets the IValidation property to the given value.
         /// </summary>
         /// <param name="validation">IValidation to be set.</param>

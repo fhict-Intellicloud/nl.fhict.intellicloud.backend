@@ -96,7 +96,7 @@ namespace nl.fhict.IntelliCloud.Service
             RequestFormat = WebMessageFormat.Json,
             ResponseFormat = WebMessageFormat.Json)]
         [AuthorizationRequired(UserType.Employee)]
-        User GetAnswer(string questionId);
+        Answer GetAnswer(string questionId);
 
         /// <summary>
         /// Retrieve the keywords that are linked to the question with the given identifier.

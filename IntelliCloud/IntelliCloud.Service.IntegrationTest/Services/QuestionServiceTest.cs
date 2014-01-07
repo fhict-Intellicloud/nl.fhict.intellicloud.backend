@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using nl.fhict.IntelliCloud.Common.DataTransfer;
 using nl.fhict.IntelliCloud.Data.IntelliCloud.Context;
 using nl.fhict.IntelliCloud.Data.IntelliCloud.Model;
 
@@ -85,6 +87,34 @@ namespace nl.fhict.IntelliCloud.Service.IntegrationTest
                 newEntity.FeedbackToken = "feedbackyeah!!@#$%^&*()";
 
                 ctx.Questions.Add(newEntity);
+
+                newEntity = new QuestionEntity();
+                newEntity.IsPrivate = false;
+                newEntity.LanguageDefinition = new LanguageDefinitionEntity { Name = "English", ResourceName = "English" };
+                newEntity.QuestionState = Common.DataTransfer.QuestionState.Closed;
+                newEntity.Source = new QuestionSourceEntity { Source = newSource, PostId = "" };
+                newEntity.Title = "this is a test question version 2";
+                newEntity.User = newUser;
+                newEntity.Content = "this is the question i want to ask, please help me?";
+                newEntity.CreationTime = DateTime.UtcNow;
+                newEntity.FeedbackToken = "feedbackyeah!!@#$%^&*()";
+                ctx.Questions.Add(newEntity);
+                ctx.SaveChanges();
+
+                KeywordEntity key = new KeywordEntity();
+                key.Name = "Android";
+                key.CreationTime = DateTime.UtcNow;
+
+                ctx.Keywords.Add(key);
+
+                QuestionKeyEntity qk = new QuestionKeyEntity();
+                qk.Keyword = key;
+                qk.Question = newEntity;
+                qk.CreationTime = DateTime.UtcNow;
+                qk.Affinity = 5;
+
+                ctx.QuestionKeys.Add(qk);
+                
                 ctx.SaveChanges();
 
                 this.entity = newEntity;
@@ -112,62 +142,76 @@ namespace nl.fhict.IntelliCloud.Service.IntegrationTest
         }
 
         #region Tests
+
+        #region GetQuestion test
+
         /// <summary>
-        /// Tests if the UpdateReview is updating a review, or at least calls something to the database.
+        /// Validates the getQuestion method.
         /// </summary>
         [TestMethod]
         [TestCategory("nl.fhict.IntelliCloud.Service.IntegrationTest")]
-        public void UpdateQuestion()
+        public void GetQuestionTest()
         {
             try
             {
-                var employeeId = this.employee.Id;
-                var questionId = this.entity.Id;
-
-                this.service.UpdateQuestion(questionId.ToString(), employeeId);
-
-                using (IntelliCloudContext ctx = new IntelliCloudContext())
-                {
-                    var question = ctx.Questions.Single(q => q.Id == questionId);
-
-                    Assert.AreEqual(questionId, question.Id);
-                }
+                int questionId = this.entity.Id;
+                var question = service.GetQuestion(questionId.ToString());
+                Assert.AreEqual(questionId, question.Id);
 
             }
-            catch (Exception e) // TODO move exception test to different method, since this allows for skipping a part of the test...
+            catch (Exception e)
             {
-                Assert.AreEqual(e.Message, "Sequence contains no elements");
+                Assert.Fail(e.Message);
+            }
+        }
+        #endregion GetQuestion test
+
+        #region GetQuestions tests
+        /// <summary>
+        /// validates GetQuestions method with Filter.
+        /// </summary>
+        [TestMethod]
+        [TestCategory("nl.fhict.IntelliCloud.Service.IntegrationTest")]
+        public void GetQuestionsTest_withFilter()
+        {
+            try
+            {
+                var questions = this.service.GetQuestions(QuestionState.Open);
+                Assert.AreEqual(true, questions.Count == 1);
+            }
+            catch (Exception e)
+            {
+                Assert.Fail(e.Message);
             }
         }
 
         /// <summary>
-        /// Tests if the UpdateReview is updating a review, or at least calls something to the database.
+        /// validates GetQuestions method without Filter.
         /// </summary>
         [TestMethod]
         [TestCategory("nl.fhict.IntelliCloud.Service.IntegrationTest")]
-        public void GetQuestions()
+        public void GetQuestionsTest_withoutFilter()
         {
             try
             {
-           //     const int employeeId = 1;
-
-           //     var questions = this.service.GetQuestions(employeeId);
-
-          //      Assert.AreEqual(true, questions.Count > 0);
-
+                var questions = this.service.GetQuestions();
+                Assert.AreEqual(true, questions.Count == 2);
             }
-            catch (Exception e) // TODO move exception test to different method, since this allows for skipping a part of the test...
+            catch (Exception e)
             {
-                Assert.AreEqual(e.Message, "Sequence contains no elements");
+                Assert.Fail(e.Message);
             }
         }
+        #endregion GetQuestions tests
+
+        #region CreateQuestion test
 
         /// <summary>
-        /// Tests if the CreateReview is creating a review, or at least calls something to the database.
+        /// Validates the createQuestion method.
         /// </summary>
         [TestMethod]
         [TestCategory("nl.fhict.IntelliCloud.Service.IntegrationTest")]
-        public void CreateQuestion()
+        public void CreateQuestionTest()
         {
             try
             {
@@ -193,53 +237,155 @@ namespace nl.fhict.IntelliCloud.Service.IntegrationTest
                     Assert.AreEqual(reference, newEntity.Source.Source.Value);
                 }
             }
-            catch (Exception e) // TODO move exception test to different method, since this allows for skipping a part of the test...
+            catch (Exception e)
             {
-                Assert.AreEqual(e.Message, "Sequence contains no elements");
+                Assert.Fail(e.Message);
             }
         }
 
+        // TODO: danik will add test methods here
+
+        #endregion CreateQuestion test
+
+        #region GetQuestionByFeedbackToken tests
         /// <summary>
-        /// Tests if the GetReviews is getting all reviews of an answer, or atleast calls something to the database.
+        /// Test to validate GetQuestionByFeedbackToken.
         /// </summary>
         [TestMethod]
         [TestCategory("nl.fhict.IntelliCloud.Service.IntegrationTest")]
-        public void GetQuestion()
-        {
-            try
-            {
-                int questionId = this.entity.Id;
-
-                var question = service.GetQuestion(questionId.ToString());
-
-                Assert.AreEqual(questionId, question.Id);
-            }
-            catch (Exception e) // TODO move exception test to different method, since this allows for skipping a part of the test...
-            {
-                Assert.AreEqual(e.Message, "Sequence contains no elements");
-            }
-        }
-
-        /// <summary>
-        /// Tests if the GetReviews is getting all reviews of an answer, or atleast calls something to the database.
-        /// </summary>
-        [TestMethod]
-        [TestCategory("nl.fhict.IntelliCloud.Service.IntegrationTest")]
-        public void GetQuestionByFeedbackToken()
+        public void GetQuestionByFeedbackTokenTest()
         {
             try
             {
                 string feedbackToken = this.entity.FeedbackToken;
-
                 var question = service.GetQuestionByFeedbackToken(feedbackToken);
 
                 Assert.AreEqual(this.entity.Id, question.Id);
             }
-            catch (Exception e) // TODO move exception test to different method, since this allows for skipping a part of the test...
+            catch (Exception e)
             {
-                Assert.AreEqual(e.Message, "Sequence contains no elements");
+                Assert.Fail(e.Message);
             }
         }
+        #endregion GetQuestionByFeedbackToken tests
+
+        #region UpdateQuestion
+        /// <summary>
+        /// Test to validate the UpdateQuestion.
+        /// </summary>
+        [TestMethod]
+        [TestCategory("nl.fhict.IntelliCloud.Service.IntegrationTest")]
+        public void UpdateQuestionTest()
+        {
+            try
+            {
+                var employeeId = this.employee.Id;
+                var questionId = this.entity.Id;
+
+                this.service.UpdateQuestion(questionId.ToString(), employeeId);
+
+                using (IntelliCloudContext ctx = new IntelliCloudContext())
+                {
+                    var question = ctx.Questions.Single(q => q.Id == questionId);
+
+                    Assert.AreEqual(questionId, question.Id);
+                }
+
+            }
+            catch (Exception e)
+            {
+                Assert.Fail(e.Message);
+            }
+        }
+        #endregion UpdateQuestion
+
+        #region GetAsker tests
+        /// <summary>
+        /// Test to validate the getAsker method.
+        /// </summary>
+        [TestMethod]
+        [TestCategory("nl.fhict.IntelliCloud.Service.IntegrationTest")]
+        public void GetAskerTest()
+        {
+            try
+            {
+                string questionId = this.entity.Id.ToString();
+                User u = this.service.GetAsker(questionId);
+
+                Assert.AreEqual(u.Id, this.entity.User.Id);
+            }
+            catch (Exception e)
+            {
+                Assert.Fail(e.Message);
+            }
+        }
+        #endregion GetAsker tests
+
+        #region GetAnswerer tests
+        /// <summary>
+        /// Test to validate the getAnswerer method.
+        /// </summary>
+        [TestMethod]
+        [TestCategory("nl.fhict.IntelliCloud.Service.IntegrationTest")]
+        public void GetAnswererTest()
+        {
+            try
+            {
+                string questionId = this.entity.Id.ToString();
+                User u = this.service.GetAnswerer(questionId);
+
+                Assert.AreEqual(u.Id, this.entity.Answerer.Id);
+            }
+            catch (Exception e)
+            {
+                Assert.Fail(e.Message);
+            }
+        }
+        #endregion GetAnswerer tests
+
+        #region GetAnswer tests
+        /// <summary>
+        /// Test to validate the getAnswer method.
+        /// </summary>
+        [TestMethod]
+        [TestCategory("nl.fhict.IntelliCloud.Service.IntegrationTest")]
+        public void GetAnswerTest()
+        {
+            try
+            {
+                string questionId = this.entity.Id.ToString();
+                Answer a = this.service.GetAnswer(questionId);
+
+                Assert.AreEqual(a.Id, this.entity.Answer.Id);
+            }
+            catch (Exception e)
+            {
+                Assert.Fail(e.Message);
+            }
+        }
+        #endregion GetAnswer tests
+
+        #region GetKeywords tests
+        /// <summary>
+        /// Test to validate the getAnswer method.
+        /// </summary>
+        [TestMethod]
+        [TestCategory("nl.fhict.IntelliCloud.Service.IntegrationTest")]
+        public void GetKeywordsTest()
+        {
+            try
+            {
+                string questionId = this.entity.Id.ToString();
+                IList<Keyword> keys = this.service.GetKeywords(questionId);
+
+                Assert.AreEqual(keys.Count(), 1);
+            }
+            catch (Exception e)
+            {
+                Assert.Fail(e.Message);
+            }
+        }
+        #endregion GetKeywords tests
 
         #endregion Tests
 

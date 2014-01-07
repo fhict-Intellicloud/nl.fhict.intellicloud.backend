@@ -13,6 +13,18 @@ namespace nl.fhict.IntelliCloud.Business.Manager
         protected IOpenIDContext OpenIDContext { get; set; }
         protected SendAnswerFactory SendAnswerFactory { get; set; }
 
+
+        /// <summary>
+        /// This constructor will construct the BaseManager and instantiate it's properties.
+        /// </summary>
+        /// <param name="manager">Manager that serves as the sources for this basemanager</param>
+        protected BaseManager(BaseManager manager)
+        {
+            Validation = manager.Validation;
+            OpenIDContext = manager.OpenIDContext;
+            SendAnswerFactory = manager.SendAnswerFactory;
+        }
+
         /// <summary>
         /// This constructor will construct the BaseManager and instantiate it's properties.
         /// The IValidation property is set to the given values.
