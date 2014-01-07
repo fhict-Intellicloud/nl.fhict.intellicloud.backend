@@ -28,7 +28,7 @@ namespace nl.fhict.IntelliCloud.Service
 
         public Feedback GetFeedback(string id)
         {
-            return this.manager.GetFeedbacks(id);
+            return this.manager.GetFeedback(id);
         }
 
         public User GetUser(string id)

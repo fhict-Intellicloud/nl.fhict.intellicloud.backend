@@ -28,7 +28,7 @@ namespace nl.fhict.IntelliCloud.Service
             RequestFormat = WebMessageFormat.Json,
             ResponseFormat = WebMessageFormat.Json)]
         [AuthorizationRequired(UserType.Employee)]
-        Feedback GetReview(string reviewId);
+        Review GetReview(string id);
 
         /// <summary>
         /// Retrieve the user that gave the review with the given identifier.
