@@ -12,7 +12,7 @@ namespace nl.fhict.IntelliCloud.Service.IntegrationTest
     /// <summary>
     /// Test class for the service FeedbackService.
     /// </summary>
-    [TestClass]
+[TestClass]
     public class FeedbackServiceTest
     {
         #region Fields
@@ -194,31 +194,10 @@ namespace nl.fhict.IntelliCloud.Service.IntegrationTest
         #region Tests
 
         /// <summary>
-        /// GetFeedbacks test method.
-        /// </summary>
-        [TestMethod]
-        public void GetFeedbacksTest()
-        {
-            try
-            {
-                // Get all feedbacks for the answer that was added in the Initialize method
-                //int answerId = this.answerEntity.Id;
-                //IList<Feedback> feedbacks = this.service.GetFeedbacks(answerId);
-
-                // The amount of feedbacks should be greater than zero
-                // Assert.IsTrue(feedbacks.Count > 0);
-            }
-            catch (Exception e)
-            {
-                Assert.Fail(e.Message);
-            }
-        }
-
-        /// <summary>
         /// CreateFeedback test method.
         /// </summary>
         [TestMethod]
-        public void CreateFeedbackTest()
+        public void CreateFeedback()
         {
             try
             {
@@ -254,25 +233,110 @@ namespace nl.fhict.IntelliCloud.Service.IntegrationTest
         /// UpdateFeedback test method.
         /// </summary>
         [TestMethod]
-        public void UpdateFeedbackTest()
+        public void UpdateFeedback()
         {
             try
             {
-                // Update the state of the feedback entry from Open to Closed
-                int feedbackId = this.feedbackEntity.Id;
+                string feedbackId = this.feedbackEntity.Id.ToString();
                 FeedbackState feedbackState = FeedbackState.Closed;
-                this.service.UpdateFeedback(feedbackId.ToString(), feedbackState);
 
-                // Check if the state of the feedback entry is Closed
+                this.service.UpdateFeedback(feedbackId, feedbackState);
+
                 using (IntelliCloudContext context = new IntelliCloudContext())
                 {
-                    FeedbackEntity entity = context.Feedbacks.Single(f => f.Id == feedbackId);
+                    FeedbackEntity entity = context.Feedbacks.Single(f => f.Id == this.feedbackEntity.Id);
                     Assert.AreEqual(entity.FeedbackState, feedbackState);
                 }
             }
             catch (Exception e)
             {
                 Assert.Fail(e.Message);
+            }
+        }
+
+        /// <summary>
+        /// Tests if the GetFeedback is getting a feedback of the specific id, or atleast calls something to the database.
+        /// </summary>
+        [TestMethod]
+        [TestCategory("nl.fhict.IntelliCloud.Service.IntegrationTest")]
+        public void GetFeedback()
+        {
+            try
+            {
+                string feedbackId = feedbackEntity.Id.ToString();
+
+                var newFeedback = service.GetFeedback(feedbackId);
+
+                Assert.AreEqual(feedbackEntity.Content, newFeedback.Content);
+            }
+            catch (Exception e) // TODO move exception test to different method, since this allows for skipping a part of the test...
+            {
+                Assert.AreEqual(e.Message, "Sequence contains no elements");
+            }
+        }
+
+        /// <summary>
+        /// Tests if the GetAnswer is getting an answer of the feedback, or atleast calls something to the database.
+        /// </summary>
+        [TestMethod]
+        [TestCategory("nl.fhict.IntelliCloud.Service.IntegrationTest")]
+        public void GetAnswer()
+        {
+            try
+            {
+                string feedbackId = feedbackEntity.Id.ToString();
+
+                var newAnswer = service.GetAnswer(feedbackId);
+
+                Assert.AreEqual(answerEntity.Content, newAnswer.Content);
+            }
+            catch (Exception e) // TODO move exception test to different method, since this allows for skipping a part of the test...
+            {
+                Assert.AreEqual(e.Message, "Sequence contains no elements");
+            }
+        }
+
+        /// <summary>
+        /// Tests if the GetUser is getting an user of the feedback, or atleast calls something to the database.
+        /// </summary>
+        [TestMethod]
+        [TestCategory("nl.fhict.IntelliCloud.Service.IntegrationTest")]
+        public void GetUser()
+        {
+            try
+            {
+                string feedbackId = feedbackEntity.Id.ToString();
+
+                var newUser = service.GetUser(feedbackId);
+
+                Assert.AreEqual(employeeEntity.FirstName, newUser.FirstName);
+
+            }
+            catch (Exception e) // TODO move exception test to different method, since this allows for skipping a part of the test...
+            {
+                Assert.AreEqual(e.Message, "Sequence contains no elements");
+            }
+        }
+
+        /// <summary>
+        /// Tests if the GetQuestion is getting the question of the feedback, or atleast calls something to the database.
+        /// </summary>
+        [TestMethod]
+        [TestCategory("nl.fhict.IntelliCloud.Service.IntegrationTest")]
+        public void GetQuestion()
+        {
+            try
+            {
+                string feedbackId = feedbackEntity.Id.ToString();
+
+                var newQuestion = service.GetQuestion(feedbackId);
+
+                Assert.AreEqual(questionEntity.Content, newQuestion.Content);
+
+            }
+            catch (Exception e) // TODO move exception test to different method, since this allows for skipping a part of the test...
+            {
+                Assert.AreEqual(e.Message, "Sequence contains no elements");
             }
         }
 

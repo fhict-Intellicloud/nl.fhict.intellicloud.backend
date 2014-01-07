@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using nl.fhict.IntelliCloud.Common.CustomException;
@@ -39,7 +38,7 @@ namespace nl.fhict.IntelliCloud.Business.Manager
             using (var context = new IntelliCloudContext())
             {
                 var id = Convert.ToInt32(reviewId);
-                ReviewEntity review = context.Reviews.SingleOrDefault(r => r.Id.Equals(id));
+                ReviewEntity review = context.Reviews.Include(r => r.Answer).Include(r => r.User).SingleOrDefault(r => r.Id.Equals(id));
                 if (review != null)
                 {
                     review.ReviewState = reviewState;
@@ -49,7 +48,7 @@ namespace nl.fhict.IntelliCloud.Business.Manager
                 }
                 else
                 {
-                    throw new NotFoundException("Sequence contains no elements");
+                    throw new NotFoundException("No review entity exists with the specified ID.");
                 }
             }
         }
@@ -99,38 +98,66 @@ namespace nl.fhict.IntelliCloud.Business.Manager
         }
 
         /// <summary>
-        /// Retrieves the reviews for the given answer.
+        /// Retrieve the answer for the review with the given identifier.
         /// </summary>
-        /// <param name="answerId">The identifier of the answer, only reviews for this answer are returned.</param>
-        /// <returns>Returns the reviews for the given answer.</returns>
-        public List<Review> GetReviews(int answerId)
+        /// <param name="id">The identifier of the review.</param>
+        /// <returns>Returns the answer for the review with the given identifier.</returns>
+        public Answer GetAnswer(string id)
         {
-            Validation.IdCheck(answerId);
+            Validation.IdCheck(id);
 
             using (var context = new IntelliCloudContext())
             {
+                var reviewId = Convert.ToInt32(id);
+                ReviewEntity review = context.Reviews.Include(r => r.Answer).Include(r => r.Answer.LanguageDefinition).SingleOrDefault(r => r.Id.Equals(reviewId));
 
-                List<ReviewEntity> reviewEntities = (from r in context.Reviews.Include(r => r.Answer).Include(r => r.User)
-                                                     where r.Answer.Id == answerId
-                                                     select r).ToList();
+                if (review == null)
+                    throw new NotFoundException("No review entity exists with the specified ID.");
 
-                return reviewEntities.AsReviews().ToList();
+                return review.Answer.AsAnswer();
             }
         }
 
-        public Answer GetAnswer(string id)
-        {
-            throw new NotImplementedException();
-        }
-
+        /// <summary>
+        /// Retrieve the user that gave the review with the given identifier.
+        /// </summary>
+        /// <param name="id">The identifier of the review.</param>
+        /// <returns>Returns the user that gave the review with the given identifier.</returns>
         public User GetUser(string id)
         {
-            throw new NotImplementedException();
+            Validation.IdCheck(id);
+
+            using (var context = new IntelliCloudContext())
+            {
+                var reviewId = Convert.ToInt32(id);
+                ReviewEntity review = context.Reviews.Include(r => r.User).SingleOrDefault(r => r.Id.Equals(reviewId));
+
+                if (review == null)
+                    throw new NotFoundException("No review entity exists with the specified ID.");
+
+                return review.User.AsUser();
+            }
         }
 
-        public Feedback GetReview(string id)
+        /// <summary>
+        /// Retrieve the review with the given identifier.
+        /// </summary>
+        /// <param name="id">The identifier of the review.</param>
+        /// <returns>Returns the review with the given identifier.</returns>
+        public Review GetReview(string id)
         {
-            throw new NotImplementedException();
+            Validation.IdCheck(id);
+
+            using (var context = new IntelliCloudContext())
+            {
+                var reviewId = Convert.ToInt32(id);
+                ReviewEntity review = context.Reviews.SingleOrDefault(r => r.Id.Equals(reviewId));
+
+                if (review == null)
+                    throw new NotFoundException("No review entity exists with the specified ID.");
+
+                return review.AsReview();
+            }
         }
     }
 }

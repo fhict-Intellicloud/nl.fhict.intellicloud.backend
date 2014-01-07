@@ -37,7 +37,7 @@ namespace nl.fhict.IntelliCloud.Service.IntegrationTest
         public void Initialize()
         {
             this.service = new ReviewService();
-            this.initializeTestData();
+			this.initializeTestData();
         }
 
         /// <summary>
@@ -62,7 +62,7 @@ namespace nl.fhict.IntelliCloud.Service.IntegrationTest
                 newAnswer.Content = "Integration test for answer";
                 newAnswer.AnswerState = AnswerState.UnderReview;
                 newAnswer.IsPrivate = false;
-                newAnswer.LanguageDefinition = new LanguageDefinitionEntity() { Name = "Dutch", ResourceName = "NL" };
+                newAnswer.LanguageDefinition = new LanguageDefinitionEntity() {Name = "Dutch", ResourceName = "NL"};
                 newAnswer.User = newEmployee;
 
                 ctx.Answers.Add(newAnswer);
@@ -94,9 +94,9 @@ namespace nl.fhict.IntelliCloud.Service.IntegrationTest
         {
             using (IntelliCloudContext ctx = new IntelliCloudContext())
             {
-                ctx.Reviews.RemoveRange(ctx.Reviews.ToList());
-                ctx.Answers.RemoveRange(ctx.Answers.ToList());
                 ctx.Users.RemoveRange(ctx.Users.ToList());
+                ctx.Answers.RemoveRange(ctx.Answers.ToList());
+                ctx.Reviews.RemoveRange(ctx.Reviews.ToList());
 
                 ctx.SaveChanges();
             }
@@ -114,14 +114,15 @@ namespace nl.fhict.IntelliCloud.Service.IntegrationTest
             try
             {
                 string reviewId = this.review.Id.ToString();
-                ReviewState reviewState = ReviewState.Open; ;
+                ReviewState reviewState = ReviewState.Open;;
 
                 service.UpdateReview(reviewId, reviewState);
 
                 using (var context = new IntelliCloudContext())
                 {
-                    ReviewEntity updatedReview = context.Reviews.FirstOrDefault(r => r.Id.Equals(this.review.Id));
-
+                    int id = Convert.ToInt32(reviewId);
+                    ReviewEntity updatedReview = context.Reviews.FirstOrDefault(r => r.Id.Equals(id));
+                    
                     Assert.AreEqual(ReviewState.Open, updatedReview.ReviewState);
                     Assert.AreEqual(review.Id, updatedReview.Id);
                 }

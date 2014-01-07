@@ -31,7 +31,7 @@ namespace nl.fhict.IntelliCloud.Service
             this.manager.UpdateReview(id, reviewState);
         }
 
-        public Feedback GetReview(string id)
+        public Review GetReview(string id)
         {
             return this.manager.GetReview(id);
         }

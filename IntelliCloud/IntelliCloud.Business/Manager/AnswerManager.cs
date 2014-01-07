@@ -154,7 +154,7 @@ namespace nl.fhict.IntelliCloud.Business.Manager
             }
         }
 
-        public IList<Answer> GetAnswers(AnswerState? state, string search)
+        public IList<Answer> GetAnswers(AnswerState state, string search)
         {
             Validation.StringCheck(search);
             
