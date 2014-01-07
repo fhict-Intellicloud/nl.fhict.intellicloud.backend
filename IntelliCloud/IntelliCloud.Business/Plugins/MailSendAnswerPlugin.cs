@@ -72,6 +72,7 @@ namespace nl.fhict.IntelliCloud.Business.Plugins
             //Create the e-mail with the addresses and content
             using (MailMessage message = new MailMessage(fromAddress, toAddress)
             {
+                IsBodyHtml = true,
                 Subject = subject,
                 Body = body
             })
@@ -107,23 +108,15 @@ namespace nl.fhict.IntelliCloud.Business.Plugins
             MailAddress toAddress = new MailAddress(question.Source.Source.Value, askerName);
 
             //Set the e-mail content
-            string subject = "Answer to: " + question.Title;
-            string body = "Hello " + askerName + ",\n" +
-                "\n" +
-                "You have recently asked the following question:\n" +
-                question.Content + "\n" +
-                "\n" +
-                "We give you the following answer:\n" +
-                answer.Content + "\n" +
-                "\n" +
-                "We hope to have answered your question.\n" +
-                "\n" +
-                "Kind regards,\n" +
-                "IntelliCloud Team";
-
+            ResourceManager rm = Resources.ResourceManager;
+            string subject = rm.GetString(question.LanguageDefinition.ResourceName + "_MAIL_RESPONSE_SUBJECT");
+            string body = String.Format(rm.GetString(question.LanguageDefinition.ResourceName + "_MAIL_RESPONSE"),
+                question.Content, "http://81.204.121.229/intellicloud/feedback/index.html");
+            
             //Create the e-mail with the addresses and content
             using (MailMessage message = new MailMessage(fromAddress, toAddress)
             {
+                IsBodyHtml = true,
                 Subject = subject,
                 Body = body
             })
