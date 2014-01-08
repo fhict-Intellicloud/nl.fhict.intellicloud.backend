@@ -37,9 +37,9 @@ namespace nl.fhict.IntelliCloud.Service
             return manager.GetQuestionByFeedbackToken(feedbackToken);
         }
 
-        public IList<Question> GetQuestions(QuestionState? state = null)
+        public IList<Question> GetQuestions(int employeeId,QuestionState? state = null)
         {
-            return this.manager.GetQuestions(state);
+            return this.manager.GetQuestions(employeeId,state);
         }
 
         public User GetAsker(string id)
@@ -52,7 +52,7 @@ namespace nl.fhict.IntelliCloud.Service
             return this.manager.GetAnswerer(id);
         }
 
-        public User GetAnswer(string id)
+        public Answer GetAnswer(string id)
         {
             return this.manager.GetAnswer(id);
         }

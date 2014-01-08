@@ -32,40 +32,7 @@ namespace nl.fhict.IntelliCloud.Business.Manager
             : base(validation)
         { }
 
-        /// <summary>
-        /// Retrieves the available questions and optionally filtering them using the employee identifier.
-        /// </summary>
-        /// <param name="employeeId">The optional employee identifier, only questions about which the employee has 
-        /// knowledge are returned (keywords between user and question match).</param>
-        /// <returns>Returns the questions that match the filters.</returns>
-        public IList<Question> GetQuestions(int employeeId)
-        {
-            Validation.IdCheck(employeeId);
 
-            List<Question> questions = new List<Question>();
-
-            using (IntelliCloudContext ctx = new IntelliCloudContext())
-            {
-                UserEntity employee = (from u in ctx.Users
-                                       where u.Id == employeeId
-                                       select u).SingleOrDefault();
-
-                // TODO: Only retrieve questions for retrieved employee.
-                // TODO: Make sure only users of type employee can retrieve private questions.
-                List<QuestionEntity> questionEntities = (from q in ctx.Questions
-                                                                 .Include(q => q.Source)
-                                                                 .Include(q => q.User)
-                                                                 .Include(q => q.User.Sources)
-                                                                 .Include(q => q.Answerer)
-                                                                 .Include(q => q.Answerer.Sources)
-                                                                 .Include(q => q.User.Sources.Select(s => s.SourceDefinition))
-                                                         select q).ToList();
-
-                questions.AddRange(questionEntities.AsQuestions());
-            }
-
-            return questions;
-        }
 
         /// <summary>
         /// Retrieve the question with the given identifier.
@@ -119,52 +86,38 @@ namespace nl.fhict.IntelliCloud.Business.Manager
             Validation.StringCheck(question);
             Validation.StringCheck(title);
 
+            List<KeywordEntity> addedKeywords = new List<KeywordEntity>();
+            IList<Word> words = this.ResolveWords(question);
+            Language language = this.GetLanguage(words);
+            //var keywordScores = this.GetKeywordScores(words, language);
+
+
             using (IntelliCloudContext ctx = new IntelliCloudContext())
             {
-                // TODO determine real language 
-                LanguageDefinitionEntity languageDefinition = ctx.LanguageDefinitions.SingleOrDefault(ld => ld.Name.Equals("English"));
+                UserEntity userEntity = this.GetUserEntity(source, reference);
+                SourceEntity sourceDef = ResolveSource(source, userEntity.Id);
 
-                // TODO remove exception as you probably want to create the language if it doesn't exist.
-                if (languageDefinition == null)
-                    throw new NotFoundException("No languageDefinition entity exists with the specified ID.");
-
-                SourceDefinitionEntity sourceDefinition = ctx.SourceDefinitions.SingleOrDefault(sd => sd.Name.Equals(source));
-
-                if (sourceDefinition == null)
-                    throw new NotFoundException("The provided source doesn't exists.");
-
-                // Check if the user already exists
-                SourceEntity sourceEntity = ctx.Sources.SingleOrDefault(s => s.SourceDefinition.Id == sourceDefinition.Id && s.Value == reference);
-
-                UserEntity userEntity;
-
-                if (sourceEntity != null)
+                //Add method to get or create keywords in database.
+                List<String> keys = new List<string>();
+                keys = words.Select(x => x.Value).Distinct().ToList();
+                List<KeywordEntity> keyEntities = new List<KeywordEntity>();
+                keyEntities = ctx.Keywords.Where(t => keys.Contains(t.Name)).ToList();
+                foreach (Word word in words)
                 {
-                    // user already has an account, use this
-                    userEntity = ctx.Users.Single(u => u.Id == sourceEntity.UserId);
+                    if (keyEntities.FirstOrDefault(x => x.Name == word.Value) == null)
+                    {
+                        KeywordEntity key = new KeywordEntity();
+                        key.Name = word.Value;
+                        key.CreationTime = DateTime.Now;
+                        ctx.Keywords.Add(key);
+                        addedKeywords.Add(key);
+                    }
                 }
-                else
+                if (addedKeywords.Count != 0)
                 {
-                    // user has no account, create one
-                    userEntity = new UserEntity()
-                    {
-                        CreationTime = DateTime.UtcNow,
-                        Type = UserType.Customer
-                    };
-
-                    ctx.Users.Add(userEntity);
-
-                    // Mount the source to the new user
-                    sourceEntity = new SourceEntity()
-                    {
-                        Value = reference,
-                        CreationTime = DateTime.UtcNow,
-                        SourceDefinition = sourceDefinition,
-                        User = userEntity,
-                    };
-
-                    ctx.Sources.Add(sourceEntity);
+                    ctx.SaveChanges();
                 }
+
 
                 QuestionEntity questionEntity = new QuestionEntity()
                 {
@@ -175,20 +128,33 @@ namespace nl.fhict.IntelliCloud.Business.Manager
                     Title = title,
                     Source = new QuestionSourceEntity()
                     {
-                        Source = sourceEntity,
+                        Source = sourceDef,
                         PostId = postId
                     },
-                    LanguageDefinition = languageDefinition,
+                    LanguageDefinition = ctx.LanguageDefinitions.Single(x => x.Name == language.ToString()),
                     User = userEntity
                 };
 
                 ctx.Questions.Add(questionEntity);
 
-                ctx.SaveChanges();
-                
-                // TODO check if there is a 90%+  match
-                Boolean match = false;
+                //Link keyword entities with affinity to question. using questionkeyentity
+                List<KeywordEntity> questionKeys = new List<KeywordEntity>();
+                List<QuestionKeyEntity> questionKeywords = new List<QuestionKeyEntity>();
+                questionKeys.AddRange(addedKeywords);//New keywords.
+                questionKeys.AddRange(keyEntities);//Already exsisting keywords.
 
+                foreach (KeywordEntity k in questionKeys)
+                {
+                    QuestionKeyEntity ent = new QuestionKeyEntity();
+                    ent.Keyword = k;
+                    ent.Question = questionEntity;
+                    ent.CreationTime = DateTime.Now;
+                    ent.Affinity = words.Where(x => x.Value == k.Name).Count();
+                }
+                ctx.SaveChanges();
+
+                // TODO check if there is a 90%+  match - ???
+                Boolean match = false;
 
 
                 // Send auto response
@@ -240,7 +206,6 @@ namespace nl.fhict.IntelliCloud.Business.Manager
 
             using (IntelliCloudContext ctx = new IntelliCloudContext())
             {
-                // TODO: make sure only users of type employee can retrieve private questions.
                 QuestionEntity entity = (from q in ctx.Questions
                                                                  .Include(q => q.Source)
                                                                  .Include(q => q.User)
@@ -260,6 +225,34 @@ namespace nl.fhict.IntelliCloud.Business.Manager
         }
 
         #region keyword algorith methods
+
+        internal SourceEntity ResolveSource(string source, int userid)
+        {
+            using (IntelliCloudContext ctx = new IntelliCloudContext())
+            {
+                SourceEntity entity = (from q in ctx.Sources
+                                                                 .Include(q => q.CreationTime)
+                                                                 .Include(q => q.SourceDefinition)
+                                                                 .Include(q => q.Id)
+                                                                 .Include(q => q.UserId)
+                                                                 .Include(q => q.User.Avatar)
+                                                                 .Include(q => q.User.CreationTime)
+                                                                 .Include(q => q.User.FirstName)
+                                                                 .Include(q => q.User.Id)
+                                                                 .Include(q => q.User.Infix)
+                                                                 .Include(q => q.User.LastChangedTime)
+                                                                 .Include(q => q.User.LastName)
+                                                                 .Include(q => q.User.Sources)
+                                                                 .Include(q => q.User.Type)
+                                                                 .Include(q => q.Value)
+                                       where q.SourceDefinition.Name == source && q.UserId == userid
+                                       select q).SingleOrDefault();
+
+                if (entity == null)
+                    throw new NotFoundException("No SourceEntity entity exists with the specified source.");
+                return entity;
+            }
+        }
 
         /// <summary>
         /// A function in which all punctuation is removed and all text is converted to lowercase.
@@ -316,46 +309,269 @@ namespace nl.fhict.IntelliCloud.Business.Manager
         internal Language GetLanguage(IList<Word> words)
         {
             var distinctLanguages = words
+                .Where(x => x.Language != Language.Unknown)
                 .GroupBy(x => x.Language)
                 .Select(x => new { Language = x.Key, Count = x.Distinct().Count() });
 
-            return distinctLanguages.Single(x => x.Count == distinctLanguages.Max(y => y.Count)).Language;
+            return distinctLanguages.Any()
+                ? distinctLanguages.Single(x => x.Count == distinctLanguages.Max(y => y.Count)).Language
+                : Language.Unknown;
+        }
+
+
+        private UserEntity GetUserEntity(string source, string reference)
+        {
+            using (var context = new IntelliCloudContext())
+            {
+                SourceDefinitionEntity sourceDefinition = context.SourceDefinitions
+                    .SingleOrDefault(sd => sd.Name == source);
+
+                if (sourceDefinition == null)
+                    throw new NotFoundException("The provided source doesn't exists.");
+
+                // Check if the user already exists
+                SourceEntity sourceEntity = context.Sources
+                    .SingleOrDefault(s => s.SourceDefinition.Id == sourceDefinition.Id && s.Value == reference);
+
+                UserEntity userEntity;
+                if (sourceEntity != null)
+                {
+                    // user already has an account, use this
+                    userEntity = context.Users.Single(u => u.Id == sourceEntity.UserId);
+                }
+                else
+                {
+                    // user has no account, create one
+                    userEntity = new UserEntity()
+                    {
+                        CreationTime = DateTime.UtcNow,
+                        Type = UserType.Customer
+                    };
+
+                    context.Users.Add(userEntity);
+
+                    // Mount the source to the new user
+                    sourceEntity = new SourceEntity()
+                    {
+                        Value = reference,
+                        CreationTime = DateTime.UtcNow,
+                        SourceDefinition = sourceDefinition,
+                        User = userEntity,
+                    };
+
+                    context.Sources.Add(sourceEntity);
+                }
+                return userEntity;
+            }
         }
         #endregion
 
         public void UpdateQuestion(string id, int employeeId)
         {
-            throw new NotImplementedException();
+            int intId = Convert.ToInt32(id);
+            this.UpdateQuestion(id, employeeId);
         }
 
         public Question GetQuestion(string id)
         {
-            throw new NotImplementedException();
+            int intId = Convert.ToInt32(id);
+            return this.GetQuestion(intId);
         }
 
-        public IList<Question> GetQuestions(QuestionState? state)
+        public IList<Question> GetQuestions(int employeeId, QuestionState? state)
         {
-            throw new NotImplementedException();
+            List<Question> questions = new List<Question>();
+            using (IntelliCloudContext ctx = new IntelliCloudContext())
+            {
+
+                IList<QuestionEntity> questionEntities = (from q in ctx.Questions
+                                                                 .Include(q => q.Source)
+                                                                 .Include(q => q.User)
+                                                                 .Include(q => q.User.Sources)
+                                                                 .Include(q => q.Answerer)
+                                                                 .Include(q => q.Answerer.Sources)
+                                                                 .Include(q => q.User.Sources.Select(s => s.SourceDefinition))
+                                                          where q.Answer == null || q.Answer.AnswerState != AnswerState.Ready
+                                                          select q).ToList();
+                if (employeeId != 0)
+                {
+
+                    List<QuestionEntity> openEmployeeQuestions = null;
+                    List<QuestionEntity> nonEmployeeQuestions = null;
+
+                    if (state == null)
+                    {
+                        openEmployeeQuestions = (from questionkeys in ctx.QuestionKeys
+                                                 where
+                                                     (from userkeys in ctx.UserKeys where userkeys.User.Id == employeeId select userkeys).Select(keyid => keyid.Keyword.Id).Contains(questionkeys.Keyword.Id)
+                                                 select questionkeys).Select(x => x.Question).Where(x => x.QuestionState != QuestionState.Closed).Distinct().ToList();
+                        nonEmployeeQuestions = (from questionkeys in ctx.QuestionKeys select questionkeys).Except((from questionkeys in ctx.QuestionKeys
+                                                                                                                   where
+                                                                                                                       (from userkeys in ctx.UserKeys select userkeys).Select(keyid => keyid.Keyword.Id).Contains(questionkeys.Keyword.Id)
+                                                                                                                   select questionkeys)).Select(q => q.Question).Include(q => q.Source)
+                                                             .Include(q => q.User)
+                                                             .Include(q => q.User.Sources)
+                                                             .Include(q => q.Answerer)
+                                                             .Include(q => q.Answerer.Sources)
+                                                             .Include(q => q.User.Sources.Select(s => s.SourceDefinition)).Where(x => x.QuestionState == state).Distinct().ToList();
+                    }
+                    else
+                    {
+                        openEmployeeQuestions = (from questionkeys in ctx.QuestionKeys
+                                                 where
+                                                     (from userkeys in ctx.UserKeys where userkeys.User.Id == employeeId select userkeys).Select(keyid => keyid.Keyword.Id).Contains(questionkeys.Keyword.Id)
+                                                 select questionkeys).Select(x => x.Question).Where(x => x.QuestionState != QuestionState.Closed).Distinct().ToList();
+                        nonEmployeeQuestions = (from questionkeys in ctx.QuestionKeys select questionkeys).Except((from questionkeys in ctx.QuestionKeys
+                                                                                                                   where
+                                                                                                                       (from userkeys in ctx.UserKeys select userkeys).Select(keyid => keyid.Keyword.Id).Contains(questionkeys.Keyword.Id)
+                                                                                                                   select questionkeys)).Select(q => q.Question).Include(q => q.Source)
+                                                             .Include(q => q.User)
+                                                             .Include(q => q.User.Sources)
+                                                             .Include(q => q.Answerer)
+                                                             .Include(q => q.Answerer.Sources)
+                                                             .Include(q => q.User.Sources.Select(s => s.SourceDefinition)).Where(x => x.QuestionState == state).Distinct().ToList();
+                    }
+
+                    List<QuestionEntity> totalEmplyeeList = new List<QuestionEntity>();
+                    totalEmplyeeList.AddRange(openEmployeeQuestions);
+                    totalEmplyeeList.AddRange(nonEmployeeQuestions);
+
+
+
+                    //List<QuestionEntity> employeeQuestions = new List<QuestionEntity>();
+                    //List<QuestionEntity> employeeNotFoundQuestions = new List<QuestionEntity>();
+
+
+                    //List<UserKeyEntity> employeeKeys = (from x in ctx.UserKeys where x.User.Id == employee.Id select x)
+                    //    .Include(q => q.User)
+                    //    .Include(q => q.Keyword)
+                    //    .Include(q => q.Affinity).ToList();
+                    //List<QuestionKeyEntity> questionKeyEntities = (from q in ctx.QuestionKeys select q)
+                    //    .Include(q => q.Question)
+                    //    .Include(q => q.Keyword)
+                    //    .Include(q => q.Affinity).ToList();
+
+                    ////Check if employee keys contains questions keys.
+                    //foreach (QuestionEntity question in questionEntities)
+                    //{
+                    //    bool foundUserQuestion = false;
+                    //    List<QuestionKeyEntity> questionKeys = (from q in questionKeyEntities where q.Question.Id == question.Id select q).ToList();
+                    //    foreach (QuestionKeyEntity qke in questionKeys)
+                    //    {
+                    //        if (!foundUserQuestion)
+                    //        {
+                    //            foreach (UserKeyEntity uke in employeeKeys)
+                    //            {
+                    //                if (qke.Keyword.Id == uke.Keyword.Id && !foundUserQuestion)
+                    //                {
+                    //                    employeeQuestions.Add(question);
+                    //                    foundUserQuestion = true;
+                    //                }
+                    //            }
+                    //        }
+                    //    }
+                    //    if (!foundUserQuestion)
+                    //    {
+                    //        employeeNotFoundQuestions.Add(question);
+                    //    }
+                    //}
+
+                    ////If there are remaining questions that are open and not found for this employee
+                    ////check if other employees are experts in this question. If not add them also to this employee
+                    //if (employeeNotFoundQuestions.Count != 0)
+                    //{
+                    //    List<UserKeyEntity> otherUserKeys = (from u in ctx.UserKeys where u.User.Id != employeeId select u).ToList();
+                    //    foreach (QuestionEntity question in employeeNotFoundQuestions)
+                    //    {
+                    //        bool foundUserQuestion = false;
+                    //        List<QuestionKeyEntity> questionKeys = (from q in questionKeyEntities where q.Question.Id == question.Id select q).ToList();
+                    //        foreach (QuestionKeyEntity qke in questionKeys)
+                    //        {
+                    //            if (!foundUserQuestion)
+                    //            {
+                    //                foreach (UserKeyEntity uke in otherUserKeys)
+                    //                {
+                    //                    if (qke.Keyword.Id == uke.Keyword.Id && !foundUserQuestion)
+                    //                    {
+                    //                        foundUserQuestion = true;
+                    //                    }
+                    //                }
+                    //            }
+                    //        }
+                    //        if (!foundUserQuestion)
+                    //        {
+                    //            employeeQuestions.Add(question);
+                    //        }
+                    //    }
+                    //}
+                    questions = ConvertEntities.AsQuestions(totalEmplyeeList) as List<Question>;
+                }
+                else
+                {
+                    throw new NotFoundException("No User entity exists with the specified ID.");
+                }
+            }
+
+            return questions;
         }
 
         public User GetAsker(string id)
         {
-            throw new NotImplementedException();
+            using (IntelliCloudContext ctx = new IntelliCloudContext())
+            {
+                QuestionEntity entity = GetQuestionEntity(Convert.ToInt32(id));
+                return entity.User.AsUser();
+            }
         }
 
         public User GetAnswerer(string id)
         {
-            throw new NotImplementedException();
+            using (IntelliCloudContext ctx = new IntelliCloudContext())
+            {
+                QuestionEntity entity = GetQuestionEntity(Convert.ToInt32(id));
+                return entity.Answerer.AsUser();
+            }
         }
 
-        public User GetAnswer(string id)
+        public Answer GetAnswer(string id)
         {
-            throw new NotImplementedException();
+            using (IntelliCloudContext ctx = new IntelliCloudContext())
+            {
+                QuestionEntity entity = GetQuestionEntity(Convert.ToInt32(id));
+                return entity.Answer.AsAnswer();
+            }
         }
 
         public IList<Keyword> GetKeywords(string id)
         {
-            throw new NotImplementedException();
+            using (IntelliCloudContext ctx = new IntelliCloudContext())
+            {
+                QuestionEntity entity = GetQuestionEntity(Convert.ToInt32(id));
+                List<KeywordEntity> keywordEntities = ctx.QuestionKeys.Select(x => x.Keyword).ToList();
+                List<Keyword> keywords = keywordEntities.Select(x => x.AsKeyword()).ToList();
+                return keywords;
+            }
+        }
+
+        public QuestionEntity GetQuestionEntity(int id)
+        {
+            using (IntelliCloudContext ctx = new IntelliCloudContext())
+            {
+                QuestionEntity entity = (from q in ctx.Questions
+                                                                 .Include(q => q.Source)
+                                                                 .Include(q => q.User)
+                                                                 .Include(q => q.User.Sources)
+                                                                 .Include(q => q.Answerer)
+                                                                 .Include(q => q.Answerer.Sources)
+                                                                 .Include(q => q.User.Sources.Select(s => s.SourceDefinition))
+                                         where q.Id == id
+                                         select q).SingleOrDefault();
+
+                if (entity == null)
+                    throw new NotFoundException("No Question entity exists with the specified ID.");
+
+                return entity;
+            }
         }
     }
 }

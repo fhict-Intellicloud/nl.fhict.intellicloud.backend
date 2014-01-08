@@ -24,11 +24,11 @@ namespace nl.fhict.IntelliCloud.Service
         /// <remarks>Only users of type <see cref="UserType.Employee"/> are able to retrieve questions by state.
         /// </remarks>
         [OperationContract]
-        [WebGet(UriTemplate = "questions?state={state}",
+        [WebGet(UriTemplate = "questions?employeeId={employeeId}&state={state}",
             RequestFormat = WebMessageFormat.Json,
             ResponseFormat = WebMessageFormat.Json)]
         [AuthorizationRequired(UserType.Employee)]
-        IList<Question> GetQuestions(QuestionState? state = null);
+        IList<Question> GetQuestions(int employeeId,QuestionState? state = null);
 
         /// <summary>
         /// Retrieve the question with the given identifier.
@@ -96,7 +96,7 @@ namespace nl.fhict.IntelliCloud.Service
             RequestFormat = WebMessageFormat.Json,
             ResponseFormat = WebMessageFormat.Json)]
         [AuthorizationRequired(UserType.Employee)]
-        User GetAnswer(string questionId);
+        Answer GetAnswer(string questionId);
 
         /// <summary>
         /// Retrieve the keywords that are linked to the question with the given identifier.
