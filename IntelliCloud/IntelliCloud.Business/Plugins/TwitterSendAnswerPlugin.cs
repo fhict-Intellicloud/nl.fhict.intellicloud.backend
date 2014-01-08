@@ -1,4 +1,5 @@
-﻿using System.Resources;
+﻿using System.Configuration;
+using System.Resources;
 using LinqToTwitter;
 using nl.fhict.IntelliCloud.Business.Plugins.Loader;
 using nl.fhict.IntelliCloud.Business.Properties;
@@ -11,64 +12,58 @@ namespace nl.fhict.IntelliCloud.Business.Plugins
     /// </summary>
     public class TwitterSendAnswerPlugin : ISendAnswerPlugin
     {
-        IValidation validation;
+        private IValidation validation;
+        private ResourceManager resourceManager;
 
         /// <summary>
-        /// Creates a new PinAutharizedUser
-        /// Autorization needed since twitter api 1.1
-        /// Account settings can be found in drive - Configuratie settings
+        /// The pin authorizer that is needed since twitter API 1.1.
         /// </summary>
-        private PinAuthorizer _pinAutharizedUser;
-        private PinAuthorizer PinAutharizedUser
+        private readonly static PinAuthorizer PinAuthorizedUser = new PinAuthorizer
         {
-            get
+            Credentials = new InMemoryCredentials
             {
-                if (_pinAutharizedUser == null)
-                {
-                    var auth = new PinAuthorizer
-                    {
-                        Credentials = new InMemoryCredentials
-                        {
-                            ConsumerKey = "5SFAC0n3LhszMHKvpDkvw",
-                            ConsumerSecret = "TkP98l0xDl4FEucVq6WYfEAHyCgJi0b6IwSrOGfhCs",
-                            OAuthToken = "2221459926-pUrExE5ls8d0m4D9rIkvSmL7a590XEzKElBOtrr",
-                            AccessToken = "2eaC8UZsCdh9E5Pi0JebSZa04VwFFnahkuMf3NVYT41yd"
-                        }
-                    };
-
-                    _pinAutharizedUser = auth;
-                    return _pinAutharizedUser;
-                }
-                else
-                {
-                    return _pinAutharizedUser;
-                }
+                ConsumerKey = ConfigurationManager.AppSettings["IntelliCloud.Twitter.ConsumerKey"],
+                ConsumerSecret = ConfigurationManager.AppSettings["IntelliCloud.Twitter.ConsumerSecret"],
+                OAuthToken = ConfigurationManager.AppSettings["IntelliCloud.Twitter.OAuthToken"],
+                AccessToken = ConfigurationManager.AppSettings["IntelliCloud.Twitter.AccessToken"]
             }
+        };
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="TwitterSendAnswerPlugin"/> class.
+        /// </summary>
+        public TwitterSendAnswerPlugin(ResourceManager resourceManager)
+        {
+            validation = new Validation();
+            this.resourceManager = resourceManager;
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="TwitterSendAnswerPlugin"/> class.
+        /// </summary>
         public TwitterSendAnswerPlugin()
         {
             validation = new Validation();
+            this.resourceManager = Resources.ResourceManager;
         }
         
         /// <summary>
         /// Sends a confirmation the the asker of the question
         /// </summary>
         /// <param name="question">the question asked by a user</param>
-        public void SendQuestionRecieved(QuestionEntity question)
+        public void SendQuestionReceived(QuestionEntity question)
         {
             var reference = question.Source.Source.Value;
             var postId = question.Source.PostId;
 
-            ResourceManager rm = Resources.ResourceManager;
-            string tweetBody = rm.GetString(question.LanguageDefinition.ResourceName + "_TWITTER_AUTO_RESPONSE");
+            string tweetBody = resourceManager.GetString(question.LanguageDefinition.ResourceName + "_TWITTER_AUTO_RESPONSE");
 
             var status = reference + " " + tweetBody;
 
             validation.StringCheck(postId);
             validation.TweetLengthCheck(status);
 
-            using (TwitterContext twitterCtx = new TwitterContext(PinAutharizedUser))
+            using (TwitterContext twitterCtx = new TwitterContext(PinAuthorizedUser))
             {
                 twitterCtx.UpdateStatus(status, postId);
             }
@@ -86,10 +81,16 @@ namespace nl.fhict.IntelliCloud.Business.Plugins
 
             var status = reference + " " + answer.Content;
 
+            if (status.Length > 140)
+            {
+                // TODO create link to web answer page and make a resource containing the message: 'U antwoord kan hier gevonden worden:'.
+                status = resourceManager.GetString(question.LanguageDefinition.ResourceName + "_TWITTER_LINK_RESPONSE");
+            }
+
             validation.StringCheck(postId);
             validation.TweetLengthCheck(status);
 
-            using (TwitterContext twitterCtx = new TwitterContext(PinAutharizedUser))
+            using (TwitterContext twitterCtx = new TwitterContext(PinAuthorizedUser))
             {
                 twitterCtx.UpdateStatus(status, postId);
             }

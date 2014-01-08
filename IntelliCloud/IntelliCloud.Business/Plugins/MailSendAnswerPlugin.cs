@@ -46,7 +46,7 @@ namespace nl.fhict.IntelliCloud.Business.Plugins
         /// Send a confirmation mail to the address that send in a question.
         /// </summary>
         /// <param name="question">Question that was created</param>
-        public void SendQuestionRecieved(QuestionEntity question)
+        public void SendQuestionReceived(QuestionEntity question)
         {
             //Create the from and to addresses that are needed to send the e-mail
             MailAddress fromAddress = new MailAddress(clientUsername, "IntelliCloud Team");
