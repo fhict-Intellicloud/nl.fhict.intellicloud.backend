@@ -100,7 +100,9 @@
       <DependentUpon>UserService.svc</DependentUpon>
     </Compile>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
     <None Include="Properties\PublishProfiles\IntelliCloud-Debug.pubxml" />

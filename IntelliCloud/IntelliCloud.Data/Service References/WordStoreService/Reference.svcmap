@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ReferenceGroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="35370d56-7c89-4117-baa2-e8338a30ab5c" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
+<ReferenceGroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="10f3bc8e-3edd-4e66-b2ad-58f64906a733" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
   <ClientOptions>
     <GenerateAsynchronousMethods>false</GenerateAsynchronousMethods>
     <EnableDataBinding>true</EnableDataBinding>
@@ -21,11 +21,11 @@
     <MetadataSource Address="http://81.204.121.229/WordStoreService/WordService.svc" Protocol="http" SourceId="1" />
   </MetadataSources>
   <Metadata>
-    <MetadataFile FileName="WordService.xsd" MetadataType="Schema" ID="8b63ac23-83e2-495f-a72e-642f6745877c" SourceId="1" SourceUrl="http://81.204.121.229/WordStoreService/WordService.svc?xsd=xsd0" />
-    <MetadataFile FileName="WordService.wsdl" MetadataType="Wsdl" ID="81389ddf-32f9-4ed9-b306-b4962dd80cf7" SourceId="1" SourceUrl="http://81.204.121.229/WordStoreService/WordService.svc?wsdl" />
-    <MetadataFile FileName="WordService1.xsd" MetadataType="Schema" ID="9cf65681-92da-4fc9-817e-e52dbbab5908" SourceId="1" SourceUrl="http://81.204.121.229/WordStoreService/WordService.svc?xsd=xsd1" />
-    <MetadataFile FileName="WordService.disco" MetadataType="Disco" ID="cb54ef29-f7cc-4abf-bfe0-f0e635f2bc56" SourceId="1" SourceUrl="http://81.204.121.229/WordStoreService/WordService.svc?disco" />
-    <MetadataFile FileName="WordService2.xsd" MetadataType="Schema" ID="4059623e-afcf-430c-931f-a9c7351fa504" SourceId="1" SourceUrl="http://81.204.121.229/WordStoreService/WordService.svc?xsd=xsd2" />
+    <MetadataFile FileName="WordService.xsd" MetadataType="Schema" ID="450903a0-71e9-426e-9ae7-2517af4280cf" SourceId="1" SourceUrl="http://81.204.121.229/WordStoreService/WordService.svc?xsd=xsd0" />
+    <MetadataFile FileName="WordService.wsdl" MetadataType="Wsdl" ID="abca1e34-422f-4cad-a61e-7e87660405f6" SourceId="1" SourceUrl="http://81.204.121.229/WordStoreService/WordService.svc?wsdl" />
+    <MetadataFile FileName="WordService1.xsd" MetadataType="Schema" ID="01c256cf-c091-4ff6-a73e-af566db2b4fe" SourceId="1" SourceUrl="http://81.204.121.229/WordStoreService/WordService.svc?xsd=xsd1" />
+    <MetadataFile FileName="WordService.disco" MetadataType="Disco" ID="3c8bbd38-0933-4e5b-b6fb-d28f7137b2ce" SourceId="1" SourceUrl="http://81.204.121.229/WordStoreService/WordService.svc?disco" />
+    <MetadataFile FileName="WordService2.xsd" MetadataType="Schema" ID="74c95eb7-462b-4f0e-9389-16664632d371" SourceId="1" SourceUrl="http://81.204.121.229/WordStoreService/WordService.svc?xsd=xsd2" />
   </Metadata>
   <Extensions>
     <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />
