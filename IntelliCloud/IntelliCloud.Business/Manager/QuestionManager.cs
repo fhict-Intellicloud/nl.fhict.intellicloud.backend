@@ -33,54 +33,20 @@ namespace nl.fhict.IntelliCloud.Business.Manager
         { }
 
         /// <summary>
-        /// Retrieves the available questions and optionally filtering them using the employee identifier.
-        /// </summary>
-        /// <param name="employeeId">The optional employee identifier, only questions about which the employee has 
-        /// knowledge are returned (keywords between user and question match).</param>
-        /// <returns>Returns the questions that match the filters.</returns>
-        public IList<Question> GetQuestions(int employeeId)
-        {
-            Validation.IdCheck(employeeId);
-
-            List<Question> questions = new List<Question>();
-
-            using (IntelliCloudContext ctx = new IntelliCloudContext())
-            {
-                UserEntity employee = (from u in ctx.Users
-                                       where u.Id == employeeId
-                                       select u).SingleOrDefault();
-
-                // TODO: Only retrieve questions for retrieved employee.
-                // TODO: Make sure only users of type employee can retrieve private questions.
-                List<QuestionEntity> questionEntities = (from q in ctx.Questions
-                                                                 .Include(q => q.Source)
-                                                                 .Include(q => q.User)
-                                                                 .Include(q => q.User.Sources)
-                                                                 .Include(q => q.Answerer)
-                                                                 .Include(q => q.Answerer.Sources)
-                                                                 .Include(q => q.User.Sources.Select(s => s.SourceDefinition))
-                                                         select q).ToList();
-
-                questions.AddRange(questionEntities.AsQuestions());
-            }
-
-            return questions;
-        }
-
-        /// <summary>
         /// Retrieve the question with the given identifier.
         /// </summary>
-        /// <param name="id">The identifier of the question.</param>
+        /// <param name="questionId">The identifier of the question.</param>
         /// <returns>Returns the question with the given identifier.</returns>
-        public Question GetQuestion(int id)
+        public Question GetQuestion(string id)
         {
             Validation.IdCheck(id);
+
+            int convertedId = Convert.ToInt32(id);
 
             Question question = new Question();
 
             using (IntelliCloudContext ctx = new IntelliCloudContext())
             {
-                // TODO: make sure only users of type employee can retrieve private questions.
                 QuestionEntity entity = (from q in ctx.Questions
                                                                  .Include(q => q.Source)
                                                                  .Include(q => q.User)
@@ -88,7 +54,7 @@ namespace nl.fhict.IntelliCloud.Business.Manager
                                                                  .Include(q => q.Answerer)
                                                                  .Include(q => q.Answerer.Sources)
                                                                  .Include(q => q.User.Sources.Select(s => s.SourceDefinition))
-                                         where q.Id == id
+                                         where q.Id == convertedId
                                          select q).SingleOrDefault();
 
                 if (entity == null)
@@ -97,6 +63,37 @@ namespace nl.fhict.IntelliCloud.Business.Manager
                 question = entity.AsQuestion();
             }
             return question;
+        }
+
+        /// <summary>
+        /// Retrieves the available questions and filtering them using the state.
+        /// </summary>
+        /// <param name="state">The optional state of the question, only questions with the given state are returned.</param>
+        /// <returns>Returns the questions that match the filter.</returns>
+        public IList<Question> GetQuestions(QuestionState? state)
+        {
+            using (IntelliCloudContext ctx = new IntelliCloudContext())
+            {
+                var questionEntities = ctx.Questions
+                                                                 .Include(q => q.Source)
+                                                                 .Include(q => q.User)
+                                                                 .Include(q => q.User.Sources)
+                                                                 .Include(q => q.Answerer)
+                                                                 .Include(q => q.Answerer.Sources)
+                                                                 .Include(q => q.QuestionState)
+                                                                 .Include(q => q.User.Sources.Select(s => s.SourceDefinition));
+
+                if (state == null)
+                    return questionEntities.ToList().AsQuestions();
+                else
+                {
+                    return questionEntities
+                        .Where(q => q.QuestionState == state)
+                        .ToList()
+                        .AsQuestions();
+
+                }
+            }
         }
 
         /// <summary>
@@ -185,7 +182,7 @@ namespace nl.fhict.IntelliCloud.Business.Manager
                 ctx.Questions.Add(questionEntity);
 
                 ctx.SaveChanges();
-                
+
                 // TODO check if there is a 90%+  match
                 Boolean match = false;
 
@@ -195,36 +192,10 @@ namespace nl.fhict.IntelliCloud.Business.Manager
                 if (!match)
                 {
                     this.SendAnswerFactory.LoadPlugin(questionEntity.Source.Source.SourceDefinition)
-                        .SendQuestionRecieved(questionEntity);
+                        .SendQuestionReceived(questionEntity);
                 }
 
             }
-        }
-
-        /// <summary>
-        /// Updates the question with the given identifier.
-        /// </summary>
-        /// <param name="id">The identifier of the question that is updated.</param>
-        /// <param name="employeeId">The identifier of the employee that is going to answer the question.</param>
-        public void UpdateQuestion(int id, int employeeId)
-        {
-            Validation.IdCheck(id);
-            Validation.IdCheck(employeeId);
-
-            using (IntelliCloudContext ctx = new IntelliCloudContext())
-            {
-                QuestionEntity questionEntity = (from q in ctx.Questions
-                                                 where q.Id == id
-                                                 select q).Single();
-
-                questionEntity.Answerer = (from u in ctx.Users
-                                           where u.Id == employeeId
-                                           select u).Single();
-                questionEntity.LastChangedTime = DateTime.UtcNow;
-
-                ctx.SaveChanges();
-            }
-
         }
 
         /// <summary>
@@ -237,10 +208,10 @@ namespace nl.fhict.IntelliCloud.Business.Manager
             Validation.StringCheck(feedbackToken);
 
             Question question = new Question();
+            UserManager userManager = new UserManager(this);
 
             using (IntelliCloudContext ctx = new IntelliCloudContext())
             {
-                // TODO: make sure only users of type employee can retrieve private questions.
                 QuestionEntity entity = (from q in ctx.Questions
                                                                  .Include(q => q.Source)
                                                                  .Include(q => q.User)
@@ -254,9 +225,52 @@ namespace nl.fhict.IntelliCloud.Business.Manager
                 if (entity == null)
                     throw new NotFoundException("No Question entity exists with the specified feedback token.");
 
+                if (userManager.GetUser().Type != UserType.Employee && entity.IsPrivate)
+                    throw new NotFoundException("Only employees can retrieve private questions.");
+
                 question = entity.AsQuestion();
             }
             return question;
+        }
+
+        /// <summary>
+        /// Updates the question with the given identifier.
+        /// </summary>
+        /// <param name="id">The identifier of the question that is updated.</param>
+        /// <param name="employeeId">The identifier of the employee that is going to answer the question.</param>
+        public void UpdateQuestion(string id, int employeeId)
+        {
+            // Validate input data
+            Validation.IdCheck(id);
+            Validation.IdCheck(employeeId);
+
+            // Convert the textual representation of the id to an integer
+            int convertedId = Convert.ToInt32(id);
+
+            using (IntelliCloudContext context = new IntelliCloudContext())
+            {
+                // Get the feedback entity from the context
+                QuestionEntity question = context.Questions
+                                          .SingleOrDefault(q => q.Id == convertedId);
+
+                if (question == null)
+                    throw new NotFoundException("No question entity exists with the specified ID.");
+
+                UserEntity user = context.Users
+                                         .Include(u => u.Sources)
+                                         .Include(u => u.Type)
+                                         .SingleOrDefault(u => u.Id == employeeId);
+
+                if (user == null)
+                    throw new NotFoundException("No user entity exists with the specified ID.");
+
+                // Update the state of the feedback entry
+                question.Answerer = user;
+                question.LastChangedTime = DateTime.UtcNow;
+
+                // Save the changes to the context
+                context.SaveChanges();
+            }
         }
 
         #region keyword algorith methods
@@ -323,39 +337,92 @@ namespace nl.fhict.IntelliCloud.Business.Manager
         }
         #endregion
 
-        public void UpdateQuestion(string id, int employeeId)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Question GetQuestion(string id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IList<Question> GetQuestions(QuestionState? state)
-        {
-            throw new NotImplementedException();
-        }
-
+        /// <summary>
+        /// Retrieve the user that asked the question with the given identifier.
+        /// </summary>
+        /// <param name="questionId">The identifier of the question.</param>
+        /// <returns>Returns the user that asked the question with the given identifier.</returns>
         public User GetAsker(string id)
         {
-            throw new NotImplementedException();
+            Validation.IdCheck(id);
+
+            int convertedId = Convert.ToInt32(id);
+
+            using (IntelliCloudContext ctx = new IntelliCloudContext())
+            {
+                return ctx.Questions
+                    .Include(q => q.User)
+                    .Where(q => q.Id == convertedId)
+                    .Select(q => q.User)
+                    .Single()
+                    .AsUser();
+            }
         }
 
+        /// <summary>
+        /// Retrieve the user that has answered the question with the given identifier.
+        /// </summary>
+        /// <param name="id">The identifier of the question.</param>
+        /// <returns>Returns the user that answered the question with the given identifier.</returns>
         public User GetAnswerer(string id)
         {
-            throw new NotImplementedException();
+            Validation.IdCheck(id);
+
+            int convertedId = Convert.ToInt32(id);
+            using (IntelliCloudContext ctx = new IntelliCloudContext())
+            {
+                return ctx.Questions
+                    .Include(q => q.Answerer)
+                    .Where(q => q.Id == convertedId)
+                    .Select(q => q.Answerer)
+                    .Single()
+                    .AsUser();
+            }
         }
 
-        public User GetAnswer(string id)
+        /// <summary>
+        /// Retrieve the answer that answered the question with the given identifier.
+        /// </summary>
+        /// <param name="id">The identifier of the question.</param>
+        /// <returns>Returns the answer that answered the question with the given identifier.</returns>
+        public Answer GetAnswer(string id)
         {
-            throw new NotImplementedException();
+            Validation.IdCheck(id);
+
+            int convertedId = Convert.ToInt32(id);
+
+            using (IntelliCloudContext ctx = new IntelliCloudContext())
+            {
+                return ctx.Questions
+                    .Include(q => q.Answer)
+                    .Where(q => q.Id == convertedId)
+                    .Select(q => q.Answer)
+                    .Single()
+                    .AsAnswer();
+            }
         }
 
+        /// <summary>
+        /// Retrieve the keywords that are linked to the question with the given identifier.
+        /// </summary>
+        /// <param name="id">The identifier of the question.</param>
+        /// <returns>Returns the keywords that are linked to the question with the given identifier.</returns>
         public IList<Keyword> GetKeywords(string id)
         {
-            throw new NotImplementedException();
+            Validation.IdCheck(id);
+
+            int convertedId = Convert.ToInt32(id);
+
+            using (IntelliCloudContext ctx = new IntelliCloudContext())
+            {
+                return ctx.QuestionKeys
+                    .Include(qk => qk.Question)
+                     .Include(qk => qk.Keyword)
+                    .Where(qk => qk.Question.Id == convertedId)
+                    .Select(qk => qk.Keyword)
+                    .ToList()
+                    .AsKeywords();
+            }
         }
     }
 }

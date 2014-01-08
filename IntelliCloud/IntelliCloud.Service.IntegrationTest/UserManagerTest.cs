@@ -7,6 +7,7 @@ using nl.fhict.IntelliCloud.Data.OpenID.Model;
 using System;
 using System.Data.Entity;
 using System.Linq;
+using System.Collections.Generic;
 
 namespace nl.fhict.IntelliCloud.Service.IntegrationTest
 {
@@ -119,6 +120,7 @@ namespace nl.fhict.IntelliCloud.Service.IntegrationTest
 
         #region Tests
 
+        #region CreateUserTests
         /// <summary>
         /// CreateUser test method.
         /// </summary>
@@ -162,6 +164,46 @@ namespace nl.fhict.IntelliCloud.Service.IntegrationTest
         }
 
         /// <summary>
+        /// CreateUser test method.
+        /// </summary>
+        [TestMethod]
+        public void CreateUserTest()
+        {
+            try
+            {
+                // Create a new user
+                UserType userType = UserType.Customer;
+                IList<UserSource> sources = new List<UserSource>();
+                sources.Add(new UserSource() { Name = "Mail", Value = "customer2@domain.com" });
+                string firstName = "Name";
+                string infix = "of";
+                string lastName = "second customer";
+                string avatar = "http://domain.com/avatar2.jpg";
+                this.manager.CreateUser(userType, sources, firstName, infix, lastName, avatar);
+
+                // Check if the user was added and contains the correct data
+                using (IntelliCloudContext context = new IntelliCloudContext())
+                {
+                    UserEntity entity = context.Users
+                                        .Include(u => u.Sources)
+                                        .Include(u => u.Sources.Select(s => s.SourceDefinition))
+                                        .Single(u => u.FirstName.Equals(firstName) && u.Infix.Equals(infix) && u.LastName.Equals(lastName));
+
+                    Assert.AreEqual(entity.Type, userType);
+                    Assert.AreEqual(entity.Avatar, avatar);
+                    entity.Sources.Select(s => s.SourceDefinition.Name.Equals(sources[0].Name) && s.Value.Equals(sources[0].Value));
+                }
+            }
+            catch (Exception e)
+            {
+                Assert.Fail(e.Message);
+            }
+        }
+
+        #endregion CreateUserTests
+
+        #region MatchUserTest
+        /// <summary>
         /// MatchUser test method.
         /// </summary>
         [TestMethod]
@@ -187,8 +229,8 @@ namespace nl.fhict.IntelliCloud.Service.IntegrationTest
                 Assert.AreEqual(user.Type, UserType.Customer);
                 Assert.AreEqual(user.FirstName, userInfo.GivenName);
                 Assert.AreEqual(user.LastName, userInfo.FamilyName);
-                user.Sources.Select(s => s.SourceDefinition.Name.Equals("accounts.google.com") && s.Value.Equals(userInfo.Sub));
-                user.Sources.Select(s => s.SourceDefinition.Name.Equals("Mail") && s.Value.Equals(userInfo.Email));
+                user.Sources.Select(s => s.Name.Equals("accounts.google.com") && s.Value.Equals(userInfo.Sub));
+                user.Sources.Select(s => s.Name.Equals("Mail") && s.Value.Equals(userInfo.Email));
                 Assert.AreEqual(user.Avatar, userInfo.Picture);
             }
             catch (Exception e)
@@ -196,6 +238,37 @@ namespace nl.fhict.IntelliCloud.Service.IntegrationTest
                 Assert.Fail(e.Message);
             }
         }
+        #endregion MatchUserTest
+
+        #region GetUserTest
+
+        /// <summary>
+        /// GetUser test method that checks if a User is returned when only a source has been supplied.
+        /// </summary>
+        [TestMethod]
+        public void GetUserTest_BySource()
+        {
+            try
+            {
+                // Get the user from the context
+                List<UserSource> sources = new List<UserSource>();
+                sources.Add(new UserSource() { Name = "Mail", Value = "customer1@domain.com" });
+                User user = this.manager.GetUser(null, sources);
+
+                // Check if the correct data is returned
+                Assert.AreEqual(user.FirstName, this.userEntity.FirstName);
+                Assert.AreEqual(user.Infix, this.userEntity.Infix);
+                Assert.AreEqual(user.LastName, this.userEntity.LastName);
+                Assert.AreEqual(user.Type, this.userEntity.Type);
+                Assert.AreEqual(user.Avatar, this.userEntity.Avatar);
+                user.Sources.Select(s => s.Name.Equals("Mail") && s.Value.Equals("customer1@domain.com"));
+            }
+            catch (Exception e)
+            {
+                Assert.Fail(e.Message);
+            }
+        }
+        #endregion GetUserTest
 
         #endregion Tests
 

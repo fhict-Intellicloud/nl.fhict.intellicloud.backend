@@ -38,26 +38,32 @@ namespace nl.fhict.IntelliCloud.Business.UnitTest.Manager
         #region Tests
 
         #region question manager tests
+
+        #region GetQuestion test
         /// <summary>
-        /// In this test we check if the questionId and emplooyeeId is being validated in the UpdateQuestion method.
+        /// In this test we check if the questionId is being validated in the GetQuestion method.
         /// </summary>
         [TestMethod]
-        public void UpdateQuestionTest()
+        public void GetQuestionTest()
         {
-            int questionId = 1;
-            int employeeId = 1;
+            string questionId = "1";
 
             try
             {
-                manager.UpdateQuestion(questionId, employeeId);
+                manager.GetQuestion(questionId);
             }
             catch (Exception)
             { }
 
             validation.Verify(v => v.IdCheck(questionId), Times.Once());
-            validation.Verify(v => v.IdCheck(employeeId), Times.Once());
         }
+        #endregion
 
+        #region GetQuestions tests 
+
+        #endregion GetQuestions tests
+
+        #region CreateQuestion test
         /// <summary>
         /// In this test we check if the source, reference, question, title, postId and isPrivate is being validated in the CreateQuestion method.
         /// </summary>
@@ -82,45 +88,137 @@ namespace nl.fhict.IntelliCloud.Business.UnitTest.Manager
             validation.Verify(v => v.StringCheck(reference), Times.Once());
             validation.Verify(v => v.StringCheck(question), Times.Once());
             validation.Verify(v => v.StringCheck(title), Times.Once());
-            validation.Verify(v => v.StringCheck(postId), Times.Once());
-            // TODO: boolean check
+            // TODO: boolean check for keyword match
         }
 
+        #endregion CreateQuestion test
+
+        #region GetQuestionByFeedbackToken tests
         /// <summary>
-        /// In this test we check if the qustionId is being validated in the GetQuestion method.
+        /// In this test we validate the GetQuestionByFeedbackToken method
         /// </summary>
         [TestMethod]
-        public void GetQuestionTest()
+        public void GetQuestionByFeedbackTokenTest()
         {
-            int questionId = 1;
+            string token = "abcdefghijklmnopqrstuvwxyz1234567890";
+            
+            try
+            {
+                manager.GetQuestionByFeedbackToken(token);
+            }
+            catch (Exception)
+            { }
+
+            validation.Verify(v => v.StringCheck(token), Times.Once());
+        }
+
+        #endregion GetQuestionByFeedbackToken tests
+
+        #region UpdateQuestion
+        /// <summary>
+        /// In this test we check if the questionId and emplooyeeId is being validated in the UpdateQuestion method.
+        /// </summary>
+        [TestMethod]
+        public void UpdateQuestionTest()
+        {
+            string questionId = "1";
+            int employeeId = 1;
 
             try
             {
-                manager.GetQuestion(questionId);
+               manager.UpdateQuestion(questionId, employeeId);
+            }
+            catch (Exception)
+            { }
+
+            validation.Verify(v => v.IdCheck(questionId), Times.Once());
+            validation.Verify(v => v.IdCheck(employeeId), Times.Once());
+        }
+        #endregion UpdateQuestion
+
+        #region GetAsker tests
+        /// <summary>
+        /// Test to validate the getAsker method.
+        /// </summary>
+        [TestMethod]
+        public void GetAskerTest()
+        {
+            string questionId = "1";
+
+            try
+            {
+                manager.GetAsker(questionId);
             }
             catch (Exception)
             { }
 
             validation.Verify(v => v.IdCheck(questionId), Times.Once());
         }
+        #endregion GetAsker tests
 
+        #region GetAnswerer tests
         /// <summary>
-        /// In this test we check if the employeeId is being validated in the GetQuestions method.
+        /// Test to validate the getAnswerer method.
         /// </summary>
         [TestMethod]
-        public void GetQuestionsTest()
+        public void GetAnswererTest()
         {
-            int employeeId = 1;
+            string questionId = "1";
 
             try
             {
-                manager.GetQuestions(employeeId);
+                manager.GetAnswerer(questionId);
             }
             catch (Exception)
             { }
 
-            validation.Verify(v => v.IdCheck(employeeId), Times.Once());
+            validation.Verify(v => v.IdCheck(questionId), Times.Once());
         }
+        #endregion GetAnswerer tests
+
+        #region GetAnswer tests
+        /// <summary>
+        /// Test to validate the getAnswer method.
+        /// </summary>
+        [TestMethod]
+        public void GetAnswerTest()
+        {
+            string questionId = "1";
+
+            try
+            {
+                manager.GetAnswer(questionId);
+            }
+            catch (Exception)
+            { }
+
+            validation.Verify(v => v.IdCheck(questionId), Times.Once());
+        }
+        #endregion GetAnswer tests
+
+        #region GetKeywords tests
+        /// <summary>
+        /// Test to validate the getKeywords method.
+        /// </summary>
+        [TestMethod]
+        public void GetKeywordsTest()
+        {
+            string questionId = "1";
+
+            try
+            {
+                manager.GetKeywords(questionId);
+            }
+            catch (Exception)
+            { }
+
+            validation.Verify(v => v.IdCheck(questionId), Times.Once());
+        }
+        #endregion GetKeywords tests
+
+        #region
+
+        #endregion
 
         #endregion
 

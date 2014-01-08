@@ -20,9 +20,9 @@ namespace nl.fhict.IntelliCloud.Business.Plugins.Loader
         void SendAnswer(QuestionEntity question, AnswerEntity answer);
 
         /// <summary>
-        /// Send a recieved confirmation to the source.
+        /// Send a received confirmation to the source.
         /// </summary>
         /// <param name="question"></param>
-        void SendQuestionRecieved(QuestionEntity question);
+        void SendQuestionReceived(QuestionEntity question);
     }
 }

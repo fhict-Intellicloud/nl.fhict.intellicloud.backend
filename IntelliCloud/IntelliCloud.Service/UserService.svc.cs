@@ -5,6 +5,9 @@ using nl.fhict.IntelliCloud.Common.DataTransfer;
 
 namespace nl.fhict.IntelliCloud.Service
 {
+    /// <summary>
+    /// A service providing functionality related to users.
+    /// </summary>
     public class UserService : IUserService
     {
         private readonly UserManager manager;
@@ -36,17 +39,17 @@ namespace nl.fhict.IntelliCloud.Service
 
         public IList<Answer> GetFeedbacks(string id, DateTime? after = null)
         {
-            throw new NotImplementedException();
+            return this.manager.GetFeedbacks(id, after);
         }
 
         public IList<Answer> GetReviews(string id, DateTime? after = null)
         {
-            throw new NotImplementedException();
+            return this.manager.GetReviews(id, after);
         }
 
         public void AssignKeyword(string id, string keyword, int affinity)
         {
-            throw new NotImplementedException();
+            this.manager.AssignKeyword(id, keyword, affinity);
         }
     }
 }

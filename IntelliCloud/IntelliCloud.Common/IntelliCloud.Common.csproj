@@ -42,6 +42,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CustomException\AccesDeniedException.cs" />
     <Compile Include="CustomException\NotFoundException.cs" />
     <Compile Include="DataTransfer\Answer.cs" />
     <Compile Include="DataTransfer\AnswerState.cs" />

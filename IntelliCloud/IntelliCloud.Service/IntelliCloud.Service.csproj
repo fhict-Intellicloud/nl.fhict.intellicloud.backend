@@ -84,11 +84,11 @@
     <Compile Include="FeedbackService.svc.cs">
       <DependentUpon>FeedbackService.svc</DependentUpon>
     </Compile>
-    <Compile Include="IAnswerService.cs" />
-    <Compile Include="IFeedbackService.cs" />
-    <Compile Include="IQuestionService.cs" />
-    <Compile Include="IReviewService.cs" />
-    <Compile Include="IUserService.cs" />
+    <Compile Include="Interfaces\IAnswerService.cs" />
+    <Compile Include="Interfaces\IFeedbackService.cs" />
+    <Compile Include="Interfaces\IQuestionService.cs" />
+    <Compile Include="Interfaces\IReviewService.cs" />
+    <Compile Include="Interfaces\IUserService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QuestionService.svc.cs">
       <DependentUpon>QuestionService.svc</DependentUpon>
