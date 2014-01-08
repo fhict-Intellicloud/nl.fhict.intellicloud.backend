@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using nl.fhict.IntelliCloud.Business.UnitTest.Manager;
 using nl.fhict.IntelliCloud.Common.CustomException;
 using nl.fhict.IntelliCloud.Common.DataTransfer;
 using nl.fhict.IntelliCloud.Data.IntelliCloud.Context;
 using nl.fhict.IntelliCloud.Data.IntelliCloud.Model;
+using System.Data.Entity;
 
 namespace nl.fhict.IntelliCloud.Service.IntegrationTest.Services
 {
@@ -51,13 +51,18 @@ namespace nl.fhict.IntelliCloud.Service.IntegrationTest.Services
         {
             using (IntelliCloudContext ctx = new IntelliCloudContext())
             {
+                ctx.AnswerKeys.RemoveRange(ctx.AnswerKeys.ToList());
+                ctx.Keywords.RemoveRange(ctx.Keywords.ToList());
+                ctx.Answers.RemoveRange(ctx.Answers.ToList());
+                ctx.Feedbacks.RemoveRange(ctx.Feedbacks.ToList());
+                ctx.Reviews.RemoveRange(ctx.Reviews.ToList());
                 ctx.Questions.RemoveRange(ctx.Questions.ToList());
                 ctx.QuestionSources.RemoveRange(ctx.QuestionSources.ToList());
                 ctx.Sources.RemoveRange(ctx.Sources.ToList());
                 ctx.SourceDefinitions.RemoveRange(ctx.SourceDefinitions.ToList());
-                ctx.LanguageDefinitions.RemoveRange(ctx.LanguageDefinitions.ToList());
                 ctx.Users.RemoveRange(ctx.Users.ToList());
-
+                ctx.LanguageDefinitions.RemoveRange(ctx.LanguageDefinitions.ToList());
+                
                 ctx.SaveChanges();
             }
         }
@@ -71,8 +76,8 @@ namespace nl.fhict.IntelliCloud.Service.IntegrationTest.Services
             {
                 // creating a language for testing
                 LanguageDefinitionEntity language = new LanguageDefinitionEntity();
-                language.Name = "Dutch";
-                language.ResourceName = "Dutch";
+                language.Name = "English";
+                language.ResourceName = "English";
                 ctx.LanguageDefinitions.Add(language);
 
                 // create test customer and employee;
@@ -99,7 +104,7 @@ namespace nl.fhict.IntelliCloud.Service.IntegrationTest.Services
                 newSource.User = customer;
                 newSource.Value = "test@test.nl";
                 newSource.CreationTime = DateTime.UtcNow;
-                newSource.SourceDefinition = new SourceDefinitionEntity { CreationTime = DateTime.UtcNow, Description = "integration test def", Name = "test def", Url = "" };
+                newSource.SourceDefinition = new SourceDefinitionEntity { CreationTime = DateTime.UtcNow, Description = "integration test def", Name = "Mail", Url = "" };
 
                 ctx.Sources.Add(newSource);
                 ctx.SaveChanges();
@@ -122,7 +127,7 @@ namespace nl.fhict.IntelliCloud.Service.IntegrationTest.Services
                 this.answer.CreationTime = DateTime.Now;
                 this.answer.Content = "The answer to your question is 42.";
                 this.answer.User = this.employee;
-                this.answer.AnswerState = AnswerState.Ready;
+                this.answer.AnswerState = AnswerState.UnderReview;
 
                 ReviewEntity review = new ReviewEntity();
                 review.Answer = answer;
@@ -167,26 +172,7 @@ namespace nl.fhict.IntelliCloud.Service.IntegrationTest.Services
         #region Tests
 
         #region GetAnswers tests
-        /// <summary>
-        /// Test to vlaidate all answers are found without the use of filters.
-        /// </summary>
-        [TestMethod]
-        [TestCategory("nl.fhict.IntelliCloud.Service.IntegrationTest")]
-        public void GetAnswersTest_NoFilter()
-        {
-            try
-            {
-                // TODO: getAnswer summary states that paramters are optional this is not the case.
-                var questions = this.service.GetAnswers(AnswerState.Ready);
-                Assert.IsTrue(questions.Count == 1);
-
-            }
-            catch (Exception e) 
-            {
-                Assert.AreEqual(e.Message, "Sequence contains no elements");
-            }
-        }
-
+        
         /// <summary>
         /// Test to vlaidate all answers are found with the use of a state filter.
         /// </summary>
@@ -197,7 +183,7 @@ namespace nl.fhict.IntelliCloud.Service.IntegrationTest.Services
             try
             {
                 // TODO: getAnswer summary states that paramters are optional this is not the case.
-                var questions = this.service.GetAnswers(AnswerState.Ready, null);
+                var questions = this.service.GetAnswers(AnswerState.UnderReview, null);
                 Assert.IsTrue(questions.Count == 1);
 
             }
@@ -262,21 +248,20 @@ namespace nl.fhict.IntelliCloud.Service.IntegrationTest.Services
             int questionId = this.question.Id, answererId = this.employee.Id;
             string answer = "The answer to anything is 42!!";
             AnswerState state = AnswerState.Ready;
-
-            try
-            {
-                this.service.CreateAnswer(questionId, answer, answererId, state);
+            
+            this.service.CreateAnswer(questionId, answer, answererId, state);
 
                 using (IntelliCloudContext ctx = new IntelliCloudContext())
                 {
                     AnswerEntity newAnswer = ctx.Answers
+                        .Include(a => a.User)
                         .Where(a => a.Content == answer &&
                             a.User.Id == answererId &&
                             a.AnswerState == state)
                         .Single();
 
                     Assert.AreEqual(answer, newAnswer.Content);
-                    Assert.AreEqual(answererId, newAnswer.User);
+                    Assert.AreEqual(answererId, newAnswer.User.Id);
                     Assert.AreEqual(state, newAnswer.AnswerState);
 
                     QuestionEntity newQuestion = ctx.Questions
@@ -285,11 +270,6 @@ namespace nl.fhict.IntelliCloud.Service.IntegrationTest.Services
 
                     Assert.IsTrue(newQuestion.Answer.Id == newAnswer.Id);
                 }
-            }
-            catch (Exception e) 
-            {
-                Assert.AreEqual(e.Message, "Sequence contains no elements");
-            }
 
         }
         #endregion CreateAnswer tests
@@ -366,7 +346,7 @@ namespace nl.fhict.IntelliCloud.Service.IntegrationTest.Services
                 {
                     var ctxAnswerer = ctx.Users.Single(a => a.Id == this.employee.Id);
 
-                    Assert.AreEqual(ctxAnswerer.Id, answerer.Id);
+                    Assert.AreEqual(ctxAnswerer.Id.ToString(), answerer.Id.ToString().Split('/').Last());
                 }
             }
             catch (Exception e)
@@ -455,7 +435,7 @@ namespace nl.fhict.IntelliCloud.Service.IntegrationTest.Services
         /// </summary>
         [TestMethod]
         [TestCategory("nl.fhict.IntelliCloud.Service.IntegrationTest")]
-        [ExpectedException(typeof(Exception))]
+        [ExpectedException(typeof(System.InvalidOperationException))]
         public void NoAnswerFound()
         {
             this.service.GetAnswer("1000");
@@ -510,7 +490,7 @@ namespace nl.fhict.IntelliCloud.Service.IntegrationTest.Services
         /// </summary>
         [TestMethod]
         [TestCategory("nl.fhict.IntelliCloud.Service.IntegrationTest")]
-        [ExpectedException(typeof(ArgumentException))]
+        [ExpectedException(typeof(System.ArgumentNullException))]
         public void invalidString_Null()
         {
             this.service.CreateAnswer(0, null, 0, AnswerState.Ready);
