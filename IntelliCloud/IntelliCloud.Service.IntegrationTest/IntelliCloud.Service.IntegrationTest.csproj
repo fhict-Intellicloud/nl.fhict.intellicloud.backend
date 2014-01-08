@@ -40,7 +40,11 @@
     <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -48,10 +52,25 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Services\AnswerServiceTest.cs" />
+    <Compile Include="UserServiceTest.cs" />
+    <Compile Include="UserManagerTest.cs" />
+    <Compile Include="FeedbackServiceTest.cs" />
+    <Compile Include="KeywordAlgorithmTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ReviewServiceTest.cs" />
+    <Compile Include="Services\QuestionServiceTest.cs" />
+    <Compile Include="Services\ReviewServiceTest.cs" />
+    <Compile Include="ValidationTest.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\IntelliCloud.Business.UnitTest\IntelliCloud.Business.UnitTest.csproj">
+      <Project>{482D3E09-31B9-4642-8C08-01FE70223490}</Project>
+      <Name>IntelliCloud.Business.UnitTest</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\IntelliCloud.Business\IntelliCloud.Business.csproj">
+      <Project>{59a5b95e-1352-4b18-aaa4-71e1f334a2f5}</Project>
+      <Name>IntelliCloud.Business</Name>
+    </ProjectReference>
     <ProjectReference Include="..\IntelliCloud.Common\IntelliCloud.Common.csproj">
       <Project>{22a9b283-420a-4325-990a-7c0a14e36590}</Project>
       <Name>IntelliCloud.Common</Name>
@@ -70,6 +89,7 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="packages.config" />
+    <None Include="Properties\DataSources\nl.fhict.IntelliCloud.Business.WordService.Word.datasource" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

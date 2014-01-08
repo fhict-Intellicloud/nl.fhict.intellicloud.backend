@@ -1,15 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
 using System.Diagnostics;
 using System.Linq;
 using System.ServiceProcess;
-using System.Text;
-using System.Threading.Tasks;
 using ActiveUp.Net.Mail;
 using System.Configuration;
-using IntelliMailClient.QuestionService;
 using System.Net.Mail;
 using System.Net;
 using System.IO;
@@ -207,52 +203,5 @@ namespace IntelliMailClient
             return messages;
         }
 
-        /// <summary>
-        /// Send a confirmation mail to the address that send in a question
-        /// </summary>
-        /// <param name="from">Address that send in a question</param>
-        private void SendConfirmationMail(Address from)
-        {
-            //Create the from and to addresses that are needed to send the e-mail
-            MailAddress fromAddress = new MailAddress(username, "IntelliCloud Team");
-            MailAddress toAddress = new MailAddress(from.Email, from.Name);
-            
-            //Set the e-mail content
-            string subject = "Thank you for your question!";
-            string body = "Hello " + from.Name + ",\n\n" + 
-                "We received your question. You will soon receive an answer.\n\n" +
-                "Kind regards,\n" +
-                "IntelliCloud Team";
-
-            //Create a new smtp client with credentials
-            SmtpClient smtp = new SmtpClient
-            {
-                Host = "smtp.gmail.com",
-                Port = 587,
-                EnableSsl = true,
-                DeliveryMethod = SmtpDeliveryMethod.Network,
-                UseDefaultCredentials = false,
-                Credentials = new NetworkCredential(fromAddress.Address, password)
-            };
-
-            //Create the e-mail with the addresses and content
-            using (MailMessage message = new MailMessage(fromAddress, toAddress)
-            {
-                Subject = subject,
-                Body = body
-            })
-            //Send the mail
-                try
-                {
-                    smtp.Send(message);
-                }
-                catch (Exception e)
-                {
-                    //If it fails, the error is written to the logfile
-                    serviceLog.WriteEntry("Sending e-mail failed: " + e.ToString());
-                }
-            //Dispose the smtp client
-            smtp.Dispose();
-        }
     }
 }

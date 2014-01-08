@@ -40,6 +40,8 @@
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -47,23 +49,33 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Context\IntelliCloudContext.cs" />
-    <Compile Include="Migration\Configuration.cs" />
-    <Compile Include="Migration\Extension.cs" />
-    <Compile Include="Model\AnswerEntity.cs" />
-    <Compile Include="Model\AnswerKeyEntity.cs" />
-    <Compile Include="Model\FeedbackEntity.cs" />
-    <Compile Include="Model\KeywordEntity.cs" />
-    <Compile Include="Model\LanguageDefinitionEntity.cs" />
-    <Compile Include="Model\QuestionEntity.cs" />
-    <Compile Include="Model\QuestionKeyEntity.cs" />
-    <Compile Include="Model\QuestionSourceEntity.cs" />
-    <Compile Include="Model\ReviewEntity.cs" />
-    <Compile Include="Model\SourceEntity.cs" />
-    <Compile Include="Model\SourceDefinitionEntity.cs" />
-    <Compile Include="Model\UserEntity.cs" />
-    <Compile Include="Model\UserKeyEntity.cs" />
+    <Compile Include="IntelliCloud\Context\IntelliCloudContext.cs" />
+    <Compile Include="IntelliCloud\Context\WordStoreContext.cs" />
+    <Compile Include="IntelliCloud\Migration\Configuration.cs" />
+    <Compile Include="IntelliCloud\Migration\Extension.cs" />
+    <Compile Include="IntelliCloud\Model\AnswerEntity.cs" />
+    <Compile Include="IntelliCloud\Model\AnswerKeyEntity.cs" />
+    <Compile Include="IntelliCloud\Model\FeedbackEntity.cs" />
+    <Compile Include="IntelliCloud\Model\KeywordEntity.cs" />
+    <Compile Include="IntelliCloud\Model\LanguageDefinitionEntity.cs" />
+    <Compile Include="IntelliCloud\Model\QuestionEntity.cs" />
+    <Compile Include="IntelliCloud\Model\QuestionKeyEntity.cs" />
+    <Compile Include="IntelliCloud\Model\QuestionSourceEntity.cs" />
+    <Compile Include="IntelliCloud\Model\ReviewEntity.cs" />
+    <Compile Include="IntelliCloud\Model\SourceEntity.cs" />
+    <Compile Include="IntelliCloud\Model\SourceDefinitionEntity.cs" />
+    <Compile Include="IntelliCloud\Model\UserEntity.cs" />
+    <Compile Include="IntelliCloud\Model\UserKeyEntity.cs" />
+    <Compile Include="OpenID\Context\IOpenIDContext.cs" />
+    <Compile Include="OpenID\Context\OpenIDContext.cs" />
+    <Compile Include="OpenID\Model\AuthorizationToken.cs" />
+    <Compile Include="OpenID\Model\OpenIDUserInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Service References\WordStoreService\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\IntelliCloud.Common\IntelliCloud.Common.csproj">
@@ -72,7 +84,42 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="App.config" />
     <None Include="packages.config" />
+    <None Include="Service References\WordStoreService\nl.fhict.IntelliCloud.Data.WordStoreService.Word.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\WordStoreService\WordService.wsdl" />
+    <None Include="Service References\WordStoreService\WordService.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\WordStoreService\WordService1.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\WordStoreService\WordService2.xsd">
+      <SubType>Designer</SubType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadataStorage Include="Service References\WordStoreService\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\WordStoreService\WordService.disco" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\WordStoreService\configuration91.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\WordStoreService\configuration.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\WordStoreService\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

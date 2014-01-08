@@ -1,10 +1,5 @@
 ﻿using nl.fhict.IntelliCloud.Business.Manager;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.Serialization;
-using System.ServiceModel;
-using System.Text;
 using nl.fhict.IntelliCloud.Common.DataTransfer;
 
 namespace nl.fhict.IntelliCloud.Service
@@ -22,24 +17,44 @@ namespace nl.fhict.IntelliCloud.Service
             this.manager = new AnswerManager();
         }
 
-        public IList<Answer> GetAnswers(AnswerState answerState, int employeeId)
-        {
-            return manager.GetAnswers(answerState, employeeId);
-        }
-
         public Answer GetAnswer(string id)
         {
-            return manager.GetAnswer(id);
+            return this.manager.GetAnswer(id);
         }
 
         public void CreateAnswer(int questionId, string answer, int answererId, AnswerState answerState)
         {
-            manager.CreateAnswer(questionId, answer, answererId, answerState);
+            this.manager.CreateAnswer(questionId, answer, answererId, answerState);
         }
 
         public void UpdateAnswer(string id, AnswerState answerState, string answer)
         {
-            manager.UpdateAnswer(id, answerState, answer);
+            this.manager.UpdateAnswer(id, answerState, answer);
+        }
+
+        public IList<Answer> GetAnswers(AnswerState state, string search = null)
+        {
+            return this.manager.GetAnswers(state, search);
+        }
+
+        public User GetAnswerer(string id)
+        {
+            return this.manager.GetAnswerer(id);
+        }
+
+        public IList<Feedback> GetFeedbacks(string id, FeedbackState state)
+        {
+            return this.manager.GetFeedbacks(id, state);
+        }
+
+        public IList<Review> GetReviews(string id, ReviewState state)
+        {
+            return this.manager.GetReviews(id, state);
+        }
+
+        public IList<Keyword> GetKeywords(string id)
+        {
+            return this.manager.GetKeywords(id);
         }
     }
 }

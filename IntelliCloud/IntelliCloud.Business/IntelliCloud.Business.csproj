@@ -30,14 +30,17 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="DialogueMaster.Babel">
-      <HintPath>Libs\DialogueMaster.Babel.dll</HintPath>
-    </Reference>
     <Reference Include="EntityFramework">
       <HintPath>..\packages\EntityFramework.6.0.1\lib\net40\EntityFramework.dll</HintPath>
     </Reference>
     <Reference Include="EntityFramework.SqlServer">
       <HintPath>..\packages\EntityFramework.6.0.1\lib\net40\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="LinqToTwitter">
+      <HintPath>..\packages\linqtotwitter.2.1.11\lib\net40\LinqToTwitter.dll</HintPath>
+    </Reference>
+    <Reference Include="Facebook">
+      <HintPath>..\packages\Facebook.6.4.2\lib\net40-client\Facebook.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
@@ -54,43 +57,31 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Authorization\AuthorizationHandler.cs" />
-    <Compile Include="Authorization\AuthorizationToken.cs" />
     <Compile Include="Authorization\AuthorizationOptional.cs" />
-    <Compile Include="Authorization\OpenIDUserInfo.cs" />
     <Compile Include="Authorization\AuthorizationRequired.cs" />
     <Compile Include="ConvertEntities.cs" />
     <Compile Include="IValidation.cs" />
     <Compile Include="Manager\BaseManager.cs" />
     <Compile Include="Manager\AnswerManager.cs" />
+    <Compile Include="Manager\UserManager.cs" />
     <Compile Include="Manager\FeedbackManager.cs" />
     <Compile Include="Manager\QuestionManager.cs" />
     <Compile Include="Manager\ReviewManager.cs" />
+    <Compile Include="Plugins\FacebookSendAnswerPlugin.cs" />
     <Compile Include="Plugins\Loader\ISendAnswerPlugin.cs" />
     <Compile Include="Plugins\Loader\SendAnswerFactory.cs" />
     <Compile Include="Plugins\MailSendAnswerPlugin.cs" />
+    <Compile Include="Plugins\TwitterSendAnswerPlugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Service References\WordService\Reference.cs">
+    <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>Reference.svcmap</DependentUpon>
+      <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="Validation.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
-    <None Include="Service References\WordService\nl.fhict.IntelliCloud.Business.WordService.Word.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </None>
-    <None Include="Service References\WordService\WordService.wsdl" />
-    <None Include="Service References\WordService\WordService.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\WordService\WordService1.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\WordService\WordService2.xsd">
-      <SubType>Designer</SubType>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\IntelliCloud.Common\IntelliCloud.Common.csproj">
@@ -103,28 +94,11 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <WCFMetadata Include="Service References\" />
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
-  <ItemGroup>
-    <WCFMetadataStorage Include="Service References\WordService\" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Service References\WordService\WordService.disco" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Service References\WordService\configuration91.svcinfo" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Service References\WordService\configuration.svcinfo" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Service References\WordService\Reference.svcmap">
-      <Generator>WCF Proxy Generator</Generator>
-      <LastGenOutput>Reference.cs</LastGenOutput>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Libs\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

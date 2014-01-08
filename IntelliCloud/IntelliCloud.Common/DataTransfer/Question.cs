@@ -13,10 +13,10 @@ namespace nl.fhict.IntelliCloud.Common.DataTransfer
     public class Question
     {
         /// <summary>
-        /// Gets or sets the unique identifier of the question.
+        /// Gets or sets the URL to this specific question.
         /// </summary>
         [DataMember]
-        public int Id { get; set; }
+        public Uri Id { get; set; }
 
         /// <summary>
         /// Gets or sets the tile of the question. The title is a short summary of the question.
@@ -34,27 +34,27 @@ namespace nl.fhict.IntelliCloud.Common.DataTransfer
         /// Gets or sets the language the question is written in.
         /// </summary>
         [DataMember]
-        public LanguageDefinition LanguageDefinition { get; set; }
+        public string Language { get; set; }
 
         /// <summary>
-        /// Gets or sets the answer for the question. This field is empty until the question state is either 
+        /// Gets or sets the URL to the answer for the question. This field is empty until the question state is either 
         /// <see cref="QuestionState.UpForFeedback"/> or <see cref="QuestionState.Closed"/>, so it only contains 
         /// accepted or pending answers.
         /// </summary>
         [DataMember]
-        public Answer Answer { get; set; }
+        public Uri Answer { get; set; }
 
         /// <summary>
-        /// Gets or sets the user that asked the question.
+        /// Gets or sets the URL to the user that asked the question.
         /// </summary>
         [DataMember]
-        public User User { get; set; }
+        public Uri User { get; set; }
 
         /// <summary>
         /// Gets or sets the user that is going to answer the question.
         /// </summary>
         [DataMember]
-        public User Answerer { get; set; }
+        public Uri Answerer { get; set; }
 
         /// <summary>
         /// Gets or sets the state of the question.
@@ -65,13 +65,19 @@ namespace nl.fhict.IntelliCloud.Common.DataTransfer
         /// Gets or sets the creation date and time of the question.
         /// </summary>
         [DataMember]
-        public DateTime? CreationTime { get; set; }
+        public DateTime CreationTime { get; set; }
 
         /// <summary>
-        /// Gets or sets the keywords that are linked to the question.
+        /// Gets or sets the last changed date and time of the question.
         /// </summary>
         [DataMember]
-        public IList<Keyword> Keywords { get; set; }
+        public DateTime? LastChangedTime { get; set; }
+
+        /// <summary>
+        /// Gets or sets the URL to the keywords that are linked to the question.
+        /// </summary>
+        [DataMember]
+        public Uri Keywords { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether the question is private. When a question is private it can only be 
@@ -81,11 +87,16 @@ namespace nl.fhict.IntelliCloud.Common.DataTransfer
         public bool IsPrivate { get; set; }
 
         /// <summary>
-        /// Gets or sets the question source that is used to return the answer of the question. The question source 
-        /// represents the <see cref="Source"/> the question originated from and extra information about where exactly 
-        /// the answer needs to be send.
+        /// Gets or sets the identifier of the post where the question originated from, like the Facebook post 
+        /// identifier. This identifier is used so the answer can be replied to this post.
         /// </summary>
         [DataMember]
-        public QuestionSource Source { get; set; }
+        public string SourcePostId { get; set; }
+
+        /// <summary>
+        /// Gets or sets the source that is used to return the answer of the question.
+        /// </summary>
+        [DataMember]
+        public UserSource Source { get; set; }
     }
 }

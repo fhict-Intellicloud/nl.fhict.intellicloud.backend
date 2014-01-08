@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.Serialization;
-using System.Web;
 
 namespace nl.fhict.IntelliCloud.Common.DataTransfer
 {
@@ -13,10 +11,10 @@ namespace nl.fhict.IntelliCloud.Common.DataTransfer
     public class User
     {
         /// <summary>
-        /// Gets or sets the unique identifier of the user.
+        /// Gets or sets the URL to this specific user.
         /// </summary>
         [DataMember]
-        public int Id { get; set; }
+        public Uri Id { get; set; }
 
         /// <summary>
         /// Gets or sets the first name of the user.
@@ -45,7 +43,7 @@ namespace nl.fhict.IntelliCloud.Common.DataTransfer
         /// Gets or sets a collection of sources the user supports.
         /// </summary>
         [DataMember]
-        public IList<Source> Sources { get; set; }
+        public IList<UserSource> Sources { get; set; }
 
         /// <summary>
         /// Gets or sets the creation date and time of the answer.
@@ -54,9 +52,42 @@ namespace nl.fhict.IntelliCloud.Common.DataTransfer
         public DateTime? CreationTime { get; set; }
 
         /// <summary>
-        /// Gets or sets the keywords that are linked to the user.
+        /// Gets or sets the last changed date and time of the user.
         /// </summary>
         [DataMember]
-        public IList<Keyword> Keywords { get; set; }
+        public DateTime? LastChangedTime { get; set; }
+
+        /// <summary>
+        /// Gets or sets the URL to the keywords that are linked to the user.
+        /// </summary>
+        [DataMember]
+        public Uri Keywords { get; set; }
+
+        /// <summary>
+        /// Gets or sets the URL to the avatar image of the user.
+        /// </summary>
+        [DataMember]
+        public Uri Avatar { get; set; }
+
+        /// <summary>
+        /// Gets or sets the URL to the questions that can be answered by the user. These questions have keywords in 
+        /// common with this user.
+        /// </summary>
+        [DataMember]
+        public Uri Questions { get; set; }
+
+        /// <summary>
+        /// Gets or sets the URL to the answers that have open feedback that can be processed by the user. These answers
+        /// have keywords in common with this user.
+        /// </summary>
+        [DataMember]
+        public Uri Feedbacks { get; set; }
+
+        /// <summary>
+        /// Gets or sets the URL to the answers that have open reviews that can be processed by the user. These answers
+        /// have keywords in common with this user.
+        /// </summary>
+        [DataMember]
+        public Uri Reviews { get; set; }
     }
 }

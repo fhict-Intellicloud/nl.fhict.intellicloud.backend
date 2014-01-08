@@ -1,7 +1,5 @@
-﻿using nl.fhict.IntelliCloud.Business.Authorization;
-using nl.fhict.IntelliCloud.Common.DataTransfer;
-using nl.fhict.IntelliCloud.Data.Context;
-using System.ServiceModel.Web;
+﻿using nl.fhict.IntelliCloud.Business.Plugins.Loader;
+using nl.fhict.IntelliCloud.Data.OpenID.Context;
 
 namespace nl.fhict.IntelliCloud.Business.Manager
 {
@@ -12,17 +10,19 @@ namespace nl.fhict.IntelliCloud.Business.Manager
     public abstract class BaseManager
     {
         protected IValidation Validation {get; set;}
-        protected ConvertEntities ConvertEntities {get; set;}
+        protected IOpenIDContext OpenIDContext { get; set; }
+        protected SendAnswerFactory SendAnswerFactory { get; set; }
 
         /// <summary>
         /// This constructor will construct the BaseManager and instantiate it's properties.
-        /// The IValidation property is set to the given value.
+        /// The IValidation property is set to the given values.
         /// </summary>
         /// <param name="validation">IValidation to be set.</param>
         protected BaseManager(IValidation validation)
         {
             Validation = validation;
-            ConvertEntities = new ConvertEntities();
+            OpenIDContext = new OpenIDContext();
+            SendAnswerFactory = new SendAnswerFactory();
         }
 
         /// <summary>
@@ -31,7 +31,8 @@ namespace nl.fhict.IntelliCloud.Business.Manager
         protected BaseManager()
         {
             Validation = new Validation();
-            ConvertEntities = new ConvertEntities();
+            OpenIDContext = new OpenIDContext();
+            SendAnswerFactory = new SendAnswerFactory();
         }
     }
 }

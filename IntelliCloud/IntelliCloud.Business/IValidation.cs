@@ -5,6 +5,9 @@ using System.Text;
 
 namespace nl.fhict.IntelliCloud.Business
 {
+    /// <summary>
+    /// Interface to validate incoming parameters.
+    /// </summary>
     public interface IValidation
     {
         /// <summary>
@@ -26,21 +29,15 @@ namespace nl.fhict.IntelliCloud.Business
         void IdCheck(int value);
 
         /// <summary>
-        /// Checks if the given string can be parsed to an AnswerState enum.
-        /// </summary>
-        /// <param name="answerState">The string that needs to be checked as an AnswerState</param>
-        void AnswerStateCheck(string answerState);
-
-        /// <summary>
-        /// Checks if the given string can be parsed to an ReviewState enum.
-        /// </summary>
-        /// <param name="reviewState">The string that needs to be checked as an ReviewState</param>
-        void ReviewStateCheck(string reviewState);
-
-        /// <summary>
         /// Checks if the given SourceDefinitionName exists.
         /// </summary>
         /// <param name="SourceDefinitionName">SourceDefinitionName that has to be checked.</param>
         void SourceDefinitionExistsCheck(string SourceDefinitionName);
+
+        /// <summary>
+        /// Checks if a tweet is less or equal to 140 characters
+        /// </summary>
+        /// <param name="tweet">The answer to be send</param>
+        void TweetLengthCheck(string tweet);
     }
 }

@@ -5,6 +5,14 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IntelliMailClient", "Intell
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IntelliMailClientTests", "IntelliMailClientTests\IntelliMailClientTests.csproj", "{A0AB53D5-AF57-43BE-B517-F27856ED3B78}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DLL", "DLL", "{CD378AC6-3F90-4738-87BB-8CE306AB8419}"
+	ProjectSection(SolutionItems) = preProject
+		IntelliMailClient\DLL\ActiveUp.Net.Common.dll = IntelliMailClient\DLL\ActiveUp.Net.Common.dll
+		IntelliMailClient\DLL\ActiveUp.Net.Imap4.dll = IntelliMailClient\DLL\ActiveUp.Net.Imap4.dll
+		IntelliMailClient\DLL\ActiveUp.Net.Mail.dll = IntelliMailClient\DLL\ActiveUp.Net.Mail.dll
+		IntelliMailClient\DLL\Newtonsoft.Json.dll = IntelliMailClient\DLL\Newtonsoft.Json.dll
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -22,8 +30,5 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(Performance) = preSolution
-		HasPerformanceSessions = true
 	EndGlobalSection
 EndGlobal

@@ -1,11 +1,5 @@
-using nl.fhict.IntelliCloud.Business;
 using nl.fhict.IntelliCloud.Business.Manager;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.Serialization;
-using System.ServiceModel;
-using System.Text;
 using nl.fhict.IntelliCloud.Common.DataTransfer;
 
 namespace nl.fhict.IntelliCloud.Service
@@ -18,29 +12,54 @@ namespace nl.fhict.IntelliCloud.Service
         private readonly QuestionManager manager;
 
         public QuestionService()
-        {            
-            this.manager = new QuestionManager();
-        }
-
-        public IList<Question> GetQuestions(int employeeId)
         {
-            return manager.GetQuestions(employeeId);
+            this.manager = new QuestionManager();
         }
 
         public Question GetQuestion(string id)
         {
-            return manager.GetQuestion(Convert.ToInt32(id));
+            return this.manager.GetQuestion(id);
         }
 
         public void CreateQuestion(
             string source, string reference, string question, string title, string postId = null, bool isPrivate = false)
         {
-            manager.CreateQuestion(source, reference, question, title, postId, isPrivate);
+            this.manager.CreateQuestion(source, reference, question, title, postId, isPrivate);
         }
 
         public void UpdateQuestion(string id, int employeeId)
         {
-            manager.UpdateQuestion(Convert.ToInt32(id), employeeId);
+            this.manager.UpdateQuestion(id, employeeId);
+        }
+        
+        public Question GetQuestionByFeedbackToken(string feedbackToken)
+        {
+            return manager.GetQuestionByFeedbackToken(feedbackToken);
+        }
+
+        public IList<Question> GetQuestions(int employeeId,QuestionState? state = null)
+        {
+            return this.manager.GetQuestions(employeeId,state);
+        }
+
+        public User GetAsker(string id)
+        {
+            return this.manager.GetAsker(id);
+        }
+
+        public User GetAnswerer(string id)
+        {
+            return this.manager.GetAnswerer(id);
+        }
+
+        public Answer GetAnswer(string id)
+        {
+            return this.manager.GetAnswer(id);
+        }
+
+        public IList<Keyword> GetKeywords(string id)
+        {
+            return this.manager.GetKeywords(id);
         }
     }
 }
