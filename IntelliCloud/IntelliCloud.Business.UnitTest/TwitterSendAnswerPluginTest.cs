@@ -14,13 +14,21 @@ namespace nl.fhict.IntelliCloud.Business.UnitTest
     [TestClass]
     public class TwitterSendAnswerPluginTest
     {
+        #region Fields
+
         TwitterSendAnswerPlugin twitterSendAnswerPlugin;
+
+        #endregion Fields
+
+        #region Methods
 
         [TestInitialize]
         public void Initialize()
         {
             twitterSendAnswerPlugin = new TwitterSendAnswerPlugin(Resources.ResourceManager);
         }
+
+        #region Tests
 
         /// <summary>
         /// Tests if the length answer string is checked, can't be larger than 140 charactes.
@@ -200,5 +208,9 @@ namespace nl.fhict.IntelliCloud.Business.UnitTest
                 Assert.IsTrue(e is ArgumentException);
             }
         }
+
+        #endregion Tests
+
+        #endregion Methods
     }
 }
