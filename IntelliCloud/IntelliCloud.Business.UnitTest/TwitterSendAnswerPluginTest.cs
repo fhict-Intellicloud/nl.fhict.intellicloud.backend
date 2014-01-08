@@ -1,11 +1,10 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using System;
+using System.Reflection;
+using System.Resources;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using nl.fhict.IntelliCloud.Business.Plugins;
-using nl.fhict.IntelliCloud.Common.DataTransfer;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using nl.fhict.IntelliCloud.Business.UnitTest.Properties;
+using nl.fhict.IntelliCloud.Data.IntelliCloud.Model;
 
 namespace nl.fhict.IntelliCloud.Business.UnitTest
 {
@@ -15,94 +14,191 @@ namespace nl.fhict.IntelliCloud.Business.UnitTest
     [TestClass]
     public class TwitterSendAnswerPluginTest
     {
-    ////    #region Fields
+        TwitterSendAnswerPlugin twitterSendAnswerPlugin;
 
-    ////    TwitterSendAnswerPlugin twitterSendAnswerPlugin;
-    ////    Question question;
-    ////    Answer answer;
+        [TestInitialize]
+        public void Initialize()
+        {
+            twitterSendAnswerPlugin = new TwitterSendAnswerPlugin(Resources.ResourceManager);
+        }
 
-    ////    #endregion Fields
+        /// <summary>
+        /// Tests if the length answer string is checked, can't be larger than 140 charactes.
+        /// </summary>
+        [TestMethod]
+        public void SendLongReplyTweetAnswerTest()
+        {
+            QuestionEntity question = new QuestionEntity();
+            question.Source = new QuestionSourceEntity();
+            question.Source.Source = new SourceEntity();
+            question.Source.PostId = "1";
+            question.Source.Source.Value = "@IntelliCloudQ";
 
-    ////    #region Methods
+            AnswerEntity answer = new AnswerEntity();
+            answer.Content = "Hello this answer is too long so it can't be send to twitter test test test test test test test test test test test test test!!";
 
-    ////    [TestInitialize]
-    ////    public void Initialize()
-    ////    {
-    ////        twitterSendAnswerPlugin = new TwitterSendAnswerPlugin();
-    ////        QuestionSource questionSource = new QuestionSource();
-    ////        Source source = new Source();
-    ////        questionSource.Source = source;
-    ////        question = new Question();
-    ////        question.Source = questionSource;
-    ////        answer = new Answer();
-    ////    }
+            //Answer can't be more then 140 characters long
+            try
+            {
+                twitterSendAnswerPlugin.SendAnswer(question, answer);
+                Assert.Fail();
+            }
+            catch (Exception e)
+            {
+                Assert.IsTrue(e is ArgumentException);
+            }
+        }
 
-    ////    #region Tests
+        /// <summary>
+        /// Tests if the answer string is checked, can't be empty
+        /// </summary>
+        [TestMethod]
+        public void SendEmptyReplyTweetAnswerTest()
+        {
+            QuestionEntity question = new QuestionEntity();
+            question.Source = new QuestionSourceEntity();
+            question.Source.Source = new SourceEntity();
+            question.Source.PostId = "1";
+            question.Source.Source.Value = "";
 
-    ////    /// <summary>
-    ////    /// Tests if the answer string is checked, can't be null or empty
-    ////    /// </summary>
-    ////    [TestMethod]
-    ////    public void SendReplyTweetAnswerTest()
-    ////    {
-    ////        question.Source.PostId = "1";
-    ////        question.Source.Value = "@IntelliCloudQ";
-            
-    ////        answer.Content = "Hello this answer is too long so it can't be send to twitter test test test test test test test test test test test test test!!";
+            AnswerEntity answer = new AnswerEntity();
+            answer.Content = "";
 
-    ////        //Answer can't be more then 140 characters long
-    ////        try
-    ////        {
-    ////            twitterSendAnswerPlugin.SendAnswer(question, answer);
-    ////            Assert.Fail();
-    ////        }
-    ////        catch (Exception e)
-    ////        {
-    ////            Assert.IsTrue(e is ArgumentException);
-    ////            Assert.AreEqual("Tweet can't be longer then 140 characters", e.Message);
-    ////        }
+            //Answer can't be empty
+            try
+            {
+                twitterSendAnswerPlugin.SendAnswer(question, answer);
+                Assert.Fail();
+            }
+            catch (Exception e)
+            {
+                Assert.IsTrue(e is ArgumentException);
+            }
+        }
 
-    ////        question.Source.Source.Value = "";
-    ////        answer.Content = "";
+        /// <summary>
+        /// Tests if the answer string is checked, can't be null
+        /// </summary>
+        [TestMethod]
+        public void SendNullEmptyReplyTweetAnswerTest()
+        {
+            QuestionEntity question = new QuestionEntity();
+            question.Source = new QuestionSourceEntity();
+            question.Source.Source = new SourceEntity();
+            question.Source.PostId = "1";
+            question.Source.Source.Value = null;
 
-    ////        //Answer can't be empty
-    ////        try
-    ////        {
-    ////            twitterSendAnswerPlugin.SendAnswer(question, answer);
-    ////            Assert.Fail();
-    ////        }
-    ////        catch (Exception e)
-    ////        {
-    ////            Assert.IsTrue(e is ArgumentException);
-    ////            Assert.AreEqual("Tweet is empty", e.Message);
-    ////        }
-    ////    }
+            AnswerEntity answer = new AnswerEntity();
+            answer.Content = null;
 
-    ////    /// <summary>
-    ////    /// Tests if the postId string is checked, can't be null or empty
-    ////    /// </summary>
-    ////    [TestMethod]
-    ////    public void SendReplyTweetPostIdTest()
-    ////    {
-    ////        question.Source.PostId = "";
-    ////        question.Source.Source.Value = "@IntelliCloudQ";
-           
-    ////        answer.Content = "This is a valid answer";
+            //Answer can't be empty
+            try
+            {
+                twitterSendAnswerPlugin.SendAnswer(question, answer);
+                Assert.Fail();
+            }
+            catch (Exception e)
+            {
+                Assert.IsTrue(e is ArgumentException);
+            }
+        }
 
-    ////        try
-    ////        {
-    ////            twitterSendAnswerPlugin.SendAnswer(question, answer);
-    ////            Assert.Fail();
-    ////        }
-    ////        catch (Exception e)
-    ////        {
-    ////            Assert.IsTrue(e is ArgumentException);
-    ////            Assert.AreEqual("String is empty.", e.Message);
-    ////        }
-    ////    }
+        /// <summary>
+        /// Tests if the postId string is checked, can't be empty
+        /// </summary>
+        [TestMethod]
+        public void SendEmptyReplyTweetPostIdTest()
+        {
+            QuestionEntity question = new QuestionEntity();
+            question.Source = new QuestionSourceEntity();
+            question.Source.Source = new SourceEntity();
+            question.Source.PostId = "";
+            question.Source.Source.Value = "@IntelliCloudQ";
 
-    ////    #endregion Tests
+            AnswerEntity answer = new AnswerEntity();
+            answer.Content = "This is a valid answer";
 
-    ////    #endregion Methods
+            try
+            {
+                twitterSendAnswerPlugin.SendAnswer(question, answer);
+                Assert.Fail();
+            }
+            catch (Exception e)
+            {
+                Assert.IsTrue(e is ArgumentException);
+            }
+        }
+
+        /// <summary>
+        /// Tests if the postId string is checked, can't be null
+        /// </summary>
+        [TestMethod]
+        public void SendNullEmptyReplyTweetPostIdTest()
+        {
+            QuestionEntity question = new QuestionEntity();
+            question.Source = new QuestionSourceEntity();
+            question.Source.Source = new SourceEntity();
+            question.Source.PostId = null;
+            question.Source.Source.Value = "@IntelliCloudQ";
+
+            AnswerEntity answer = new AnswerEntity();
+            answer.Content = "This is a valid answer";
+
+            try
+            {
+                twitterSendAnswerPlugin.SendAnswer(question, answer);
+                Assert.Fail();
+            }
+            catch (Exception e)
+            {
+                Assert.IsTrue(e is ArgumentException);
+            }
+        }
+
+        /// <summary>
+        /// Tests if the postId string is checked, can't be empty
+        /// </summary>
+        [TestMethod]
+        public void SendEmptyReplyReceivedPostIdTest()
+        {
+            QuestionEntity question = new QuestionEntity();
+            question.Source = new QuestionSourceEntity();
+            question.Source.Source = new SourceEntity();
+            question.Source.PostId = "";
+            question.Source.Source.Value = "@IntelliCloudQ";
+
+            try
+            {
+                twitterSendAnswerPlugin.SendQuestionReceived(question);
+                Assert.Fail();
+            }
+            catch (Exception e)
+            {
+                Assert.IsTrue(e is ArgumentException);
+            }
+        }
+
+        /// <summary>
+        /// Tests if the postId string is checked, can't be null
+        /// </summary>
+        [TestMethod]
+        public void SendNullEmptyReplyReceivedPostIdTest()
+        {
+            QuestionEntity question = new QuestionEntity();
+            question.Source = new QuestionSourceEntity();
+            question.Source.Source = new SourceEntity();
+            question.Source.PostId = null;
+            question.Source.Source.Value = "@IntelliCloudQ";
+
+            try
+            {
+                twitterSendAnswerPlugin.SendQuestionReceived(question);
+                Assert.Fail();
+            }
+            catch (Exception e)
+            {
+                Assert.IsTrue(e is ArgumentException);
+            }
+        }
     }
 }

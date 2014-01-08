@@ -192,7 +192,7 @@ namespace nl.fhict.IntelliCloud.Business.Manager
                 if (!match)
                 {
                     this.SendAnswerFactory.LoadPlugin(questionEntity.Source.Source.SourceDefinition)
-                        .SendQuestionRecieved(questionEntity);
+                        .SendQuestionReceived(questionEntity);
                 }
 
             }

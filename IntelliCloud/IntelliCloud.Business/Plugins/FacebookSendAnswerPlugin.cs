@@ -18,7 +18,7 @@ namespace nl.fhict.IntelliCloud.Business.Plugins
         /// Sends a confirmation the the asker of the question
         /// </summary>
         /// <param name="question">the question asked by a user</param>
-        public void SendQuestionRecieved(Data.IntelliCloud.Model.QuestionEntity question)
+        public void SendQuestionReceived(Data.IntelliCloud.Model.QuestionEntity question)
         {
             //Get the id of the post containing the question
             String postId = question.Source.PostId;
