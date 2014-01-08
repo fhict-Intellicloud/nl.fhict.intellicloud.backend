@@ -13,6 +13,18 @@ namespace nl.fhict.IntelliCloud.Business
     {
 
         /// <summary>
+        /// Checks if the affinity is between 0 and 11.
+        /// </summary>
+        /// <param name="affinity">The int that needs to be checked as an id.</param>
+        public void AffinityCheck(int affinity)
+        {
+            if (affinity <= 0 || affinity>=11)
+            {
+                throw new ArgumentException("Affinity needs to be between 0 and 11.");
+            }
+        }
+
+        /// <summary>
         /// Checks if the string is not null or empty.
         /// </summary>
         /// <param name="value">The string that needs to be checked</param>

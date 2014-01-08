@@ -52,7 +52,7 @@ namespace nl.fhict.IntelliCloud.Service
             return this.manager.GetAnswerer(id);
         }
 
-        public User GetAnswer(string id)
+        public Answer GetAnswer(string id)
         {
             return this.manager.GetAnswer(id);
         }

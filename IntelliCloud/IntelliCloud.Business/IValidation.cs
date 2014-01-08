@@ -10,6 +10,13 @@ namespace nl.fhict.IntelliCloud.Business
     /// </summary>
     public interface IValidation
     {
+
+        /// <summary>
+        /// Checks if the affinity is between 0 and 11.
+        /// </summary>
+        /// <param name="affinity">The int that needs to be checked as an id.</param>
+        void AffinityCheck(int affinity);
+
         /// <summary>
         /// Checks if the string is not null or empty.
         /// </summary>

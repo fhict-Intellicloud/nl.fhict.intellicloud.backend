@@ -9,6 +9,8 @@ using System.IO;
 using System.Linq;
 using System.Runtime.Serialization.Json;
 using System.ServiceModel.Web;
+using System.Collections;
+using nl.fhict.IntelliCloud.Common.CustomException;
 
 namespace nl.fhict.IntelliCloud.Business.Manager
 {
@@ -17,6 +19,15 @@ namespace nl.fhict.IntelliCloud.Business.Manager
     /// </summary>
     public class UserManager : BaseManager
     {
+        /// <summary>
+        /// Constructor that uses a given base managers properties as its own.
+        /// </summary>
+        /// <param name="manager">Manager supplying the needed values.</param>
+        public UserManager(BaseManager manager)
+            : base(manager)
+        {
+        }
+
         /// <summary>
         /// Constructor that sets the IValidation property to the given value.
         /// </summary>
@@ -106,6 +117,22 @@ namespace nl.fhict.IntelliCloud.Business.Manager
         }
 
         /// <summary>
+        /// Method for retrieving the User object for the currently authorized user.
+        /// </summary>
+        /// <returns>Instance of class User on success or null on error.</returns>
+        public User GetAuthorizedUser()
+        {
+            // Retrieve user info about the currently authorized user
+            OpenIDUserInfo userInfo = this.GetOpenIDUserInfo();
+
+            // Only continue if user info could be retrieved
+            if (userInfo != null)
+                return this.MatchUser(userInfo);
+            else
+                return null;
+        }
+
+        /// <summary>
         /// Method for creating a new user (of UserType Customer) based on an instance of class OpenIDUserInfo.
         /// </summary>
         /// <param name="userInfo">The instance of class OpenIDUserInfo that will be used to create the new user.</param>
@@ -126,81 +153,6 @@ namespace nl.fhict.IntelliCloud.Business.Manager
 
             // Attempt to create a new user
             this.CreateUser(UserType.Customer, sources, firstName, null, lastName, avatar);
-        }
-
-        /// <summary>
-        /// Method for retrieving the User object for the currently authorized user.
-        /// </summary>
-        /// <returns>Instance of class User on success or null on error.</returns>
-        public User GetAuthorizedUser()
-        {
-            // Retrieve user info about the currently authorized user
-            OpenIDUserInfo userInfo = this.GetOpenIDUserInfo();
-
-            // Only continue if user info could be retrieved
-            if (userInfo != null)
-                return this.MatchUser(userInfo);
-            else
-                return null;
-        }
-
-        #endregion
-
-        /// <summary>
-        /// Method for getting a user based on it's ID or a list of UserSource instances.
-        /// All parameters are optional - if no parameters are provided the currently logged in user will be returned.
-        /// </summary>
-        /// <param name="id">The ID of the user. Optional.</param>
-        /// <param name="sources">A list of UserSource instances. Optional.</param>
-        /// <returns>The matched user based on the values of the parameters, otherwise the currently logged in user.</returns>
-        public User GetUser(string id = null, IList<UserSource> sources = null)
-        {
-            // Validate supplied input data
-            if (id != null) Validation.IdCheck(id);
-
-            // User object that will contain the User object on success
-            User user = null;
-
-            // Check if any input data is supplied
-            if (id == null && sources == null)
-            {
-                // No input data is supplied, return the currently logged in user
-                user = this.GetAuthorizedUser();
-            }
-            else
-            {
-                // Get the user from the context
-                using (IntelliCloudContext context = new IntelliCloudContext())
-                {
-                    UserEntity userEntity = null;
-
-                    // Build the query
-                    var query = context.Users
-                                .Include(u => u.Sources)        
-                                .Include(u => u.Sources.Select(s => s.SourceDefinition));
-
-                    // Check if an id has been supplied
-                    if (id != null)
-                    {
-                        int iId = Convert.ToInt32(id);
-                        query = query.Where(u => u.Id == iId);
-                        userEntity = query.SingleOrDefault();
-                    }
-
-                    // Check if sources have been supplied
-                    if (sources != null && sources.Count > 0)
-                        userEntity = query.ToList().Where(u => u.Sources.Any(s => sources.Any(us => us.Name == s.SourceDefinition.Name && us.Value == s.Value))).SingleOrDefault();
-                    else
-                        userEntity = query.SingleOrDefault();
-
-                    // Convert the UserEntity (if found) to an instance of class User and set in the reference
-                    if (userEntity != null)
-                        user = userEntity.AsUser();
-                }
-            }
-
-            // Return the User object
-            return user;
         }
 
         /// <summary>
@@ -257,19 +209,395 @@ namespace nl.fhict.IntelliCloud.Business.Manager
             }
         }
 
+        /// <summary>
+        /// Method for getting a user based on it's ID or a list of UserSource instances.
+        /// All parameters are optional - if no parameters are provided the currently logged in user will be returned.
+        /// </summary>
+        /// <param name="id">The ID of the user. Optional.</param>
+        /// <param name="sources">A list of UserSource instances. Optional.</param>
+        /// <returns>The matched user based on the values of the parameters, otherwise the currently logged in user.</returns>
+        public User GetUser(string id = null, IList<UserSource> sources = null)
+        {
+            // Validate supplied input data
+            if (id != null) Validation.IdCheck(id);
+
+            // User object that will contain the User object on success
+            User user = null;
+
+            // Check if any input data is supplied
+            if (id == null && sources == null)
+            {
+                // No input data is supplied, return the currently logged in user
+                user = this.GetAuthorizedUser();
+            }
+            else
+            {
+                // Get the user from the context
+                using (IntelliCloudContext context = new IntelliCloudContext())
+                {
+                    UserEntity userEntity = null;
+
+                    // Build the query
+                    var query = context.Users
+                                .Include(u => u.Sources)
+                                .Include(u => u.Sources.Select(s => s.SourceDefinition));
+
+                    // Check if an id has been supplied
+                    if (id != null)
+                    {
+                        int iId = Convert.ToInt32(id);
+                        query = query.Where(u => u.Id == iId);
+                        userEntity = query.SingleOrDefault();
+                    }
+
+                    // Check if sources have been supplied
+                    if (sources != null && sources.Count > 0)
+                        userEntity = query.ToList().Where(u => u.Sources.Any(s => sources.Any(us => us.Name == s.SourceDefinition.Name && us.Value == s.Value))).SingleOrDefault();
+                    else
+                        userEntity = query.SingleOrDefault();
+
+                    // Convert the UserEntity (if found) to an instance of class User and set in the reference
+                    if (userEntity != null)
+                        user = userEntity.AsUser();
+                }
+            }
+
+            // Return the User object
+            return user;
+        }
+ 
+        #endregion
+
+        public User GetUser(string userId) {
+
+            // Validate the userId
+            base.Validation.IdCheck(userId);
+
+            // Get the user from the context
+            using (IntelliCloudContext context = new IntelliCloudContext())
+            {
+                // convert id to int
+                int parsedId = Convert.ToInt32(userId);
+
+                // Build the query
+                var query = context.Users
+                    .Where(u => u.Id == parsedId);
+
+                // execute the query and convert the userEntities to Users.
+                return query.Single().AsUser();
+            }
+        }
+
+        /// <summary>
+        /// Retrieves the users which match the filter.
+        /// </summary>
+        /// <param name="after">Optional: Only users that are created or modified after this date time are retrieved,
+        /// in UTC time.</param>
+        /// <returns>Returns the users which match the filter.</returns>
         public IList<User> GetUsers(DateTime? after)
         {
-            throw new NotImplementedException();
+            //// Get the user from the context
+            using (IntelliCloudContext context = new IntelliCloudContext())
+            {
+                // Build the query
+                var query = context.Users;
+
+
+                // Check if the after filter needs to be applied.
+                if (after.Value != null)
+                {
+                    query.Where(u => after.Value.CompareTo(u.CreationTime) < 0);
+                }
+
+                // execute the query and convert the userEntities to Users.
+                return query.ToList().AsUsers();
+            }
         }
 
-        public IList<Keyword> GetKeywords(string id)
+        /// <summary>
+        /// Retrieves the keywords for the user with the given identifier.
+        /// </summary>
+        /// <param name="userId">The identifier of the user.</param>
+        /// <returns>Returns the keywords for the user with the given identifier.</returns>
+        public IList<Keyword> GetKeywords(string userId)
         {
-            throw new NotImplementedException();
+            // Validate the userId
+            base.Validation.IdCheck(userId);
+
+            //// Get the keywords from the context
+            using (IntelliCloudContext context = new IntelliCloudContext())
+            {
+                // convert id to int
+                int parsedId = Convert.ToInt32(userId);
+
+                // Build the query
+                var query = context.UserKeys
+                        .Where(uk => uk.User.Id == parsedId)
+                        .Select(uk => uk.Keyword);
+
+                // execute the query and convert the keywordsEntities to Keywords.
+                return query.ToList().AsKeywords();
+            }
         }
 
-        public IList<Question> GetQuestions(string id, DateTime? after)
+        /// <summary>
+        /// Retrieves the questions for the user with the given identifier. The retrieved questions have keywords which
+        /// match with one or more keywords of the user. Also questions which don't match with any user are retrieved.
+        /// Only questions with state <see cref="QuestionState.Open"/> and <see cref="QuestionState.UpForAnswer"/> are 
+        /// returned.
+        /// </summary>
+        /// <param name="userId">The identifier of the user.</param>
+        /// <param name="after">Optional: Only questions that are created or modified after this date time are retrieved,
+        /// in UTC time.</param>
+        /// <returns>Returns the questions for the user with the given identifier.</returns>
+        public IList<Question> GetQuestions(string userId, DateTime? after)
         {
-            throw new NotImplementedException();
+            // Validate the userId
+            base.Validation.IdCheck(userId);
+
+            //// Get the questions from the context
+            using (IntelliCloudContext context = new IntelliCloudContext())
+            {
+                // convert id to int
+                int parsedId = Convert.ToInt32(userId);
+
+                // Build the query
+                var query = context.Questions
+                        // get questions claimed by the given user or unclaimed questions
+                        .Where(q => q.Answerer.Id == parsedId || q.Answerer == null)
+                        // get only open and up for answer questions
+                        .Where(q => q.QuestionState == QuestionState.Open || q.QuestionState == QuestionState.UpForAnswer)
+                        // get answers which contain keywords that match one or more of the given users keywords
+                        .Where(q => context.QuestionKeys
+                                            // get answer keys for the given answer
+                                            .Where(qk => qk.Id == q.Id)
+                                            // select the name of the keyword which serves as the actual keyword
+                                            .Select(qk => qk.Keyword.Name)
+                                            // check if any keyword of this answer matches any of the users keywords
+                                            .Any(k => k.Equals(context.UserKeys
+                                                                       // get only user keywords for the given user
+                                                                       .Where(u => u.Id == parsedId)
+                                                                       // get any of the users keywords and match them
+                                                                       .Any()
+                                                               )
+                                                )
+                                            // or get answers that have keywords which don't match any of all the user keywords
+                                            || !context.AnswerKeys
+                                                        // get answer keys for the given answer
+                                                        .Where(ak => ak.Id == q.Id)
+                                                        // select the name of the keyword which serves as the actual keyword
+                                                        .Select(ak => ak.Keyword.Name)
+                                                        // check if any keyword of this answer matches any of the users keywords
+                                                        .Any(k => k.Equals(context.UserKeys
+                                                                                  // get any of the users keywords and match them
+                                                                                  .Any()
+                                                                          )
+                                                           )
+                                );
+
+
+                // optionallty get only questions after certain date
+                if (after.Value != null)
+                    query.Where(q => after.Value.CompareTo(q.CreationTime) < 0);
+
+                // execute the query and convert the questionEntities to Questions.
+                return query.ToList().AsQuestions();
+            }
+        }
+
+        /// <summary>
+        /// Retrieves the answers which received feedback for the user with the given identifier. The feedback applies
+        /// to an answer which has keywords which match with one or more keywords of the user. Also feedback which don't
+        /// match with any user is retrieved. Only answers which have open feedback items are returned.
+        /// </summary>
+        /// <param name="userId">The identifier of the user.</param>
+        /// <param name="after">Optional: Only answers that are created or modified after this date time are retrieved,
+        /// in UTC time.</param>
+        /// <returns>Returns the feedback for the user with the given identifier.</returns>
+        public IList<Answer> GetFeedbacks(string userId, DateTime? after)
+        {
+            // Validate the userId
+            base.Validation.IdCheck(userId);
+
+            //// Get the answers from the context
+            using (IntelliCloudContext context = new IntelliCloudContext())
+            {
+                // convert id to int
+                int parsedId = Convert.ToInt32(userId);
+
+                // Build the query
+                var query  = context.Feedbacks
+                                    // get only open feedback items
+                                    .Where(f => f.FeedbackState == FeedbackState.Open)
+                                    // select the answers for the open feedback items
+                                    .Select(f => f.Answer)
+                                    // get only the answers for the given user
+                                    .Where(a => a.Id == parsedId)
+                                    // get answers which contain keywords that match one or more of the given users keywords
+                                    .Where(a => context.AnswerKeys
+                                                        // get answer keys for the given answer
+                                                        .Where(ak => ak.Id == a.Id)
+                                                        // select the name of the keyword which serves as the actual keyword
+                                                        .Select(ak => ak.Keyword.Name)
+                                                        // check if any keyword of this answer matches any of the users keywords
+                                                        .Any(k => k.Equals(context.UserKeys
+                                                                                   // get only user keywords for the given user
+                                                                                   .Where(u => u.Id == parsedId)
+                                                                                   // get any of the users keywords and match them
+                                                                                   .Any()
+                                                                          )
+                                                           )   
+                                            // or get answers that have keywords which don't match any of all the user keywords
+                                            || !context.AnswerKeys
+                                                        // get answer keys for the given answer
+                                                        .Where(ak => ak.Id == a.Id)
+                                                        // select the name of the keyword which serves as the actual keyword
+                                                        .Select(ak => ak.Keyword.Name)
+                                                        // check if any keyword of this answer matches any of the users keywords
+                                                        .Any(k => k.Equals(context.UserKeys
+                                                                                  // get any of the users keywords and match them
+                                                                                  .Any()
+                                                                          )
+                                                           )
+                                           );
+
+
+                // optionallty get only answers after certain date
+                if (after.Value != null)
+                    query.Where(a => after.Value.CompareTo(a.CreationTime) < 0);
+
+                // execute the query and convert the questionEntities to Questions.
+                return query.ToList().AsAnswers();
+            }
+        }
+
+        /// <summary>
+        /// Retrieves the answers that are under review which can be reviewed by the user with the given identifier. 
+        /// An answer can be reviewed by a user when one or more of the keywords of the answer match with the keywords
+        /// of the user or if the keywords of the answer don't match with any user. Only answers which have open review
+        /// items are returned.
+        /// </summary>
+        /// <param name="userId">The identifier of the user.</param>
+        /// <param name="after">Optional: Only answers that are created or modified after this date time are retrieved,
+        /// in UTC time.</param>
+        /// <returns>Returns the reviewable answers for the user with the given identifier.</returns>
+        public IList<Answer> GetReviews(string userId, DateTime? after)
+        {
+            // Validate the userId
+            base.Validation.IdCheck(userId);
+
+            //// Get the answers from the context
+            using (IntelliCloudContext context = new IntelliCloudContext())
+            {
+                // convert id to int
+                int parsedId = Convert.ToInt32(userId);
+
+                // Build the query
+                var query = context.Reviews
+                    // get only open review items
+                    .Where(r => r.ReviewState == ReviewState.Open)
+                    // select the answers for the open feedbacks
+                    .Select(r => r.Answer)
+                    // get only the answers for the given user
+                    .Where(a => a.Id == parsedId)
+                    // get only answer that are under review.
+                    .Where(a => a.AnswerState == AnswerState.UnderReview)
+                    // get answers which contain keywords that match one or more of the given users keywords
+                    .Where(a => context.AnswerKeys
+                                // get answer keys for the given answer
+                                .Where(ak => ak.Id == a.Id)
+                                // select the name of the keyword which serves as the actual keyword
+                                .Select(ak => ak.Keyword.Name)
+                                // check if any keyword of this answer matches any of the users keywords
+                                .Any(k => k.Equals(context.UserKeys
+                                    // get only user keywords for the given user
+                                                          .Where(u => u.Id == parsedId)
+                                    // get any of the users keywords and match them
+                                                          .Any()
+                                                   )
+                                    )
+                            // or get answers that have keywords which don't match any of all the user keywords
+                            || !context.AnswerKeys
+                                // get answer keys for the given answer
+                                .Where(ak => ak.Id == a.Id)
+                                // select the name of the keyword which serves as the actual keyword
+                                .Select(ak => ak.Keyword.Name)
+                                // check if any keyword of this answer matches any of the users keywords
+                                .Any(k => k.Equals(context.UserKeys
+                                                          // get any of the users keywords and match them
+                                                          .Any()
+                                                   )
+                                    )
+                           );
+
+                // optionallty get only answers after certain date
+                if (after.Value != null)
+                    query.Where(a => after.Value.CompareTo(a.CreationTime) < 0);
+
+                // execute the query and convert the questionEntities to Questions.
+                return query.ToList().AsAnswers();
+            }
+        }
+
+        /// <summary>
+        /// Assign a keyword to the user with the given identifier.
+        /// </summary>
+        /// <param name="userId">The identifier of the user.</param>
+        /// <param name="keyword">The keyword which is assigned to the user.</param>
+        /// <param name="affinity">The affinity the user has with the assigned keyword, on a scale of 1 to 10.</param>
+        public void AssignKeyword(string userId, string keyword, int affinity)
+        {
+            // validate the given id
+            base.Validation.IdCheck(userId);
+            // validate given keyword string
+            base.Validation.StringCheck(keyword);
+            // validate given affinity level
+            base.Validation.AffinityCheck(affinity);
+
+            // Assign keyword to a user
+            using (IntelliCloudContext context = new IntelliCloudContext())
+            {
+                // convert id to int
+                int parsedId = Convert.ToInt32(userId);
+
+                UserEntity user;
+
+                try
+                {
+                    // get user which gets new key
+                    user = context.Users
+                        .Where(u => u.Id == parsedId)
+                        .Single();
+                }
+                catch (InvalidOperationException)
+                {
+                    throw new NotFoundException("No user found with the id: " + parsedId);
+                }
+
+                // create the new keyword entity
+                KeywordEntity keywordEntity = new KeywordEntity()
+                {
+                    CreationTime = DateTime.UtcNow,
+                    Name = keyword
+                };
+
+                // add and save new keyword
+                context.Keywords.Add(keywordEntity);
+                context.SaveChanges();
+
+                // create new user to keyword match
+                UserKeyEntity entity = new UserKeyEntity()
+                {
+                    CreationTime = DateTime.UtcNow,
+                    Affinity = affinity,
+                    User = user,
+                    Keyword = keywordEntity
+                };
+
+                // add and save new user to keyword match
+                context.UserKeys.Add(entity);
+                context.SaveChanges();
+            }
         }
     }
 }

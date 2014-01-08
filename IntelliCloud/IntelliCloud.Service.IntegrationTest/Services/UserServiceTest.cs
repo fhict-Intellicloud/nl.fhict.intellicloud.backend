@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
+using nl.fhict.IntelliCloud.Common.CustomException;
 
 namespace nl.fhict.IntelliCloud.Service.IntegrationTest
 {
@@ -66,7 +67,19 @@ namespace nl.fhict.IntelliCloud.Service.IntegrationTest
                     Type = UserType.Customer,
                     CreationTime = DateTime.UtcNow
                 };
+
+                // user to validate the optional after parameters
+                UserEntity oldUser = new UserEntity()
+                {
+                    FirstName = "Name",
+                    Infix = "of",
+                    LastName = "old employee",
+                    Avatar = "http://domain.com/avatar1.jpg",
+                    Type = UserType.Customer,
+                    CreationTime = new DateTime(2010, 11, 12, 13, 14, 15)
+                };
                 context.Users.Add(this.userEntity);
+                context.Users.Add(oldUser);
 
                 // Create a new source for the user (email address)
                 SourceEntity userMailSource = new SourceEntity()
@@ -80,6 +93,8 @@ namespace nl.fhict.IntelliCloud.Service.IntegrationTest
 
                 // Save the changes to the context
                 context.SaveChanges();
+
+
             }
         }
 
@@ -113,55 +128,18 @@ namespace nl.fhict.IntelliCloud.Service.IntegrationTest
         }
 
         #region Tests
-
-        /// <summary>
-        /// CreateUser test method.
-        /// </summary>
-        [TestMethod]
-        public void CreateUserTest()
-        {
-            try
-            {
-                // Create a new user
-                UserType userType = UserType.Customer;
-                IList<UserSource> sources = new List<UserSource>();
-                sources.Add(new UserSource() { Name = "Mail", Value = "customer2@domain.com" });
-                string firstName = "Name";
-                string infix = "of";
-                string lastName = "second customer";
-                string avatar = "http://domain.com/avatar2.jpg";
-                this.service.CreateUser(userType, sources, firstName, infix, lastName, avatar);
-
-                // Check if the user was added and contains the correct data
-                using (IntelliCloudContext context = new IntelliCloudContext())
-                {
-                    UserEntity entity = context.Users
-                                        .Include(u => u.Sources)
-                                        .Include(u => u.Sources.Select(s => s.SourceDefinition))
-                                        .Single(u => u.FirstName.Equals(firstName) && u.Infix.Equals(infix) && u.LastName.Equals(lastName));
-
-                    Assert.AreEqual(entity.Type, userType);
-                    Assert.AreEqual(entity.Avatar, avatar);
-                    entity.Sources.Select(s => s.SourceDefinition.Name.Equals(sources[0].Name) && s.Value.Equals(sources[0].Value));
-                }
-            }
-            catch (Exception e)
-            {
-                Assert.Fail(e.Message);
-            }
-        }
-
+        #region GetUserTest
         /// <summary>
         /// GetUser test method that checks if a User is returned when an id has been supplied.
         /// </summary>
         [TestMethod]
-        public void GetUserTest_ById()
+        public void GetUserTest()
         {
             try
             {
                 // Get the user from the context
                 int userId = this.userEntity.Id;
-                User user = this.service.GetUser(userId.ToString(), null);
+                User user = this.service.GetUser(userId.ToString());
 
                 // Check if the correct data is returned
                 Assert.AreEqual(user.FirstName, this.userEntity.FirstName);
@@ -169,40 +147,119 @@ namespace nl.fhict.IntelliCloud.Service.IntegrationTest
                 Assert.AreEqual(user.LastName, this.userEntity.LastName);
                 Assert.AreEqual(user.Type, this.userEntity.Type);
                 Assert.AreEqual(user.Avatar, this.userEntity.Avatar);
-                user.Sources.Select(s => s.SourceDefinition.Name.Equals("Mail") && s.Value.Equals("customer1@domain.com"));
+                user.Sources.Select(s => s.Name.Equals("Mail") && s.Value.Equals("customer1@domain.com"));
             }
             catch (Exception e)
             {
                 Assert.Fail(e.Message);
             }
+        }
+
+        #endregion GetUserTest
+
+        #region Error handling tests
+
+        /// <summary>
+        /// Test to validate an Exception is thrown when no user can be found.
+        /// </summary>
+        [TestMethod]
+        [TestCategory("nl.fhict.IntelliCloud.Service.IntegrationTest")]
+        [ExpectedException(typeof(InvalidOperationException))]
+        public void NoAnswerFound()
+        {
+            this.service.GetUser("1000");
         }
 
         /// <summary>
-        /// GetUser test method that checks if a User is returned when only a source has been supplied.
+        /// Test if an ArgumentException is thrown when a negative id is given.
         /// </summary>
         [TestMethod]
-        public void GetUserTest_BySource()
+        [TestCategory("nl.fhict.IntelliCloud.Service.IntegrationTest")]
+        [ExpectedException(typeof(ArgumentException))]
+        public void invalidId_Negative()
         {
-            try
-            {
-                // Get the user from the context
-                List<UserSource> sources = new List<UserSource>();
-                sources.Add(new UserSource() { Name = "Mail", Value = "customer1@domain.com" });
-                User user = this.service.GetUser(null, sources);
-
-                // Check if the correct data is returned
-                Assert.AreEqual(user.FirstName, this.userEntity.FirstName);
-                Assert.AreEqual(user.Infix, this.userEntity.Infix);
-                Assert.AreEqual(user.LastName, this.userEntity.LastName);
-                Assert.AreEqual(user.Type, this.userEntity.Type);
-                Assert.AreEqual(user.Avatar, this.userEntity.Avatar);
-                user.Sources.Select(s => s.SourceDefinition.Name.Equals("Mail") && s.Value.Equals("customer1@domain.com"));
-            }
-            catch (Exception e)
-            {
-                Assert.Fail(e.Message);
-            }
+            this.service.GetUser("-1");
         }
+
+        /// <summary>
+        /// Test if an ArgumentException is thrown when a string that is not a number is given.
+        /// </summary>
+        [TestMethod]
+        [TestCategory("nl.fhict.IntelliCloud.Service.IntegrationTest")]
+        [ExpectedException(typeof(ArgumentException))]
+        public void invalidId_NotANumber()
+        {
+            this.service.GetUser("one");
+        }
+
+        /// <summary>
+        /// Test if an ArgumentException is thrown when a empty string is given.
+        /// </summary>
+        [TestMethod]
+        [TestCategory("nl.fhict.IntelliCloud.Service.IntegrationTest")]
+        [ExpectedException(typeof(ArgumentException))]
+        public void invalidString_EmptyString()
+        {
+            this.service.AssignKeyword(this.userEntity.Id.ToString(), "", 3);
+        }
+
+        /// <summary>
+        /// Test if an ArgumentException is thrown when a string with only spaces is given.
+        /// </summary>
+        [TestMethod]
+        [TestCategory("nl.fhict.IntelliCloud.Service.IntegrationTest")]
+        [ExpectedException(typeof(ArgumentException))]
+        public void invalidString_spacesString()
+        {
+            this.service.AssignKeyword(this.userEntity.Id.ToString(), " ", 3);
+        }
+
+        /// <summary>
+        /// Test if an ArgumentException is thrown when a null value is given as a string.
+        /// </summary>
+        [TestMethod]
+        [TestCategory("nl.fhict.IntelliCloud.Service.IntegrationTest")]
+        [ExpectedException(typeof(ArgumentException))]
+        public void invalidString_Null()
+        {
+            this.service.AssignKeyword(this.userEntity.Id.ToString(), null, 3);
+        }
+
+        /// <summary>
+        /// Test if an ArgumentException is thrown when a value below 0 is given.
+        /// </summary>
+        [TestMethod]
+        [TestCategory("nl.fhict.IntelliCloud.Service.IntegrationTest")]
+        [ExpectedException(typeof(ArgumentException))]
+        public void invalidAffinity_toLow()
+        {
+            this.service.AssignKeyword(this.userEntity.Id.ToString(), "keyword", -1);
+        }
+
+        /// <summary>
+        /// Test if an ArgumentException is thrown when a value above 10 is given.
+        /// </summary>
+        [TestMethod]
+        [TestCategory("nl.fhict.IntelliCloud.Service.IntegrationTest")]
+        [ExpectedException(typeof(ArgumentException))]
+        public void invalidAffinity_toHigh()
+        {
+            this.service.AssignKeyword(this.userEntity.Id.ToString(), "keyword", 11);
+        }
+
+
+        /// <summary>
+        /// Test if a NotFoundException is thrown when attempting to add keyword to inexisting answer.
+        /// </summary>
+        [TestMethod]
+        [TestCategory("nl.fhict.IntelliCloud.Service.IntegrationTest")]
+        [ExpectedException(typeof(NotFoundException))]
+        public void UpdateAnswer_NoAnswerFound()
+        {
+            this.service.AssignKeyword("1000", "keyword", 5);
+        }
+
+        #endregion Error handling tests
 
         #endregion Tests
 
