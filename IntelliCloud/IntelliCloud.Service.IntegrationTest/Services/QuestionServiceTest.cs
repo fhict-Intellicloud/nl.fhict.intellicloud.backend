@@ -46,6 +46,8 @@ namespace nl.fhict.IntelliCloud.Service.IntegrationTest
         /// </summary>
         private void initializeTestData()
         {
+            cleanDatabase();
+
             using (IntelliCloudContext ctx = new IntelliCloudContext())
             {
                 UserEntity newUser = new UserEntity();
@@ -91,7 +93,7 @@ namespace nl.fhict.IntelliCloud.Service.IntegrationTest
 
                 newEntity = new QuestionEntity();
                 newEntity.IsPrivate = false;
-                newEntity.LanguageDefinition = new LanguageDefinitionEntity { Name = "English", ResourceName = "English" };
+                newEntity.LanguageDefinition = new LanguageDefinitionEntity { Name = "Dutch", ResourceName = "Dutch" };
                 newEntity.QuestionState = Common.DataTransfer.QuestionState.Closed;
                 newEntity.Source = new QuestionSourceEntity { Source = newSource, PostId = "" };
                 newEntity.Title = "this is a test question version 2";
@@ -129,6 +131,10 @@ namespace nl.fhict.IntelliCloud.Service.IntegrationTest
         [TestCleanup]
         public void Cleanup()
         {
+            cleanDatabase();
+        }
+
+        private void cleanDatabase() {
             using (IntelliCloudContext ctx = new IntelliCloudContext())
             {
                 ctx.Questions.RemoveRange(ctx.Questions.ToList());
@@ -136,6 +142,9 @@ namespace nl.fhict.IntelliCloud.Service.IntegrationTest
                 ctx.Sources.RemoveRange(ctx.Sources.ToList());
                 ctx.SourceDefinitions.RemoveRange(ctx.SourceDefinitions.ToList());
                 ctx.LanguageDefinitions.RemoveRange(ctx.LanguageDefinitions.ToList());
+                ctx.Keywords.RemoveRange(ctx.Keywords.ToList());
+                ctx.QuestionKeys.RemoveRange(ctx.QuestionKeys.ToList());
+
                 ctx.Users.RemoveRange(ctx.Users.ToList());
 
                 ctx.SaveChanges();
