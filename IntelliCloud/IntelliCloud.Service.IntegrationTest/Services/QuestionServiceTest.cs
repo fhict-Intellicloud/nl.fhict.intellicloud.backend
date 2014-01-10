@@ -62,6 +62,7 @@ namespace nl.fhict.IntelliCloud.Service.IntegrationTest
                 UserEntity newEmployee = new UserEntity();
                 newEmployee.CreationTime = DateTime.UtcNow;
                 newEmployee.FirstName = "employee";
+                newEmployee.LastName = "emp";
                 newEmployee.Type = Common.DataTransfer.UserType.Employee;
 
                 ctx.Users.Add(newEmployee);
@@ -91,6 +92,18 @@ namespace nl.fhict.IntelliCloud.Service.IntegrationTest
 
                 ctx.Questions.Add(newEntity);
 
+                AnswerEntity answer = new AnswerEntity();
+                answer.AnswerState = AnswerState.Ready;
+                answer.Content = "Do this then that and a backflip";
+                answer.CreationTime = DateTime.UtcNow;
+                answer.IsPrivate = false;
+                answer.LanguageDefinition = new LanguageDefinitionEntity { Name = "Dutch", ResourceName = "Dutch" };
+                answer.User = this.employee;
+
+                ctx.Answers.Add(answer);
+
+                ctx.SaveChanges();
+
                 newEntity = new QuestionEntity();
                 newEntity.IsPrivate = false;
                 newEntity.LanguageDefinition = new LanguageDefinitionEntity { Name = "Dutch", ResourceName = "Dutch" };
@@ -101,6 +114,8 @@ namespace nl.fhict.IntelliCloud.Service.IntegrationTest
                 newEntity.Content = "this is the question i want to ask, please help me?";
                 newEntity.CreationTime = DateTime.UtcNow;
                 newEntity.FeedbackToken = "feedbackyeah!!@#$%^&*d()";
+                newEntity.Answerer = this.employee;
+                newEntity.Answer = answer;
                 ctx.Questions.Add(newEntity);
                 ctx.SaveChanges();
 
@@ -144,6 +159,7 @@ namespace nl.fhict.IntelliCloud.Service.IntegrationTest
                 ctx.LanguageDefinitions.RemoveRange(ctx.LanguageDefinitions.ToList());
                 ctx.Keywords.RemoveRange(ctx.Keywords.ToList());
                 ctx.QuestionKeys.RemoveRange(ctx.QuestionKeys.ToList());
+                ctx.Answers.RemoveRange(ctx.Answers.ToList());
 
                 ctx.Users.RemoveRange(ctx.Users.ToList());
 
@@ -165,7 +181,7 @@ namespace nl.fhict.IntelliCloud.Service.IntegrationTest
             {
                 int questionId = this.entity.Id;
                 var question = service.GetQuestion(questionId.ToString());
-                Assert.AreEqual(questionId, question.Id);
+                Assert.AreEqual(this.entity.Content, question.Content);
 
             }
             catch (Exception e)
@@ -256,28 +272,6 @@ namespace nl.fhict.IntelliCloud.Service.IntegrationTest
 
         #endregion CreateQuestion test
 
-        #region GetQuestionByFeedbackToken tests
-        /// <summary>
-        /// Test to validate GetQuestionByFeedbackToken.
-        /// </summary>
-        [TestMethod]
-        [TestCategory("nl.fhict.IntelliCloud.Service.IntegrationTest")]
-        public void GetQuestionByFeedbackTokenTest()
-        {
-            try
-            {
-                string feedbackToken = this.entity.FeedbackToken;
-                var question = service.GetQuestionByFeedbackToken(feedbackToken);
-
-                Assert.AreEqual(this.entity.Id, question.Id);
-            }
-            catch (Exception e)
-            {
-                Assert.Fail(e.Message);
-            }
-        }
-        #endregion GetQuestionByFeedbackToken tests
-
         #region UpdateQuestion
         /// <summary>
         /// Test to validate the UpdateQuestion.
@@ -321,7 +315,7 @@ namespace nl.fhict.IntelliCloud.Service.IntegrationTest
                 string questionId = this.entity.Id.ToString();
                 User u = this.service.GetAsker(questionId);
 
-                Assert.AreEqual(u.Id, this.entity.User.Id);
+                Assert.AreEqual(u.LastName, this.entity.User.LastName);
             }
             catch (Exception e)
             {
@@ -343,7 +337,7 @@ namespace nl.fhict.IntelliCloud.Service.IntegrationTest
                 string questionId = this.entity.Id.ToString();
                 User u = this.service.GetAnswerer(questionId);
 
-                Assert.AreEqual(u.Id, this.entity.Answerer.Id);
+                Assert.AreEqual(u.LastName, this.entity.Answerer.LastName);
             }
             catch (Exception e)
             {
@@ -365,7 +359,7 @@ namespace nl.fhict.IntelliCloud.Service.IntegrationTest
                 string questionId = this.entity.Id.ToString();
                 Answer a = this.service.GetAnswer(questionId);
 
-                Assert.AreEqual(a.Id, this.entity.Answer.Id);
+                Assert.AreEqual(a.Content, this.entity.Answer.Content);
             }
             catch (Exception e)
             {

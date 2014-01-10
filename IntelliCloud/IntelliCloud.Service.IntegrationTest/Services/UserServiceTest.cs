@@ -219,7 +219,7 @@ namespace nl.fhict.IntelliCloud.Service.IntegrationTest
         /// </summary>
         [TestMethod]
         [TestCategory("nl.fhict.IntelliCloud.Service.IntegrationTest")]
-        [ExpectedException(typeof(ArgumentException))]
+        [ExpectedException(typeof(ArgumentNullException))]
         public void invalidString_Null()
         {
             this.service.AssignKeyword(this.userEntity.Id.ToString(), null, 3);
