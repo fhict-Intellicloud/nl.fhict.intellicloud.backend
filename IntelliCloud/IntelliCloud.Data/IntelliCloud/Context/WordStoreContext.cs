@@ -10,7 +10,7 @@ namespace nl.fhict.IntelliCloud.Data.IntelliCloud.Context
     /// <summary>
     /// A data context providing acces to wordstore service.
     /// </summary>
-    public class WordStoreContext
+    public class WordStoreContext: IDisposable
     {
         /// <summary>
         /// Function to call the WordStore service ResolveWord while ensuring all resources are 
@@ -42,6 +42,13 @@ namespace nl.fhict.IntelliCloud.Data.IntelliCloud.Context
                 client.Abort();
                 throw;
             }
+        }
+
+        /// <summary>
+        /// Nothing special needs to be disposed
+        /// </summary>
+        public void Dispose()
+        {
         }
     }
 }

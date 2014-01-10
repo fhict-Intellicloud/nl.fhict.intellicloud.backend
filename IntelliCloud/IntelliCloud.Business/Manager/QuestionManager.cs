@@ -53,6 +53,7 @@ namespace nl.fhict.IntelliCloud.Business.Manager
                                                                  .Include(q => q.User.Sources)
                                                                  .Include(q => q.Answerer)
                                                                  .Include(q => q.Answerer.Sources)
+                                                                 .Include(q => q.LanguageDefinition)
                                                                  .Include(q => q.User.Sources.Select(s => s.SourceDefinition))
                                          where q.Id == convertedId
                                          select q).SingleOrDefault();
@@ -75,13 +76,13 @@ namespace nl.fhict.IntelliCloud.Business.Manager
             using (IntelliCloudContext ctx = new IntelliCloudContext())
             {
                 var questionEntities = ctx.Questions
-                                                                 .Include(q => q.Source)
-                                                                 .Include(q => q.User)
-                                                                 .Include(q => q.User.Sources)
-                                                                 .Include(q => q.Answerer)
-                                                                 .Include(q => q.Answerer.Sources)
-                                                                 .Include(q => q.QuestionState)
-                                                                 .Include(q => q.User.Sources.Select(s => s.SourceDefinition));
+                                        .Include(q => q.Source)
+                                        .Include(q => q.User)
+                                        .Include(q => q.User.Sources)
+                                        .Include(q => q.Answerer)
+                                        .Include(q => q.Answerer.Sources)
+                                        .Include(q => q.LanguageDefinition)
+                                        .Include(q => q.User.Sources.Select(s => s.SourceDefinition));
 
                 if (state == null)
                     return questionEntities
@@ -191,7 +192,7 @@ namespace nl.fhict.IntelliCloud.Business.Manager
 
 
                 // Send auto response
-                if (!match)
+                if (match)
                 {
                     this.SendAnswerFactory.LoadPlugin(questionEntity.Source.Source.SourceDefinition)
                         .SendQuestionReceived(questionEntity);
@@ -220,6 +221,7 @@ namespace nl.fhict.IntelliCloud.Business.Manager
                                                                  .Include(q => q.User.Sources)
                                                                  .Include(q => q.Answerer)
                                                                  .Include(q => q.Answerer.Sources)
+                                                                 .Include(q => q.LanguageDefinition)
                                                                  .Include(q => q.User.Sources.Select(s => s.SourceDefinition))
                                          where q.FeedbackToken == feedbackToken
                                          select q).SingleOrDefault();
@@ -253,6 +255,13 @@ namespace nl.fhict.IntelliCloud.Business.Manager
             {
                 // Get the feedback entity from the context
                 QuestionEntity question = context.Questions
+                                          .Include(q => q.Source)
+                                          .Include(q => q.User)
+                                          .Include(q => q.User.Sources)
+                                          .Include(q => q.Answerer)
+                                          .Include(q => q.Answerer.Sources)
+                                          .Include(q => q.LanguageDefinition)
+                                          .Include(q => q.User.Sources.Select(s => s.SourceDefinition))
                                           .SingleOrDefault(q => q.Id == convertedId);
 
                 if (question == null)
@@ -260,7 +269,6 @@ namespace nl.fhict.IntelliCloud.Business.Manager
 
                 UserEntity user = context.Users
                                          .Include(u => u.Sources)
-                                         .Include(u => u.Type)
                                          .SingleOrDefault(u => u.Id == employeeId);
 
                 if (user == null)
@@ -303,10 +311,12 @@ namespace nl.fhict.IntelliCloud.Business.Manager
         /// <returns>A list containing the resolved words that were contained in the question</returns>
         internal IList<Word> ResolveWords(String question)
         {
-            IWordService service = new WordServiceClient();
-            return ConvertQuestion(question)
-                .SelectMany(x => service.ResolveWord(x))
-                .ToList();
+            using (WordStoreContext context = new WordStoreContext())
+            {
+                return ConvertQuestion(question)
+                    .SelectMany(x => context.ResolveWord(x))
+                    .ToList();
+            }
         }
 
         /// <summary>
@@ -354,6 +364,8 @@ namespace nl.fhict.IntelliCloud.Business.Manager
             {
                 return ctx.Questions
                     .Include(q => q.User)
+                    .Include(q => q.User.Sources)
+                    .Include(q => q.User.Type)
                     .Where(q => q.Id == convertedId)
                     .Select(q => q.User)
                     .Single()
@@ -375,6 +387,8 @@ namespace nl.fhict.IntelliCloud.Business.Manager
             {
                 return ctx.Questions
                     .Include(q => q.Answerer)
+                    .Include(q => q.Answerer.Sources)
+                    .Include(q => q.Answerer.Type)
                     .Where(q => q.Id == convertedId)
                     .Select(q => q.Answerer)
                     .Single()
@@ -397,8 +411,10 @@ namespace nl.fhict.IntelliCloud.Business.Manager
             {
                 return ctx.Questions
                     .Include(q => q.Answer)
+                    .Include(q => q.Answer.User)
                     .Where(q => q.Id == convertedId)
                     .Select(q => q.Answer)
+                    .Include(q => q.LanguageDefinition)
                     .Single()
                     .AsAnswer();
             }
@@ -419,7 +435,7 @@ namespace nl.fhict.IntelliCloud.Business.Manager
             {
                 return ctx.QuestionKeys
                     .Include(qk => qk.Question)
-                     .Include(qk => qk.Keyword)
+                    .Include(qk => qk.Keyword)
                     .Where(qk => qk.Question.Id == convertedId)
                     .Select(qk => qk.Keyword)
                     .ToList()
