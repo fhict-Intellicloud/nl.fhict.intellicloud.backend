@@ -1,3 +1,4 @@
+using System.Text.RegularExpressions;
 using nl.fhict.IntelliCloud.Common.DataTransfer;
 using nl.fhict.IntelliCloud.Data.IntelliCloud.Context;
 using nl.fhict.IntelliCloud.Data.IntelliCloud.Model;
@@ -6,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Data.Entity;
 using nl.fhict.IntelliCloud.Common.CustomException;
+using nl.fhict.IntelliCloud.Data.WordStoreService;
 
 namespace nl.fhict.IntelliCloud.Business.Manager
 {
@@ -46,6 +48,8 @@ namespace nl.fhict.IntelliCloud.Business.Manager
 
                 AnswerEntity answerentity = ctx.Answers
                     .Include(a => a.LanguageDefinition)
+                    .Include(a => a.User)
+                    .Include(a => a.OriginalAnswer)
                     .Single(a => a.Id == iId);
 
                 answer = answerentity.AsAnswer();
@@ -105,6 +109,7 @@ namespace nl.fhict.IntelliCloud.Business.Manager
                     .Include(q => q.Source)
                     .Include(q => q.Source.Source)
                     .Include(q => q.Source.Source.SourceDefinition)
+                    .Include(q => q.LanguageDefinition)
                     .Single(q => q.Id == questionId);
 
                 question.Answer = answerEntity;
@@ -157,9 +162,38 @@ namespace nl.fhict.IntelliCloud.Business.Manager
         public IList<Answer> GetAnswers(AnswerState state, string search)
         {
             Validation.StringCheck(search);
-            
-            // TODO implement Daniks algorithm
-            throw new NotImplementedException();
+
+            using (IntelliCloudContext ctx = new IntelliCloudContext())
+            {
+                // resolve the words
+                List<Word> resolvedWords = new List<Word>();
+                resolvedWords.AddRange(this.ResolveWords(search));
+
+                // determine language
+                Language lan = this.GetLanguage(resolvedWords);
+
+                // find keywords
+                List<Word> keywords = new List<Word>();
+                keywords.AddRange(this.FindMostLikelyKeywords(resolvedWords, lan));
+
+                List<string> keywordStringval = new List<string>();
+                foreach (Word w in keywords)
+                {
+                    keywordStringval.Add(w.Value);
+                }
+
+                // find answer with these keywords
+                List<AnswerEntity> answerEntities = (ctx.AnswerKeys
+                                                     .Where(ak => keywordStringval.Contains(ak.Keyword.Name))
+                                                     .Select(ak => ak.Answer))
+                                                     .Include(a => a.User)
+                                                     .Include(a => a.LanguageDefinition)
+                                                     .Include(a => a.OriginalAnswer)
+                                                     .ToList();
+
+                return answerEntities.AsAnswers();
+            }
+
         }
 
         public User GetAnswerer(string id)
@@ -256,5 +290,70 @@ namespace nl.fhict.IntelliCloud.Business.Manager
 
             return keywords;
         }
+
+
+        #region keyword algorith methods
+
+        /// <summary>
+        /// A function in which all punctuation is removed and all text is converted to lowercase.
+        /// Words with punctuation within them are ignored (eg. andré, hbo'er).
+        /// </summary>
+        /// <param name="question">A string representing a question that is to be decomposed.</param>
+        /// <returns> A list with each word in the sentence is returned. </returns>
+        internal IList<string> ConvertQuestion(String question)
+        {
+            //Regex that matches every single special character exluding the -
+            Regex regex = new Regex("[\\\\+=`~!@#$%^&*()_\\\\\\\\[\\]{}:\\\";\\?<>/.,|]");
+
+            string cleanQuestion = regex.Replace(question.ToLowerInvariant(), "");
+
+            return cleanQuestion.Split(' ')
+                .Where(x => x != "-" && x != "'")
+                .ToList();
+        }
+
+        /// <summary>
+        /// Function that evaluates all words in the given question to its wordtypes.
+        /// All verbs are converted to their full version. (eg worked --> to work, werkte --> werken)
+        /// </summary>
+        /// <param name="question">A given question for which all words are to be resolved to their type.</param>
+        /// <returns>A list containing the resolved words that were contained in the question</returns>
+        internal IList<Word> ResolveWords(String question)
+        {
+            IWordService service = new WordServiceClient();
+            return ConvertQuestion(question)
+                .SelectMany(x => service.ResolveWord(x))
+                .ToList();
+        }
+
+        /// <summary>
+        /// Function that finds the most likely keywords from a given question. This is done by returning all Nouns, Pronouns and Verbs. 
+        /// </summary>
+        /// <param name="question">A question from which one needs the keywords.</param>
+        /// <param name="language">The language one needs the found keywords of. </param>
+        /// <returns>Returns a List containing the most likely keywords from a given question.</returns>
+        internal IList<Word> FindMostLikelyKeywords(IList<Word> words, Language language)
+        {
+            return words
+                .Where(x =>
+                    (x.Type == WordType.Noun || x.Type == WordType.Verb || x.Type == WordType.Pronoun)
+                    && x.Language == language)
+                .ToList();
+        }
+
+        /// <summary>
+        /// Function to determine the langauge of set of words. 
+        /// </summary>
+        /// <param name="words">Set of words from which one needs to determine the language.</param>
+        /// <returns>Returns the language that is the most common within the given set.</returns>
+        internal Language GetLanguage(IList<Word> words)
+        {
+            var distinctLanguages = words
+                .GroupBy(x => x.Language)
+                .Select(x => new { Language = x.Key, Count = x.Distinct().Count() });
+
+            return distinctLanguages.Single(x => x.Count == distinctLanguages.Max(y => y.Count)).Language;
+        }
+        #endregion
     }
 }

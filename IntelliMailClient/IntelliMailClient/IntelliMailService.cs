@@ -6,7 +6,6 @@ using System.Linq;
 using System.ServiceProcess;
 using ActiveUp.Net.Mail;
 using System.Configuration;
-using System.Net.Mail;
 using System.Net;
 using System.IO;
 using Newtonsoft.Json;
@@ -121,8 +120,7 @@ namespace IntelliMailClient
                 serviceLog.WriteEntry("E-mail received from " + mail.From.Email);
                 try
                 {
-                    CreateQuestion(mail);                    
-                    SendConfirmationMail(mail.From);
+                    CreateQuestion(mail);                 
                 }
                 catch (Exception ex)
                 {
