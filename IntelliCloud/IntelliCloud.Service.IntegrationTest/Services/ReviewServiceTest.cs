@@ -97,6 +97,7 @@ namespace nl.fhict.IntelliCloud.Service.IntegrationTest
                 ctx.Reviews.RemoveRange(ctx.Reviews.ToList());
                 ctx.Answers.RemoveRange(ctx.Answers.ToList());
                 ctx.Users.RemoveRange(ctx.Users.ToList());
+                ctx.LanguageDefinitions.RemoveRange(ctx.LanguageDefinitions.ToList());
 
                 ctx.SaveChanges();
             }
