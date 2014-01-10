@@ -84,7 +84,9 @@ namespace nl.fhict.IntelliCloud.Business.Manager
                                                                  .Include(q => q.User.Sources.Select(s => s.SourceDefinition));
 
                 if (state == null)
-                    return questionEntities.ToList().AsQuestions();
+                    return questionEntities
+                        .ToList()
+                        .AsQuestions();
                 else
                 {
                     return questionEntities
