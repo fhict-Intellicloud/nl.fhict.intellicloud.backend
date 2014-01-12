@@ -4,6 +4,7 @@ using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using nl.fhict.IntelliCloud.Business.Manager;
 using nl.fhict.IntelliCloud.Data.WordStoreService;
+using nl.fhict.IntelliCloud.Business.Manager.Entities;
 
 namespace nl.fhict.IntelliCloud.Service.IntegrationTest
 {
@@ -156,15 +157,13 @@ namespace nl.fhict.IntelliCloud.Service.IntegrationTest
             string question = "hoe formatteer ik mijn computer als ik een virus heb";
             IList<Word> resolvedWords = this.manager.ResolveWords(question);
 
-            IList<Word> keywords = this.manager.FindMostLikelyKeywords(
-                this.manager.ResolveWords(question),
-                Language.Dutch);
+            IList<Keyword> keywords = this.manager.RetrieveKeywords( this.manager.ResolveWords(question), Language.Dutch);
 
             try
             {
-                keywords.Where(x => x.Value == "formateren" && x.Type == WordType.Verb && x.Language == Language.Dutch).Single();
-                keywords.Where(x => x.Value == "virus" && x.Type == WordType.Noun && x.Language == Language.Dutch).Single();
-                keywords.Where(x => x.Value == "computer" && x.Type == WordType.Noun && x.Language == Language.Dutch).Single();
+                keywords.Where(x => x.Word.Value == "formateren" && x.Word.Type == WordType.Verb && x.Word.Language == Language.Dutch).Single();
+                keywords.Where(x => x.Word.Value == "virus" && x.Word.Type == WordType.Noun && x.Word.Language == Language.Dutch).Single();
+                keywords.Where(x => x.Word.Value == "computer" && x.Word.Type == WordType.Noun && x.Word.Language == Language.Dutch).Single();
             }
             catch (Exception ex)
             {
@@ -182,15 +181,13 @@ namespace nl.fhict.IntelliCloud.Service.IntegrationTest
         {
             string question = "How do I format my computer when i have a virus";
 
-            IList<Word> keywords = this.manager.FindMostLikelyKeywords(
-                this.manager.ResolveWords(question),
-                Language.English);
+            IList<Keyword> keywords = this.manager.RetrieveKeywords( this.manager.ResolveWords(question), Language.English);
 
             try
             {
-                keywords.Where(x => x.Value == "to format" && x.Type == WordType.Verb && x.Language == Language.English).Single();
-                keywords.Where(x => x.Value == "virus" && x.Type == WordType.Noun && x.Language == Language.English).Single();
-                keywords.Where(x => x.Value == "computer" && x.Type == WordType.Noun && x.Language == Language.English).Single();
+                keywords.Where(x => x.Word.Value == "to format" && x.Word.Type == WordType.Verb && x.Word.Language == Language.English).Single();
+                keywords.Where(x => x.Word.Value == "virus" && x.Word.Type == WordType.Noun && x.Word.Language == Language.English).Single();
+                keywords.Where(x => x.Word.Value == "computer" && x.Word.Type == WordType.Noun && x.Word.Language == Language.English).Single();
             }
             catch (Exception ex)
             {
