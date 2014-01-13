@@ -127,7 +127,7 @@ namespace nl.fhict.IntelliCloud.Business.Manager
                 var language = this.GetLanguage(words);
                 var keywords = this.RetrieveKeywords(words, language);
 
-                var languageDefinitionEntity = ctx.LanguageDefinitions.Single(x => x.Name == this.ToLanguageString(language));
+                var languageDefinitionEntity = ctx.LanguageDefinitions.AsEnumerable().Single(x => x.Name == this.ToLanguageString(language));
                 var sourceEntity = this.GetOrCreateSourceEntity(ctx, source, reference);
 
                 QuestionEntity questionEntity = new QuestionEntity()
@@ -158,16 +158,16 @@ namespace nl.fhict.IntelliCloud.Business.Manager
                     });
 
                 ctx.QuestionKeys.AddRange(questionKeys);
-
-                questionEntity.Answer = this.GetMatch(ctx, questionEntity);
                 ctx.SaveChanges();
 
-                this.SendAnswerFactory.LoadPlugin(questionEntity.Source.Source.SourceDefinition)
-                    .SendQuestionReceived(questionEntity);
+                questionEntity.Answer = this.GetMatch(ctx, questionEntity);
+                
+                //this.SendAnswerFactory.LoadPlugin(questionEntity.Source.Source.SourceDefinition)
+                //    .SendQuestionReceived(questionEntity);
 
-                if (questionEntity.Answer != null)
-                    this.SendAnswerFactory.LoadPlugin(questionEntity.Source.Source.SourceDefinition)
-                        .SendAnswer(questionEntity, questionEntity.Answer);
+                //if (questionEntity.Answer != null)
+                //    this.SendAnswerFactory.LoadPlugin(questionEntity.Source.Source.SourceDefinition)
+                //        .SendAnswer(questionEntity, questionEntity.Answer);
             }
         }
 
@@ -177,8 +177,9 @@ namespace nl.fhict.IntelliCloud.Business.Manager
             keywords.ToList().ForEach(
                 (keyword) =>
                 {
+
                     var entity = context.Keywords
-                        .SingleOrDefault(x => x.Name.ToLowerInvariant() == keyword.Word.Value.ToLowerInvariant());
+                        .SingleOrDefault(x => x.Name == keyword.Word.Value);
 
                     entities.Add(keyword, entity != null
                         ? entity
@@ -196,11 +197,11 @@ namespace nl.fhict.IntelliCloud.Business.Manager
 
         private AnswerEntity GetMatch(IntelliCloudContext context, QuestionEntity questionEntity)
         {
-            var questionKeywords = context.QuestionKeys.Where(x => x.Question == questionEntity);
+            var questionKeywords = context.QuestionKeys.Where(x => x.Question.Id == questionEntity.Id);
 
-            var importantKeywords = questionKeywords.Where(x => x.Affinity > 10).Select(x => x.Keyword);
-            var relevantAnswerKeys = context.AnswerKeys.Where(x => importantKeywords.Contains(x.Keyword));
-            var relevantAnswers = relevantAnswerKeys.Select(x => x.Answer).Distinct();
+            var importantKeywords = questionKeywords.Where(x => x.Affinity > 10).Select(x => x.Keyword.Id);
+            var relevantAnswerKeys = context.AnswerKeys.Include(x => x.Answer).Where(x => importantKeywords.Contains(x.Keyword.Id));
+            var relevantAnswers = relevantAnswerKeys.Select(x => x.Answer).Distinct().ToList();
 
             IDictionary<AnswerEntity, int> ratedAnswers = new Dictionary<AnswerEntity, int>();
             foreach (var answer in relevantAnswers)
@@ -208,14 +209,16 @@ namespace nl.fhict.IntelliCloud.Business.Manager
                 var answerKeywords = context.AnswerKeys.Where(x => x.Answer.Id == answer.Id);
                 var matchingKeywords = answerKeywords.Where(x => questionKeywords.Any(y => y.Keyword.Id == x.Keyword.Id));
 
-                int maximumScore = answerKeywords
+                double maximumScore = answerKeywords
                     .Select(x => x.Affinity)
+                    .AsEnumerable()
                     .Aggregate((previous, next) => previous + next);
-                int score = questionKeywords
+                double score = questionKeywords
+                    .AsEnumerable()
                     .Zip(matchingKeywords, (questionKey, answerKey) => questionKey.Affinity / answerKey.Affinity)
                     .Aggregate((previous, next) => previous + next);
 
-                ratedAnswers.Add(answer, score/maximumScore);
+                ratedAnswers.Add(answer, (int)(score/maximumScore * 100));
             }
 
             if (ratedAnswers.Any())
@@ -234,7 +237,8 @@ namespace nl.fhict.IntelliCloud.Business.Manager
             SourceDefinitionEntity sourceDefinitionEntity = context.SourceDefinitions
                 .Single(x => x.Name == source);
             SourceEntity sourceEntity = context.Sources
-                .SingleOrDefault(x => x.SourceDefinition == sourceDefinitionEntity && x.Value == reference);
+                .Include(x => x.User)
+                .SingleOrDefault(x => x.SourceDefinition.Id == sourceDefinitionEntity.Id && x.Value == reference);
 
             if (sourceEntity != null)
                 return sourceEntity;
@@ -388,7 +392,7 @@ namespace nl.fhict.IntelliCloud.Business.Manager
         internal IList<Entities.Keyword> RetrieveKeywords(IList<Word> words, Language language)
         {
             return words
-                .Where(x => x.Language == language && x.Type != WordType.Article)
+                .Where(x => x.Language == language || x.Language == Language.Unknown && x.Type != WordType.Article)
                 .GroupBy(x => x.Value)
                 .Select(x => 
                     new Entities.Keyword(

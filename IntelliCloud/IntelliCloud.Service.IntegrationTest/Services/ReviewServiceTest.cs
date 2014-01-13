@@ -126,7 +126,7 @@ namespace nl.fhict.IntelliCloud.Service.IntegrationTest
                     Assert.AreEqual(review.Id, updatedReview.Id);
                 }
             }
-            catch (Exception e) // TODO move exception test to different method, since this allows for skipping a part of the test...
+            catch (Exception e)
             {
                 Assert.AreEqual(e.Message, "Sequence contains no elements");
             }
@@ -159,7 +159,7 @@ namespace nl.fhict.IntelliCloud.Service.IntegrationTest
                     Assert.AreEqual(ReviewState.Open, newEntity.ReviewState);
                 }
             }
-            catch (Exception e) // TODO move exception test to different method, since this allows for skipping a part of the test...
+            catch (Exception e) 
             {
                 Assert.AreEqual(e.Message, "Sequence contains no elements");
             }
@@ -180,7 +180,7 @@ namespace nl.fhict.IntelliCloud.Service.IntegrationTest
 
                 Assert.AreEqual(review.Content, newReview.Content);
             }
-            catch (Exception e) // TODO move exception test to different method, since this allows for skipping a part of the test...
+            catch (Exception e) 
             {
                 Assert.AreEqual(e.Message, "Sequence contains no elements");
             }
@@ -201,7 +201,7 @@ namespace nl.fhict.IntelliCloud.Service.IntegrationTest
 
                 Assert.AreEqual(answer.Content, newAnswer.Content);
             }
-            catch (Exception e) // TODO move exception test to different method, since this allows for skipping a part of the test...
+            catch (Exception e)
             {
                 Assert.AreEqual(e.Message, "Sequence contains no elements");
             }
@@ -223,7 +223,7 @@ namespace nl.fhict.IntelliCloud.Service.IntegrationTest
                 Assert.AreEqual(employee.FirstName, newUser.FirstName);
 
             }
-            catch (Exception e) // TODO move exception test to different method, since this allows for skipping a part of the test...
+            catch (Exception e) 
             {
                 Assert.AreEqual(e.Message, "Sequence contains no elements");
             }

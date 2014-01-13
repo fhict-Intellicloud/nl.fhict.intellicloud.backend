@@ -88,7 +88,6 @@ namespace nl.fhict.IntelliCloud.Business.UnitTest.Manager
             validation.Verify(v => v.StringCheck(reference), Times.Once());
             validation.Verify(v => v.StringCheck(question), Times.Once());
             validation.Verify(v => v.StringCheck(title), Times.Once());
-            // TODO: boolean check for keyword match
         }
 
         #endregion CreateQuestion test

@@ -77,12 +77,12 @@ namespace nl.fhict.IntelliCloud.Service.IntegrationTest
         [TestCategory("nl.fhict.IntelliCloud.Service.IntegrationTest")]
         public void ResolveWordsTest_Dutch_Verb()
         {
-            string word = "formatteer";
+            string word = "liep";
             IList<Word> resolved = this.manager.ResolveWords(word);
 
             try
             {
-                resolved.Where(x => x.Value == "formateren" && x.Type == WordType.Verb && x.Language == Language.Dutch).Single();
+                resolved.Where(x => x.Value == "lopen" && x.Type == WordType.Verb && x.Language == Language.Dutch).Single();
             }
             catch (Exception ex)
             {
@@ -161,7 +161,7 @@ namespace nl.fhict.IntelliCloud.Service.IntegrationTest
 
             try
             {
-                keywords.Where(x => x.Word.Value == "formateren" && x.Word.Type == WordType.Verb && x.Word.Language == Language.Dutch).Single();
+                keywords.Where(x => x.Word.Value == "formatteer" && x.Word.Type == WordType.Unknown && x.Word.Language == Language.Unknown).Single();
                 keywords.Where(x => x.Word.Value == "virus" && x.Word.Type == WordType.Noun && x.Word.Language == Language.Dutch).Single();
                 keywords.Where(x => x.Word.Value == "computer" && x.Word.Type == WordType.Noun && x.Word.Language == Language.Dutch).Single();
             }
