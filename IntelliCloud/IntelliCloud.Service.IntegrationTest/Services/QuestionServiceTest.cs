@@ -74,7 +74,7 @@ namespace nl.fhict.IntelliCloud.Service.IntegrationTest
                 newSource.User = newUser;
                 newSource.Value = "test@test.nl";
                 newSource.CreationTime = DateTime.UtcNow;
-                newSource.SourceDefinition = new SourceDefinitionEntity { CreationTime = DateTime.UtcNow, Description = "integration test def", Name = "test def", Url = "" };
+                newSource.SourceDefinition = new SourceDefinitionEntity { CreationTime = DateTime.UtcNow, Description = "integration test def", Name = "Mail", Url = "" };
 
                 ctx.Sources.Add(newSource);
                 ctx.SaveChanges();
@@ -92,13 +92,34 @@ namespace nl.fhict.IntelliCloud.Service.IntegrationTest
 
                 ctx.Questions.Add(newEntity);
 
+                var dutch = new LanguageDefinitionEntity { Name = "Dutch", ResourceName = "Dutch" };
+                var unknown = new LanguageDefinitionEntity { Name = "Unknown", ResourceName = "Unknown" };
+                
+                ctx.LanguageDefinitions.Add(dutch);
+                ctx.LanguageDefinitions.Add(unknown);
+
                 AnswerEntity answer = new AnswerEntity();
                 answer.AnswerState = AnswerState.Ready;
-                answer.Content = "Do this then that and a backflip";
+                answer.Content = "Dit is een voorbeeld.";
                 answer.CreationTime = DateTime.UtcNow;
                 answer.IsPrivate = false;
-                answer.LanguageDefinition = new LanguageDefinitionEntity { Name = "Dutch", ResourceName = "Dutch" };
+                answer.LanguageDefinition = dutch;
                 answer.User = this.employee;
+
+                var keyword1 = new KeywordEntity { CreationTime = DateTime.UtcNow, Name = "dit" };
+                var keyword2 = new KeywordEntity { CreationTime = DateTime.UtcNow, Name = "zijn" };
+                var keyword3 = new KeywordEntity { CreationTime = DateTime.UtcNow, Name = "een" };
+                var keyword4 = new KeywordEntity { CreationTime = DateTime.UtcNow, Name = "voorbeeld" };
+
+                var answerKeys = new[]
+                {
+                    new AnswerKeyEntity { Affinity = 1, CreationTime = DateTime.UtcNow, Answer = answer, Keyword = keyword1 },
+                    new AnswerKeyEntity { Affinity = 10, CreationTime = DateTime.UtcNow, Answer = answer, Keyword = keyword2 },
+                    new AnswerKeyEntity { Affinity = 1, CreationTime = DateTime.UtcNow, Answer = answer, Keyword = keyword3 },
+                    new AnswerKeyEntity { Affinity = 10, CreationTime = DateTime.UtcNow, Answer = answer, Keyword = keyword4 },
+                };
+
+                ctx.AnswerKeys.AddRange(answerKeys);
 
                 ctx.Answers.Add(answer);
 
@@ -106,7 +127,7 @@ namespace nl.fhict.IntelliCloud.Service.IntegrationTest
 
                 newEntity = new QuestionEntity();
                 newEntity.IsPrivate = false;
-                newEntity.LanguageDefinition = new LanguageDefinitionEntity { Name = "Dutch", ResourceName = "Dutch" };
+                newEntity.LanguageDefinition = dutch;
                 newEntity.QuestionState = Common.DataTransfer.QuestionState.Closed;
                 newEntity.Source = new QuestionSourceEntity { Source = newSource, PostId = "" };
                 newEntity.Title = "this is a test question version 2";
@@ -159,6 +180,7 @@ namespace nl.fhict.IntelliCloud.Service.IntegrationTest
                 ctx.LanguageDefinitions.RemoveRange(ctx.LanguageDefinitions.ToList());
                 ctx.Keywords.RemoveRange(ctx.Keywords.ToList());
                 ctx.QuestionKeys.RemoveRange(ctx.QuestionKeys.ToList());
+                ctx.AnswerKeys.RemoveRange(ctx.AnswerKeys.ToList());
                 ctx.Answers.RemoveRange(ctx.Answers.ToList());
 
                 ctx.Users.RemoveRange(ctx.Users.ToList());
@@ -242,7 +264,7 @@ namespace nl.fhict.IntelliCloud.Service.IntegrationTest
             {
                 string content = "This is the content";
                 string title = "This is the title";
-                string source = "test def";
+                string source = "Mail";
                 string reference = "reffgdsgfd";
 
                 this.service.CreateQuestion(source, reference, content, title);
@@ -267,8 +289,6 @@ namespace nl.fhict.IntelliCloud.Service.IntegrationTest
                 Assert.Fail(e.Message);
             }
         }
-
-        // TODO: danik will add test methods here
 
         #endregion CreateQuestion test
 
@@ -388,6 +408,7 @@ namespace nl.fhict.IntelliCloud.Service.IntegrationTest
                 Assert.Fail(e.Message);
             }
         }
+
         #endregion GetKeywords tests
 
         #endregion Tests
@@ -409,18 +430,7 @@ namespace nl.fhict.IntelliCloud.Service.IntegrationTest
         /// </summary>
         [TestMethod]
         [TestCategory("nl.fhict.IntelliCloud.Service.IntegrationTest")]
-        [ExpectedException(typeof(NotFoundException))]
-        public void CreateQuestion_NoLanguageDefinition()
-        {
-            this.service.CreateQuestion("test@test.nl", "ding", "7e094q0 djf a988 900?", "The great question", isPrivate: false);
-        }
-
-        /// <summary>
-        /// Test if a NotFoundException is thrown when attempting to get a question with an unrecognizable language.
-        /// </summary>
-        [TestMethod]
-        [TestCategory("nl.fhict.IntelliCloud.Service.IntegrationTest")]
-        [ExpectedException(typeof(NotFoundException))]
+        [ExpectedException(typeof(ArgumentException))]
         public void CreateQuestion_NoSourceDefinition()
         {
             this.service.CreateQuestion("unregistered source", "ding", "What is the answer to life, the universe and all?", "The great question", isPrivate: false);

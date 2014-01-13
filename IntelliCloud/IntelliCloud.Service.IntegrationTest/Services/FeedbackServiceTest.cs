@@ -269,7 +269,7 @@ namespace nl.fhict.IntelliCloud.Service.IntegrationTest
 
                 Assert.AreEqual(feedbackEntity.Content, newFeedback.Content);
             }
-            catch (Exception e) // TODO move exception test to different method, since this allows for skipping a part of the test...
+            catch (Exception e)
             {
                 Assert.AreEqual(e.Message, "Sequence contains no elements");
             }
@@ -290,7 +290,7 @@ namespace nl.fhict.IntelliCloud.Service.IntegrationTest
 
                 Assert.AreEqual(answerEntity.Content, newAnswer.Content);
             }
-            catch (Exception e) // TODO move exception test to different method, since this allows for skipping a part of the test...
+            catch (Exception e)
             {
                 Assert.AreEqual(e.Message, "Sequence contains no elements");
             }
@@ -312,7 +312,7 @@ namespace nl.fhict.IntelliCloud.Service.IntegrationTest
                 Assert.AreEqual(employeeEntity.FirstName, newUser.FirstName);
 
             }
-            catch (Exception e) // TODO move exception test to different method, since this allows for skipping a part of the test...
+            catch (Exception e)
             {
                 Assert.AreEqual(e.Message, "Sequence contains no elements");
             }
@@ -334,7 +334,7 @@ namespace nl.fhict.IntelliCloud.Service.IntegrationTest
                 Assert.AreEqual(questionEntity.Content, newQuestion.Content);
 
             }
-            catch (Exception e) // TODO move exception test to different method, since this allows for skipping a part of the test...
+            catch (Exception e)
             {
                 Assert.AreEqual(e.Message, "Sequence contains no elements");
             }

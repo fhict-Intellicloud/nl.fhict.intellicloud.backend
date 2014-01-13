@@ -77,16 +77,9 @@ namespace nl.fhict.IntelliCloud.Business.Plugins
                 Body = body
             })
             //Send the mail
-                try
-                {
-                    smtp.Send(message);
-                }
-                catch (Exception e)
-                {
-                    //If it fails, the error is written to the logfile
-                    // TODO log real error
-                    //serviceLog.WriteEntry("Sending e-mail failed: " + e.ToString());
-                }
+            smtp.Send(message);
+
+
             //Dispose the smtp client
             smtp.Dispose();
         }
