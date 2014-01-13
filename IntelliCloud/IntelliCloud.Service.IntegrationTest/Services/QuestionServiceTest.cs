@@ -223,7 +223,7 @@ namespace nl.fhict.IntelliCloud.Service.IntegrationTest
         {
             try
             {
-                var questions = this.service.GetQuestions(QuestionState.Open);
+                var questions = this.service.GetQuestionsByState(QuestionState.Open);
                 Assert.AreEqual(true, questions.Count == 1);
             }
             catch (Exception e)
@@ -250,47 +250,6 @@ namespace nl.fhict.IntelliCloud.Service.IntegrationTest
             }
         }
         #endregion GetQuestions tests
-
-        #region CreateQuestion test
-
-        /// <summary>
-        /// Validates the createQuestion method.
-        /// </summary>
-        [TestMethod]
-        [TestCategory("nl.fhict.IntelliCloud.Service.IntegrationTest")]
-        public void CreateQuestionTest()
-        {
-            try
-            {
-                string content = "This is the content";
-                string title = "This is the title";
-                string source = "Mail";
-                string reference = "reffgdsgfd";
-
-                this.service.CreateQuestion(source, reference, content, title);
-
-                using (IntelliCloudContext ctx = new IntelliCloudContext())
-                {
-                    QuestionEntity newEntity = ctx.Questions
-                    .Include(q => q.Source)
-                    .Include(q => q.User)
-                    .Include(q => q.User.Sources)
-                    .Include(q => q.User.Sources.Select(s => s.SourceDefinition))
-                    .Include(q => q.LanguageDefinition).Single(q => q.Content == content && q.Title == title);
-
-                    Assert.AreEqual(content, newEntity.Content);
-                    Assert.AreEqual(title, newEntity.Title);
-                    Assert.AreEqual(source, newEntity.Source.Source.SourceDefinition.Name);
-                    Assert.AreEqual(reference, newEntity.Source.Source.Value);
-                }
-            }
-            catch (Exception e)
-            {
-                Assert.Fail(e.Message);
-            }
-        }
-
-        #endregion CreateQuestion test
 
         #region UpdateQuestion
         /// <summary>

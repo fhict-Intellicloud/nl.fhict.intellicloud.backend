@@ -29,7 +29,20 @@ namespace nl.fhict.IntelliCloud.Service
             RequestFormat = WebMessageFormat.Json,
             ResponseFormat = WebMessageFormat.Json)]
         [AuthorizationRequired(UserType.Employee)]
-        IList<Question> GetQuestions(QuestionState state = QuestionState.Closed);
+        IList<Question> GetQuestionsByState(QuestionState state);
+
+        /// <summary>
+        /// Retrieves the available questions.
+        /// </summary>
+        /// <returns>Returns the questions that match the filter.</returns>
+        /// <remarks>Only users of type <see cref="UserType.Employee"/> are able to retrieve questions.
+        /// </remarks>
+        [OperationContract]
+        [WebGet(UriTemplate = "questions",
+            RequestFormat = WebMessageFormat.Json,
+            ResponseFormat = WebMessageFormat.Json)]
+        [AuthorizationRequired(UserType.Employee)]
+        IList<Question> GetQuestions();
 
         /// <summary>
         /// Retrieve the question with the given identifier.
