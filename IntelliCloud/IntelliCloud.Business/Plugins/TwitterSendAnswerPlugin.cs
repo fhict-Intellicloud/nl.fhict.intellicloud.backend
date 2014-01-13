@@ -1,4 +1,5 @@
-﻿using System.Configuration;
+﻿using System;
+using System.Configuration;
 using System.Resources;
 using LinqToTwitter;
 using nl.fhict.IntelliCloud.Business.Plugins.Loader;
@@ -83,8 +84,7 @@ namespace nl.fhict.IntelliCloud.Business.Plugins
 
             if (status.Length > 140)
             {
-                // TODO create link to web answer page and make a resource containing the message: 'U antwoord kan hier gevonden worden:'.
-                status = resourceManager.GetString(question.LanguageDefinition.ResourceName + "_TWITTER_LINK_RESPONSE");
+                status = String.Format(this.resourceManager.GetString(question.LanguageDefinition.ResourceName + "_TWITTER_LINK_RESPONSE"), URLGenerator.GenerateResponeURL(question));
             }
 
             validation.StringCheck(postId);

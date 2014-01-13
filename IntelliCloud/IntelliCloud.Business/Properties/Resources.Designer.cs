@@ -134,6 +134,15 @@ namespace nl.fhict.IntelliCloud.Business.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to U antwoord: {0}.
+        /// </summary>
+        internal static string DUTCH_TWITTER_LINK_RESPONSE {
+            get {
+                return ResourceManager.GetString("DUTCH_TWITTER_LINK_RESPONSE", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Thank you for your question, you will recieve a answer shortly..
         /// </summary>
         internal static string ENGLISH_FACEBOOK_AUTO_RESPONSE {
@@ -193,6 +202,15 @@ namespace nl.fhict.IntelliCloud.Business.Properties {
         internal static string ENGLISH_TWITTER_AUTO_RESPONSE {
             get {
                 return ResourceManager.GetString("ENGLISH_TWITTER_AUTO_RESPONSE", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Your answer: {0}.
+        /// </summary>
+        internal static string ENGLISH_TWITTER_LINK_RESPONSE {
+            get {
+                return ResourceManager.GetString("ENGLISH_TWITTER_LINK_RESPONSE", resourceCulture);
             }
         }
         
@@ -274,6 +292,15 @@ namespace nl.fhict.IntelliCloud.Business.Properties {
         internal static string UNKNOWN_TWITTER_AUTO_RESPONSE1 {
             get {
                 return ResourceManager.GetString("UNKNOWN_TWITTER_AUTO_RESPONSE1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Your answer: {0}.
+        /// </summary>
+        internal static string UNKNOWN_TWITTER_LINK_RESPONSE {
+            get {
+                return ResourceManager.GetString("UNKNOWN_TWITTER_LINK_RESPONSE", resourceCulture);
             }
         }
     }

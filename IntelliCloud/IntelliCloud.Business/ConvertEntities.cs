@@ -23,7 +23,7 @@ namespace nl.fhict.IntelliCloud.Business
         {
             try
             {
-                baseUrl = WebOperationContext.Current.IncomingRequest.UriTemplateMatch.RequestUri;
+                baseUrl = new Uri("http://81.204.121.229/IntelliCloudServiceNew");
             }
             catch (Exception)
             {
@@ -230,3 +230,4 @@ namespace nl.fhict.IntelliCloud.Business
 
     }
 }
+>>>>>>> upstream/master

@@ -189,6 +189,7 @@ namespace nl.fhict.IntelliCloud.Business.Manager
                                                      .Include(a => a.User)
                                                      .Include(a => a.LanguageDefinition)
                                                      .Include(a => a.OriginalAnswer)
+                                                     .Take(5)
                                                      .ToList();
 
                 return answerEntities.AsAnswers();

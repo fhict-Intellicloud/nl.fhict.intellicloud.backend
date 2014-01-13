@@ -21,11 +21,25 @@ namespace nl.fhict.IntelliCloud.Service
         /// <returns>Returns the users which match the filter.</returns>
         /// <remarks>Only users of type <see cref="UserType.Employee"/> are able to retrieve users.</remarks>
         [OperationContract]
+        [WebGet(UriTemplate = "users",
+            RequestFormat = WebMessageFormat.Json,
+            ResponseFormat = WebMessageFormat.Json)]
+        [AuthorizationRequired(UserType.Customer, UserType.Employee)]
+        User GetAutUser();
+
+        /// <summary>
+        /// Retrieves the users which match the filter.
+        /// </summary>
+        /// <param name="after">Optional: Only users that are created or modified after this date time are retrieved,
+        /// in UTC time.</param>
+        /// <returns>Returns the users which match the filter.</returns>
+        /// <remarks>Only users of type <see cref="UserType.Employee"/> are able to retrieve users.</remarks>
+        [OperationContract]
         [WebGet(UriTemplate = "users?after={after}",
             RequestFormat = WebMessageFormat.Json,
             ResponseFormat = WebMessageFormat.Json)]
         [AuthorizationRequired(UserType.Employee)]
-        IList<User> GetUsers(DateTime? after = null);
+        IList<User> GetUsers(DateTime after);
 
         /// <summary>
         /// Retrieves the user with the given identifier.
@@ -38,7 +52,7 @@ namespace nl.fhict.IntelliCloud.Service
         [WebGet(UriTemplate = "users/{userId}",
             RequestFormat = WebMessageFormat.Json,
             ResponseFormat = WebMessageFormat.Json)]
-        [AuthorizationRequired]
+        [AuthorizationRequired(UserType.Customer, UserType.Employee)]
         User GetUser(string userId);
 
         /// <summary>
@@ -70,7 +84,7 @@ namespace nl.fhict.IntelliCloud.Service
             RequestFormat = WebMessageFormat.Json,
             ResponseFormat = WebMessageFormat.Json)]
         [AuthorizationRequired(UserType.Employee)]
-        IList<Question> GetQuestions(string userId, DateTime? after = null);
+        IList<Question> GetQuestions(string userId, DateTime after);
 
         /// <summary>
         /// Retrieves the answers which received feedback for the user with the given identifier. The feedback applies
@@ -87,7 +101,7 @@ namespace nl.fhict.IntelliCloud.Service
             RequestFormat = WebMessageFormat.Json,
             ResponseFormat = WebMessageFormat.Json)]
         [AuthorizationRequired(UserType.Employee)]
-        IList<Answer> GetFeedbacks(string userId, DateTime? after = null);
+        IList<Answer> GetFeedbacks(string userId, DateTime after);
 
         /// <summary>
         /// Retrieves the answers that are under review which can be reviewed by the user with the given identifier. 
@@ -106,7 +120,7 @@ namespace nl.fhict.IntelliCloud.Service
             RequestFormat = WebMessageFormat.Json,
             ResponseFormat = WebMessageFormat.Json)]
         [AuthorizationRequired(UserType.Employee)]
-        IList<Answer> GetReviews(string userId, DateTime? after = null);
+        IList<Answer> GetReviews(string userId, DateTime after);
 
         /// <summary>
         /// Assign a keyword to the user with the given identifier.

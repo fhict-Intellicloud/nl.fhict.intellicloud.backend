@@ -111,7 +111,7 @@ namespace nl.fhict.IntelliCloud.Business.Plugins
             ResourceManager rm = Resources.ResourceManager;
             string subject = rm.GetString(question.LanguageDefinition.ResourceName + "_MAIL_RESPONSE_SUBJECT");
             string body = String.Format(rm.GetString(question.LanguageDefinition.ResourceName + "_MAIL_RESPONSE"),
-                question.Content, "http://81.204.121.229/intellicloud/feedback/index.html");
+                question.Content, URLGenerator.GenerateResponeURL(question));
             
             //Create the e-mail with the addresses and content
             using (MailMessage message = new MailMessage(fromAddress, toAddress)

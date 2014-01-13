@@ -205,6 +205,9 @@ IntelliCloud Service Team&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/font
   <data name="DUTCH_TWITTER_AUTO_RESPONSE" xml:space="preserve">
     <value>Bedankt voor U vraag, U zult spoedig antwoord van ons ontvangen.</value>
   </data>
+  <data name="DUTCH_TWITTER_LINK_RESPONSE" xml:space="preserve">
+    <value>U antwoord: {0}</value>
+  </data>
   <data name="ENGLISH_FACEBOOK_AUTO_RESPONSE" xml:space="preserve">
     <value>Thank you for your question, you will recieve a answer shortly.</value>
   </data>
@@ -291,6 +294,9 @@ IntelliCloud Service Team&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/font
   </data>
   <data name="ENGLISH_TWITTER_AUTO_RESPONSE" xml:space="preserve">
     <value>Thank you for your question, you will recieve a answer shortly.</value>
+  </data>
+  <data name="ENGLISH_TWITTER_LINK_RESPONSE" xml:space="preserve">
+    <value>Your answer: {0}</value>
   </data>
   <data name="ENSLIGH_MAIL_AUTO_RESPONSE_SUBJECT" xml:space="preserve">
     <value>Thank you for your question!</value>
@@ -384,5 +390,8 @@ IntelliCloud Service Team&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/font
   </data>
   <data name="UNKNOWN_TWITTER_AUTO_RESPONSE1" xml:space="preserve">
     <value>Thank you for your question, you will recieve a answer shortly.</value>
+  </data>
+  <data name="UNKNOWN_TWITTER_LINK_RESPONSE" xml:space="preserve">
+    <value>Your answer: {0}</value>
   </data>
 </root>

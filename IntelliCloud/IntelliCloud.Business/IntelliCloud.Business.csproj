@@ -79,6 +79,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="URLGenerator.cs" />
     <Compile Include="Validation.cs" />
   </ItemGroup>
   <ItemGroup>

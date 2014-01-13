@@ -37,7 +37,7 @@ namespace nl.fhict.IntelliCloud.Service
             return manager.GetQuestionByFeedbackToken(feedbackToken);
         }
 
-        public IList<Question> GetQuestions(QuestionState? state = null)
+        public IList<Question> GetQuestions(QuestionState state)
         {
             return this.manager.GetQuestions(state);
         }
@@ -60,6 +60,11 @@ namespace nl.fhict.IntelliCloud.Service
         public IList<Keyword> GetKeywords(string id)
         {
             return this.manager.GetKeywords(id);
+        }
+
+        public IList<Question> GetQuestions()
+        {
+            return this.manager.GetQuestions(QuestionState.Closed);
         }
     }
 }
