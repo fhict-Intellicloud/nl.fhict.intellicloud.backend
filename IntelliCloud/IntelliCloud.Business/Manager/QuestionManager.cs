@@ -161,13 +161,13 @@ namespace nl.fhict.IntelliCloud.Business.Manager
                 ctx.SaveChanges();
 
                 questionEntity.Answer = this.GetMatch(ctx, questionEntity);
-                
-                //this.SendAnswerFactory.LoadPlugin(questionEntity.Source.Source.SourceDefinition)
-                //    .SendQuestionReceived(questionEntity);
 
-                //if (questionEntity.Answer != null)
-                //    this.SendAnswerFactory.LoadPlugin(questionEntity.Source.Source.SourceDefinition)
-                //        .SendAnswer(questionEntity, questionEntity.Answer);
+                this.SendAnswerFactory.LoadPlugin(questionEntity.Source.Source.SourceDefinition)
+                    .SendQuestionReceived(questionEntity);
+
+                if (questionEntity.Answer != null)
+                    this.SendAnswerFactory.LoadPlugin(questionEntity.Source.Source.SourceDefinition)
+                        .SendAnswer(questionEntity, questionEntity.Answer);
             }
         }
 
@@ -504,7 +504,8 @@ namespace nl.fhict.IntelliCloud.Business.Manager
             using (IntelliCloudContext ctx = new IntelliCloudContext())
             {
                 return ctx.QuestionKeys
-                    .Where(x => x.Id == convertedId)
+                    .Include(x => x.Keyword)
+                    .Where(x => x.Question.Id == convertedId)
                     .Select(x => x.Keyword)
                     .ToList()
                     .AsKeywords();

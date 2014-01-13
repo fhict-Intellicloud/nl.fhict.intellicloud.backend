@@ -64,7 +64,12 @@ namespace nl.fhict.IntelliCloud.Service
 
         public IList<Question> GetQuestions()
         {
-            return this.manager.GetQuestions(QuestionState.Closed);
+            return this.manager.GetQuestions(null);
+        }
+
+        public IList<Question> GetQuestionsByState(QuestionState state)
+        {
+            return this.manager.GetQuestions(state);
         }
     }
 }
