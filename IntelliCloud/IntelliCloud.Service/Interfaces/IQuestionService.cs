@@ -16,6 +16,7 @@ namespace nl.fhict.IntelliCloud.Service
     [ServiceContract]
     public interface IQuestionService
     {
+
         /// <summary>
         /// Retrieves the available questions and filtering them using the state.
         /// </summary>
@@ -28,7 +29,7 @@ namespace nl.fhict.IntelliCloud.Service
             RequestFormat = WebMessageFormat.Json,
             ResponseFormat = WebMessageFormat.Json)]
         [AuthorizationRequired(UserType.Employee)]
-        IList<Question> GetQuestions(QuestionState? state = null);
+        IList<Question> GetQuestions(QuestionState state = QuestionState.Closed);
 
         /// <summary>
         /// Retrieve the question with the given identifier.

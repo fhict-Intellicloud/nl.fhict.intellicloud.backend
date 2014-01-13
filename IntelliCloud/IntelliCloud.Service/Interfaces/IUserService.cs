@@ -25,7 +25,7 @@ namespace nl.fhict.IntelliCloud.Service
             RequestFormat = WebMessageFormat.Json,
             ResponseFormat = WebMessageFormat.Json)]
         [AuthorizationRequired(UserType.Employee)]
-        IList<User> GetUsers(DateTime? after = null);
+        IList<User> GetUsers(DateTime after);
 
         /// <summary>
         /// Retrieves the user with the given identifier.
@@ -70,7 +70,7 @@ namespace nl.fhict.IntelliCloud.Service
             RequestFormat = WebMessageFormat.Json,
             ResponseFormat = WebMessageFormat.Json)]
         [AuthorizationRequired(UserType.Employee)]
-        IList<Question> GetQuestions(string userId, DateTime? after = null);
+        IList<Question> GetQuestions(string userId, DateTime after);
 
         /// <summary>
         /// Retrieves the answers which received feedback for the user with the given identifier. The feedback applies
@@ -87,7 +87,7 @@ namespace nl.fhict.IntelliCloud.Service
             RequestFormat = WebMessageFormat.Json,
             ResponseFormat = WebMessageFormat.Json)]
         [AuthorizationRequired(UserType.Employee)]
-        IList<Answer> GetFeedbacks(string userId, DateTime? after = null);
+        IList<Answer> GetFeedbacks(string userId, DateTime after);
 
         /// <summary>
         /// Retrieves the answers that are under review which can be reviewed by the user with the given identifier. 
@@ -106,7 +106,7 @@ namespace nl.fhict.IntelliCloud.Service
             RequestFormat = WebMessageFormat.Json,
             ResponseFormat = WebMessageFormat.Json)]
         [AuthorizationRequired(UserType.Employee)]
-        IList<Answer> GetReviews(string userId, DateTime? after = null);
+        IList<Answer> GetReviews(string userId, DateTime after);
 
         /// <summary>
         /// Assign a keyword to the user with the given identifier.

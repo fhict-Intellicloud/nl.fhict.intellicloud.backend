@@ -22,7 +22,7 @@ namespace nl.fhict.IntelliCloud.Service
             return this.manager.GetUser(userId);
         }
 
-        public IList<User> GetUsers(DateTime? after = null)
+        public IList<User> GetUsers(DateTime after)
         {
             return this.manager.GetUsers(after);
         }
@@ -32,17 +32,17 @@ namespace nl.fhict.IntelliCloud.Service
             return this.manager.GetKeywords(id);
         }
 
-        public IList<Question> GetQuestions(string id, DateTime? after = null)
+        public IList<Question> GetQuestions(string id, DateTime after)
         {
             return this.manager.GetQuestions(id, after);
         }
 
-        public IList<Answer> GetFeedbacks(string id, DateTime? after = null)
+        public IList<Answer> GetFeedbacks(string id, DateTime after)
         {
             return this.manager.GetFeedbacks(id, after);
         }
 
-        public IList<Answer> GetReviews(string id, DateTime? after = null)
+        public IList<Answer> GetReviews(string id, DateTime after)
         {
             return this.manager.GetReviews(id, after);
         }
