@@ -171,50 +171,6 @@ namespace nl.fhict.IntelliCloud.Service.IntegrationTest.Services
 
         #region Tests
 
-        #region GetAnswers tests
-        
-        /// <summary>
-        /// Test to vlaidate all answers are found with the use of a state filter.
-        /// </summary>
-        [TestMethod]
-        [TestCategory("nl.fhict.IntelliCloud.Service.IntegrationTest")]
-        public void GetAnswersTest_StateFilter()
-        {
-            try
-            {
-                // TODO: getAnswer summary states that paramters are optional this is not the case.
-                var questions = this.service.GetAnswers(AnswerState.UnderReview, null);
-                Assert.IsTrue(questions.Count == 1);
-
-            }
-            catch (Exception e) 
-            {
-                Assert.AreEqual(e.Message, "Sequence contains no elements");
-            }
-        }
-
-        /// <summary>
-        /// Test to vlaidate all answers are found with the use of a employee filter.
-        /// </summary>
-        [TestMethod]
-        [TestCategory("nl.fhict.IntelliCloud.Service.IntegrationTest")]
-        public void GetAnswersTest_EmployeeFilter()
-        {
-            try
-            {
-                // TODO: getAnswer summary states that paramters are optional this is not the case.
-                var questions = this.service.GetAnswers(AnswerState.Ready, "");
-                Assert.IsTrue(questions.Count == 1);
-
-            }
-            catch (Exception e) 
-            {
-                Assert.AreEqual(e.Message, "Sequence contains no elements");
-            }
-        }
-
-        #endregion GetAnswers tests
-
         #region GetAnswer tests
         /// <summary>
         /// Test to validate that a specific question can succesfully be retrieved.
@@ -236,43 +192,6 @@ namespace nl.fhict.IntelliCloud.Service.IntegrationTest.Services
             }
         }
         #endregion GetAnswer test
-
-        #region CreateAnswer tests
-        /// <summary>
-        /// Test to validate that a answer is properly created and is set to the right question.
-        /// </summary>
-        [TestMethod]
-        [TestCategory("nl.fhict.IntelliCloud.Service.IntegrationTest")]
-        public void CreateAnswer()
-        {
-            int questionId = this.question.Id, answererId = this.employee.Id;
-            string answer = "The answer to anything is 42!!";
-            AnswerState state = AnswerState.Ready;
-            
-            this.service.CreateAnswer(questionId, answer, answererId, state);
-
-                using (IntelliCloudContext ctx = new IntelliCloudContext())
-                {
-                    AnswerEntity newAnswer = ctx.Answers
-                        .Include(a => a.User)
-                        .Where(a => a.Content == answer &&
-                            a.User.Id == answererId &&
-                            a.AnswerState == state)
-                        .Single();
-
-                    Assert.AreEqual(answer, newAnswer.Content);
-                    Assert.AreEqual(answererId, newAnswer.User.Id);
-                    Assert.AreEqual(state, newAnswer.AnswerState);
-
-                    QuestionEntity newQuestion = ctx.Questions
-                        .Where(q => q.Id == questionId)
-                        .Single();
-
-                    Assert.IsTrue(newQuestion.Answer.Id == newAnswer.Id);
-                }
-
-        }
-        #endregion CreateAnswer tests
 
         #region UpdateAnswer tests
         /// <summary>
@@ -518,19 +437,6 @@ namespace nl.fhict.IntelliCloud.Service.IntegrationTest.Services
         {
             this.service.CreateAnswer(this.question.Id, "Not important", 10, AnswerState.Ready);
         }
-
-        /// <summary>
-        /// Test if a NotFoundException is thrown when attempting to create answer
-        /// with undetectable language.
-        /// </summary>
-        [TestMethod]
-        [TestCategory("nl.fhict.IntelliCloud.Service.IntegrationTest")]
-        [ExpectedException(typeof(NotFoundException))]
-        public void CreateAnswer_InvalidLanguage()
-        {
-            this.service.CreateAnswer(this.question.Id, "&Undetecable ^&language te67xt.", this.employee.Id, AnswerState.Ready);
-        }
-
         #endregion Error handling tests
 
         #region GetAnswers tests
