@@ -8,6 +8,7 @@ using nl.fhict.IntelliCloud.Common.DataTransfer;
 using nl.fhict.IntelliCloud.Data.IntelliCloud.Context;
 using nl.fhict.IntelliCloud.Data.IntelliCloud.Model;
 using nl.fhict.IntelliCloud.Data.WordStoreService;
+using System.Collections;
 
 namespace nl.fhict.IntelliCloud.Business.Manager
 {
@@ -53,6 +54,7 @@ namespace nl.fhict.IntelliCloud.Business.Manager
                                                                  .Include(q => q.User.Sources)
                                                                  .Include(q => q.Answerer)
                                                                  .Include(q => q.Answerer.Sources)
+                                                                 .Include(q => q.LanguageDefinition)
                                                                  .Include(q => q.User.Sources.Select(s => s.SourceDefinition))
                                          where q.Id == convertedId
                                          select q).SingleOrDefault();
@@ -75,16 +77,18 @@ namespace nl.fhict.IntelliCloud.Business.Manager
             using (IntelliCloudContext ctx = new IntelliCloudContext())
             {
                 var questionEntities = ctx.Questions
-                                                                 .Include(q => q.Source)
-                                                                 .Include(q => q.User)
-                                                                 .Include(q => q.User.Sources)
-                                                                 .Include(q => q.Answerer)
-                                                                 .Include(q => q.Answerer.Sources)
-                                                                 .Include(q => q.QuestionState)
-                                                                 .Include(q => q.User.Sources.Select(s => s.SourceDefinition));
+                                        .Include(q => q.Source)
+                                        .Include(q => q.User)
+                                        .Include(q => q.User.Sources)
+                                        .Include(q => q.Answerer)
+                                        .Include(q => q.Answerer.Sources)
+                                        .Include(q => q.LanguageDefinition)
+                                        .Include(q => q.User.Sources.Select(s => s.SourceDefinition));
 
                 if (state == null)
-                    return questionEntities.ToList().AsQuestions();
+                    return questionEntities
+                        .ToList()
+                        .AsQuestions();
                 else
                 {
                     return questionEntities
@@ -115,53 +119,16 @@ namespace nl.fhict.IntelliCloud.Business.Manager
             Validation.StringCheck(reference);
             Validation.StringCheck(question);
             Validation.StringCheck(title);
+            Validation.SourceDefinitionExistsCheck(source);
 
             using (IntelliCloudContext ctx = new IntelliCloudContext())
             {
-                // TODO determine real language 
-                LanguageDefinitionEntity languageDefinition = ctx.LanguageDefinitions.SingleOrDefault(ld => ld.Name.Equals("English"));
+                var words = this.ResolveWords(question);
+                var language = this.GetLanguage(words);
+                var keywords = this.RetrieveKeywords(words, language);
 
-                // TODO remove exception as you probably want to create the language if it doesn't exist.
-                if (languageDefinition == null)
-                    throw new NotFoundException("No languageDefinition entity exists with the specified ID.");
-
-                SourceDefinitionEntity sourceDefinition = ctx.SourceDefinitions.SingleOrDefault(sd => sd.Name.Equals(source));
-
-                if (sourceDefinition == null)
-                    throw new NotFoundException("The provided source doesn't exists.");
-
-                // Check if the user already exists
-                SourceEntity sourceEntity = ctx.Sources.SingleOrDefault(s => s.SourceDefinition.Id == sourceDefinition.Id && s.Value == reference);
-
-                UserEntity userEntity;
-
-                if (sourceEntity != null)
-                {
-                    // user already has an account, use this
-                    userEntity = ctx.Users.Single(u => u.Id == sourceEntity.UserId);
-                }
-                else
-                {
-                    // user has no account, create one
-                    userEntity = new UserEntity()
-                    {
-                        CreationTime = DateTime.UtcNow,
-                        Type = UserType.Customer
-                    };
-
-                    ctx.Users.Add(userEntity);
-
-                    // Mount the source to the new user
-                    sourceEntity = new SourceEntity()
-                    {
-                        Value = reference,
-                        CreationTime = DateTime.UtcNow,
-                        SourceDefinition = sourceDefinition,
-                        User = userEntity,
-                    };
-
-                    ctx.Sources.Add(sourceEntity);
-                }
+                var languageDefinitionEntity = ctx.LanguageDefinitions.Single(x => x.Name == this.ToLanguageString(language));
+                var sourceEntity = this.GetOrCreateSourceEntity(ctx, source, reference);
 
                 QuestionEntity questionEntity = new QuestionEntity()
                 {
@@ -175,26 +142,122 @@ namespace nl.fhict.IntelliCloud.Business.Manager
                         Source = sourceEntity,
                         PostId = postId
                     },
-                    LanguageDefinition = languageDefinition,
-                    User = userEntity
+                    LanguageDefinition = languageDefinitionEntity,
+                    User = sourceEntity.User,
                 };
-
                 ctx.Questions.Add(questionEntity);
 
+                var keywordEntities = this.GetOrCreateKeywordEntities(ctx, keywords);
+                var questionKeys = keywordEntities.Select(keyword =>
+                    new QuestionKeyEntity
+                    {
+                        Question = questionEntity,
+                        Keyword = keyword.Value,
+                        CreationTime = DateTime.UtcNow,
+                        Affinity = keyword.Key.Affinity,
+                    });
+
+                ctx.QuestionKeys.AddRange(questionKeys);
+
+                questionEntity.Answer = this.GetMatch(ctx, questionEntity);
                 ctx.SaveChanges();
 
-                // TODO check if there is a 90%+  match
-                Boolean match = false;
+                this.SendAnswerFactory.LoadPlugin(questionEntity.Source.Source.SourceDefinition)
+                    .SendQuestionReceived(questionEntity);
 
-
-
-                // Send auto response
-                if (!match)
-                {
+                if (questionEntity.Answer != null)
                     this.SendAnswerFactory.LoadPlugin(questionEntity.Source.Source.SourceDefinition)
-                        .SendQuestionReceived(questionEntity);
-                }
+                        .SendAnswer(questionEntity, questionEntity.Answer);
+            }
+        }
 
+        private IDictionary<Entities.Keyword, KeywordEntity> GetOrCreateKeywordEntities(IntelliCloudContext context, IList<Entities.Keyword> keywords)
+        {
+            IDictionary<Entities.Keyword, KeywordEntity> entities = new Dictionary<Entities.Keyword, KeywordEntity>();
+            keywords.ToList().ForEach(
+                (keyword) =>
+                {
+                    var entity = context.Keywords
+                        .SingleOrDefault(x => x.Name.ToLowerInvariant() == keyword.Word.Value.ToLowerInvariant());
+
+                    entities.Add(keyword, entity != null
+                        ? entity
+                        : new KeywordEntity
+                        {
+                            CreationTime = DateTime.UtcNow,
+                            Name = keyword.Word.Value,
+                        });
+                });
+
+            context.SaveChanges();
+
+            return entities;
+        }
+
+        private AnswerEntity GetMatch(IntelliCloudContext context, QuestionEntity questionEntity)
+        {
+            var questionKeywords = context.QuestionKeys.Where(x => x.Question == questionEntity);
+
+            var importantKeywords = questionKeywords.Where(x => x.Affinity > 10).Select(x => x.Keyword);
+            var relevantAnswerKeys = context.AnswerKeys.Where(x => importantKeywords.Contains(x.Keyword));
+            var relevantAnswers = relevantAnswerKeys.Select(x => x.Answer).Distinct();
+
+            IDictionary<AnswerEntity, int> ratedAnswers = new Dictionary<AnswerEntity, int>();
+            foreach (var answer in relevantAnswers)
+            {
+                var answerKeywords = context.AnswerKeys.Where(x => x.Answer.Id == answer.Id);
+                var matchingKeywords = answerKeywords.Where(x => questionKeywords.Any(y => y.Keyword.Id == x.Keyword.Id));
+
+                int maximumScore = answerKeywords
+                    .Select(x => x.Affinity)
+                    .Aggregate((previous, next) => previous + next);
+                int score = questionKeywords
+                    .Zip(matchingKeywords, (questionKey, answerKey) => questionKey.Affinity / answerKey.Affinity)
+                    .Aggregate((previous, next) => previous + next);
+
+                ratedAnswers.Add(answer, score/maximumScore);
+            }
+
+            if (ratedAnswers.Any())
+            {
+                var bestMatch = ratedAnswers.OrderByDescending(x => x.Value).First();
+                return bestMatch.Value >= 50 ? bestMatch.Key : null;
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        private SourceEntity GetOrCreateSourceEntity(IntelliCloudContext context, string source, string reference)
+        {
+            SourceDefinitionEntity sourceDefinitionEntity = context.SourceDefinitions
+                .Single(x => x.Name == source);
+            SourceEntity sourceEntity = context.Sources
+                .SingleOrDefault(x => x.SourceDefinition == sourceDefinitionEntity && x.Value == reference);
+
+            if (sourceEntity != null)
+                return sourceEntity;
+            else
+            {
+                var userEntity = new UserEntity
+                {
+                    CreationTime = DateTime.UtcNow,
+                    Type = UserType.Customer
+                };
+
+                sourceEntity = new SourceEntity
+                {
+                    Value = reference,
+                    CreationTime = DateTime.UtcNow,
+                    SourceDefinition = sourceDefinitionEntity,
+                    User = userEntity,
+                };
+
+                context.Sources.Add(sourceEntity);
+                context.SaveChanges();
+
+                return sourceEntity;
             }
         }
 
@@ -218,6 +281,7 @@ namespace nl.fhict.IntelliCloud.Business.Manager
                                                                  .Include(q => q.User.Sources)
                                                                  .Include(q => q.Answerer)
                                                                  .Include(q => q.Answerer.Sources)
+                                                                 .Include(q => q.LanguageDefinition)
                                                                  .Include(q => q.User.Sources.Select(s => s.SourceDefinition))
                                          where q.FeedbackToken == feedbackToken
                                          select q).SingleOrDefault();
@@ -251,6 +315,13 @@ namespace nl.fhict.IntelliCloud.Business.Manager
             {
                 // Get the feedback entity from the context
                 QuestionEntity question = context.Questions
+                                          .Include(q => q.Source)
+                                          .Include(q => q.User)
+                                          .Include(q => q.User.Sources)
+                                          .Include(q => q.Answerer)
+                                          .Include(q => q.Answerer.Sources)
+                                          .Include(q => q.LanguageDefinition)
+                                          .Include(q => q.User.Sources.Select(s => s.SourceDefinition))
                                           .SingleOrDefault(q => q.Id == convertedId);
 
                 if (question == null)
@@ -258,7 +329,6 @@ namespace nl.fhict.IntelliCloud.Business.Manager
 
                 UserEntity user = context.Users
                                          .Include(u => u.Sources)
-                                         .Include(u => u.Type)
                                          .SingleOrDefault(u => u.Id == employeeId);
 
                 if (user == null)
@@ -301,10 +371,12 @@ namespace nl.fhict.IntelliCloud.Business.Manager
         /// <returns>A list containing the resolved words that were contained in the question</returns>
         internal IList<Word> ResolveWords(String question)
         {
-            IWordService service = new WordServiceClient();
-            return ConvertQuestion(question)
-                .SelectMany(x => service.ResolveWord(x))
-                .ToList();
+            using (WordStoreContext context = new WordStoreContext())
+            {
+                return ConvertQuestion(question)
+                    .SelectMany(x => context.ResolveWord(x))
+                    .ToList();
+            }
         }
 
         /// <summary>
@@ -313,13 +385,19 @@ namespace nl.fhict.IntelliCloud.Business.Manager
         /// <param name="question">A question from which one needs the keywords.</param>
         /// <param name="language">The language one needs the found keywords of. </param>
         /// <returns>Returns a List containing the most likely keywords from a given question.</returns>
-        internal IList<Word> FindMostLikelyKeywords(IList<Word> words, Language language)
+        internal IList<Entities.Keyword> RetrieveKeywords(IList<Word> words, Language language)
         {
             return words
-                .Where(x =>
-                    (x.Type == WordType.Noun || x.Type == WordType.Verb || x.Type == WordType.Pronoun)
-                    && x.Language == language)
-                .ToList();
+                .Where(x => x.Language == language && x.Type != WordType.Article)
+                .GroupBy(x => x.Value)
+                .Select(x => 
+                    new Entities.Keyword(
+                        word: x.First(),
+                        affinity: 
+                            ((x.First().Type == WordType.Noun || x.First().Type == WordType.Verb || x.First().Type == WordType.Pronoun)) 
+                            ? x.Count() * 10 : 
+                            x.Count()
+                    )).ToList();
         }
 
         /// <summary>
@@ -352,6 +430,8 @@ namespace nl.fhict.IntelliCloud.Business.Manager
             {
                 return ctx.Questions
                     .Include(q => q.User)
+                    .Include(q => q.User.Sources)
+                    .Include(q => q.User.Type)
                     .Where(q => q.Id == convertedId)
                     .Select(q => q.User)
                     .Single()
@@ -373,6 +453,8 @@ namespace nl.fhict.IntelliCloud.Business.Manager
             {
                 return ctx.Questions
                     .Include(q => q.Answerer)
+                    .Include(q => q.Answerer.Sources)
+                    .Include(q => q.Answerer.Type)
                     .Where(q => q.Id == convertedId)
                     .Select(q => q.Answerer)
                     .Single()
@@ -395,8 +477,10 @@ namespace nl.fhict.IntelliCloud.Business.Manager
             {
                 return ctx.Questions
                     .Include(q => q.Answer)
+                    .Include(q => q.Answer.User)
                     .Where(q => q.Id == convertedId)
                     .Select(q => q.Answer)
+                    .Include(q => q.LanguageDefinition)
                     .Single()
                     .AsAnswer();
             }
@@ -416,12 +500,25 @@ namespace nl.fhict.IntelliCloud.Business.Manager
             using (IntelliCloudContext ctx = new IntelliCloudContext())
             {
                 return ctx.QuestionKeys
-                    .Include(qk => qk.Question)
-                     .Include(qk => qk.Keyword)
-                    .Where(qk => qk.Question.Id == convertedId)
-                    .Select(qk => qk.Keyword)
+                    .Where(x => x.Id == convertedId)
+                    .Select(x => x.Keyword)
                     .ToList()
                     .AsKeywords();
+            }
+        }
+
+        private string ToLanguageString(Language language)
+        {
+            switch (language)
+            {
+                case Language.Dutch:
+                    return "Dutch";
+                case Language.English:
+                    return "English";
+                case Language.Unknown:
+                    return "Unknown";
+                default:
+                    throw new ArgumentException("Unknown language");
             }
         }
     }

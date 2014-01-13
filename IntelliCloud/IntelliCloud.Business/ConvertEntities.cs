@@ -25,7 +25,7 @@ namespace nl.fhict.IntelliCloud.Business
             {
                 baseUrl = new Uri("http://81.204.121.229/IntelliCloudServiceNew");
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 baseUrl = new Uri("http://localhost");
             }
@@ -226,7 +226,8 @@ namespace nl.fhict.IntelliCloud.Business
         public static IList<Keyword> AsKeywords(this IList<KeywordEntity> entities)
         {
             return entities.Select(k => k.AsKeyword()).ToList();
-        } 
+        }
 
     }
 }
+>>>>>>> upstream/master

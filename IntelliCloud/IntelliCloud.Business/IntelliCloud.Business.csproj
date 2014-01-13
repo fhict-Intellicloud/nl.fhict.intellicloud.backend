@@ -63,6 +63,7 @@
     <Compile Include="IValidation.cs" />
     <Compile Include="Manager\BaseManager.cs" />
     <Compile Include="Manager\AnswerManager.cs" />
+    <Compile Include="Manager\Entities\Keyword.cs" />
     <Compile Include="Manager\UserManager.cs" />
     <Compile Include="Manager\FeedbackManager.cs" />
     <Compile Include="Manager\QuestionManager.cs" />
