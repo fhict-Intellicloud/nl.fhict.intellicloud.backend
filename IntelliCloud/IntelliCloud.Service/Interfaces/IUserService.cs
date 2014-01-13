@@ -21,6 +21,20 @@ namespace nl.fhict.IntelliCloud.Service
         /// <returns>Returns the users which match the filter.</returns>
         /// <remarks>Only users of type <see cref="UserType.Employee"/> are able to retrieve users.</remarks>
         [OperationContract]
+        [WebGet(UriTemplate = "users",
+            RequestFormat = WebMessageFormat.Json,
+            ResponseFormat = WebMessageFormat.Json)]
+        [AuthorizationRequired(UserType.Customer, UserType.Employee)]
+        User GetAutUser();
+
+        /// <summary>
+        /// Retrieves the users which match the filter.
+        /// </summary>
+        /// <param name="after">Optional: Only users that are created or modified after this date time are retrieved,
+        /// in UTC time.</param>
+        /// <returns>Returns the users which match the filter.</returns>
+        /// <remarks>Only users of type <see cref="UserType.Employee"/> are able to retrieve users.</remarks>
+        [OperationContract]
         [WebGet(UriTemplate = "users?after={after}",
             RequestFormat = WebMessageFormat.Json,
             ResponseFormat = WebMessageFormat.Json)]
@@ -38,7 +52,7 @@ namespace nl.fhict.IntelliCloud.Service
         [WebGet(UriTemplate = "users/{userId}",
             RequestFormat = WebMessageFormat.Json,
             ResponseFormat = WebMessageFormat.Json)]
-        [AuthorizationRequired]
+        [AuthorizationRequired(UserType.Customer, UserType.Employee)]
         User GetUser(string userId);
 
         /// <summary>

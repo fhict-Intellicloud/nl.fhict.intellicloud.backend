@@ -51,5 +51,10 @@ namespace nl.fhict.IntelliCloud.Service
         {
             this.manager.AssignKeyword(id, keyword, affinity);
         }
+
+        public User GetAutUser()
+        {
+            return this.manager.GetUser(null, null);
+        }
     }
 }
