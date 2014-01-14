@@ -15,7 +15,7 @@ namespace nl.fhict.IntelliCloud.Common.DataTransfer
         /// <summary>
         /// Gets or sets the URL to the keywords that have a relation with an answer or question.
         /// </summary>
-        public Uri Id { get; set; }
+        public string Id { get; set; }
 
         /// <summary>
         /// Gets or sets the name of the keyword. In this case the keyword itself.

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using nl.fhict.IntelliCloud.Business.Manager;
 using nl.fhict.IntelliCloud.Common.CustomException;
 using nl.fhict.IntelliCloud.Common.DataTransfer;
 using nl.fhict.IntelliCloud.Data.IntelliCloud.Context;
@@ -28,6 +29,30 @@ namespace nl.fhict.IntelliCloud.Service.IntegrationTest
         #endregion Fields
 
         #region Methods
+
+        
+        [TestMethod]
+        public void test()
+        {
+            this.service.CreateQuestion("Mail", "test@test.nl",
+                "hallo ik heb een vraag en hier wil ik graag een antwoord op",
+                "hallo ik heb een vraag en hier wil ik graag een antwoord op");
+
+            int userId = 0;
+            int questionId = 0;
+            using (var context = new IntelliCloudContext())
+            {
+                userId = context.Users.AsEnumerable().Last().Id;
+                questionId = context.Questions.AsEnumerable().Last().Id;
+            }
+
+            new AnswerManager().CreateAnswer(questionId, "hallo ik heb een vraag en hier wil ik graag een antwoord op",
+                userId, AnswerState.Ready);
+
+            this.service.CreateQuestion("Mail", "test@test.nl",
+                "hallo ik heb een vraag en hier wil ik graag een antwoord op",
+                "hallo ik heb een vraag en hier wil ik graag een antwoord op");
+        }
 
         /// <summary>
         /// A method that is called before each test is run. This method is used to set up a fresh state for
@@ -168,6 +193,7 @@ namespace nl.fhict.IntelliCloud.Service.IntegrationTest
         public void Cleanup()
         {
             cleanDatabase();
+        
         }
 
         private void cleanDatabase() {

@@ -435,7 +435,7 @@ namespace nl.fhict.IntelliCloud.Service.IntegrationTest.Services
         [ExpectedException(typeof(NotFoundException))]
         public void CreateAnswer_NoAnswererFound()
         {
-            this.service.CreateAnswer(this.question.Id, "Not important", 10, AnswerState.Ready);
+            this.service.CreateAnswer(this.question.Id, "Not important", 1500, AnswerState.Ready);
         }
         #endregion Error handling tests
 

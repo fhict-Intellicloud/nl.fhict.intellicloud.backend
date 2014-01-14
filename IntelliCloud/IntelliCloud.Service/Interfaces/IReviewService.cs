@@ -24,6 +24,20 @@ namespace nl.fhict.IntelliCloud.Service
         /// <remarks>Only users of type <see cref="UserType.Employee"/> are able to retrieve reviews by identifier.
         /// </remarks>
         [OperationContract]
+        [WebGet(UriTemplate = "reviews",
+            RequestFormat = WebMessageFormat.Json,
+            ResponseFormat = WebMessageFormat.Json)]
+        [AuthorizationRequired(UserType.Employee)]
+        IList<Review> GetReviews();
+
+        /// <summary>
+        /// Retrieve the review with the given identifier.
+        /// </summary>
+        /// <param name="reviewId">The identifier of the review.</param>
+        /// <returns>Returns the review with the given identifier.</returns>
+        /// <remarks>Only users of type <see cref="UserType.Employee"/> are able to retrieve reviews by identifier.
+        /// </remarks>
+        [OperationContract]
         [WebGet(UriTemplate = "reviews/{reviewId}",
             RequestFormat = WebMessageFormat.Json,
             ResponseFormat = WebMessageFormat.Json)]

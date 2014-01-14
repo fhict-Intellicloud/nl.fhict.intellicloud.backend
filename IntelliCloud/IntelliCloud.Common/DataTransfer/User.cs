@@ -14,7 +14,7 @@ namespace nl.fhict.IntelliCloud.Common.DataTransfer
         /// Gets or sets the URL to this specific user.
         /// </summary>
         [DataMember]
-        public Uri Id { get; set; }
+        public string Id { get; set; }
 
         /// <summary>
         /// Gets or sets the first name of the user.
@@ -61,33 +61,33 @@ namespace nl.fhict.IntelliCloud.Common.DataTransfer
         /// Gets or sets the URL to the keywords that are linked to the user.
         /// </summary>
         [DataMember]
-        public Uri Keywords { get; set; }
+        public string Keywords { get; set; }
 
         /// <summary>
         /// Gets or sets the URL to the avatar image of the user.
         /// </summary>
         [DataMember]
-        public Uri Avatar { get; set; }
+        public string Avatar { get; set; }
 
         /// <summary>
         /// Gets or sets the URL to the questions that can be answered by the user. These questions have keywords in 
         /// common with this user.
         /// </summary>
         [DataMember]
-        public Uri Questions { get; set; }
+        public string Questions { get; set; }
 
         /// <summary>
         /// Gets or sets the URL to the answers that have open feedback that can be processed by the user. These answers
         /// have keywords in common with this user.
         /// </summary>
         [DataMember]
-        public Uri Feedbacks { get; set; }
+        public string Feedbacks { get; set; }
 
         /// <summary>
         /// Gets or sets the URL to the answers that have open reviews that can be processed by the user. These answers
         /// have keywords in common with this user.
         /// </summary>
         [DataMember]
-        public Uri Reviews { get; set; }
+        public string Reviews { get; set; }
     }
 }

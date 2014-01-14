@@ -41,7 +41,7 @@ namespace nl.fhict.IntelliCloud.Service
         [WebGet(UriTemplate = "questions",
             RequestFormat = WebMessageFormat.Json,
             ResponseFormat = WebMessageFormat.Json)]
-        [AuthorizationRequired(UserType.Employee)]
+        [AuthorizationOptional]
         IList<Question> GetQuestions();
 
         /// <summary>
@@ -109,7 +109,7 @@ namespace nl.fhict.IntelliCloud.Service
         [WebGet(UriTemplate = "questions/{questionId}/answer",
             RequestFormat = WebMessageFormat.Json,
             ResponseFormat = WebMessageFormat.Json)]
-        [AuthorizationRequired(UserType.Employee)]
+        [AuthorizationOptional]
         Answer GetAnswer(string questionId);
 
         /// <summary>

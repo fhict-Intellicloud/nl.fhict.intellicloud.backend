@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.ServiceModel;
-using System.ServiceModel.Web;
-using System.Text;
 using nl.fhict.IntelliCloud.Common.DataTransfer;
 using nl.fhict.IntelliCloud.Data.IntelliCloud.Model;
 
@@ -15,23 +12,6 @@ namespace nl.fhict.IntelliCloud.Business
     public static class ConvertEntities
     {
         /// <summary>
-        /// The base URL of the server.
-        /// </summary>
-        public static Uri baseUrl;
-
-        static ConvertEntities()
-        {
-            try
-            {
-                baseUrl = new Uri("http://81.204.121.229/IntelliCloudServiceNew");
-            }
-            catch (Exception)
-            {
-                baseUrl = new Uri("http://localhost");
-            }
-        }
-
-        /// <summary>
         /// Converts an <see cref="AnswerEntity"/> to a <see cref="Answer"/>.
         /// </summary>
         /// <param name="entity">The entity to convert.</param>
@@ -40,17 +20,17 @@ namespace nl.fhict.IntelliCloud.Business
         {
             return new Answer
             {
-                Id = new Uri(string.Format("{0}/answers/{1}", baseUrl, entity.Id)),
+                Id = string.Format("AnswerService.svc/answers/{0}", entity.Id),
                 Content = entity.Content,
                 Language = entity.LanguageDefinition.Name,
-                User = new Uri(string.Format("{0}/answer/{1}/answerer", baseUrl, entity.Id)),
+                User = string.Format("AnswerService.svc/answer/{0}/answerer", entity.Id),
                 AnswerState = entity.AnswerState,
                 CreationTime = entity.CreationTime,
                 LastChangedTime = entity.LastChangedTime,
-                Keywords = new Uri(string.Format("{0}/answer/{1}/keywords", baseUrl, entity.Id)),
+                Keywords = string.Format("AnswerService.svc/answer/{0}/keywords", entity.Id),
                 IsPrivate = entity.IsPrivate,
-                Feedbacks = new Uri(string.Format("{0}/answer/{1}/feedbacks", baseUrl, entity.Id)),
-                Reviews = new Uri(string.Format("{0}/answer/{1}/reviews", baseUrl, entity.Id))
+                Feedbacks = string.Format("AnswerService.svc/answer/{0}/feedbacks", entity.Id),
+                Reviews = string.Format("AnswerService.svc/answer/{0}/reviews", entity.Id)
             };
         }
 
@@ -73,11 +53,11 @@ namespace nl.fhict.IntelliCloud.Business
         {
             return new Feedback
             {
-                Id = new Uri(string.Format("{0}/feedbacks/{1}", baseUrl, entity.Id)),
+                Id = string.Format("FeedbackService.svc/feedbacks/{0}", entity.Id),
                 Content = entity.Content,
-                Answer = new Uri(string.Format("{0}/feedbacks/{1}/answer", baseUrl, entity.Id)),
-                Question = new Uri(string.Format("{0}/feedbacks/{1}/question", baseUrl, entity.Id)),
-                User = new Uri(string.Format("{0}/feedbacks/{1}/user", baseUrl, entity.Id)),
+                Answer = string.Format("FeedbackService.svc/feedbacks/{0}/answer", entity.Id),
+                Question = string.Format("FeedbackService.svc/feedbacks/{0}/question", entity.Id),
+                User = string.Format("FeedbackService.svc/feedbacks/{0}/user", entity.Id),
                 FeedbackType = entity.FeedbackType,
                 FeedbackState = entity.FeedbackState,
                 CreationTime = entity.CreationTime,
@@ -104,17 +84,17 @@ namespace nl.fhict.IntelliCloud.Business
         {
             return new Question
             {
-                Id = new Uri(string.Format("{0}/questions/{1}", baseUrl, entity.Id)),
+                Id = string.Format("QuestionService.svc/questions/{0}", entity.Id),
                 Title = entity.Title,
                 Content = entity.Content,
                 Language = entity.LanguageDefinition.Name,
-                Answer = new Uri(string.Format("{0}/questions/{1}/answer", baseUrl, entity.Id)),
-                User = new Uri(string.Format("{0}/questions/{1}/asker", baseUrl, entity.Id)),
-                Answerer = new Uri(string.Format("{0}/questions/{1}/answerer", baseUrl, entity.Id)),
+                Answer = string.Format("QuestionService.svc/questions/{0}/answer", entity.Id),
+                User = string.Format("QuestionService.svc/questions/{0}/asker", entity.Id),
+                Answerer = string.Format("QuestionService.svc/questions/{0}/answerer", entity.Id),
                 QuestionState = entity.QuestionState,
                 CreationTime = entity.CreationTime,
                 LastChangedTime = entity.LastChangedTime,
-                Keywords = new Uri(string.Format("{0}/questions/{1}/keywords", baseUrl, entity.Id)),
+                Keywords = string.Format("QuestionService.svc/questions/{0}/keywords", entity.Id),
                 IsPrivate = entity.IsPrivate,
                 SourcePostId = entity.Source.PostId,
                 Source = new UserSource
@@ -144,11 +124,11 @@ namespace nl.fhict.IntelliCloud.Business
         {
             return new Review
             {
-                Id = new Uri(string.Format("{0}/reviews/{1}", baseUrl, entity.Id)),
+                Id = string.Format("ReviewService.svc/reviews/{0}", entity.Id),
                 Content = entity.Content,
-                Answer = new Uri(string.Format("{0}/reviews/{1}/answer", baseUrl, entity.Id)),
+                Answer = string.Format("ReviewService.svc/reviews/{0}/answer", entity.Id),
                 ReviewState = entity.ReviewState,
-                User = new Uri(string.Format("{0}/reviews/{1}/user", baseUrl, entity.Id)),
+                User = string.Format("ReviewService.svc/reviews/{0}/user", entity.Id),
                 CreationTime = entity.CreationTime,
                 LastChangedTime = entity.LastChangedTime
             };
@@ -173,7 +153,7 @@ namespace nl.fhict.IntelliCloud.Business
         {
             return new User
             {
-                Id = new Uri(string.Format("{0}/users/{1}", baseUrl, entity.Id)),
+                Id = string.Format("UserService.svc/users/{0}", entity.Id),
                 FirstName = entity.FirstName,
                 Infix = entity.Infix,
                 LastName = entity.LastName,
@@ -185,11 +165,11 @@ namespace nl.fhict.IntelliCloud.Business
                 }).ToList(),
                 CreationTime = entity.CreationTime,
                 LastChangedTime = entity.LastChangedTime,
-                Keywords = new Uri(string.Format("{0}/users/{1}/keywords", baseUrl, entity.Id)),
-                Avatar = entity.Avatar == null ? null : new Uri(entity.Avatar),
-                Questions = new Uri(string.Format("{0}/users/{1}/questions", baseUrl, entity.Id)),
-                Feedbacks = new Uri(string.Format("{0}/users/{1}/feedbacks", baseUrl, entity.Id)),
-                Reviews = new Uri(string.Format("{0}/users/{1}/reviews", baseUrl, entity.Id)),
+                Keywords = string.Format("UserService.svc/users/{0}/keywords", entity.Id),
+                Avatar = entity.Avatar == null ? null : entity.Avatar,
+                Questions = string.Format("UserService.svc/users/{0}/questions", entity.Id),
+                Feedbacks = string.Format("UserService.svc/users/{0}/feedbacks", entity.Id),
+                Reviews = string.Format("UserService.svc/users/{0}/reviews", entity.Id),
             };
         }
 
@@ -207,12 +187,13 @@ namespace nl.fhict.IntelliCloud.Business
         /// Converts an <see cref="KeywordEntity"/> to a <see cref="Keyword"/>.
         /// </summary>
         /// <param name="entity">The entity to convert</param>
+        /// <param name="serviceName">The name of the servicee that uses the keyword.</param>
         /// <returns>returns a converted DTO</returns>
-        public static Keyword AsKeyword(this KeywordEntity entity)
+        public static Keyword AsKeyword(this KeywordEntity entity, string serviceName)
         {
             return new Keyword()
             {
-                Id = new Uri(string.Format("{0}/keywords/{1}", baseUrl, entity.Id)),
+                Id = string.Format("{0}/keywords/{1}", serviceName, entity.Id),
                 Name = entity.Name,
                 CreationTime = entity.CreationTime
             };
@@ -222,10 +203,11 @@ namespace nl.fhict.IntelliCloud.Business
         /// Converts a <see cref="KeywordEntity"/> collection to a <see cref="Keyword"/> collection.
         /// </summary>
         /// <param name="entities">The entities to convert</param>
+        /// <param name="serviceName">The name of the service that uses the keywords.</param>
         /// <returns>Returns the converted DTOs</returns>
-        public static IList<Keyword> AsKeywords(this IList<KeywordEntity> entities)
+        public static IList<Keyword> AsKeywords(this IList<KeywordEntity> entities, string serviceName)
         {
-            return entities.Select(k => k.AsKeyword()).ToList();
+            return entities.Select(k => k.AsKeyword(serviceName)).ToList();
         }
 
     }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using nl.fhict.IntelliCloud.Common.CustomException;
@@ -157,6 +158,16 @@ namespace nl.fhict.IntelliCloud.Business.Manager
                     throw new NotFoundException("No review entity exists with the specified ID.");
 
                 return review.AsReview();
+            }
+        }
+
+        public System.Collections.Generic.IList<Review> GetReviews()
+        {
+            using (var context = new IntelliCloudContext())
+            {
+                List<ReviewEntity> reviews = context.Reviews.ToList();
+                
+                return reviews.AsReviews();
             }
         }
     }

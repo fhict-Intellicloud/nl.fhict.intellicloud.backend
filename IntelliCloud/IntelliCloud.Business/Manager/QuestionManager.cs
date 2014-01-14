@@ -162,12 +162,12 @@ namespace nl.fhict.IntelliCloud.Business.Manager
 
                 questionEntity.Answer = this.GetMatch(ctx, questionEntity);
 
-                this.SendAnswerFactory.LoadPlugin(questionEntity.Source.Source.SourceDefinition)
+                /*this.SendAnswerFactory.LoadPlugin(questionEntity.Source.Source.SourceDefinition)
                     .SendQuestionReceived(questionEntity);
 
                 if (questionEntity.Answer != null)
                     this.SendAnswerFactory.LoadPlugin(questionEntity.Source.Source.SourceDefinition)
-                        .SendAnswer(questionEntity, questionEntity.Answer);
+                        .SendAnswer(questionEntity, questionEntity.Answer);*/
             }
         }
 
@@ -213,10 +213,13 @@ namespace nl.fhict.IntelliCloud.Business.Manager
                     .Select(x => x.Affinity)
                     .AsEnumerable()
                     .Aggregate((previous, next) => previous + next);
-                double score = questionKeywords
-                    .AsEnumerable()
-                    .Zip(matchingKeywords, (questionKey, answerKey) => questionKey.Affinity / answerKey.Affinity)
-                    .Aggregate((previous, next) => previous + next);
+
+                double score = matchingKeywords.Any()
+                    ? matchingKeywords
+                        .AsEnumerable()
+                        .Select(x => questionKeywords.Single(y => x.Id == y.Id).Affinity/x.Affinity)
+                        .Aggregate((previous, next) => previous + next)
+                    : 0;
 
                 ratedAnswers.Add(answer, (int)(score/maximumScore * 100));
             }
@@ -286,14 +289,14 @@ namespace nl.fhict.IntelliCloud.Business.Manager
                                                                  .Include(q => q.Answerer)
                                                                  .Include(q => q.Answerer.Sources)
                                                                  .Include(q => q.LanguageDefinition)
-                                                                 .Include(q => q.User.Sources.Select(s => s.SourceDefinition))
+                                                                 .Include(q => q.Source.Source.SourceDefinition)
                                          where q.FeedbackToken == feedbackToken
                                          select q).SingleOrDefault();
 
                 if (entity == null)
                     throw new NotFoundException("No Question entity exists with the specified feedback token.");
 
-                if (userManager.GetUser().Type != UserType.Employee && entity.IsPrivate)
+                if (entity.IsPrivate && userManager.GetUser().Type != UserType.Employee)
                     throw new NotFoundException("Only employees can retrieve private questions.");
 
                 question = entity.AsQuestion();
@@ -508,7 +511,7 @@ namespace nl.fhict.IntelliCloud.Business.Manager
                     .Where(x => x.Question.Id == convertedId)
                     .Select(x => x.Keyword)
                     .ToList()
-                    .AsKeywords();
+                    .AsKeywords("QuestionService.svc");
             }
         }
 

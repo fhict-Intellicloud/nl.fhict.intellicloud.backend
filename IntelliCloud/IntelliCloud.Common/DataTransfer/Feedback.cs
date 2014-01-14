@@ -16,7 +16,7 @@ namespace nl.fhict.IntelliCloud.Common.DataTransfer
         /// Gets or sets the URL to this specific feedback item.
         /// </summary>
         [DataMember]
-        public Uri Id { get; set; }
+        public string Id { get; set; }
 
         /// <summary>
         /// Gets or sets the content of the feedback. The content represents the feedback the customer gave.
@@ -28,7 +28,7 @@ namespace nl.fhict.IntelliCloud.Common.DataTransfer
         /// Gets or sets the URL to the answer the feedback applies to.
         /// </summary>
         [DataMember]
-        public Uri Answer { get; set; }
+        public string Answer { get; set; }
 
         /// <summary>
         /// Gets or sets the URL to the question which was answered. This field is required because the answer 
@@ -38,13 +38,13 @@ namespace nl.fhict.IntelliCloud.Common.DataTransfer
         /// this question).
         /// </summary>
         [DataMember]
-        public Uri Question { get; set; }
+        public string Question { get; set; }
 
         /// <summary>
         /// Gets or sets the URL to the user that gave the feedback.
         /// </summary>
         [DataMember]
-        public Uri User { get; set; }
+        public string User { get; set; }
 
         /// <summary>
         /// Gets or sets the type of feedback. The type indicates if the answer was accepted or declined.

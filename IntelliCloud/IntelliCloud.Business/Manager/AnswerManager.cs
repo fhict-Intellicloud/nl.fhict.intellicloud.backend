@@ -136,7 +136,7 @@ namespace nl.fhict.IntelliCloud.Business.Manager
                 ctx.AnswerKeys.AddRange(answerKeys);
                 ctx.SaveChanges();
                 
-                this.SendAnswerFactory.LoadPlugin(question.Source.Source.SourceDefinition).SendAnswer(question, answerEntity);
+                //this.SendAnswerFactory.LoadPlugin(question.Source.Source.SourceDefinition).SendAnswer(question, answerEntity);
             }
 
         }
@@ -300,7 +300,7 @@ namespace nl.fhict.IntelliCloud.Business.Manager
                                                       on k.Id equals ak.Keyword.Id
                                                       select k).ToList();
 
-                keywords.AddRange(keywordEntities.AsKeywords());
+                keywords.AddRange(keywordEntities.AsKeywords("AnswerService.svc"));
             }
 
             return keywords;
