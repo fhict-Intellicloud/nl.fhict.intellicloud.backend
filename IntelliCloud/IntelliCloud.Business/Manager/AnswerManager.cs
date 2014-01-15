@@ -117,6 +117,7 @@ namespace nl.fhict.IntelliCloud.Business.Manager
 
                 question.Answer = answerEntity;
                 question.Answerer = user;
+                question.QuestionState = QuestionState.UpForFeedback;
 
                 Guid token = Guid.NewGuid();
                 question.FeedbackToken = token.ToString();
@@ -375,7 +376,9 @@ namespace nl.fhict.IntelliCloud.Business.Manager
                 .GroupBy(x => x.Language)
                 .Select(x => new { Language = x.Key, Count = x.Distinct().Count() });
 
-            return distinctLanguages.Single(x => x.Count == distinctLanguages.Max(y => y.Count)).Language;
+            return distinctLanguages.OrderByDescending(x => x.Count).First().Language;
+
+           // return distinctLanguages.Single(x => x.Count == distinctLanguages.Max(y => y.Count)).Language;
         }
 
         private string ToLanguageString(Language language)

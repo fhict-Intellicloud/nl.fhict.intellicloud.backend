@@ -8,7 +8,6 @@ using nl.fhict.IntelliCloud.Common.DataTransfer;
 using nl.fhict.IntelliCloud.Data.IntelliCloud.Context;
 using nl.fhict.IntelliCloud.Data.IntelliCloud.Model;
 using nl.fhict.IntelliCloud.Data.WordStoreService;
-using System.Collections;
 
 namespace nl.fhict.IntelliCloud.Business.Manager
 {
@@ -177,7 +176,6 @@ namespace nl.fhict.IntelliCloud.Business.Manager
             keywords.ToList().ForEach(
                 (keyword) =>
                 {
-
                     var entity = context.Keywords
                         .SingleOrDefault(x => x.Name == keyword.Word.Value);
 
@@ -197,31 +195,34 @@ namespace nl.fhict.IntelliCloud.Business.Manager
 
         private AnswerEntity GetMatch(IntelliCloudContext context, QuestionEntity questionEntity)
         {
-            var questionKeywords = context.QuestionKeys.Where(x => x.Question.Id == questionEntity.Id);
+            var questionKeywords = context.QuestionKeys.Where(x => x.Question.Id == questionEntity.Id).ToList();
 
-            var importantKeywords = questionKeywords.Where(x => x.Affinity > 10).Select(x => x.Keyword.Id);
-            var relevantAnswerKeys = context.AnswerKeys.Include(x => x.Answer).Where(x => importantKeywords.Contains(x.Keyword.Id));
+            var importantKeywords = questionKeywords.Where(x => x.Affinity >= 10).Select(x => x.Keyword.Id).ToList();
+            var relevantAnswerKeys =
+                context.AnswerKeys.Include(x => x.Answer)
+                    .Where(x => importantKeywords.Contains(x.Keyword.Id))
+                    .ToList();
             var relevantAnswers = relevantAnswerKeys.Select(x => x.Answer).Distinct().ToList();
 
             IDictionary<AnswerEntity, int> ratedAnswers = new Dictionary<AnswerEntity, int>();
             foreach (var answer in relevantAnswers)
             {
-                var answerKeywords = context.AnswerKeys.Where(x => x.Answer.Id == answer.Id);
-                var matchingKeywords = answerKeywords.Where(x => questionKeywords.Any(y => y.Keyword.Id == x.Keyword.Id));
+                var answerKeys =
+                    context.AnswerKeys.Include(x => x.Answer).Where(x => x.Answer.Id == answer.Id).ToList();
 
-                double maximumScore = answerKeywords
+                double maximumScore = answerKeys
                     .Select(x => x.Affinity)
-                    .AsEnumerable()
                     .Aggregate((previous, next) => previous + next);
 
-                double score = matchingKeywords.Any()
-                    ? matchingKeywords
-                        .AsEnumerable()
-                        .Select(x => questionKeywords.Single(y => x.Id == y.Id).Affinity/x.Affinity)
-                        .Aggregate((previous, next) => previous + next)
-                    : 0;
+                double score = 0;
+                foreach (var questionKey in questionKeywords)
+                {
+                    var matchingAnswerKey = answerKeys.Where(x => x.Keyword != null).SingleOrDefault(x => x.Keyword.Id == questionKey.Keyword.Id);
+                    if(matchingAnswerKey != null)
+                        score += matchingAnswerKey.Affinity/questionKey.Affinity*matchingAnswerKey.Affinity;
+                }
 
-                ratedAnswers.Add(answer, (int)(score/maximumScore * 100));
+                ratedAnswers.Add(answer, (int)(score / maximumScore * 100));
             }
 
             if (ratedAnswers.Any())
@@ -418,7 +419,9 @@ namespace nl.fhict.IntelliCloud.Business.Manager
                 .GroupBy(x => x.Language)
                 .Select(x => new { Language = x.Key, Count = x.Distinct().Count() });
 
-            return distinctLanguages.Single(x => x.Count == distinctLanguages.Max(y => y.Count)).Language;
+            return distinctLanguages.OrderByDescending(x => x.Count).First().Language;
+
+            //return distinctLanguages.Single(x => x.Count == distinctLanguages.Max(y => y.Count)).Language;
         }
         #endregion
 

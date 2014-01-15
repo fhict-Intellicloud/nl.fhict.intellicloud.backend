@@ -50,8 +50,8 @@ namespace nl.fhict.IntelliCloud.Service.IntegrationTest
                 userId, AnswerState.Ready);
 
             this.service.CreateQuestion("Mail", "test@test.nl",
-                "hallo ik heb een vraag en hier wil ik graag een antwoord op",
-                "hallo ik heb een vraag en hier wil ik graag een antwoord op");
+                "hallo ik heb een vraag en",
+                "hallo ik heb een vraag en");
         }
 
         /// <summary>
