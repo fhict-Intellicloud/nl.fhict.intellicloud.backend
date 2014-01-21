@@ -169,6 +169,7 @@ namespace nl.fhict.IntelliCloud.Business.Manager
                 FeedbackEntity feedback = context.Feedbacks.Include(r => r.Question)
                                                            .Include(r => r.Question.LanguageDefinition)
                                                            .Include(q => q.Question.Source)
+                                                           .Include(q => q.Question.Answer)
                                                            .Include(q => q.User.Sources.Select(s => s.SourceDefinition))
                                                            .SingleOrDefault(r => r.Id.Equals(feedbackId));
 

@@ -137,7 +137,7 @@ namespace nl.fhict.IntelliCloud.Business.Manager
                 ctx.AnswerKeys.AddRange(answerKeys);
                 ctx.SaveChanges();
                 
-                //this.SendAnswerFactory.LoadPlugin(question.Source.Source.SourceDefinition).SendAnswer(question, answerEntity);
+                this.SendAnswerFactory.LoadPlugin(question.Source.Source.SourceDefinition).SendAnswer(question, answerEntity);
             }
 
         }

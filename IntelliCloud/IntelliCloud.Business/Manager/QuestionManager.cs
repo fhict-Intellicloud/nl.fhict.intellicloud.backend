@@ -52,6 +52,7 @@ namespace nl.fhict.IntelliCloud.Business.Manager
                                                                  .Include(q => q.User)
                                                                  .Include(q => q.User.Sources)
                                                                  .Include(q => q.Answerer)
+                                                                 .Include(q => q.Answer)
                                                                  .Include(q => q.Answerer.Sources)
                                                                  .Include(q => q.LanguageDefinition)
                                                                  .Include(q => q.User.Sources.Select(s => s.SourceDefinition))
@@ -80,6 +81,7 @@ namespace nl.fhict.IntelliCloud.Business.Manager
                                         .Include(q => q.User)
                                         .Include(q => q.User.Sources)
                                         .Include(q => q.Answerer)
+                                        .Include(q => q.Answer)
                                         .Include(q => q.Answerer.Sources)
                                         .Include(q => q.LanguageDefinition)
                                         .Include(q => q.User.Sources.Select(s => s.SourceDefinition));
@@ -161,12 +163,12 @@ namespace nl.fhict.IntelliCloud.Business.Manager
 
                 questionEntity.Answer = this.GetMatch(ctx, questionEntity);
 
-                /*this.SendAnswerFactory.LoadPlugin(questionEntity.Source.Source.SourceDefinition)
+                this.SendAnswerFactory.LoadPlugin(questionEntity.Source.Source.SourceDefinition)
                     .SendQuestionReceived(questionEntity);
 
                 if (questionEntity.Answer != null)
                     this.SendAnswerFactory.LoadPlugin(questionEntity.Source.Source.SourceDefinition)
-                        .SendAnswer(questionEntity, questionEntity.Answer);*/
+                        .SendAnswer(questionEntity, questionEntity.Answer);
             }
         }
 
@@ -195,42 +197,49 @@ namespace nl.fhict.IntelliCloud.Business.Manager
 
         private AnswerEntity GetMatch(IntelliCloudContext context, QuestionEntity questionEntity)
         {
-            var questionKeywords = context.QuestionKeys.Where(x => x.Question.Id == questionEntity.Id).ToList();
-
-            var importantKeywords = questionKeywords.Where(x => x.Affinity >= 10).Select(x => x.Keyword.Id).ToList();
-            var relevantAnswerKeys =
-                context.AnswerKeys.Include(x => x.Answer)
-                    .Where(x => importantKeywords.Contains(x.Keyword.Id))
-                    .ToList();
-            var relevantAnswers = relevantAnswerKeys.Select(x => x.Answer).Distinct().ToList();
-
-            IDictionary<AnswerEntity, int> ratedAnswers = new Dictionary<AnswerEntity, int>();
-            foreach (var answer in relevantAnswers)
+            try
             {
-                var answerKeys =
-                    context.AnswerKeys.Include(x => x.Answer).Where(x => x.Answer.Id == answer.Id).ToList();
+                var questionKeywords = context.QuestionKeys.Where(x => x.Question.Id == questionEntity.Id).ToList();
 
-                double maximumScore = answerKeys
-                    .Select(x => x.Affinity)
-                    .Aggregate((previous, next) => previous + next);
+                var importantKeywords = questionKeywords.Where(x => x.Affinity >= 10).Select(x => x.Keyword.Id).ToList();
+                var relevantAnswerKeys =
+                    context.AnswerKeys.Include(x => x.Answer)
+                        .Where(x => importantKeywords.Contains(x.Keyword.Id))
+                        .ToList();
+                var relevantAnswers = relevantAnswerKeys.Select(x => x.Answer).Distinct().ToList();
 
-                double score = 0;
-                foreach (var questionKey in questionKeywords)
+                IDictionary<AnswerEntity, int> ratedAnswers = new Dictionary<AnswerEntity, int>();
+                foreach (var answer in relevantAnswers)
                 {
-                    var matchingAnswerKey = answerKeys.Where(x => x.Keyword != null).SingleOrDefault(x => x.Keyword.Id == questionKey.Keyword.Id);
-                    if(matchingAnswerKey != null)
-                        score += matchingAnswerKey.Affinity/questionKey.Affinity*matchingAnswerKey.Affinity;
+                    var answerKeys =
+                        context.AnswerKeys.Include(x => x.Answer).Where(x => x.Answer.Id == answer.Id).ToList();
+
+                    double maximumScore = answerKeys
+                        .Select(x => x.Affinity)
+                        .Aggregate((previous, next) => previous + next);
+
+                    double score = 0;
+                    foreach (var questionKey in questionKeywords)
+                    {
+                        var matchingAnswerKey = answerKeys.Where(x => x.Keyword != null).SingleOrDefault(x => x.Keyword.Id == questionKey.Keyword.Id);
+                        if (matchingAnswerKey != null)
+                            score += matchingAnswerKey.Affinity / questionKey.Affinity * matchingAnswerKey.Affinity;
+                    }
+
+                    ratedAnswers.Add(answer, (int)(score / maximumScore * 100));
                 }
 
-                ratedAnswers.Add(answer, (int)(score / maximumScore * 100));
+                if (ratedAnswers.Any())
+                {
+                    var bestMatch = ratedAnswers.OrderByDescending(x => x.Value).First();
+                    return bestMatch.Value >= 50 ? bestMatch.Key : null;
+                }
+                else
+                {
+                    return null;
+                }
             }
-
-            if (ratedAnswers.Any())
-            {
-                var bestMatch = ratedAnswers.OrderByDescending(x => x.Value).First();
-                return bestMatch.Value >= 50 ? bestMatch.Key : null;
-            }
-            else
+            catch (Exception)
             {
                 return null;
             }

@@ -82,7 +82,7 @@ namespace nl.fhict.IntelliCloud.Business
         /// <returns>Returns the converted data transfer object.</returns>
         public static Question AsQuestion(this QuestionEntity entity)
         {
-            return new Question
+            Question quest = new Question
             {
                 Id = string.Format("QuestionService.svc/questions/{0}", entity.Id),
                 Title = entity.Title,
@@ -103,6 +103,11 @@ namespace nl.fhict.IntelliCloud.Business
                     Value = entity.Source.Source.Value
                 }
             };
+
+            if (entity.Answer != null)
+                quest.AnswerId = entity.Answer.Id;
+
+            return quest;
         }
 
         /// <summary>

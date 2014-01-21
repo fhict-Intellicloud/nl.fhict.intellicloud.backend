@@ -45,6 +45,14 @@ namespace nl.fhict.IntelliCloud.Common.DataTransfer
         public string Answer { get; set; }
 
         /// <summary>
+        /// Gets or sets the URL to the answer for the question. This field is empty until the question state is either 
+        /// <see cref="QuestionState.UpForFeedback"/> or <see cref="QuestionState.Closed"/>, so it only contains 
+        /// accepted or pending answers.
+        /// </summary>
+        [DataMember]
+        public int? AnswerId { get; set; }
+
+        /// <summary>
         /// Gets or sets the URL to the user that asked the question.
         /// </summary>
         [DataMember]

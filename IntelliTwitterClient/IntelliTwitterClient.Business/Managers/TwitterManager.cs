@@ -175,7 +175,7 @@ namespace IntelliTwitterClient.Business.Managers
             Validation.StringCheck(question);
 
             //Create a new POST request with the correct webmethod
-            var httpWebRequest = (HttpWebRequest)WebRequest.Create("http://81.204.121.229/IntelliCloudService/QuestionService.svc/questions");
+            var httpWebRequest = (HttpWebRequest)WebRequest.Create("http://81.204.121.229/IntelliCloudServiceNew/QuestionService.svc/questions");
             httpWebRequest.ContentType = "application/json; charset=UTF-8";
             httpWebRequest.Method = "POST";
 
