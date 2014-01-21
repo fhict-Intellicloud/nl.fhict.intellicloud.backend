@@ -16,7 +16,7 @@ namespace nl.fhict.IntelliCloud.Common.DataTransfer
         /// Gets or sets the URL to this specific answer.
         /// </summary>
         [DataMember]
-        public Uri Id { get; set; }
+        public string Id { get; set; }
 
         /// <summary>
         /// Gets or sets the content of the answer. The content contains the answer given to the question.
@@ -34,7 +34,7 @@ namespace nl.fhict.IntelliCloud.Common.DataTransfer
         /// Gets or sets the URL to the user that gave the answer.
         /// </summary>
         [DataMember]
-        public Uri User { get; set; }
+        public string User { get; set; }
 
         /// <summary>
         /// Gets or sets the state of the answer.
@@ -58,7 +58,7 @@ namespace nl.fhict.IntelliCloud.Common.DataTransfer
         /// Gets or sets the URL to the keywords that are linked to the answer.
         /// </summary>
         [DataMember]
-        public Uri Keywords { get; set; }
+        public string Keywords { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether the answer is private. When a answer is private it can only be 
@@ -71,12 +71,12 @@ namespace nl.fhict.IntelliCloud.Common.DataTransfer
         /// Gets or sets the URL to the feedbacks that have been given to this answer.
         /// </summary>
         [DataMember]
-        public Uri Feedbacks { get; set; }
+        public string Feedbacks { get; set; }
 
         /// <summary>
         /// Gets or sets the URL to the reviews that have been given to this answer.
         /// </summary>
         [DataMember]
-        public Uri Reviews { get; set; }
+        public string Reviews { get; set; }
     }
 }

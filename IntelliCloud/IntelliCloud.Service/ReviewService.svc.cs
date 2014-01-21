@@ -45,5 +45,10 @@ namespace nl.fhict.IntelliCloud.Service
         {
             return this.manager.GetAnswer(id);
         }
+
+        public IList<Review> GetReviews()
+        {
+            return this.manager.GetReviews();
+        }
     }
 }

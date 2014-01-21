@@ -336,7 +336,7 @@ namespace nl.fhict.IntelliCloud.Business.Manager
                         .Select(uk => uk.Keyword);
 
                 // execute the query and convert the keywordsEntities to Keywords.
-                return query.ToList().AsKeywords();
+                return query.ToList().AsKeywords("UserService.svc");
             }
         }
 

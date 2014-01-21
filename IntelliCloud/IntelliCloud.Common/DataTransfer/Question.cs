@@ -16,7 +16,7 @@ namespace nl.fhict.IntelliCloud.Common.DataTransfer
         /// Gets or sets the URL to this specific question.
         /// </summary>
         [DataMember]
-        public Uri Id { get; set; }
+        public string Id { get; set; }
 
         /// <summary>
         /// Gets or sets the tile of the question. The title is a short summary of the question.
@@ -42,23 +42,24 @@ namespace nl.fhict.IntelliCloud.Common.DataTransfer
         /// accepted or pending answers.
         /// </summary>
         [DataMember]
-        public Uri Answer { get; set; }
+        public string Answer { get; set; }
 
         /// <summary>
         /// Gets or sets the URL to the user that asked the question.
         /// </summary>
         [DataMember]
-        public Uri User { get; set; }
+        public string User { get; set; }
 
         /// <summary>
         /// Gets or sets the user that is going to answer the question.
         /// </summary>
         [DataMember]
-        public Uri Answerer { get; set; }
+        public string Answerer { get; set; }
 
         /// <summary>
         /// Gets or sets the state of the question.
         /// </summary>
+        [DataMember]
         public QuestionState QuestionState { get; set; }        
 
         /// <summary>
@@ -77,7 +78,7 @@ namespace nl.fhict.IntelliCloud.Common.DataTransfer
         /// Gets or sets the URL to the keywords that are linked to the question.
         /// </summary>
         [DataMember]
-        public Uri Keywords { get; set; }
+        public string Keywords { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether the question is private. When a question is private it can only be 

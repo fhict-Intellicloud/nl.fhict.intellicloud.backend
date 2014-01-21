@@ -43,7 +43,7 @@ namespace nl.fhict.IntelliCloud.Service
         [WebGet(UriTemplate = "answers/{answerId}",
             RequestFormat = WebMessageFormat.Json,
             ResponseFormat = WebMessageFormat.Json)]
-        [AuthorizationRequired(UserType.Employee)]
+        [AuthorizationOptional]
         Answer GetAnswer(string answerId);
 
         /// <summary>
@@ -54,6 +54,7 @@ namespace nl.fhict.IntelliCloud.Service
         /// <remarks>Only users of type <see cref="UserType.Employee"/> are able to retrieve the answerer of an answer.
         /// </remarks>
         [OperationContract]
+
         [WebGet(UriTemplate = "answers/{answerId}/answerer",
             RequestFormat = WebMessageFormat.Json,
             ResponseFormat = WebMessageFormat.Json)]
